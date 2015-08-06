@@ -20,4 +20,9 @@ public final class Constants {
      * URL for private projects
      */
     public static final String PRIVATE_TRAVIS_URL = "https://api.travis-ci.com";
+
+    /**
+     * Defines the file for properties
+     */
+    public static final String KEY_PROPERTIES = "key.properties";
 }

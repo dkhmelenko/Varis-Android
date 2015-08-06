@@ -1,5 +1,6 @@
 package com.khmelenko.lab.travisclient.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -23,12 +24,20 @@ import java.net.URLConnection;
 
 public class MainActivity extends AppCompatActivity {
 
-    int i = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button authBtn = (Button) findViewById(R.id.auth_btn);
+        authBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
