@@ -11,8 +11,18 @@ public final class LoaderAsyncTask<T> extends AsyncTask<Void, Void, TaskResult<T
 
     private final Task<T> mTask;
 
-    public LoaderAsyncTask(Task<T> task) {
+    private LoaderAsyncTask(Task<T> task) {
         mTask = task;
+    }
+
+    /**
+     * Executes new task
+     *
+     * @param task Task for execution
+     */
+    public static <T> void executeTask(Task<T> task) {
+        LoaderAsyncTask<T> executor = new LoaderAsyncTask(task);
+        executor.execute();
     }
 
     @Override

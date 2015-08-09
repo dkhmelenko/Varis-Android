@@ -22,6 +22,11 @@ public final class Constants {
     public static final String PRIVATE_TRAVIS_URL = "https://api.travis-ci.com";
 
     /**
+     * URL for Github access
+     */
+    public static final String GITHUB_URL = "https://github.com";
+
+    /**
      * Defines the file for properties
      */
     public static final String KEY_PROPERTIES = "key.properties";

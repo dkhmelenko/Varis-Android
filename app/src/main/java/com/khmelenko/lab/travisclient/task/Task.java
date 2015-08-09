@@ -1,30 +1,39 @@
 package com.khmelenko.lab.travisclient.task;
 
+import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
+
+import de.greenrobot.event.EventBus;
+
 /**
  * Defines an interface for Task
  *
  * @author Dmytro Khmelenko
  */
-public interface Task<T> {
+public abstract class Task<T> {
+
+    // TODO Move to DI
+    protected RestClient mRestClient = new RestClient();
+
+    protected EventBus mEventBus = EventBus.getDefault();
 
     /**
      * Starts executing task
      *
      * @return Execution result
      */
-    T execute() throws TaskException;
+    public abstract T execute() throws TaskException;
 
     /**
      * Will be called in case of task success
      *
      * @param result Task result
      */
-    void onSuccess(T result);
+    public abstract void onSuccess(T result);
 
     /**
      * Will be called in case of task error
      *
      * @param error Task error
      */
-    void onFail(TaskError error);
+    public abstract void onFail(TaskError error);
 }
