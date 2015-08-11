@@ -3,7 +3,11 @@ This project is Android client for Travis CI.
 It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for retching all required information about project and tasks.
 
 # Open source libraries
-Coming soon...
+- [Android appcompat v7](https://github.com/android/platform_frameworks_support/tree/master/v7/appcompat)
+- [Retrofit](https://github.com/square/retrofit)
+- [Gson](https://code.google.com/p/google-gson/)
+- [Parceler](http://parceler.org/)
+- [Event Bus](https://github.com/greenrobot/EventBus)
 
 # Warning
 The project is under development!
