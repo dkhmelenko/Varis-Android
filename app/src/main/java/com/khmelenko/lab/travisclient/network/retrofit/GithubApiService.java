@@ -1,6 +1,6 @@
 package com.khmelenko.lab.travisclient.network.retrofit;
 
-import com.khmelenko.lab.travisclient.network.dao.GithubAccessToken;
+import com.khmelenko.lab.travisclient.network.response.GithubAccessToken;
 
 import retrofit.http.Headers;
 import retrofit.http.POST;

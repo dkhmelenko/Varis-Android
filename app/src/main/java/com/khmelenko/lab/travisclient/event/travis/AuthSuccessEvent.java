@@ -1,4 +1,4 @@
-package com.khmelenko.lab.travisclient.event.github;
+package com.khmelenko.lab.travisclient.event.travis;
 
 /**
  * Event on successful authentication

@@ -1,4 +1,4 @@
-package com.khmelenko.lab.travisclient.network.dao;
+package com.khmelenko.lab.travisclient.network.response;
 
 import com.google.gson.annotations.SerializedName;
 

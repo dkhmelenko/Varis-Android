@@ -7,11 +7,11 @@ import com.khmelenko.lab.travisclient.task.TaskError;
  *
  * @author Dmytro Khmelenko
  */
-public final class AuthFailEvent {
+public final class GithubAuthFailEvent {
 
     private final TaskError mTaskError;
 
-    public AuthFailEvent(TaskError taskError) {
+    public GithubAuthFailEvent(TaskError taskError) {
         mTaskError = taskError;
     }
 

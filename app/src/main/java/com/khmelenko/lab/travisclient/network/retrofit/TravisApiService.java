@@ -1,15 +1,18 @@
 package com.khmelenko.lab.travisclient.network.retrofit;
 
-import com.khmelenko.lab.travisclient.network.dao.Branch;
-import com.khmelenko.lab.travisclient.network.dao.Repo;
+
+import com.khmelenko.lab.travisclient.network.request.AccessTokenRequest;
+import com.khmelenko.lab.travisclient.network.response.AccessToken;
+import com.khmelenko.lab.travisclient.network.response.Branch;
+import com.khmelenko.lab.travisclient.network.response.Repo;
 
 import java.util.List;
 
-import retrofit.Callback;
+import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.Path;
-import retrofit.http.Query;
 
 /**
  * Defines an interface for the REST service
@@ -17,6 +20,13 @@ import retrofit.http.Query;
  * @author Dmytro Khmelenko
  */
 public interface TravisApiService {
+
+    @Headers({
+            "Accept: application/vnd.travis-ci.2+json",
+            "User-Agent:TravisClient/1.0.0"
+    })
+    @POST("/auth/github")
+    AccessToken auth(@Body AccessTokenRequest accessToken);
 
     @GET("/repos")
     List<Repo> getRepos();

@@ -9,8 +9,10 @@ import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.common.Constants;
-import com.khmelenko.lab.travisclient.event.github.AuthFailEvent;
-import com.khmelenko.lab.travisclient.event.github.AuthSuccessEvent;
+import com.khmelenko.lab.travisclient.event.github.GithubAuthFailEvent;
+import com.khmelenko.lab.travisclient.event.github.GithubAuthSuccessEvent;
+import com.khmelenko.lab.travisclient.event.travis.AuthFailEvent;
+import com.khmelenko.lab.travisclient.event.travis.AuthSuccessEvent;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.util.AssetsUtils;
 
@@ -68,6 +70,25 @@ public class AuthActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         mEventBus.unregister(this);
+    }
+
+    /**
+     * Handles event of github success authentication
+     *
+     * @param event Event data
+     */
+    public void onEvent(GithubAuthSuccessEvent event) {
+        mTaskManager.startAuth(event.getAccessToken());
+    }
+
+    /**
+     * Handles event of github failed authentication
+     *
+     * @param event Event data
+     */
+    public void onEvent(GithubAuthFailEvent event) {
+        // TODO Handle error
+        Toast.makeText(this, event.getTaskError().getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     /**

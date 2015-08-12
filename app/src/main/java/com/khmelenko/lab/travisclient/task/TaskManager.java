@@ -1,6 +1,7 @@
 package com.khmelenko.lab.travisclient.task;
 
-import com.khmelenko.lab.travisclient.task.github.AuthTask;
+import com.khmelenko.lab.travisclient.task.github.GithubAuthTask;
+import com.khmelenko.lab.travisclient.task.loader.AuthTask;
 
 /**
  * Manages the tasks
@@ -17,7 +18,17 @@ public final class TaskManager {
      * @param accessCode   Access code
      */
     public void startGithubAuth(String clientId, String clientSecret, String accessCode) {
-        AuthTask task = new AuthTask(clientId, clientSecret, accessCode);
+        GithubAuthTask task = new GithubAuthTask(clientId, clientSecret, accessCode);
+        LoaderAsyncTask.executeTask(task);
+    }
+
+    /**
+     * Starts authentication task
+     *
+     * @param githubToken Github access token
+     */
+    public void startAuth(String githubToken) {
+        AuthTask task = new AuthTask(githubToken);
         LoaderAsyncTask.executeTask(task);
     }
 
