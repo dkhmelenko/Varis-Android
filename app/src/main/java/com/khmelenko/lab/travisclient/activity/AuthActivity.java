@@ -18,6 +18,8 @@ import com.khmelenko.lab.travisclient.util.AssetsUtils;
 
 import java.util.Properties;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -32,6 +34,9 @@ public class AuthActivity extends AppCompatActivity {
     private String mClientId;
     private String mClientSecret;
 
+    @Bind(R.id.webView)
+    WebView mWebView;
+
     private EventBus mEventBus = EventBus.getDefault();
 
     // TODO Move to DI
@@ -41,23 +46,23 @@ public class AuthActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+        ButterKnife.bind(this);
 
         // load required properties
         Properties properties = AssetsUtils.getProperties(Constants.KEY_PROPERTIES, this);
         mClientId = properties.getProperty("clientId");
         mClientSecret = properties.getProperty("clientSecret");
 
-        WebView webview = (WebView) findViewById(R.id.webView);
-        webview.getSettings().setJavaScriptEnabled(true);
-        webview.setWebViewClient(new WebViewClient() {
-                                     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                                         handlePageLoaded(url);
-                                     }
-                                 }
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setWebViewClient(new WebViewClient() {
+                                      public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                                          handlePageLoaded(url);
+                                      }
+                                  }
         );
 
         String url = String.format("%s?client_id=%s", OAUTH_URL, mClientId);
-        webview.loadUrl(url);
+        mWebView.loadUrl(url);
     }
 
     @Override
