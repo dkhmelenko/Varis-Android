@@ -1,4 +1,6 @@
 # TravisClient_Android
+[![Build Status on Travis:](https://travis-ci.org/brave-warrior/TravisClient_Android.svg?branch=master)](https://travis-ci.org/brave-warrior/TravisClient_Android)
+
 This project is Android client for Travis CI.
 It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for retching all required information about project and tasks.
 
