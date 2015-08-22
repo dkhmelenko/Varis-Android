@@ -1,7 +1,7 @@
 package com.khmelenko.lab.travisclient.task;
 
 import com.khmelenko.lab.travisclient.task.github.GithubAuthTask;
-import com.khmelenko.lab.travisclient.task.loader.AuthTask;
+import com.khmelenko.lab.travisclient.task.travis.AuthTask;
 
 /**
  * Manages the tasks

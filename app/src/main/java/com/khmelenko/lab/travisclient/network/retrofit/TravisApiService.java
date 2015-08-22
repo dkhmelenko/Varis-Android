@@ -31,15 +31,18 @@ public interface TravisApiService {
     @POST("/auth/github")
     AccessToken auth(@Body AccessTokenRequest accessToken);
 
+    // repositories
     @GET("/repos")
     List<Repo> getRepos();
 
     @GET("/repos/{repositoryId}")
-    List<Repo> getRepo(@Path("repositoryId") long repositoryId);
+    Repo getRepo(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}")
-    List<Repo> getRepo(@Path("repositorySlug") String repositorySlug);
+    Repo getRepo(@Path("repositorySlug") String repositorySlug);
 
+
+    // branches
     @GET("/repos/{repositoryId}/branches")
     List<Branch> getBranches(@Path("repositoryId") long repositoryId);
 
@@ -52,6 +55,8 @@ public interface TravisApiService {
     @GET("/repos/{repositorySlug}/branches/{branch}")
     Branch getBranch(@Path("repositorySlug") String repositorySlug, @Path("branch") String branch);
 
+
+    // builds
     @GET("/repos/{repositoryId}/builds")
     List<Build> getBuilds(@Path("repositoryId") long repositoryId);
 
@@ -70,6 +75,8 @@ public interface TravisApiService {
     @POST("/builds/{buildId}/restart")
     void restartBuild(@Path("buildId") long buildId);
 
+
+    // requests
     @GET("/requests/{requestId}")
     List<Request> getRequest(@Path("requestId") long requestId);
 

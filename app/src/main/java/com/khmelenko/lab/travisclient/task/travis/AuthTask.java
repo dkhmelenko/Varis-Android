@@ -1,4 +1,4 @@
-package com.khmelenko.lab.travisclient.task.loader;
+package com.khmelenko.lab.travisclient.task.travis;
 
 import com.khmelenko.lab.travisclient.event.travis.AuthFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.AuthSuccessEvent;
