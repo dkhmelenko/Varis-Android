@@ -4,7 +4,9 @@ package com.khmelenko.lab.travisclient.network.retrofit;
 import com.khmelenko.lab.travisclient.network.request.AccessTokenRequest;
 import com.khmelenko.lab.travisclient.network.response.AccessToken;
 import com.khmelenko.lab.travisclient.network.response.Branch;
+import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.Repo;
+import com.khmelenko.lab.travisclient.network.response.Request;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 /**
  * Defines an interface for the REST service
@@ -42,5 +45,38 @@ public interface TravisApiService {
 
     @GET("/repos/{repositorySlug}/branches")
     List<Branch> getBranches(@Path("repositorySlug") String repositorySlug);
+
+    @GET("/repos/{repositorySlug}/branches/{branch}")
+    Branch getBranch(@Path("repositoryId") long repositoryId, @Path("branch") String branch);
+
+    @GET("/repos/{repositorySlug}/branches/{branch}")
+    Branch getBranch(@Path("repositorySlug") String repositorySlug, @Path("branch") String branch);
+
+    @GET("/repos/{repositoryId}/builds")
+    List<Build> getBuilds(@Path("repositoryId") long repositoryId);
+
+    @GET("/repos/{repositorySlug}/builds")
+    List<Build> getBuilds(@Path("repositorySlug") String repositorySlug);
+
+    @GET("/repos/{repositoryId}/builds/{buildId}")
+    List<Build> getBuilds(@Path("repositoryId") long repositoryId, @Path("buildId") long buildId);
+
+    @GET("/repos/{repositorySlug}/builds/{buildId}")
+    List<Build> getBuilds(@Path("repositorySlug") String repositorySlug, @Path("buildId") long buildId);
+
+    @POST("/builds/{buildId}/cancel")
+    void cancelBuild(@Path("buildId") long buildId);
+
+    @POST("/builds/{buildId}/restart")
+    void restartBuild(@Path("buildId") long buildId);
+
+    @GET("/requests/{requestId}")
+    List<Request> getRequest(@Path("requestId") long requestId);
+
+    @GET("/requests")
+    List<Request> getRequests(@Query("repository_id") long repositoryId);
+
+    @GET("/requests")
+    List<Request> getRequests(@Query("slug") String repositorySlug);
 
 }
