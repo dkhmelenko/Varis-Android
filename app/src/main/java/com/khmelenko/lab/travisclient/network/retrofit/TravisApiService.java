@@ -35,6 +35,9 @@ public interface TravisApiService {
     @GET("/repos")
     List<Repo> getRepos();
 
+    @GET("/repos")
+    List<Repo> getRepos(@Query("search") String search);
+
     @GET("/repos/{repositoryId}")
     Repo getRepo(@Path("repositoryId") long repositoryId);
 
