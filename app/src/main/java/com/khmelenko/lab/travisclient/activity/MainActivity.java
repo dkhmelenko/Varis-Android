@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mReposRecyclerView.setLayoutManager(layoutManager);
-        mReposRecyclerView.setBackgroundResource(R.drawable.list_item_selector);
 
         mRepoListAdapter = new RepoListAdapter(mRepos);
         mReposRecyclerView.setAdapter(mRepoListAdapter);
@@ -149,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onEvent(LoadingFailedEvent event) {
         mProgressDialog.dismiss();
-        
+
         String msg = getString(R.string.error_failed_loading_repos, event.getTaskError().getMessage());
         Toast.makeText(this, R.string.error_failed_loading_repos, Toast.LENGTH_SHORT).show();
     }
