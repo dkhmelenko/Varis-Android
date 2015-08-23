@@ -1,9 +1,8 @@
 package com.khmelenko.lab.travisclient.activity;
 
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -12,13 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.model.DrawerItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -53,37 +49,39 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         setupDrawerLayout();
 
-
-        // TODO
-//        Button authBtn = (Button) findViewById(R.id.auth_btn);
-//        authBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 
+    /**
+     * Initializes toolbar
+     */
     private void initToolbar() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
+    /**
+     * Sets up navigation drawer layout
+     */
     private void setupDrawerLayout() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
         view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override public boolean onNavigationItemSelected(MenuItem menuItem) {
-                // TODO Handle selection from navigation view
-                Snackbar.make(content, menuItem.getTitle() + " pressed", Snackbar.LENGTH_LONG).show();
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.drawer_login:
+                        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                        startActivity(intent);
+                        break;
+                }
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 return true;
