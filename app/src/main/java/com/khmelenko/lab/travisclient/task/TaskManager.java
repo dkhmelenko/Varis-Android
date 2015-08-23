@@ -2,6 +2,7 @@ package com.khmelenko.lab.travisclient.task;
 
 import com.khmelenko.lab.travisclient.task.github.GithubAuthTask;
 import com.khmelenko.lab.travisclient.task.travis.AuthTask;
+import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
 
 /**
  * Manages the tasks
@@ -29,6 +30,11 @@ public final class TaskManager {
      */
     public void startAuth(String githubToken) {
         AuthTask task = new AuthTask(githubToken);
+        LoaderAsyncTask.executeTask(task);
+    }
+
+    public void findRepos(String searchText) {
+        FindRepoTask task = new FindRepoTask(searchText);
         LoaderAsyncTask.executeTask(task);
     }
 

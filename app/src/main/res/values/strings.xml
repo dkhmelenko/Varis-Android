@@ -18,4 +18,5 @@
     <string name="action_example">Example action</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
     <string name="navigation_drawer_logout">Logout</string>
+    <string name="error_failed_loading_repos">Failed to load repositories: %1$s</string>
 </resources>
