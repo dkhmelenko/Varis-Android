@@ -1,5 +1,6 @@
 package com.khmelenko.lab.travisclient.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private RepoListAdapter mRepoListAdapter;
     private List<Repo> mRepos = new ArrayList<>();
 
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         setupDrawerLayout();
 
+        mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
         TaskManager taskManager = new TaskManager();
         taskManager.findRepos(null);
     }
@@ -132,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
      * @param event Event data
      */
     public void onEvent(FindReposEvent event) {
+        mProgressDialog.dismiss();
+
         mRepos.clear();
         mRepos.addAll(event.getRepos());
         mRepoListAdapter.notifyDataSetChanged();
@@ -143,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
      * @param event Event data
      */
     public void onEvent(LoadingFailedEvent event) {
+        mProgressDialog.dismiss();
+        
         String msg = getString(R.string.error_failed_loading_repos, event.getTaskError().getMessage());
         Toast.makeText(this, R.string.error_failed_loading_repos, Toast.LENGTH_SHORT).show();
     }
