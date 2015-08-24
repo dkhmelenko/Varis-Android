@@ -2,7 +2,10 @@ package com.khmelenko.lab.travisclient.activity;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -38,8 +41,6 @@ public class AuthActivity extends AppCompatActivity {
     WebView mWebView;
 
     private EventBus mEventBus = EventBus.getDefault();
-
-    // TODO Move to DI
     private TaskManager mTaskManager = new TaskManager();
 
     @Override
@@ -47,6 +48,8 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
+
+        initToolbar();
 
         // load required properties
         Properties properties = AssetsUtils.getProperties(Constants.KEY_PROPERTIES, this);
@@ -77,6 +80,25 @@ public class AuthActivity extends AppCompatActivity {
         mEventBus.unregister(this);
     }
 
+    /**
+     * Initializes toolbar
+     */
+    private void initToolbar() {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
+    }
     /**
      * Handles event of github success authentication
      *
