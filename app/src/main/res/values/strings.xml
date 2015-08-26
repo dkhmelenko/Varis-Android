@@ -1,23 +1,22 @@
 <resources>
     <string name="app_name">TravisClient</string>
 
-    <string name="main_activity_action_auth">Do Auth</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_auth">AuthActivity</string>
-
+    <!-- Navigation drawer -->
     <string name="navigation_drawer_login">Login</string>
-    <string name="title_activity_main2">Main2Activity</string>
-
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_example">Example action</string>
-    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
     <string name="navigation_drawer_logout">Logout</string>
+
+    <!-- Messages -->
     <string name="error_failed_loading_repos">Failed to load repositories: %1$s</string>
     <string name="loading_msg">Loading...</string>
+
+    <!-- Main screen -->
+    <string name="main_activity_action_search">Search</string>
+    <string name="main_activity_search_repo_hint">Search repository</string>
+
+    <!-- Auth screen -->
+    <string name="title_activity_auth">AuthActivity</string>
+
+    <!-- Search screen -->
+    <string name="title_activity_search_results">Search results</string>
+
 </resources>

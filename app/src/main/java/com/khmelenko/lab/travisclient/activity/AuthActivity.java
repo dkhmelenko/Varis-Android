@@ -99,6 +99,7 @@ public class AuthActivity extends AppCompatActivity {
             });
         }
     }
+
     /**
      * Handles event of github success authentication
      *
