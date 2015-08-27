@@ -12,4 +12,5 @@
 
     <color name="build_state_passed">#FF3FA75F</color>
     <color name="build_state_failed">#FFDB423C</color>
+    <color name="build_state_started">#FFD2C93B</color>
 </resources>

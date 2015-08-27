@@ -1,18 +1,30 @@
 package com.khmelenko.lab.travisclient.activity;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.adapter.RepoListAdapter;
+import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
+import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
+import com.khmelenko.lab.travisclient.network.response.Repo;
+import com.khmelenko.lab.travisclient.task.TaskManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 /**
  * Provides activity with search results
@@ -21,11 +33,27 @@ import butterknife.ButterKnife;
  */
 public class SearchResultsActivity extends AppCompatActivity {
 
+    @Bind(R.id.search_repos_recycler_view)
+    RecyclerView mReposRecyclerView;
+
+    private RepoListAdapter mRepoListAdapter;
+    private List<Repo> mRepos = new ArrayList<>();
+
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
         ButterKnife.bind(this);
+
+        mReposRecyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mReposRecyclerView.setLayoutManager(layoutManager);
+
+        mRepoListAdapter = new RepoListAdapter(this, mRepos);
+        mReposRecyclerView.setAdapter(mRepoListAdapter);
 
         initToolbar();
 
@@ -38,6 +66,18 @@ public class SearchResultsActivity extends AppCompatActivity {
         handleIntent(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     /**
      * Handles received intent
      *
@@ -46,11 +86,19 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-
-            int i = 0;
-            i++;
-            // TODO Start search
+            startRepoSearch(query);
         }
+    }
+
+    /**
+     * Starts repository search
+     *
+     * @param query Query string for search
+     */
+    private void startRepoSearch(String query) {
+        mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
+        TaskManager taskManager = new TaskManager();
+        taskManager.findRepos(query);
     }
 
     /**
@@ -71,6 +119,31 @@ public class SearchResultsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    /**
+     * Raised on loaded repositories
+     *
+     * @param event Event data
+     */
+    public void onEvent(FindReposEvent event) {
+        mProgressDialog.dismiss();
+
+        mRepos.clear();
+        mRepos.addAll(event.getRepos());
+        mRepoListAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Raised on failed loading data
+     *
+     * @param event Event data
+     */
+    public void onEvent(LoadingFailedEvent event) {
+        mProgressDialog.dismiss();
+
+        String msg = getString(R.string.error_failed_loading_repos, event.getTaskError().getMessage());
+        Toast.makeText(this, R.string.error_failed_loading_repos, Toast.LENGTH_SHORT).show();
     }
 
 }

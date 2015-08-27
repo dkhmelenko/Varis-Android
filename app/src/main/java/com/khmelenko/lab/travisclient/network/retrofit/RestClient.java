@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.khmelenko.lab.travisclient.common.Constants;
 
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -22,13 +23,23 @@ public final class RestClient {
     public RestClient() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
+                .registerTypeAdapterFactory(new ItemTypeAdapterFactory())
                 .create();
+
+        RequestInterceptor requestInterceptor = new RequestInterceptor() {
+            @Override
+            public void intercept(RequestFacade request) {
+                request.addHeader("User-Agent", "TravisClient/1.0.0");
+                request.addHeader("Accept", "application/vnd.travis-ci.2+json");
+            }
+        };
 
         // rest adapter for travis API service
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(TRAVIS_URL)
                 .setConverter(new GsonConverter(gson))
+                .setRequestInterceptor(requestInterceptor)
                 .build();
         mApiService = restAdapter.create(TravisApiService.class);
 

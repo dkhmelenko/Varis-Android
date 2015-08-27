@@ -22,10 +22,10 @@ public final class Converter {
         int sec = (int) (duration % 60);
         StringBuilder builder = new StringBuilder();
         if (hour != 0) {
-            builder.append(hour).append(" hours");
+            builder.append(hour).append(" hours").append(" ");
         }
         if (min != 0) {
-            builder.append(min).append(" min");
+            builder.append(min).append(" min").append(" ");
         }
         if(sec != 0) {
             builder.append(sec).append(" sec");

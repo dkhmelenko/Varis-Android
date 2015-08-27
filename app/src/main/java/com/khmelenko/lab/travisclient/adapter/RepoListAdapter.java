@@ -16,8 +16,10 @@ import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Adapter class for the list of repositories
@@ -48,22 +50,32 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
         if (!TextUtils.isEmpty(state)) {
             int passedColor = mContext.getResources().getColor(R.color.build_state_passed);
             int failedColor = mContext.getResources().getColor(R.color.build_state_failed);
-            if (state.equals("passed")) {
-                repoViewHolder.mName.setTextColor(passedColor);
-                Drawable passIcon = mContext.getDrawable(R.drawable.build_passed);
-                repoViewHolder.mName.setCompoundDrawables(passIcon, null, null, null);
-            } else if (state.equals("failed")){
-                repoViewHolder.mName.setTextColor(failedColor);
-                Drawable failIcon = mContext.getDrawable(R.drawable.build_failed);
-                repoViewHolder.mName.setCompoundDrawables(failIcon, null, null, null);
+            int startedColor = mContext.getResources().getColor(R.color.build_state_started);
+            switch (state)
+            {
+                case "started":
+                    repoViewHolder.mName.setTextColor(startedColor);
+                    break;
+                case "passed":
+                    repoViewHolder.mName.setTextColor(passedColor);
+                    Drawable passIcon = mContext.getResources().getDrawable(R.drawable.build_passed);
+                    passIcon.setBounds(0,0,30,30);
+                    repoViewHolder.mName.setCompoundDrawables(passIcon, null, null, null);
+                    break;
+                case "failed":
+                case "errored":
+                    repoViewHolder.mName.setTextColor(failedColor);
+                    Drawable failIcon = mContext.getResources().getDrawable(R.drawable.build_failed);
+                    failIcon.setBounds(0,0,30,30);
+                    repoViewHolder.mName.setCompoundDrawables(failIcon, null, null, null);
+                    break;
             }
         }
 
         // finished at
         if (!TextUtils.isEmpty(repo.getLastBuildFinishedAt())) {
             try {
-                DateFormat dateFormat = DateFormat.getDateInstance();
-                Date finishedAt = dateFormat.parse(repo.getLastBuildFinishedAt());
+                Date finishedAt = DateTimeUtils.parseXmlDateTime(repo.getLastBuildFinishedAt());
                 String formattedDate = DateTimeUtils.formatDateTimeLocal(finishedAt);
                 formattedDate = mContext.getString(R.string.repo_finished_at, formattedDate);
                 repoViewHolder.mFinished.setText(formattedDate);
