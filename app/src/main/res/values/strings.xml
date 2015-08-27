@@ -18,5 +18,8 @@
 
     <!-- Search screen -->
     <string name="title_activity_search_results">Search results</string>
+    <string name="repo_finished_at">Finished: %1$s</string>
+    <string name="repo_build_in_progress">In progress</string>
+    <string name="repo_duration">Duration: %1$s</string>
 
 </resources>

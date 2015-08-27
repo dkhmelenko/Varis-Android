@@ -25,10 +25,10 @@ public class Repo {
     private String mLastBuildNumber;
 
     @SerializedName("last_build_state")
-    private String mLastBuildStat;
+    private String mLastBuildState;
 
     @SerializedName("last_build_duration")
-    private String mLastBuildDuration;
+    private long mLastBuildDuration;
 
     @SerializedName("last_build_started_at")
     private String mLastBuildStartedAt;
@@ -79,19 +79,19 @@ public class Repo {
         mLastBuildNumber = lastBuildNumber;
     }
 
-    public String getLastBuildStat() {
-        return mLastBuildStat;
+    public String getLastBuildState() {
+        return mLastBuildState;
     }
 
-    public void setLastBuildStat(String lastBuildStat) {
-        mLastBuildStat = lastBuildStat;
+    public void setLastBuildState(String lastBuildState) {
+        mLastBuildState = lastBuildState;
     }
 
-    public String getLastBuildDuration() {
+    public long getLastBuildDuration() {
         return mLastBuildDuration;
     }
 
-    public void setLastBuildDuration(String lastBuildDuration) {
+    public void setLastBuildDuration(long lastBuildDuration) {
         mLastBuildDuration = lastBuildDuration;
     }
 

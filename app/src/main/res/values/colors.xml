@@ -9,4 +9,7 @@
     <color name="secondary_text">#727272</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
+
+    <color name="build_state_passed">#FF3FA75F</color>
+    <color name="build_state_failed">#FFDB423C</color>
 </resources>

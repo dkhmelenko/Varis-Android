@@ -10,6 +10,30 @@
         android:id="@+id/item_repo_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:paddingTop="4dp"
         android:textSize="23sp"/>
+
+    <TextView
+        android:id="@+id/item_repo_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/duration"
+        android:drawablePadding="4dp"
+        android:drawableStart="@drawable/duration"
+        android:paddingTop="2dp"
+        android:textSize="18sp"
+        />
+
+    <TextView
+        android:id="@+id/item_repo_finished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/finished_at"
+        android:drawablePadding="4dp"
+        android:drawableStart="@drawable/finished_at"
+        android:paddingTop="2dp"
+        android:textSize="18sp"
+        />
 
 </LinearLayout>

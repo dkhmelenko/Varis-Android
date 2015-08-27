@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mReposRecyclerView.setLayoutManager(layoutManager);
 
-        mRepoListAdapter = new RepoListAdapter(mRepos);
+        mRepoListAdapter = new RepoListAdapter(this, mRepos);
         mReposRecyclerView.setAdapter(mRepoListAdapter);
 
         initToolbar();
