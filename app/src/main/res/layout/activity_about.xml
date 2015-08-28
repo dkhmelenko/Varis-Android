@@ -11,11 +11,11 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:padding="30dp"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/travis_icon"
         />
 
     <TextView
