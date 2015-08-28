@@ -113,11 +113,18 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (menuItem.getItemId()) {
                     case R.id.drawer_login:
-                        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-                        startActivity(intent);
+                        Intent loginIntent = new Intent(MainActivity.this, AuthActivity.class);
+                        startActivity(loginIntent);
+                        break;
+                    case R.id.drawer_logout:
+                        // TODO
+                        break;
+                    case R.id.drawer_about:
+                        Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
+                        startActivity(aboutIntent);
                         break;
                 }
-                menuItem.setChecked(true);
+                menuItem.setChecked(false);
                 drawerLayout.closeDrawers();
                 return true;
             }

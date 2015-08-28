@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+        android:name=".TravisApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,15 +25,18 @@
         <!-- Authentication activity -->
         <activity
             android:name=".activity.AuthActivity"
-            android:label="@string/title_activity_auth">
-        </activity>
+            android:label="@string/title_activity_auth"/>
+
+        <!-- About -->
+        <activity
+            android:name=".activity.AboutActivity"
+            android:label="@string/about_title"/>
 
         <!-- Search results -->
         <activity
             android:name=".activity.SearchResultsActivity"
-            android:label="@string/title_activity_search_results"
+            android:label="@string/search_results_title"
             android:launchMode="singleTop">
-
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>

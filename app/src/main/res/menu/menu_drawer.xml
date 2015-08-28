@@ -14,5 +14,10 @@
             android:icon="@drawable/login_icon"
             android:title="@string/navigation_drawer_logout"/>
 
+        <item
+            android:id="@+id/drawer_about"
+            android:icon="@drawable/about_icon"
+            android:title="@string/navigation_drawer_about"/>
+
     </group>
 </menu>
