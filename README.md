@@ -1,4 +1,4 @@
-# TravisClient_Android
+# Project description
 [![Build Status on Travis:](https://travis-ci.org/brave-warrior/TravisClient_Android.svg?branch=master)](https://travis-ci.org/brave-warrior/TravisClient_Android)
 
 This project is Android client for Travis CI.
@@ -11,6 +11,9 @@ It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for retchi
 - [Parceler](http://parceler.org/)
 - [Butter Knife](http://jakewharton.github.io/butterknife/)
 - [Event Bus](https://github.com/greenrobot/EventBus)
+
+# Contribution
+In case you have ideas or found an issue, don't hesitate to create pull request.
 
 # Warning
 The project is under development!
