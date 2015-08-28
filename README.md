@@ -9,6 +9,7 @@ It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for retchi
 - [Retrofit](https://github.com/square/retrofit)
 - [Gson](https://code.google.com/p/google-gson/)
 - [Parceler](http://parceler.org/)
+- [Butter Knife](http://jakewharton.github.io/butterknife/)
 - [Event Bus](https://github.com/greenrobot/EventBus)
 
 # Warning
