@@ -3,6 +3,7 @@ package com.khmelenko.lab.travisclient.network.retrofit;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.khmelenko.lab.travisclient.common.Constants;
+import com.khmelenko.lab.travisclient.util.PackageUtils;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -29,7 +30,8 @@ public final class RestClient {
         RequestInterceptor requestInterceptor = new RequestInterceptor() {
             @Override
             public void intercept(RequestFacade request) {
-                request.addHeader("User-Agent", "TravisClient/1.0.0");
+                String userAgent = String.format("TravisClient/%1$s", PackageUtils.getAppVersion());
+                request.addHeader("User-Agent", userAgent);
                 request.addHeader("Accept", "application/vnd.travis-ci.2+json");
             }
         };
