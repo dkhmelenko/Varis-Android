@@ -4,7 +4,7 @@ package com.khmelenko.lab.travisclient.task;
  * Exception for task
  * @author Dmytro Khmelenko
  */
-public class TaskException extends Throwable {
+public class TaskException extends RuntimeException {
 
     private final TaskError mTaskError;
 

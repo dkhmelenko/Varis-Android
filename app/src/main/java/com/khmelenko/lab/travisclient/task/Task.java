@@ -3,6 +3,7 @@ package com.khmelenko.lab.travisclient.task;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 
 import de.greenrobot.event.EventBus;
+import retrofit.RetrofitError;
 
 /**
  * Defines an interface for Task
@@ -36,4 +37,5 @@ public abstract class Task<T> {
      * @param error Task error
      */
     public abstract void onFail(TaskError error);
+
 }

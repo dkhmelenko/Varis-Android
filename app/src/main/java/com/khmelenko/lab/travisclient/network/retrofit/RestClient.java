@@ -40,6 +40,7 @@ public final class RestClient {
                 .setEndpoint(TRAVIS_URL)
                 .setConverter(new GsonConverter(gson))
                 .setRequestInterceptor(requestInterceptor)
+                .setErrorHandler(new RestErrorHandling())
                 .build();
         mApiService = restAdapter.create(TravisApiService.class);
 

@@ -21,7 +21,7 @@ public final class LoaderAsyncTask<T> extends AsyncTask<Void, Void, TaskResult<T
      * @param task Task for execution
      */
     public static <T> void executeTask(Task<T> task) {
-        LoaderAsyncTask<T> executor = new LoaderAsyncTask(task);
+        LoaderAsyncTask<T> executor = new LoaderAsyncTask<T>(task);
         executor.execute();
     }
 

@@ -7,6 +7,9 @@ package com.khmelenko.lab.travisclient.task;
  */
 public final class TaskError {
 
+    public static final int NETWORK_ERROR = -1;
+    public static final int NO_RESPONSE = -2;
+
     private final int mCode;
     private final String mMessage;
 

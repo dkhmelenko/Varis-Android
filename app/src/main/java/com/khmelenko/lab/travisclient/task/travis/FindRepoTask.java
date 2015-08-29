@@ -30,7 +30,7 @@ public class FindRepoTask extends Task<List<Repo>> {
     @Override
     public List<Repo> execute() throws TaskException {
         List<Repo> repos;
-        if(!TextUtils.isEmpty(mSearch)) {
+        if (!TextUtils.isEmpty(mSearch)) {
             repos = mRestClient.getApiService().getRepos(mSearch);
         } else {
             repos = mRestClient.getApiService().getRepos();
