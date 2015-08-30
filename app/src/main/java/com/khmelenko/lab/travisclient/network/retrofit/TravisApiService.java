@@ -67,10 +67,10 @@ public interface TravisApiService {
     List<Build> getBuilds(@Path("repositorySlug") String repositorySlug);
 
     @GET("/repos/{repositoryId}/builds/{buildId}")
-    List<Build> getBuilds(@Path("repositoryId") long repositoryId, @Path("buildId") long buildId);
+    List<Build> getBuild(@Path("repositoryId") long repositoryId, @Path("buildId") long buildId);
 
     @GET("/repos/{repositorySlug}/builds/{buildId}")
-    List<Build> getBuilds(@Path("repositorySlug") String repositorySlug, @Path("buildId") long buildId);
+    List<Build> getBuild(@Path("repositorySlug") String repositorySlug, @Path("buildId") long buildId);
 
     @POST("/builds/{buildId}/cancel")
     void cancelBuild(@Path("buildId") long buildId);
