@@ -6,6 +6,7 @@ import com.khmelenko.lab.travisclient.network.response.AccessToken;
 import com.khmelenko.lab.travisclient.network.response.Branch;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.Repo;
+import com.khmelenko.lab.travisclient.network.response.RepoStatus;
 import com.khmelenko.lab.travisclient.network.response.Request;
 
 import java.util.List;
@@ -61,16 +62,16 @@ public interface TravisApiService {
 
     // builds
     @GET("/repos/{repositoryId}/builds")
-    List<Build> getBuilds(@Path("repositoryId") long repositoryId);
+    RepoStatus getBuilds(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}/builds")
-    List<Build> getBuilds(@Path("repositorySlug") String repositorySlug);
+    RepoStatus getBuilds(@Path("repositorySlug") String repositorySlug);
 
     @GET("/repos/{repositoryId}/builds/{buildId}")
-    List<Build> getBuild(@Path("repositoryId") long repositoryId, @Path("buildId") long buildId);
+    RepoStatus getBuild(@Path("repositoryId") long repositoryId, @Path("buildId") long buildId);
 
     @GET("/repos/{repositorySlug}/builds/{buildId}")
-    List<Build> getBuild(@Path("repositorySlug") String repositorySlug, @Path("buildId") long buildId);
+    RepoStatus getBuild(@Path("repositorySlug") String repositorySlug, @Path("buildId") long buildId);
 
     @POST("/builds/{buildId}/cancel")
     void cancelBuild(@Path("buildId") long buildId);
