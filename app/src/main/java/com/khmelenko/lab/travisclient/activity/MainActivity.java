@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
+    @Bind(R.id.main_repos_swipe_view)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Bind(R.id.main_repos_recycler_view)
     RecyclerView mReposRecyclerView;
 
@@ -66,12 +70,18 @@ public class MainActivity extends AppCompatActivity {
         mRepoListAdapter = new RepoListAdapter(this, mRepos);
         mReposRecyclerView.setAdapter(mRepoListAdapter);
 
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadRepos();
+            }
+        });
+
         initToolbar();
         setupDrawerLayout();
 
         mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
-        TaskManager taskManager = new TaskManager();
-        taskManager.findRepos(null);
+        loadRepos();
     }
 
     @Override
@@ -84,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * Starts loading repositories
+     */
+    private void loadRepos() {
+        TaskManager taskManager = new TaskManager();
+        taskManager.findRepos(null);
     }
 
     /**
@@ -176,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
      * @param event Event data
      */
     public void onEvent(FindReposEvent event) {
+        mSwipeRefreshLayout.setRefreshing(false);
         mProgressDialog.dismiss();
 
         mRepos.clear();
@@ -189,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
      * @param event Event data
      */
     public void onEvent(LoadingFailedEvent event) {
+        mSwipeRefreshLayout.setRefreshing(false);
         mProgressDialog.dismiss();
 
         String error = event.getTaskError().getMessage();
