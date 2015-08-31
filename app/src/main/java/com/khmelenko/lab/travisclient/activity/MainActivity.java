@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         mRepoListAdapter = new RepoListAdapter(this, mRepos);
         mReposRecyclerView.setAdapter(mRepoListAdapter);
 
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
