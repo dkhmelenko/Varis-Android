@@ -1,13 +1,13 @@
-package com.khmelenko.lab.travisclient.util;
+package com.khmelenko.lab.travisclient.converter;
 
 /**
- * Provides convertion methods
+ * Provides time related convertion methods
  *
  * @author Dmytro Khmelenko
  */
-public final class Converter {
+public final class TimeConverter {
 
-    private Converter() {
+    private TimeConverter() {
     }
 
     /**

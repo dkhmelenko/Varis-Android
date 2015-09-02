@@ -10,16 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
+import com.khmelenko.lab.travisclient.converter.TimeConverter;
 import com.khmelenko.lab.travisclient.network.response.Repo;
-import com.khmelenko.lab.travisclient.util.Converter;
 import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Adapter class for the list of repositories
@@ -48,49 +44,28 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
         repoViewHolder.mName.setText(repo.getSlug());
         String state = repo.getLastBuildState();
         if (!TextUtils.isEmpty(state)) {
-            int passedColor = mContext.getResources().getColor(R.color.build_state_passed);
-            int failedColor = mContext.getResources().getColor(R.color.build_state_failed);
-            int startedColor = mContext.getResources().getColor(R.color.build_state_started);
-            switch (state)
-            {
-                case "started":
-                    repoViewHolder.mName.setTextColor(startedColor);
-                    break;
-                case "passed":
-                    repoViewHolder.mName.setTextColor(passedColor);
-                    Drawable passIcon = mContext.getResources().getDrawable(R.drawable.build_passed);
-                    passIcon.setBounds(0,0,30,30);
-                    repoViewHolder.mName.setCompoundDrawables(passIcon, null, null, null);
-                    break;
-                case "failed":
-                case "errored":
-                    repoViewHolder.mName.setTextColor(failedColor);
-                    Drawable failIcon = mContext.getResources().getDrawable(R.drawable.build_failed);
-                    failIcon.setBounds(0,0,30,30);
-                    repoViewHolder.mName.setCompoundDrawables(failIcon, null, null, null);
-                    break;
-            }
+            int buildColor = BuildStateHelper.getBuildColor(state);
+            repoViewHolder.mName.setTextColor(buildColor);
+
+            Drawable drawable = BuildStateHelper.getBuildImage(state);
+            drawable.setBounds(0, 0, 30, 30);
+            repoViewHolder.mName.setCompoundDrawables(drawable, null, null, null);
         }
 
         // finished at
         if (!TextUtils.isEmpty(repo.getLastBuildFinishedAt())) {
-            try {
-                Date finishedAt = DateTimeUtils.parseXmlDateTime(repo.getLastBuildFinishedAt());
-                String formattedDate = DateTimeUtils.formatDateTimeLocal(finishedAt);
-                formattedDate = mContext.getString(R.string.repo_finished_at, formattedDate);
-                repoViewHolder.mFinished.setText(formattedDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            String formattedDate = DateTimeUtils.parseAndFormatDateTime(repo.getLastBuildFinishedAt());
+            formattedDate = mContext.getString(R.string.build_finished_at, formattedDate);
+            repoViewHolder.mFinished.setText(formattedDate);
         } else {
-            String stateInProgress = mContext.getString(R.string.repo_build_in_progress);
-            String finished = mContext.getString(R.string.repo_finished_at, stateInProgress);
+            String stateInProgress = mContext.getString(R.string.build_build_in_progress);
+            String finished = mContext.getString(R.string.build_finished_at, stateInProgress);
             repoViewHolder.mFinished.setText(finished);
         }
 
         // duration
-        if(repo.getLastBuildDuration() != 0) {
-            String duration = Converter.durationToString(repo.getLastBuildDuration());
+        if (repo.getLastBuildDuration() != 0) {
+            String duration = TimeConverter.durationToString(repo.getLastBuildDuration());
             duration = mContext.getString(R.string.repo_duration, duration);
             repoViewHolder.mDuration.setText(duration);
         } else {
