@@ -2,6 +2,7 @@ package com.khmelenko.lab.travisclient.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -26,10 +27,12 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
 
     private final List<Repo> mRepos;
     private final Context mContext;
+    private final OnRepoItemListener mListener;
 
-    public RepoListAdapter(Context context, List<Repo> repos) {
+    public RepoListAdapter(Context context, List<Repo> repos, OnRepoItemListener listener) {
         mContext = context;
         mRepos = repos;
+        mListener = listener;
     }
 
     @Override
@@ -83,7 +86,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
     /**
      * Viewholder class
      */
-    class RepoViewHolder extends RecyclerView.ViewHolder {
+    class RepoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mName;
         private TextView mDuration;
@@ -91,10 +94,32 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
 
         public RepoViewHolder(View itemView) {
             super(itemView);
-            itemView.setClickable(true);
+            CardView cardView = (CardView) itemView.findViewById(R.id.card_view);
+            cardView.setOnClickListener(this);
+
             mName = (TextView) itemView.findViewById(R.id.item_repo_name);
             mDuration = (TextView) itemView.findViewById(R.id.item_repo_duration);
             mFinished = (TextView) itemView.findViewById(R.id.item_repo_finished);
         }
+
+        @Override
+        public void onClick(View view) {
+            if(mListener != null) {
+                mListener.onItemSelected(getLayoutPosition());
+            }
+        }
+    }
+
+    /**
+     * Listener for item repository
+     */
+    public interface OnRepoItemListener {
+
+        /**
+         * Handles item selection
+         *
+         * @param position Item position
+         */
+        void onItemSelected(int position);
     }
 }

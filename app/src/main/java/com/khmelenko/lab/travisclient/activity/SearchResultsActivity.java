@@ -52,7 +52,13 @@ public class SearchResultsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mReposRecyclerView.setLayoutManager(layoutManager);
 
-        mRepoListAdapter = new RepoListAdapter(this, mRepos);
+        mRepoListAdapter = new RepoListAdapter(this, mRepos, new RepoListAdapter.OnRepoItemListener() {
+            @Override
+            public void onItemSelected(int position) {
+                Intent intent = new Intent(SearchResultsActivity.this, BuildHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
         mReposRecyclerView.setAdapter(mRepoListAdapter);
 
         initToolbar();

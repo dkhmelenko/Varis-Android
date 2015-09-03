@@ -67,7 +67,13 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mReposRecyclerView.setLayoutManager(layoutManager);
 
-        mRepoListAdapter = new RepoListAdapter(this, mRepos);
+        mRepoListAdapter = new RepoListAdapter(this, mRepos, new RepoListAdapter.OnRepoItemListener() {
+            @Override
+            public void onItemSelected(int position) {
+                Intent intent = new Intent(MainActivity.this, BuildHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
         mReposRecyclerView.setAdapter(mRepoListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
