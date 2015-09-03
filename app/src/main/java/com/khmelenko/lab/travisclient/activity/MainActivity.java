@@ -70,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
         mRepoListAdapter = new RepoListAdapter(this, mRepos, new RepoListAdapter.OnRepoItemListener() {
             @Override
             public void onItemSelected(int position) {
+                Repo repo = mRepos.get(position);
                 Intent intent = new Intent(MainActivity.this, BuildHistoryActivity.class);
+                intent.putExtra(BuildHistoryActivity.REPO_SLUG_KEY, repo.getSlug());
                 startActivity(intent);
             }
         });

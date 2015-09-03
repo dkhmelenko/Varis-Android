@@ -12,6 +12,7 @@ import com.khmelenko.lab.travisclient.network.response.Request;
 import java.util.List;
 
 import retrofit.http.Body;
+import retrofit.http.EncodedPath;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.POST;
@@ -43,7 +44,7 @@ public interface TravisApiService {
     Repo getRepo(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}")
-    Repo getRepo(@Path("repositorySlug") String repositorySlug);
+    Repo getRepo(@EncodedPath("repositorySlug") String repositorySlug);
 
 
     // branches
@@ -51,13 +52,13 @@ public interface TravisApiService {
     List<Branch> getBranches(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}/branches")
-    List<Branch> getBranches(@Path("repositorySlug") String repositorySlug);
+    List<Branch> getBranches(@EncodedPath("repositorySlug") String repositorySlug);
 
-    @GET("/repos/{repositorySlug}/branches/{branch}")
+    @GET("/repos/{repositoryId}/branches/{branch}")
     Branch getBranch(@Path("repositoryId") long repositoryId, @Path("branch") String branch);
 
     @GET("/repos/{repositorySlug}/branches/{branch}")
-    Branch getBranch(@Path("repositorySlug") String repositorySlug, @Path("branch") String branch);
+    Branch getBranch(@EncodedPath("repositorySlug") String repositorySlug, @Path("branch") String branch);
 
 
     // builds
@@ -65,13 +66,13 @@ public interface TravisApiService {
     RepoStatus getBuilds(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}/builds")
-    RepoStatus getBuilds(@Path("repositorySlug") String repositorySlug);
+    RepoStatus getBuilds(@EncodedPath("repositorySlug") String repositorySlug);
 
     @GET("/repos/{repositoryId}/builds/{buildId}")
     RepoStatus getBuild(@Path("repositoryId") long repositoryId, @Path("buildId") long buildId);
 
     @GET("/repos/{repositorySlug}/builds/{buildId}")
-    RepoStatus getBuild(@Path("repositorySlug") String repositorySlug, @Path("buildId") long buildId);
+    RepoStatus getBuild(@EncodedPath("repositorySlug") String repositorySlug, @Path("buildId") long buildId);
 
     @POST("/builds/{buildId}/cancel")
     void cancelBuild(@Path("buildId") long buildId);

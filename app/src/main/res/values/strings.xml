@@ -8,6 +8,7 @@
 
     <!-- Messages -->
     <string name="error_failed_loading_repos">Failed to load repositories: \n%1$s</string>
+    <string name="error_failed_loading_build_history">Failed to load build history: \n%1$s</string>
     <string name="error_network">Network problem. Check your network connection and try again</string>
     <string name="error_no_response">No response from the server. Try again later</string>
     <string name="error_parsing">Parsing error occurred. Try again later</string>
@@ -42,6 +43,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
 
 
 </resources>

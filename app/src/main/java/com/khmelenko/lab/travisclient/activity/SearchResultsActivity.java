@@ -55,7 +55,9 @@ public class SearchResultsActivity extends AppCompatActivity {
         mRepoListAdapter = new RepoListAdapter(this, mRepos, new RepoListAdapter.OnRepoItemListener() {
             @Override
             public void onItemSelected(int position) {
+                Repo repo = mRepos.get(position);
                 Intent intent = new Intent(SearchResultsActivity.this, BuildHistoryActivity.class);
+                intent.putExtra(BuildHistoryActivity.REPO_SLUG_KEY, repo.getSlug());
                 startActivity(intent);
             }
         });
@@ -149,7 +151,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
 
         String msg = getString(R.string.error_failed_loading_repos, event.getTaskError().getMessage());
-        Toast.makeText(this, R.string.error_failed_loading_repos, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }
