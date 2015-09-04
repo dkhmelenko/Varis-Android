@@ -57,10 +57,13 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
                 int buildColor = BuildStateHelper.getBuildColor(state);
                 holder.mState.setText(state);
                 holder.mState.setTextColor(buildColor);
+                holder.mNumber.setTextColor(buildColor);
 
                 Drawable drawable = BuildStateHelper.getBuildImage(state);
-                drawable.setBounds(0, 0, 30, 30);
-                holder.mNumber.setCompoundDrawables(drawable, null, null, null);
+                if(drawable != null) {
+                    drawable.setBounds(0, 0, 30, 30);
+                    holder.mNumber.setCompoundDrawables(drawable, null, null, null);
+                }
             }
 
             // commit data
@@ -108,6 +111,7 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
      */
     class BuildViewHolder extends RecyclerView.ViewHolder {
 
+        View mParent;
         TextView mNumber;
         TextView mState;
         TextView mBranch;
@@ -120,6 +124,7 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
             super(itemView);
             itemView.setClickable(true);
 
+            mParent = itemView.findViewById(R.id.card_view);
             mNumber = (TextView) itemView.findViewById(R.id.item_build_number);
             mState = (TextView) itemView.findViewById(R.id.item_build_state);
             mBranch = (TextView) itemView.findViewById(R.id.item_build_branch);

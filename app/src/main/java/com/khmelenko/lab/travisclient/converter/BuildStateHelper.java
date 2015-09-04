@@ -2,6 +2,7 @@ package com.khmelenko.lab.travisclient.converter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import com.khmelenko.lab.travisclient.R;
@@ -23,17 +24,41 @@ public final class BuildStateHelper {
     public static int getBuildColor(String state) {
         Context context = TravisApp.getAppContext();
 
-        int color = ContextCompat.getColor(context, R.color.build_state_failed);
+        int color = ContextCompat.getColor(context, R.color.secondary_text);
         switch (state) {
+            case "created":
             case "started":
                 color = ContextCompat.getColor(context, R.color.build_state_started);
                 break;
             case "passed":
                 color = ContextCompat.getColor(context, R.color.build_state_passed);
                 break;
+            case "canceled":
             case "failed":
             case "errored":
                 color = ContextCompat.getColor(context, R.color.build_state_failed);
+                break;
+        }
+
+        return color;
+    }
+
+    public static int getBuildBackground(String state) {
+        Context context = TravisApp.getAppContext();
+
+        int color = ContextCompat.getColor(context, android.R.color.transparent);
+        switch (state) {
+            case "created":
+            case "started":
+                color = ContextCompat.getColor(context, R.color.build_state_started_bg);
+                break;
+            case "passed":
+                color = ContextCompat.getColor(context, R.color.build_state_passed_bg);
+                break;
+            case "canceled":
+            case "failed":
+            case "errored":
+                color = ContextCompat.getColor(context, R.color.build_state_failed_bg);
                 break;
         }
 
@@ -46,21 +71,24 @@ public final class BuildStateHelper {
      * @param state Build state
      * @return Image drawable
      */
-    public static Drawable getBuildImage(String state) {
+    public static @Nullable Drawable getBuildImage(String state) {
         Context context = TravisApp.getAppContext();
 
-        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.build_failed);
+        Drawable drawable = null;
         switch (state) {
+            case "created":
             case "started":
-                // TODO drawable = ContextCompat.getDrawable(context, R.drawable.build_started);
+                drawable = ContextCompat.getDrawable(context, R.drawable.build_state_started);
                 break;
             case "passed":
-                drawable = ContextCompat.getDrawable(context, R.drawable.build_passed);
+                drawable = ContextCompat.getDrawable(context, R.drawable.build_state_passed);
                 break;
+            case "canceled":
             case "errored":
-                // TODO Use another image for errored state
+                drawable = ContextCompat.getDrawable(context, R.drawable.build_state_errored);
+                break;
             case "failed":
-                drawable = ContextCompat.getDrawable(context, R.drawable.build_failed);
+                drawable = ContextCompat.getDrawable(context, R.drawable.build_state_failed);
                 break;
         }
 
