@@ -32,6 +32,11 @@
             android:name=".activity.AboutActivity"
             android:label="@string/about_title" />
 
+        <!-- Repository details -->
+        <activity
+            android:name=".activity.RepoDetailsActivity"
+            android:label="@string/repo_details_title" />
+
         <!-- Build history -->
         <activity
             android:name=".activity.BuildHistoryActivity"
