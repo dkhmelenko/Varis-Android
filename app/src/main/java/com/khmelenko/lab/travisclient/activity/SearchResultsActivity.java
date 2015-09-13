@@ -57,7 +57,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void onItemSelected(int position) {
                 Repo repo = mRepos.get(position);
                 Intent intent = new Intent(SearchResultsActivity.this, RepoDetailsActivity.class);
-                intent.putExtra(BuildHistoryActivity.REPO_SLUG_KEY, repo.getSlug());
+                intent.putExtra(RepoDetailsActivity.REPO_SLUG_KEY, repo.getSlug());
                 startActivity(intent);
             }
         });
