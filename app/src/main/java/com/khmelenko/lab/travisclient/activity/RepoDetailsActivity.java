@@ -23,7 +23,8 @@ import butterknife.ButterKnife;
  *
  * @author Dmytro Khmelenko
  */
-public class RepoDetailsActivity extends AppCompatActivity implements BuildHistoryFragment.BuildHistoryListener {
+public class RepoDetailsActivity extends AppCompatActivity implements BuildHistoryFragment.BuildHistoryListener,
+        BranchesFragment.BranchesListener {
 
     public static final String REPO_SLUG_KEY = "RepoSlug";
 
@@ -53,7 +54,7 @@ public class RepoDetailsActivity extends AppCompatActivity implements BuildHisto
                 case INDEX_BUILD_HISTORY:
                     return BuildHistoryFragment.newInstance(mRepoSlug);
                 case INDEX_BRANCHES:
-                    return BranchesFragment.newInstance("", "Page # 2");
+                    return BranchesFragment.newInstance(mRepoSlug);
                 case INDEX_PULL_REQUESTS:
                     return PullRequestsFragment.newInstance("", "Page # 3");
                 default:
@@ -119,6 +120,11 @@ public class RepoDetailsActivity extends AppCompatActivity implements BuildHisto
 
     @Override
     public void onBuildSelected(String buildNumber) {
+        // TODO
+    }
+
+    @Override
+    public void onBranchSelected(String branchName) {
         // TODO
     }
 }

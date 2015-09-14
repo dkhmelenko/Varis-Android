@@ -4,6 +4,7 @@ package com.khmelenko.lab.travisclient.network.retrofit;
 import com.khmelenko.lab.travisclient.network.request.AccessTokenRequest;
 import com.khmelenko.lab.travisclient.network.response.AccessToken;
 import com.khmelenko.lab.travisclient.network.response.Branch;
+import com.khmelenko.lab.travisclient.network.response.Branches;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.RepoStatus;
@@ -49,10 +50,10 @@ public interface TravisApiService {
 
     // branches
     @GET("/repos/{repositoryId}/branches")
-    List<Branch> getBranches(@Path("repositoryId") long repositoryId);
+    Branches getBranches(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}/branches")
-    List<Branch> getBranches(@EncodedPath("repositorySlug") String repositorySlug);
+    Branches getBranches(@EncodedPath("repositorySlug") String repositorySlug);
 
     @GET("/repos/{repositoryId}/branches/{branch}")
     Branch getBranch(@Path("repositoryId") long repositoryId, @Path("branch") String branch);

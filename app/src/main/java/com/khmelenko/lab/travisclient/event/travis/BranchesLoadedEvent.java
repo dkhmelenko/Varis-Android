@@ -1,6 +1,7 @@
 package com.khmelenko.lab.travisclient.event.travis;
 
 import com.khmelenko.lab.travisclient.network.response.Branch;
+import com.khmelenko.lab.travisclient.network.response.Branches;
 
 import java.util.List;
 
@@ -12,13 +13,13 @@ import java.util.List;
 public class BranchesLoadedEvent {
 
 
-    private final List<Branch> mBranches;
+    private final Branches mBranches;
 
-    public BranchesLoadedEvent(List<Branch> branches) {
+    public BranchesLoadedEvent(Branches branches) {
         mBranches = branches;
     }
 
-    public List<Branch> getBranches() {
+    public Branches getBranches() {
         return mBranches;
     }
 }

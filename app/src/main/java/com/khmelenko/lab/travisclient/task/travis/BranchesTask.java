@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.khmelenko.lab.travisclient.event.travis.BranchesLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.network.response.Branch;
+import com.khmelenko.lab.travisclient.network.response.Branches;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskException;
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class BranchesTask extends Task<List<Branch>> {
+public class BranchesTask extends Task<Branches> {
 
     private long mRepoId;
     private String mRepoSlug;
@@ -30,8 +31,8 @@ public class BranchesTask extends Task<List<Branch>> {
     }
 
     @Override
-    public List<Branch> execute() throws TaskException {
-        List<Branch> branches;
+    public Branches execute() throws TaskException {
+        Branches branches;
         if (!TextUtils.isEmpty(mRepoSlug)) {
             branches = mRestClient.getApiService().getBranches(mRepoSlug);
         } else {
@@ -41,7 +42,7 @@ public class BranchesTask extends Task<List<Branch>> {
     }
 
     @Override
-    public void onSuccess(List<Branch> result) {
+    public void onSuccess(Branches result) {
         BranchesLoadedEvent event = new BranchesLoadedEvent(result);
         mEventBus.post(event);
     }
