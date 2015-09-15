@@ -2,14 +2,12 @@ package com.khmelenko.lab.travisclient.network.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
- * Dao for Branch
+ * Repository job
  *
  * @author Dmytro Khmelenko
  */
-public class Branch {
+public class Job {
 
     @SerializedName("id")
     private long mId;
@@ -17,17 +15,20 @@ public class Branch {
     @SerializedName("repository_id")
     private long mRepositoryId;
 
+    @SerializedName("build_id")
+    private long mBuildId;
+
     @SerializedName("commit_id")
     private long mCommitId;
 
-    @SerializedName("number")
-    private String mNumber;
-
-//    @SerializedName("config")
-//    private Config mConfig;
+    @SerializedName("log_id")
+    private long mLogId;
 
     @SerializedName("state")
     private String mState;
+
+    @SerializedName("number")
+    private String mNumber;
 
     @SerializedName("started_at")
     private String mStartedAt;
@@ -35,14 +36,18 @@ public class Branch {
     @SerializedName("finished_at")
     private String mFinishedAt;
 
-    @SerializedName("duration")
-    private long mDuration;
+    @SerializedName("queue")
+    private String mQueue;
 
-    @SerializedName("job_ids")
-    private List<Long> mJobIds;
+    @SerializedName("allow_failure")
+    private boolean mAllowFailure;
 
-    @SerializedName("pull_request")
-    private boolean mPullRequest;
+    // TODO
+    // @SerializedName("tags")
+
+    // TODO
+    // @SerializedName("annotation_ids")
+
 
     public long getId() {
         return mId;
@@ -60,6 +65,14 @@ public class Branch {
         mRepositoryId = repositoryId;
     }
 
+    public long getBuildId() {
+        return mBuildId;
+    }
+
+    public void setBuildId(long buildId) {
+        mBuildId = buildId;
+    }
+
     public long getCommitId() {
         return mCommitId;
     }
@@ -68,12 +81,12 @@ public class Branch {
         mCommitId = commitId;
     }
 
-    public String getNumber() {
-        return mNumber;
+    public long getLogId() {
+        return mLogId;
     }
 
-    public void setNumber(String number) {
-        mNumber = number;
+    public void setLogId(long logId) {
+        mLogId = logId;
     }
 
     public String getState() {
@@ -82,6 +95,14 @@ public class Branch {
 
     public void setState(String state) {
         mState = state;
+    }
+
+    public String getNumber() {
+        return mNumber;
+    }
+
+    public void setNumber(String number) {
+        mNumber = number;
     }
 
     public String getStartedAt() {
@@ -100,27 +121,19 @@ public class Branch {
         mFinishedAt = finishedAt;
     }
 
-    public long getDuration() {
-        return mDuration;
+    public String getQueue() {
+        return mQueue;
     }
 
-    public void setDuration(long duration) {
-        mDuration = duration;
+    public void setQueue(String queue) {
+        mQueue = queue;
     }
 
-    public boolean isPullRequest() {
-        return mPullRequest;
+    public boolean isAllowFailure() {
+        return mAllowFailure;
     }
 
-    public void setPullRequest(boolean pullRequest) {
-        mPullRequest = pullRequest;
-    }
-
-    public List<Long> getJobIds() {
-        return mJobIds;
-    }
-
-    public void setJobIds(List<Long> jobIds) {
-        mJobIds = jobIds;
+    public void setAllowFailure(boolean allowFailure) {
+        mAllowFailure = allowFailure;
     }
 }

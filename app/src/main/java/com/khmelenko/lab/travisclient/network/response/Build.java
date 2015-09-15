@@ -2,6 +2,8 @@ package com.khmelenko.lab.travisclient.network.response;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Dao for Build
  *
@@ -44,7 +46,8 @@ public class Build {
     @SerializedName("duration")
     private long mDuration;
 
-//    private List<> mJobIds;
+    @SerializedName("job_ids")
+    private List<Long> mJobIds;
 
 
     public long getId() {
@@ -133,5 +136,13 @@ public class Build {
 
     public void setDuration(long duration) {
         mDuration = duration;
+    }
+
+    public List<Long> getJobIds() {
+        return mJobIds;
+    }
+
+    public void setJobIds(List<Long> jobIds) {
+        mJobIds = jobIds;
     }
 }
