@@ -1,7 +1,6 @@
 package com.khmelenko.lab.travisclient.fragment;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,8 +15,8 @@ import android.widget.Toast;
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.adapter.BuildListAdapter;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
-import com.khmelenko.lab.travisclient.event.travis.RepoStatusLoadedEvent;
-import com.khmelenko.lab.travisclient.network.response.RepoStatus;
+import com.khmelenko.lab.travisclient.event.travis.BuildHistoryLoadedEvent;
+import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 
 import butterknife.Bind;
@@ -43,7 +42,7 @@ public class BuildHistoryFragment extends Fragment {
     ProgressBar mProgressBar;
 
     private BuildListAdapter mBuildListAdapter;
-    private RepoStatus mRepoStatus;
+    private BuildHistory mBuildHistory;
     private String mRepoSlug;
 
     private BuildHistoryListener mListener;
@@ -85,7 +84,7 @@ public class BuildHistoryFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mBuildHistoryRecyclerView.setLayoutManager(layoutManager);
 
-        mBuildListAdapter = new BuildListAdapter(getContext(), mRepoStatus);
+        mBuildListAdapter = new BuildListAdapter(getContext(), mBuildHistory);
         mBuildHistoryRecyclerView.setAdapter(mBuildListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
@@ -119,7 +118,7 @@ public class BuildHistoryFragment extends Fragment {
      */
     private void loadBuilds() {
         TaskManager taskManager = new TaskManager();
-        taskManager.getRepoStatus(mRepoSlug);
+        taskManager.getBuildHistory(mRepoSlug);
     }
 
     /**
@@ -127,12 +126,12 @@ public class BuildHistoryFragment extends Fragment {
      *
      * @param event Event data
      */
-    public void onEvent(RepoStatusLoadedEvent event) {
+    public void onEvent(BuildHistoryLoadedEvent event) {
         mSwipeRefreshLayout.setRefreshing(false);
         mProgressBar.setVisibility(View.GONE);
 
-        mRepoStatus = event.getRepoStatus();
-        mBuildListAdapter.setRepoStatus(mRepoStatus);
+        mBuildHistory = event.getBuildHistory();
+        mBuildListAdapter.setBuildHistory(mBuildHistory);
         mBuildListAdapter.notifyDataSetChanged();
     }
 

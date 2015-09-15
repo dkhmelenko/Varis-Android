@@ -4,7 +4,7 @@ import com.khmelenko.lab.travisclient.task.github.GithubAuthTask;
 import com.khmelenko.lab.travisclient.task.travis.AuthTask;
 import com.khmelenko.lab.travisclient.task.travis.BranchesTask;
 import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
-import com.khmelenko.lab.travisclient.task.travis.RepoStatusTask;
+import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
 
 /**
  * Manages the tasks
@@ -46,12 +46,12 @@ public final class TaskManager {
     }
 
     /**
-     * Gets repository status
+     * Gets build history
      *
      * @param repoSlug Repo slug
      */
-    public void getRepoStatus(String repoSlug) {
-        RepoStatusTask task = new RepoStatusTask(repoSlug);
+    public void getBuildHistory(String repoSlug) {
+        BuildHistoryTask task = new BuildHistoryTask(repoSlug);
         LoaderAsyncTask.executeTask(task);
     }
 

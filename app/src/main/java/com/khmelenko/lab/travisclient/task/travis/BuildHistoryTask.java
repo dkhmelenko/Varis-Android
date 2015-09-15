@@ -2,34 +2,34 @@ package com.khmelenko.lab.travisclient.task.travis;
 
 import android.text.TextUtils;
 
-import com.khmelenko.lab.travisclient.event.travis.RepoStatusLoadedEvent;
+import com.khmelenko.lab.travisclient.event.travis.BuildHistoryLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
-import com.khmelenko.lab.travisclient.network.response.RepoStatus;
+import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskException;
 
 /**
- * Defines the Repository status task
+ * Defines the Build history task
  *
  * @author Dmytro Khmelenko
  */
-public class RepoStatusTask extends Task<RepoStatus> {
+public class BuildHistoryTask extends Task<BuildHistory> {
 
     private long mRepoId;
     private String mRepoSlug;
 
-    public RepoStatusTask(long repoId) {
+    public BuildHistoryTask(long repoId) {
         mRepoId = repoId;
     }
 
-    public RepoStatusTask(String repoSlug) {
+    public BuildHistoryTask(String repoSlug) {
         mRepoSlug = repoSlug;
     }
 
     @Override
-    public RepoStatus execute() throws TaskException {
-        RepoStatus builds;
+    public BuildHistory execute() throws TaskException {
+        BuildHistory builds;
         if (!TextUtils.isEmpty(mRepoSlug)) {
             builds = mRestClient.getApiService().getBuilds(mRepoSlug);
         } else {
@@ -39,8 +39,8 @@ public class RepoStatusTask extends Task<RepoStatus> {
     }
 
     @Override
-    public void onSuccess(RepoStatus result) {
-        RepoStatusLoadedEvent event = new RepoStatusLoadedEvent(result);
+    public void onSuccess(BuildHistory result) {
+        BuildHistoryLoadedEvent event = new BuildHistoryLoadedEvent(result);
         mEventBus.post(event);
     }
 

@@ -14,7 +14,7 @@ import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.converter.TimeConverter;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.Commit;
-import com.khmelenko.lab.travisclient.network.response.RepoStatus;
+import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 
 /**
@@ -24,12 +24,12 @@ import com.khmelenko.lab.travisclient.util.DateTimeUtils;
  */
 public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.BuildViewHolder> {
 
-    private RepoStatus mRepoStatus;
+    private BuildHistory mBuildHistory;
     private final Context mContext;
 
-    public BuildListAdapter(Context context, RepoStatus repoStatus) {
+    public BuildListAdapter(Context context, BuildHistory buildHistory) {
         mContext = context;
-        mRepoStatus = repoStatus;
+        mBuildHistory = buildHistory;
     }
 
     @Override
@@ -40,10 +40,10 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
 
     @Override
     public void onBindViewHolder(BuildViewHolder holder, int position) {
-        if (mRepoStatus != null) {
-            Build build = mRepoStatus.getBuilds().get(position);
+        if (mBuildHistory != null) {
+            Build build = mBuildHistory.getBuilds().get(position);
             Commit relatedCommit = null;
-            for (Commit commit : mRepoStatus.getCommits()) {
+            for (Commit commit : mBuildHistory.getCommits()) {
                 if (build.getCommitId() == commit.getId()) {
                     relatedCommit = commit;
                     break;
@@ -99,11 +99,11 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
 
     @Override
     public int getItemCount() {
-        return mRepoStatus != null ? mRepoStatus.getBuilds().size() : 0;
+        return mBuildHistory != null ? mBuildHistory.getBuilds().size() : 0;
     }
 
-    public void setRepoStatus(RepoStatus repoStatus) {
-        mRepoStatus = repoStatus;
+    public void setBuildHistory(BuildHistory buildHistory) {
+        mBuildHistory = buildHistory;
     }
 
     /**

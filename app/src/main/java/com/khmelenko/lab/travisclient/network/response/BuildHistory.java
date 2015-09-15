@@ -6,11 +6,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Repository status
+ * Build history
  *
  * @author Dmytro Khmelenko
  */
-public class RepoStatus {
+public class BuildHistory {
 
     @SerializedName("builds")
     private List<Build> mBuilds;
