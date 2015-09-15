@@ -5,6 +5,8 @@ import com.khmelenko.lab.travisclient.network.request.AccessTokenRequest;
 import com.khmelenko.lab.travisclient.network.response.AccessToken;
 import com.khmelenko.lab.travisclient.network.response.Branch;
 import com.khmelenko.lab.travisclient.network.response.Branches;
+import com.khmelenko.lab.travisclient.network.response.Log;
+import com.khmelenko.lab.travisclient.network.response.Logs;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.network.response.Request;
@@ -91,4 +93,10 @@ public interface TravisApiService {
     @GET("/requests")
     List<Request> getRequests(@Query("slug") String repositorySlug);
 
+    // logs
+    @GET("/jobs/{jobId}/log")
+    String getLogRaw(@Path("jobId") long jobId);
+
+    @GET("/logs/{logId}")
+    Logs getLogs(@Path("logId") long logId);
 }
