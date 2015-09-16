@@ -13,7 +13,7 @@ It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for retchi
 - [Event Bus](https://github.com/greenrobot/EventBus)
 
 # Contribution
-In case you have ideas or found an issue, don't hesitate to create pull request.
+In case you have ideas or found an issue, don't hesitate to create pull request. 
 
 # Warning
 The project is under development!
