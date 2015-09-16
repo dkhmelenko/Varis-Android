@@ -13,7 +13,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko
  */
-public class AuthTask extends Task<AccessToken> {
+public final class AuthTask extends Task<AccessToken> {
 
     private final String mGithubAccessToken;
 

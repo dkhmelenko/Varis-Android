@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class FindRepoTask extends Task<List<Repo>> {
+public final class FindRepoTask extends Task<List<Repo>> {
 
     private String mSearch;
 

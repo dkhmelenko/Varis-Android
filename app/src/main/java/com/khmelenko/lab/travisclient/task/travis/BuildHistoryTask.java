@@ -14,7 +14,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko
  */
-public class BuildHistoryTask extends Task<BuildHistory> {
+public final class BuildHistoryTask extends Task<BuildHistory> {
 
     private long mRepoId;
     private String mRepoSlug;

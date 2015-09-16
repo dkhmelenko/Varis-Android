@@ -3,8 +3,9 @@ package com.khmelenko.lab.travisclient.task;
 import com.khmelenko.lab.travisclient.task.github.GithubAuthTask;
 import com.khmelenko.lab.travisclient.task.travis.AuthTask;
 import com.khmelenko.lab.travisclient.task.travis.BranchesTask;
-import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
 import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
+import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
+import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
 
 /**
  * Manages the tasks
@@ -62,6 +63,16 @@ public final class TaskManager {
      */
     public void getBranches(String repoSlug) {
         BranchesTask task = new BranchesTask(repoSlug);
+        LoaderAsyncTask.executeTask(task);
+    }
+
+    /**
+     * Gets repository requests
+     *
+     * @param repoSlug Repo slug
+     */
+    public void getRequests(String repoSlug) {
+        RequestsTask task = new RequestsTask(repoSlug);
         LoaderAsyncTask.executeTask(task);
     }
 

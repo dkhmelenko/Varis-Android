@@ -3,163 +3,31 @@ package com.khmelenko.lab.travisclient.network.response;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Dao for Request
+ * Dao for Request response
  *
  * @author Dmytro Khmelenko
  */
 public class Request {
 
-    @SerializedName("id")
-    private long mId;
+    @SerializedName("request")
+    private RequestData mRequestData;
 
-    @SerializedName("repository_id")
-    private long mRepositoryId;
+    @SerializedName("commit")
+    private Commit mCommit;
 
-    @SerializedName("commit_id")
-    private long mCommitId;
-
-    @SerializedName("created_at")
-    private String mCreated;
-
-    @SerializedName("owner_id")
-    private long mOwnerId;
-
-    @SerializedName("owner_type")
-    private String mOwnerType;
-
-    @SerializedName("event_type")
-    private String mEventType;
-
-    @SerializedName("result")
-    private String mResult;
-
-    @SerializedName("message")
-    private String mMessage;
-
-    @SerializedName("pull_request")
-    private boolean mPullRequest;
-
-    @SerializedName("pull_request_number")
-    private String mPullRequestNumber;
-
-    @SerializedName("pull_request_title")
-    private String mPullRequestTitle;
-
-    @SerializedName("branch")
-    private String mBranch;
-
-    @SerializedName("tag")
-    private String mTag;
-
-    public long getId() {
-        return mId;
+    public RequestData getRequestData() {
+        return mRequestData;
     }
 
-    public void setId(long id) {
-        mId = id;
+    public void setRequestData(RequestData request) {
+        mRequestData = request;
     }
 
-    public long getRepositoryId() {
-        return mRepositoryId;
+    public Commit getCommit() {
+        return mCommit;
     }
 
-    public void setRepositoryId(long repositoryId) {
-        mRepositoryId = repositoryId;
-    }
-
-    public long getCommitId() {
-        return mCommitId;
-    }
-
-    public void setCommitId(long commitId) {
-        mCommitId = commitId;
-    }
-
-    public String getCreated() {
-        return mCreated;
-    }
-
-    public void setCreated(String created) {
-        mCreated = created;
-    }
-
-    public long getOwnerId() {
-        return mOwnerId;
-    }
-
-    public void setOwnerId(long ownerId) {
-        mOwnerId = ownerId;
-    }
-
-    public String getOwnerType() {
-        return mOwnerType;
-    }
-
-    public void setOwnerType(String ownerType) {
-        mOwnerType = ownerType;
-    }
-
-    public String getEventType() {
-        return mEventType;
-    }
-
-    public void setEventType(String eventType) {
-        mEventType = eventType;
-    }
-
-    public String getResult() {
-        return mResult;
-    }
-
-    public void setResult(String result) {
-        mResult = result;
-    }
-
-    public String getMessage() {
-        return mMessage;
-    }
-
-    public void setMessage(String message) {
-        mMessage = message;
-    }
-
-    public boolean isPullRequest() {
-        return mPullRequest;
-    }
-
-    public void setPullRequest(boolean pullRequest) {
-        mPullRequest = pullRequest;
-    }
-
-    public String getPullRequestNumber() {
-        return mPullRequestNumber;
-    }
-
-    public void setPullRequestNumber(String pullRequestNumber) {
-        mPullRequestNumber = pullRequestNumber;
-    }
-
-    public String getPullRequestTitle() {
-        return mPullRequestTitle;
-    }
-
-    public void setPullRequestTitle(String pullRequestTitle) {
-        mPullRequestTitle = pullRequestTitle;
-    }
-
-    public String getBranch() {
-        return mBranch;
-    }
-
-    public void setBranch(String branch) {
-        mBranch = branch;
-    }
-
-    public String getTag() {
-        return mTag;
-    }
-
-    public void setTag(String tag) {
-        mTag = tag;
+    public void setCommit(Commit commit) {
+        mCommit = commit;
     }
 }
