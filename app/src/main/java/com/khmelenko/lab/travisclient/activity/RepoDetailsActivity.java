@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * @author Dmytro Khmelenko
  */
 public class RepoDetailsActivity extends AppCompatActivity implements BuildHistoryFragment.BuildHistoryListener,
-        BranchesFragment.BranchesListener {
+        BranchesFragment.BranchesListener, PullRequestsFragment.PullRequestsListener {
 
     public static final String REPO_SLUG_KEY = "RepoSlug";
 
@@ -56,7 +56,7 @@ public class RepoDetailsActivity extends AppCompatActivity implements BuildHisto
                 case INDEX_BRANCHES:
                     return BranchesFragment.newInstance(mRepoSlug);
                 case INDEX_PULL_REQUESTS:
-                    return PullRequestsFragment.newInstance("", "Page # 3");
+                    return PullRequestsFragment.newInstance(mRepoSlug);
                 default:
                     return null;
             }
@@ -125,6 +125,11 @@ public class RepoDetailsActivity extends AppCompatActivity implements BuildHisto
 
     @Override
     public void onBranchSelected(String branchName) {
+        // TODO
+    }
+
+    @Override
+    public void onPullRequestSelected(String pullRequest) {
         // TODO
     }
 }

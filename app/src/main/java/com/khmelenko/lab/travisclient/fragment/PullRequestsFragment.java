@@ -1,49 +1,62 @@
 package com.khmelenko.lab.travisclient.fragment;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.adapter.PullRequestsListAdapter;
+import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
+import com.khmelenko.lab.travisclient.event.travis.RequestsLoadedEvent;
+import com.khmelenko.lab.travisclient.network.response.Requests;
+import com.khmelenko.lab.travisclient.task.TaskManager;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PullRequestsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PullRequestsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Repository pull requests
+ *
+ * @author Dmytro Khmelenko
  */
 public class PullRequestsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String REPO_SLUG_KEY = "RepoSlug";
 
-    private OnFragmentInteractionListener mListener;
+    @Bind(R.id.pull_requests_swipe_view)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @Bind(R.id.pull_requests_recycler_view)
+    RecyclerView mPullRequestsRecyclerView;
+
+    @Bind(R.id.progressbar)
+    ProgressBar mProgressBar;
+
+    private PullRequestsListAdapter mPullRequestsListAdapter;
+    private Requests mRequests;
+    private String mRepoSlug;
+
+    private PullRequestsListener mListener;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Creates new instance of the fragment
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PullRequestsFragment.
+     * @param repoSlug Repository slug
+     * @return Fragment instance
      */
-    // TODO: Rename and change types and number of parameters
-    public static PullRequestsFragment newInstance(String param1, String param2) {
+    public static PullRequestsFragment newInstance(String repoSlug) {
         PullRequestsFragment fragment = new PullRequestsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(REPO_SLUG_KEY, repoSlug);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,33 +69,94 @@ public class PullRequestsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mRepoSlug = getArguments().getString(REPO_SLUG_KEY);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pull_requests, container, false);
+        View view = inflater.inflate(R.layout.fragment_branches, container, false);
+
+        ButterKnife.bind(this, view);
+
+        mPullRequestsRecyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mPullRequestsRecyclerView.setLayoutManager(layoutManager);
+
+        mPullRequestsListAdapter = new PullRequestsListAdapter(getContext(), mRequests);
+        mPullRequestsRecyclerView.setAdapter(mPullRequestsListAdapter);
+
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadBranches();
+            }
+        });
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        loadBranches();
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * Starts loading branches
+     */
+    private void loadBranches() {
+        TaskManager taskManager = new TaskManager();
+        taskManager.getRequests(mRepoSlug);
+    }
+
+    /**
+     * Raised on loaded requests
+     *
+     * @param event Event data
+     */
+    public void onEvent(RequestsLoadedEvent event) {
+        mSwipeRefreshLayout.setRefreshing(false);
+        mProgressBar.setVisibility(View.GONE);
+
+        mRequests = event.getRequests();
+        mPullRequestsListAdapter.setRequests(mRequests);
+        mPullRequestsListAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Raised on failed loading data
+     *
+     * @param event Event data
+     */
+    public void onEvent(LoadingFailedEvent event) {
+        mSwipeRefreshLayout.setRefreshing(false);
+        mProgressBar.setVisibility(View.GONE);
+
+        String msg = getString(R.string.error_failed_loading_build_history, event.getTaskError().getMessage());
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-          //  mListener = (OnFragmentInteractionListener) activity;
+            mListener = (PullRequestsListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement PullRequestsListener");
         }
     }
 
@@ -93,18 +167,15 @@ public class PullRequestsFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * Interface for communication with this fragment
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
+    public interface PullRequestsListener {
 
+        /**
+         * Handles selection of the pull request
+         *
+         * @param pullRequest Pull request name
+         */
+        void onPullRequestSelected(String pullRequest);
+    }
 }
