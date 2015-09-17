@@ -108,6 +108,8 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
             String state = relatedBuild.getState();
             if (!TextUtils.isEmpty(state)) {
                 int buildColor = BuildStateHelper.getBuildColor(state);
+                holder.mState.setText(state);
+                holder.mState.setTextColor(buildColor);
                 holder.mNumber.setTextColor(buildColor);
 
                 Drawable drawable = BuildStateHelper.getBuildImage(state);
@@ -153,6 +155,7 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
 
         View mParent;
         TextView mNumber;
+        TextView mState;
         TextView mTitle;
         TextView mCommitPerson;
         TextView mDuration;
@@ -164,6 +167,7 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
 
             mParent = itemView.findViewById(R.id.card_view);
             mNumber = (TextView) itemView.findViewById(R.id.item_pull_request_number);
+            mState = (TextView) itemView.findViewById(R.id.item_pull_request_state);
             mTitle = (TextView) itemView.findViewById(R.id.item_pull_request_title);
             mCommitPerson = (TextView) itemView.findViewById(R.id.item_pull_request_commit_person);
             mDuration = (TextView) itemView.findViewById(R.id.item_pull_request_duration);
