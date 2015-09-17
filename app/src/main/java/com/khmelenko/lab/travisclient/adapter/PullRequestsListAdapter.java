@@ -12,10 +12,14 @@ import android.widget.TextView;
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.converter.TimeConverter;
+import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.Commit;
 import com.khmelenko.lab.travisclient.network.response.RequestData;
 import com.khmelenko.lab.travisclient.network.response.Requests;
 import com.khmelenko.lab.travisclient.util.DateTimeUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * List adapter for Pull requests
@@ -25,11 +29,14 @@ import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsListAdapter.BranchViewHolder> {
 
     private Requests mRequests;
+    private List<RequestData> mPullRequests;
     private final Context mContext;
 
     public PullRequestsListAdapter(Context context, Requests requests) {
         mContext = context;
         mRequests = requests;
+        mPullRequests = new ArrayList<>();
+        fetchPullRequests();
     }
 
     /**
@@ -39,6 +46,20 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
      */
     public void setRequests(Requests requests) {
         mRequests = requests;
+        fetchPullRequests();
+    }
+
+    /**
+     * Fetches pull requests
+     */
+    private void fetchPullRequests() {
+        if(mRequests != null) {
+            for (RequestData request : mRequests.getRequests()) {
+                if (request.isPullRequest()) {
+                    mPullRequests.add(request);
+                }
+            }
+        }
     }
 
     @Override
@@ -50,22 +71,43 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
     @Override
     public void onBindViewHolder(BranchViewHolder holder, int position) {
         if (mRequests != null) {
-            RequestData request = mRequests.getRequests().get(position);
-            Commit relatedCommit = null;
-            for (Commit commit : mRequests.getCommits()) {
-                if (request.getCommitId() == commit.getId()) {
-                    relatedCommit = commit;
-                    break;
-                }
+            RequestData request = mPullRequests.get(position);
+            if (request.isPullRequest()) {
+                bindPullRequest(holder, position, request);
             }
+        }
+    }
 
-            // build data
-            holder.mNumber.setText(mContext.getString(R.string.build_build_number, request.getNumber()));
-            String state = request.getState();
+    private void bindPullRequest(BranchViewHolder holder, int position, RequestData request) {
+        Commit relatedCommit = null;
+        for (Commit commit : mRequests.getCommits()) {
+            if (request.getCommitId() == commit.getId()) {
+                relatedCommit = commit;
+                break;
+            }
+        }
+
+        Build relatedBuild = null;
+        for (Build build : mRequests.getBuilds()) {
+            if (request.getBuildId() == build.getId()) {
+                relatedBuild = build;
+                break;
+            }
+        }
+
+        holder.mNumber.setText(mContext.getString(R.string.pull_request_number, request.getPullRequestNumber()));
+        holder.mTitle.setText(request.getPullRequestTitle());
+
+        // commit data
+        if (relatedCommit != null) {
+            holder.mCommitPerson.setText(relatedCommit.getCommitterName());
+        }
+
+        // build data
+        if (relatedBuild != null) {
+            String state = relatedBuild.getState();
             if (!TextUtils.isEmpty(state)) {
                 int buildColor = BuildStateHelper.getBuildColor(state);
-                holder.mState.setText(state);
-                holder.mState.setTextColor(buildColor);
                 holder.mNumber.setTextColor(buildColor);
 
                 Drawable drawable = BuildStateHelper.getBuildImage(state);
@@ -75,16 +117,9 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
                 }
             }
 
-            // commit data
-            if (relatedCommit != null) {
-                holder.mBranch.setText(relatedCommit.getBranch());
-                holder.mCommitMessage.setText(relatedCommit.getMessage());
-                holder.mCommitPerson.setText(relatedCommit.getCommitterName());
-            }
-
             // finished at
-            if (!TextUtils.isEmpty(request.getFinishedAt())) {
-                String formattedDate = DateTimeUtils.parseAndFormatDateTime(request.getFinishedAt());
+            if (!TextUtils.isEmpty(relatedBuild.getFinishedAt())) {
+                String formattedDate = DateTimeUtils.parseAndFormatDateTime(relatedBuild.getFinishedAt());
                 formattedDate = mContext.getString(R.string.build_finished_at, formattedDate);
                 holder.mFinished.setText(formattedDate);
             } else {
@@ -94,8 +129,8 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
             }
 
             // duration
-            if (request.getDuration() != 0) {
-                String duration = TimeConverter.durationToString(request.getDuration());
+            if (relatedBuild.getDuration() != 0) {
+                String duration = TimeConverter.durationToString(relatedBuild.getDuration());
                 duration = mContext.getString(R.string.build_duration, duration);
                 holder.mDuration.setText(duration);
             } else {
@@ -108,7 +143,7 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
 
     @Override
     public int getItemCount() {
-        return mRequests != null ? mRequests.getBranches().size() : 0;
+        return mPullRequests.size();
     }
 
     /**
@@ -118,9 +153,7 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
 
         View mParent;
         TextView mNumber;
-        TextView mState;
-        TextView mBranch;
-        TextView mCommitMessage;
+        TextView mTitle;
         TextView mCommitPerson;
         TextView mDuration;
         TextView mFinished;
@@ -131,9 +164,7 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
 
             mParent = itemView.findViewById(R.id.card_view);
             mNumber = (TextView) itemView.findViewById(R.id.item_pull_request_number);
-            mState = (TextView) itemView.findViewById(R.id.item_pull_request_state);
-            mBranch = (TextView) itemView.findViewById(R.id.item_pull_request_branch);
-            mCommitMessage = (TextView) itemView.findViewById(R.id.item_pull_request_commit_message);
+            mTitle = (TextView) itemView.findViewById(R.id.item_pull_request_title);
             mCommitPerson = (TextView) itemView.findViewById(R.id.item_pull_request_commit_person);
             mDuration = (TextView) itemView.findViewById(R.id.item_pull_request_duration);
             mFinished = (TextView) itemView.findViewById(R.id.item_pull_request_finished);

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.khmelenko.lab.travisclient.event.travis.BranchesLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.RequestsLoadedEvent;
+import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.network.response.Requests;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
@@ -29,10 +30,15 @@ public final class RequestsTask extends Task<Requests> {
     @Override
     public Requests execute() throws TaskException {
         Requests requests;
+        BuildHistory buildHistory;
         if(!TextUtils.isEmpty(mRepoSlug)) {
             requests = mRestClient.getApiService().getRequests(mRepoSlug);
+            buildHistory = mRestClient.getApiService().getBuilds(mRepoSlug);
+            requests.setBuilds(buildHistory.getBuilds());
         } else {
             requests = mRestClient.getApiService().getRequests(mRepoId);
+            buildHistory = mRestClient.getApiService().getBuilds(mRepoId);
+            requests.setBuilds(buildHistory.getBuilds());
         }
         return requests;
     }

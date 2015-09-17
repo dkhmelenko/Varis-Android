@@ -17,6 +17,8 @@ public class Requests {
     @SerializedName("commits")
     private List<Commit> mCommits;
 
+    private transient List<Build> mBuilds;
+
     public List<RequestData> getRequests() {
         return mRequests;
     }
@@ -31,5 +33,13 @@ public class Requests {
 
     public void setCommits(List<Commit> commits) {
         mCommits = commits;
+    }
+
+    public List<Build> getBuilds() {
+        return mBuilds;
+    }
+
+    public void setBuilds(List<Build> builds) {
+        mBuilds = builds;
     }
 }

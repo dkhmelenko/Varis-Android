@@ -57,6 +57,9 @@ public class RequestData {
     @SerializedName("tag")
     private String mTag;
 
+    @SerializedName("build_id")
+    private long mBuildId;
+
     public long getId() {
         return mId;
     }
@@ -183,5 +186,13 @@ public class RequestData {
 
     public void setHeadCommit(String headCommit) {
         mHeadCommit = headCommit;
+    }
+
+    public long getBuildId() {
+        return mBuildId;
+    }
+
+    public void setBuildId(long buildId) {
+        mBuildId = buildId;
     }
 }

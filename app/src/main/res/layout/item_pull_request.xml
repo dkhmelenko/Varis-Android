@@ -36,7 +36,7 @@
                     android:textSize="23sp"/>
 
                 <TextView
-                    android:id="@+id/item_pull_request_state"
+                    android:id="@+id/item_pull_request_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
@@ -66,57 +66,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="17dp"
-                    android:layout_height="17dp"
-                    android:layout_gravity="center"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/git_branch"/>
-
-                <TextView
-                    android:id="@+id/item_pull_request_branch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingLeft="2dp"
-                    android:textSize="20sp"
-                    />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="17dp"
-                    android:layout_height="17dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_gravity="center|top"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/git"/>
-
-                <TextView
-                    android:id="@+id/item_pull_request_commit_message"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxLines="2"
-                    android:paddingLeft="2dp"
-                    android:textSize="20sp"
-                    />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
