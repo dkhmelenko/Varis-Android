@@ -195,4 +195,17 @@ public class RequestData {
     public void setBuildId(long buildId) {
         mBuildId = buildId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RequestData)) return false;
+        RequestData that = (RequestData) o;
+        return mPullRequestNumber.equals(that.mPullRequestNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return mPullRequestNumber.hashCode();
+    }
 }

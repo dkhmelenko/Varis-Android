@@ -55,7 +55,7 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
     private void fetchPullRequests() {
         if(mRequests != null) {
             for (RequestData request : mRequests.getRequests()) {
-                if (request.isPullRequest()) {
+                if (request.isPullRequest() && !mPullRequests.contains(request)) {
                     mPullRequests.add(request);
                 }
             }
@@ -72,9 +72,7 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
     public void onBindViewHolder(BranchViewHolder holder, int position) {
         if (mRequests != null) {
             RequestData request = mPullRequests.get(position);
-            if (request.isPullRequest()) {
-                bindPullRequest(holder, position, request);
-            }
+            bindPullRequest(holder, position, request);
         }
     }
 
