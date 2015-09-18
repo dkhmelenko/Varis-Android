@@ -33,11 +33,11 @@ public final class RequestsTask extends Task<Requests> {
         BuildHistory buildHistory;
         if(!TextUtils.isEmpty(mRepoSlug)) {
             requests = mRestClient.getApiService().getRequests(mRepoSlug);
-            buildHistory = mRestClient.getApiService().getBuilds(mRepoSlug);
+            buildHistory = mRestClient.getApiService().getPullRequestBuilds(mRepoSlug);
             requests.setBuilds(buildHistory.getBuilds());
         } else {
             requests = mRestClient.getApiService().getRequests(mRepoId);
-            buildHistory = mRestClient.getApiService().getBuilds(mRepoId);
+            buildHistory = mRestClient.getApiService().getPullRequestBuilds(mRepoId);
             requests.setBuilds(buildHistory.getBuilds());
         }
         return requests;

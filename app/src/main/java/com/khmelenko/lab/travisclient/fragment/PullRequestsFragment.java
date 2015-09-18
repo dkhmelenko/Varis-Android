@@ -92,12 +92,12 @@ public class PullRequestsFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadBranches();
+                loadRequests();
             }
         });
 
         mProgressBar.setVisibility(View.VISIBLE);
-        loadBranches();
+        loadRequests();
 
         return view;
     }
@@ -115,9 +115,9 @@ public class PullRequestsFragment extends Fragment {
     }
 
     /**
-     * Starts loading branches
+     * Starts loading requests
      */
-    private void loadBranches() {
+    private void loadRequests() {
         TaskManager taskManager = new TaskManager();
         taskManager.getRequests(mRepoSlug);
     }

@@ -71,6 +71,12 @@ public interface TravisApiService {
     @GET("/repos/{repositorySlug}/builds")
     BuildHistory getBuilds(@EncodedPath("repositorySlug") String repositorySlug);
 
+    @GET("/repos/{repositoryId}/builds?event_type=pull_request")
+    BuildHistory getPullRequestBuilds(@Path("repositoryId") long repositoryId);
+
+    @GET("/repos/{repositorySlug}/builds?event_type=pull_request")
+    BuildHistory getPullRequestBuilds(@EncodedPath("repositorySlug") String repositorySlug);
+
     @GET("/repos/{repositoryId}/builds/{buildId}")
     BuildHistory getBuild(@Path("repositoryId") long repositoryId, @Path("buildId") long buildId);
 
