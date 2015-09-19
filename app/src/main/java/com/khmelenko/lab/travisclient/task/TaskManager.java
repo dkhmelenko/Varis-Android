@@ -1,6 +1,8 @@
 package com.khmelenko.lab.travisclient.task;
 
-import com.khmelenko.lab.travisclient.task.github.GithubAuthTask;
+import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
+import com.khmelenko.lab.travisclient.task.github.CreateAuthorizationTask;
+import com.khmelenko.lab.travisclient.task.github.DeleteAuthorizationTask;
 import com.khmelenko.lab.travisclient.task.travis.AuthTask;
 import com.khmelenko.lab.travisclient.task.travis.BranchesTask;
 import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
@@ -15,14 +17,23 @@ import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
 public final class TaskManager {
 
     /**
-     * Starts Github authentication task
+     * Creates new authorization task
      *
-     * @param clientId     Client ID
-     * @param clientSecret Client secret
-     * @param accessCode   Access code
+     * @param basicAuth Basic GitHub authorization
+     * @param request   Request data
      */
-    public void startGithubAuth(String clientId, String clientSecret, String accessCode) {
-        GithubAuthTask task = new GithubAuthTask(clientId, clientSecret, accessCode);
+    public void createNewAuthorization(String basicAuth, AuthorizationRequest request) {
+        CreateAuthorizationTask task = new CreateAuthorizationTask(basicAuth, request);
+        LoaderAsyncTask.executeTask(task);
+    }
+
+    /**
+     * Deletes authorization
+     *
+     * @param basicAuth Basic GitHub authorization
+     */
+    public void deleteAuthorization(String basicAuth) {
+        DeleteAuthorizationTask task = new DeleteAuthorizationTask(basicAuth);
         LoaderAsyncTask.executeTask(task);
     }
 

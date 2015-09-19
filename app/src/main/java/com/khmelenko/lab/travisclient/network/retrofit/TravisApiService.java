@@ -29,10 +29,6 @@ import retrofit.http.Query;
  */
 public interface TravisApiService {
 
-    @Headers({
-            "Accept: application/vnd.travis-ci.2+json",
-            "User-Agent:TravisClient/1.0.0"
-    })
     @POST("/auth/github")
     AccessToken auth(@Body AccessTokenRequest accessToken);
 
