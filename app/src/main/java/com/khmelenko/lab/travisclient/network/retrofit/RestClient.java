@@ -1,8 +1,11 @@
 package com.khmelenko.lab.travisclient.network.retrofit;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.khmelenko.lab.travisclient.common.Constants;
+import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.util.PackageUtils;
 
 import retrofit.RequestInterceptor;
@@ -33,6 +36,12 @@ public final class RestClient {
                 String userAgent = String.format("TravisClient/%1$s", PackageUtils.getAppVersion());
                 request.addHeader("User-Agent", userAgent);
                 request.addHeader("Accept", "application/vnd.travis-ci.2+json");
+
+                String accessToken = AppSettings.getAccessToken();
+                if(!TextUtils.isEmpty(accessToken)) {
+                    String headerValue = String.format("token %1$s", accessToken);
+                    request.addHeader("Authorization", headerValue);
+                }
             }
         };
 
