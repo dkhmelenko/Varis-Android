@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,7 +44,7 @@ import de.greenrobot.event.EventBus;
 public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.drawer_layout)
-    DrawerLayout drawerLayout;
+    DrawerLayout mDrawerLayout;
 
     @Bind(R.id.main_repos_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+        updateMenuState();
     }
 
     @Override
@@ -132,9 +134,9 @@ public class MainActivity extends AppCompatActivity {
      * Sets up navigation drawer layout
      */
     private void setupDrawerLayout() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
+        final NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
         view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -146,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.drawer_logout:
                         AppSettings.putAccessToken("");
-                        recreate();
+                        finish();
+                        startActivity(getIntent());
                         break;
                     case R.id.drawer_about:
                         Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
@@ -154,18 +157,34 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 menuItem.setChecked(false);
-                drawerLayout.closeDrawers();
+                mDrawerLayout.closeDrawers();
                 return true;
             }
         });
 
     }
 
+    /**
+     * Updates menu state
+     */
+    private void updateMenuState() {
+        NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
+        Menu menu = view.getMenu();
+        String accessToken = AppSettings.getAccessToken();
+        if (TextUtils.isEmpty(accessToken)) {
+            menu.findItem(R.id.drawer_login).setVisible(true);
+            menu.findItem(R.id.drawer_logout).setVisible(false);
+        } else {
+            menu.findItem(R.id.drawer_login).setVisible(false);
+            menu.findItem(R.id.drawer_logout).setVisible(true);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
         return super.onOptionsItemSelected(item);
