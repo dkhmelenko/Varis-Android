@@ -14,14 +14,16 @@ import com.khmelenko.lab.travisclient.task.TaskException;
 public class DeleteAuthorizationTask extends Task<Void>{
 
     private final String mBasicAuth;
+    private final String mAuthorizationId;
 
-    public DeleteAuthorizationTask(String basicAuth) {
+    public DeleteAuthorizationTask(String basicAuth, String authorizationId) {
         mBasicAuth = basicAuth;
+        mAuthorizationId = authorizationId;
     }
 
     @Override
     public Void execute() throws TaskException {
-        mRestClient.getGithubApiService().deleteAuthorization(mBasicAuth);
+        mRestClient.getGithubApiService().deleteAuthorization(mBasicAuth, mAuthorizationId);
         return null;
     }
 

@@ -25,7 +25,7 @@
         <!-- Authentication activity -->
         <activity
             android:name=".activity.AuthActivity"
-            android:label="@string/title_activity_auth" />
+            android:label="@string/auth_title" />
 
         <!-- About -->
         <activity

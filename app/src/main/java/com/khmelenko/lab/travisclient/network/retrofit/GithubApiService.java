@@ -9,6 +9,7 @@ import retrofit.http.DELETE;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -18,15 +19,11 @@ import retrofit.http.Query;
  */
 public interface GithubApiService {
 
-    @Headers("Accept: application/json")
-    @POST("/login/oauth/access_token")
-    GithubAccessToken getAccesToken(@Query("client_id") String clientId, @Query("client_secret") String clientSecret,
-                                    @Query("code") String code);
-
-    @POST("/authorization")
-    Authorization createNewAuthorization(@Header("Authorization") String authorization,
+    @POST("/authorizations")
+    Authorization createNewAuthorization(@Header("Authorization") String basicAuth,
                                   @Body AuthorizationRequest authorizationRequest);
 
-    @DELETE("/authorization")
-    void deleteAuthorization(@Header("Authorization") String authorization);
+    @DELETE("/authorizations/{authorizationId}")
+    Object deleteAuthorization(@Header("Authorization") String basicAuth,
+                             @Path("authorizationId") String authorizationId);
 }

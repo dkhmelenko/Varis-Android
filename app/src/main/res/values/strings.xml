@@ -19,7 +19,13 @@
     <string name="main_activity_search_repo_hint">Search repository</string>
 
     <!-- Auth screen -->
-    <string name="title_activity_auth">AuthActivity</string>
+    <string name="auth_title">Authorization</string>
+    <string name="auth_username_hint">Username</string>
+    <string name="auth_password_hint">Password</string>
+    <string name="auth_intro_text">Input your GitHub credentials. \nIf you have never used Travis CI before, do first login from Travis CI web page.</string>
+    <string name="auth_login_btn">Login</string>
+    <string name="auth_invalid_username_msg">Username cannot be empty</string>
+    <string name="auth_invalid_password_msg">Password cannot be empty</string>
 
     <!-- Search screen -->
     <string name="search_results_title">Search results</string>
@@ -53,6 +59,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pull_request_number">PR #%1$s</string>
+
 
 
 </resources>

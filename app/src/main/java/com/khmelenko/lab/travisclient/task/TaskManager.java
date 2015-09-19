@@ -30,10 +30,11 @@ public final class TaskManager {
     /**
      * Deletes authorization
      *
-     * @param basicAuth Basic GitHub authorization
+     * @param basicAuth       Basic GitHub authorization
+     * @param authorizationId Authorization ID to delete
      */
-    public void deleteAuthorization(String basicAuth) {
-        DeleteAuthorizationTask task = new DeleteAuthorizationTask(basicAuth);
+    public void deleteAuthorization(String basicAuth, String authorizationId) {
+        DeleteAuthorizationTask task = new DeleteAuthorizationTask(basicAuth, authorizationId);
         LoaderAsyncTask.executeTask(task);
     }
 
