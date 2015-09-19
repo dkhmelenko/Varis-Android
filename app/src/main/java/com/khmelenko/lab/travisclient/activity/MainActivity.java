@@ -25,6 +25,7 @@ import com.khmelenko.lab.travisclient.adapter.RepoListAdapter;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.network.response.Repo;
+import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 
 import java.util.ArrayList;
@@ -144,7 +145,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(loginIntent);
                         break;
                     case R.id.drawer_logout:
-                        // TODO
+                        AppSettings.putAccessToken("");
+                        recreate();
                         break;
                     case R.id.drawer_about:
                         Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
@@ -156,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
     }
 
     @Override
