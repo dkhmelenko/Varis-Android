@@ -19,6 +19,7 @@ import com.khmelenko.lab.travisclient.event.travis.AuthFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.AuthSuccessEvent;
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.Authorization;
+import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.util.EncryptionUtils;
 import com.khmelenko.lab.travisclient.util.StringUtils;
@@ -155,8 +156,7 @@ public class AuthActivity extends AppCompatActivity {
      * @param event Event data
      */
     public void onEvent(DeleteAuthorizationSuccessEvent event) {
-        mProgressDialog.dismiss();
-
+        // ignoring the result of deletion
     }
 
     /**
@@ -178,11 +178,13 @@ public class AuthActivity extends AppCompatActivity {
      */
     public void onEvent(AuthSuccessEvent event) {
         mProgressDialog.dismiss();
+
+        // start deletion authorization on Github, because we don't need it anymore
         mTaskManager.deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()));
 
+        // save access token to settings
         String accessToken = event.getAccessToken();
-
-        // TODO Save access token
+        AppSettings.putAccessToken(accessToken);
 
         finish();
     }
