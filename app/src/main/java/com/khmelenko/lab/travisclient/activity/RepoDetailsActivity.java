@@ -88,6 +88,9 @@ public class RepoDetailsActivity extends AppCompatActivity implements BuildHisto
 
         initToolbar();
 
+        String projectName = mRepoSlug.substring(mRepoSlug.indexOf("/") + 1);
+        setTitle(projectName);
+
         // setting view pager
         ViewPager vpPager = (ViewPager) findViewById(R.id.repo_details_view_pager);
         PagerAdapter adapterViewPager = new PagerAdapter(getSupportFragmentManager());
