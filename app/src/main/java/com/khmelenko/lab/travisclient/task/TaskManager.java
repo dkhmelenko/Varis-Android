@@ -8,6 +8,8 @@ import com.khmelenko.lab.travisclient.task.travis.BranchesTask;
 import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
 import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
 import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
+import com.khmelenko.lab.travisclient.task.travis.UserReposTask;
+import com.khmelenko.lab.travisclient.task.travis.UserTask;
 
 /**
  * Manages the tasks
@@ -88,4 +90,21 @@ public final class TaskManager {
         LoaderAsyncTask.executeTask(task);
     }
 
+    /**
+     * Gets user information
+     */
+    public void getUser() {
+        UserTask task = new UserTask();
+        LoaderAsyncTask.executeTask(task);
+    }
+
+    /**
+     * Loads user related repositories
+     *
+     * @param userName User name
+     */
+    public void userRepos(String userName) {
+        UserReposTask task = new UserReposTask(userName);
+        LoaderAsyncTask.executeTask(task);
+    }
 }

@@ -37,6 +37,11 @@ public class ItemTypeAdapterFactory implements TypeAdapterFactory {
                         jsonElement = jsonObject.get("repos");
                     }
 
+                    // fetch user
+                    if (jsonObject.has("user") && jsonObject.get("user").isJsonObject()) {
+                        jsonElement = jsonObject.get("user");
+                    }
+
                     // TODO Add more objects here
                 }
 

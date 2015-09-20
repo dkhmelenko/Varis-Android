@@ -11,6 +11,7 @@ import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.network.response.Request;
 import com.khmelenko.lab.travisclient.network.response.RequestData;
 import com.khmelenko.lab.travisclient.network.response.Requests;
+import com.khmelenko.lab.travisclient.network.response.User;
 
 import java.util.List;
 
@@ -44,6 +45,9 @@ public interface TravisApiService {
 
     @GET("/repos/{repositorySlug}")
     Repo getRepo(@EncodedPath("repositorySlug") String repositorySlug);
+
+    @GET("/repos")
+    List<Repo> getUserRepos(@Query("member") String userName);
 
 
     // branches
@@ -103,4 +107,9 @@ public interface TravisApiService {
 
     @GET("/logs/{logId}")
     Logs getLogs(@Path("logId") long logId);
+
+
+    // users
+    @GET("/users")
+    User getUser();
 }

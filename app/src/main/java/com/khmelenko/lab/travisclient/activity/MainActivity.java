@@ -25,7 +25,9 @@ import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.adapter.RepoListAdapter;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
+import com.khmelenko.lab.travisclient.event.travis.UserSuccessEvent;
 import com.khmelenko.lab.travisclient.network.response.Repo;
+import com.khmelenko.lab.travisclient.network.response.User;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 
@@ -57,12 +59,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressDialog mProgressDialog;
     private SearchView mSearchView;
+    private TaskManager mTaskManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        mTaskManager = new TaskManager();
 
         mReposRecyclerView.setHasFixedSize(true);
 
@@ -112,8 +116,12 @@ public class MainActivity extends AppCompatActivity {
      * Starts loading repositories
      */
     private void loadRepos() {
-        TaskManager taskManager = new TaskManager();
-        taskManager.findRepos(null);
+        String accessToken = AppSettings.getAccessToken();
+        if (TextUtils.isEmpty(accessToken)) {
+            mTaskManager.findRepos(null);
+        } else {
+            mTaskManager.getUser();
+        }
     }
 
     /**
@@ -245,6 +253,20 @@ public class MainActivity extends AppCompatActivity {
         String error = event.getTaskError().getMessage();
         String msg = getString(R.string.error_failed_loading_repos, error);
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Raised on loaded user information
+     *
+     * @param event Event data
+     */
+    public void onEvent(UserSuccessEvent event) {
+        User user = event.getUser();
+
+        // TODO Cache user data
+
+        String loginName = user.getLogin();
+        mTaskManager.userRepos(loginName);
     }
 
 }
