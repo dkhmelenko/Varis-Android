@@ -37,7 +37,7 @@
 
     <!-- About screen -->
     <string name="about_title">About</string>
-    <string name="about_github_link">&lt;a href=\"https://github.com/brave-warrior/TravisClient_Android\">GitHub&lt;/a></string>
+    <string name="about_github_link">&lt;a href=\"https://github.com/brave-warrior/TravisClient-Android\">GitHub&lt;/a></string>
     <string name="about_version">Version: %1$s</string>
     <string name="about_contact_email">d.khmelenko@gmail.com</string>
 
