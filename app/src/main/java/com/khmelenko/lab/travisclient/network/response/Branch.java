@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class Branch {
+public final class Branch {
 
     @SerializedName("id")
     private long mId;

@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class Authorization {
+public final class Authorization {
 
     @SerializedName("id")
     private long mId;

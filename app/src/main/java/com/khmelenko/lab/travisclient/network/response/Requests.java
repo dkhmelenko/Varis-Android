@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class Requests {
+public final class Requests {
 
     @SerializedName("requests")
     private List<RequestData> mRequests;

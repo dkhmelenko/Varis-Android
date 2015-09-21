@@ -13,7 +13,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko
  */
-public class CreateAuthorizationTask extends Task<Authorization> {
+public final class CreateAuthorizationTask extends Task<Authorization> {
 
     private final String mBasicAuth;
     private final AuthorizationRequest mAuthorizationRequest;

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Dmytro Khmelenko
  */
-public class Job {
+public final class Job {
 
     @SerializedName("id")
     private long mId;

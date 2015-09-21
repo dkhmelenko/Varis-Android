@@ -12,9 +12,11 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
 /**
+ * Types adapter for parsing JSON structures
+ *
  * @author Dmytro Khmelenko
  */
-public class ItemTypeAdapterFactory implements TypeAdapterFactory {
+final class ItemTypeAdapterFactory implements TypeAdapterFactory {
 
     public <T> TypeAdapter<T> create(Gson gson, final TypeToken<T> type) {
 

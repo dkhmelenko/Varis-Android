@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class FindReposEvent {
+public final class FindReposEvent {
 
     private final List<Repo> mRepos;
 

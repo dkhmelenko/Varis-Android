@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class BuildHistory {
+public final class BuildHistory {
 
     @SerializedName("builds")
     private List<Build> mBuilds;

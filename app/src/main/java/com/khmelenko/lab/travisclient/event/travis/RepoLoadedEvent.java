@@ -7,10 +7,9 @@ import com.khmelenko.lab.travisclient.network.response.Repo;
  *
  * @author Dmytro Khmelenko
  */
-public class RepoLoadedEvent {
+public final class RepoLoadedEvent {
 
     private final Repo mRepo;
-
 
     public RepoLoadedEvent(Repo repo) {
         mRepo = repo;

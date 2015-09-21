@@ -7,7 +7,7 @@ import com.khmelenko.lab.travisclient.network.response.BuildHistory;
  *
  * @author Dmytro Khmelenko
  */
-public class BuildHistoryLoadedEvent {
+public final class BuildHistoryLoadedEvent {
 
     private final BuildHistory mBuildHistory;
 

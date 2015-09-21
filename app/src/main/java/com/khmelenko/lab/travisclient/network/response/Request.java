@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Dmytro Khmelenko
  */
-public class Request {
+public final class Request {
 
     @SerializedName("request")
     private RequestData mRequestData;

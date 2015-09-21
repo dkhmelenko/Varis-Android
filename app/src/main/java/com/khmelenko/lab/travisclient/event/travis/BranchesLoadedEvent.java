@@ -10,8 +10,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class BranchesLoadedEvent {
-
+public final class BranchesLoadedEvent {
 
     private final Branches mBranches;
 

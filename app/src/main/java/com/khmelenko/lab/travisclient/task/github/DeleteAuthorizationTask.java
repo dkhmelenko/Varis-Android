@@ -11,7 +11,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko
  */
-public class DeleteAuthorizationTask extends Task<Void>{
+public final class DeleteAuthorizationTask extends Task<Void> {
 
     private final String mBasicAuth;
     private final String mAuthorizationId;

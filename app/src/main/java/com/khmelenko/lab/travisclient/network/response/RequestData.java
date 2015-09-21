@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Dmytro Khmelenko
  */
-public class RequestData {
+public final class RequestData {
 
     @SerializedName("id")
     private long mId;

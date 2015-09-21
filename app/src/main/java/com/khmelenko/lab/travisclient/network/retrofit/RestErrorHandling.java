@@ -15,7 +15,7 @@ import retrofit.RetrofitError;
  *
  * @author Dmytro Khmelenko
  */
-public class RestErrorHandling implements ErrorHandler {
+final class RestErrorHandling implements ErrorHandler {
 
     @Override
     public TaskException handleError(RetrofitError cause) {

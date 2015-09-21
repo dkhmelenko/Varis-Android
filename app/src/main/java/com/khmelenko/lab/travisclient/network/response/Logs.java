@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Dmytro Khmelenko
  */
-public class Logs {
+public final class Logs {
 
     @SerializedName("log")
     private Log mLog;

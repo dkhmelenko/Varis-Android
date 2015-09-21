@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Dmytro Khmelenko
  */
-public class Commit {
+public final class Commit {
 
     @SerializedName("id")
     private long mId;

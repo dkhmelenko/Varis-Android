@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Dmytro Khmelenko
  */
-public class GithubAccessToken {
+public final class GithubAccessToken {
 
     @SerializedName("access_token")
     private String mAccessToken;

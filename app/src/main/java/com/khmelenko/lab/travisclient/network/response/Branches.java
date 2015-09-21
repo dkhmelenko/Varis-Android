@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class Branches {
+public final class Branches {
 
     @SerializedName("branches")
     private List<Branch> mBranches;

@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public class Build {
+public final class Build {
 
     @SerializedName("id")
     private long mId;
