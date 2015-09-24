@@ -37,6 +37,11 @@
             android:name=".activity.RepoDetailsActivity"
             android:label="@string/repo_details_title" />
 
+        <!-- Build details -->
+        <activity
+            android:name=".activity.BuildDetailsActivity"
+            android:label="@string/title_activity_build_details" />
+
         <!-- Search results -->
         <activity
             android:name=".activity.SearchResultsActivity"
@@ -57,6 +62,7 @@
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".activity.SearchResultsActivity" />
+
 
     </application>
 
