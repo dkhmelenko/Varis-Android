@@ -18,10 +18,6 @@ public final class BuildHistory {
     @SerializedName("commits")
     private List<Commit> mCommits;
 
-    // TODO
-//    @SerializedName("jobs")
-//    private List<Job> mJobs;
-
 
     public List<Build> getBuilds() {
         return Collections.unmodifiableList(mBuilds);

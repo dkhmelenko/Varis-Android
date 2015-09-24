@@ -5,6 +5,7 @@ import com.khmelenko.lab.travisclient.task.github.CreateAuthorizationTask;
 import com.khmelenko.lab.travisclient.task.github.DeleteAuthorizationTask;
 import com.khmelenko.lab.travisclient.task.travis.AuthTask;
 import com.khmelenko.lab.travisclient.task.travis.BranchesTask;
+import com.khmelenko.lab.travisclient.task.travis.BuildDetailsTask;
 import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
 import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
 import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
@@ -105,6 +106,17 @@ public final class TaskManager {
      */
     public void userRepos(String userName) {
         UserReposTask task = new UserReposTask(userName);
+        LoaderAsyncTask.executeTask(task);
+    }
+
+    /**
+     * Loads build details information
+     *
+     * @param repoSlug Repository slug
+     * @param buildId  Build ID
+     */
+    public void getBuildDetails(String repoSlug, long buildId) {
+        BuildDetailsTask task = new BuildDetailsTask(repoSlug, buildId);
         LoaderAsyncTask.executeTask(task);
     }
 }
