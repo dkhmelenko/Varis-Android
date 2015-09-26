@@ -47,6 +47,7 @@
     <string name="build_build_in_progress">In progress</string>
     <string name="build_duration">Duration: %1$s</string>
     <string name="build_build_number">Build: #%1$s</string>
+    <string name="pull_request_number">PR #%1$s</string>
 
     <!-- Repository details -->
     <string name="repo_details_title">Repository details</string>
@@ -54,12 +55,10 @@
     <string name="repo_details_tab_branches">Branches</string>
     <string name="repo_details_tab_pull_requests">Pull requests</string>
 
+    <!-- Build details -->
+    <string name="title_activity_build_details">BuildDetailsActivity</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="pull_request_number">PR #%1$s</string>
-    <string name="title_activity_build_details">BuildDetailsActivity</string>
 
 </resources>
