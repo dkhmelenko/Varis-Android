@@ -56,7 +56,7 @@
     <string name="repo_details_tab_pull_requests">Pull requests</string>
 
     <!-- Build details -->
-    <string name="title_activity_build_details">BuildDetailsActivity</string>
+    <string name="build_details_title">BuildDetailsActivity</string>
     <string name="hello_world">Hello world!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
