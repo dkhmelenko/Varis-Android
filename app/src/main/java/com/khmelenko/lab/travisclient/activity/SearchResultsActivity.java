@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.adapter.RepoListAdapter;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
@@ -52,7 +53,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mReposRecyclerView.setLayoutManager(layoutManager);
 
-        mRepoListAdapter = new RepoListAdapter(this, mRepos, new RepoListAdapter.OnRepoItemListener() {
+        mRepoListAdapter = new RepoListAdapter(this, mRepos, new OnListItemListener() {
             @Override
             public void onItemSelected(int position) {
                 Repo repo = mRepos.get(position);

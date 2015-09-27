@@ -27,9 +27,9 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
 
     private final List<Repo> mRepos;
     private final Context mContext;
-    private final OnRepoItemListener mListener;
+    private final OnListItemListener mListener;
 
-    public RepoListAdapter(Context context, List<Repo> repos, OnRepoItemListener listener) {
+    public RepoListAdapter(Context context, List<Repo> repos, OnListItemListener listener) {
         mContext = context;
         mRepos = repos;
         mListener = listener;
@@ -110,16 +110,4 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
         }
     }
 
-    /**
-     * Listener for item repository
-     */
-    public interface OnRepoItemListener {
-
-        /**
-         * Handles item selection
-         *
-         * @param position Item position
-         */
-        void onItemSelected(int position);
-    }
 }
