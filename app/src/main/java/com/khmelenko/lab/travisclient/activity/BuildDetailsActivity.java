@@ -49,6 +49,7 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
     private long mBuildId;
 
     private TaskManager mTaskManager;
+    private JobsFragment mJobsFragment;
 
 
     @Override
@@ -77,6 +78,12 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        detachFragment(mJobsFragment);
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -199,6 +206,18 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
     }
 
     /**
+     * Detaches fragment
+     *
+     * @param fragment Fragment
+     */
+    protected void detachFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .detach(fragment)
+                .commit();
+    }
+
+    /**
      * Raised on loaded build details
      *
      * @param event Event data
@@ -211,9 +230,11 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
         showBuildDetails(details);
 
         if (details.getJobs().size() > 0) {
-            JobsFragment fragment = JobsFragment.newInstance();
-            fragment.setJobs(details.getJobs());
-            addFragment(R.id.build_details_jobs_container, fragment, "JobsFragment");
+            if(mJobsFragment == null) {
+                mJobsFragment = JobsFragment.newInstance();
+            }
+            mJobsFragment.setJobs(details.getJobs());
+            addFragment(R.id.build_details_jobs_container, mJobsFragment, "JobsFragment");
         } else {
             // TODO Show logs on the job
         }
