@@ -25,4 +25,11 @@
         android:id="@+id/build_details_build_data"
         layout="@layout/item_build"/>
 
+    <LinearLayout
+        android:id="@+id/build_details_jobs_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        />
+
 </LinearLayout>

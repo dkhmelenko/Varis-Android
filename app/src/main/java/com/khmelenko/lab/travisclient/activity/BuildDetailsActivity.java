@@ -2,6 +2,10 @@ package com.khmelenko.lab.travisclient.activity;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +18,7 @@ import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.converter.TimeConverter;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
+import com.khmelenko.lab.travisclient.fragment.JobsFragment;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildDetails;
 import com.khmelenko.lab.travisclient.network.response.Commit;
@@ -29,7 +34,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class BuildDetailsActivity extends AppCompatActivity {
+public class BuildDetailsActivity extends AppCompatActivity implements JobsFragment.JobsListener {
 
     public static final String EXTRA_REPO_SLUG = "RepoSlug";
     public static final String EXTRA_BUILD_ID = "BuildId";
@@ -158,6 +163,42 @@ public class BuildDetailsActivity extends AppCompatActivity {
     }
 
     /**
+     * Adds new fragment
+     *
+     * @param containerViewId ID of the container view for fragment
+     * @param fragment        Fragment instance
+     * @param fragmentTag     Fragment tag
+     */
+    protected void addFragment(@IdRes int containerViewId,
+                               @NonNull Fragment fragment,
+                               @NonNull String fragmentTag) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(containerViewId, fragment, fragmentTag)
+                .disallowAddToBackStack()
+                .commit();
+    }
+
+    /**
+     * Replaces fragment
+     *
+     * @param containerViewId    ID of the container view for fragment
+     * @param fragment           Fragment instance
+     * @param fragmentTag        Fragment tag
+     * @param backStackStateName Name in back stack
+     */
+    protected void replaceFragment(@IdRes int containerViewId,
+                                   @NonNull Fragment fragment,
+                                   @NonNull String fragmentTag,
+                                   @Nullable String backStackStateName) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(containerViewId, fragment, fragmentTag)
+                .addToBackStack(backStackStateName)
+                .commit();
+    }
+
+    /**
      * Raised on loaded build details
      *
      * @param event Event data
@@ -166,7 +207,16 @@ public class BuildDetailsActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.GONE);
         mBuildDetailsData.setVisibility(View.VISIBLE);
 
-        showBuildDetails(event.getBuildDetails());
+        BuildDetails details = event.getBuildDetails();
+        showBuildDetails(details);
+
+        if (details.getJobs().size() > 0) {
+            JobsFragment fragment = JobsFragment.newInstance();
+            fragment.setJobs(details.getJobs());
+            addFragment(R.id.build_details_jobs_container, fragment, "JobsFragment");
+        } else {
+            // TODO Show logs on the job
+        }
     }
 
     /**
@@ -179,5 +229,10 @@ public class BuildDetailsActivity extends AppCompatActivity {
         mBuildDetailsData.setVisibility(View.GONE);
 
         // TODO Show error
+    }
+
+    @Override
+    public void onJobSelected(String job) {
+        // TODO
     }
 }

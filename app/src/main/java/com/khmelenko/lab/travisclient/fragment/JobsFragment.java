@@ -100,7 +100,9 @@ public class JobsFragment extends Fragment {
         mJobs.clear();
         mJobs.addAll(jobs);
 
-        mJobsListAdapter.notifyDataSetChanged();
+        if(mJobsListAdapter != null) {
+            mJobsListAdapter.notifyDataSetChanged();
+        }
     }
 
     /**

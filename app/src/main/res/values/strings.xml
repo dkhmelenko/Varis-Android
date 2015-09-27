@@ -56,7 +56,7 @@
 
     <!-- Build details -->
     <string name="build_details_title">Build details</string>
-    <string name="build_details_job_number">#%1$s</string>
+    <string name="build_details_job_number">Job #%1$s</string>
     <string name="build_details_job_duration">Duration: %1$s</string>
     <string name="build_details_job_in_progress">In progress</string>
 
