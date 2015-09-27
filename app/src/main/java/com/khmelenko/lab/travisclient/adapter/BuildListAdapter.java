@@ -2,6 +2,7 @@ package com.khmelenko.lab.travisclient.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -26,10 +27,12 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
 
     private BuildHistory mBuildHistory;
     private final Context mContext;
+    private final OnListItemListener mListener;
 
-    public BuildListAdapter(Context context, BuildHistory buildHistory) {
+    public BuildListAdapter(Context context, BuildHistory buildHistory, OnListItemListener listener) {
         mContext = context;
         mBuildHistory = buildHistory;
+        mListener = listener;
     }
 
     @Override
@@ -109,7 +112,7 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
     /**
      * Viewholder class
      */
-    class BuildViewHolder extends RecyclerView.ViewHolder {
+    class BuildViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         View mParent;
         TextView mNumber;
@@ -125,6 +128,7 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
             itemView.setClickable(true);
 
             mParent = itemView.findViewById(R.id.card_view);
+            mParent.setOnClickListener(this);
             mNumber = (TextView) itemView.findViewById(R.id.item_build_number);
             mState = (TextView) itemView.findViewById(R.id.item_build_state);
             mBranch = (TextView) itemView.findViewById(R.id.item_build_branch);
@@ -133,5 +137,13 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
             mDuration = (TextView) itemView.findViewById(R.id.item_build_duration);
             mFinished = (TextView) itemView.findViewById(R.id.item_build_finished);
         }
+
+        @Override
+        public void onClick(View view) {
+            if(mListener != null) {
+                mListener.onItemSelected(getLayoutPosition());
+            }
+        }
     }
+
 }

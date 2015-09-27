@@ -14,8 +14,10 @@ import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.adapter.BuildListAdapter;
+import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.BuildHistoryLoadedEvent;
+import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 
@@ -28,7 +30,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class BuildHistoryFragment extends Fragment {
+public class BuildHistoryFragment extends Fragment implements OnListItemListener {
 
     private static final String REPO_SLUG_KEY = "RepoSlug";
 
@@ -84,7 +86,7 @@ public class BuildHistoryFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mBuildHistoryRecyclerView.setLayoutManager(layoutManager);
 
-        mBuildListAdapter = new BuildListAdapter(getContext(), mBuildHistory);
+        mBuildListAdapter = new BuildListAdapter(getContext(), mBuildHistory, this);
         mBuildHistoryRecyclerView.setAdapter(mBuildListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
@@ -165,6 +167,14 @@ public class BuildHistoryFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemSelected(int position) {
+        if(mListener != null) {
+            Build build = mBuildHistory.getBuilds().get(position);
+            mListener.onBuildSelected(build.getId());
+        }
+    }
+
     /**
      * Interface for communication with this fragment
      */
@@ -175,7 +185,7 @@ public class BuildHistoryFragment extends Fragment {
          *
          * @param buildNumber Build number
          */
-        void onBuildSelected(String buildNumber);
+        void onBuildSelected(long buildNumber);
     }
 
 }

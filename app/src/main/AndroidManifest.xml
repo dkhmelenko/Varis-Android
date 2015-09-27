@@ -40,7 +40,7 @@
         <!-- Build details -->
         <activity
             android:name=".activity.BuildDetailsActivity"
-            android:label="@string/title_activity_build_details" />
+            android:label="@string/build_details_title" />
 
         <!-- Search results -->
         <activity

@@ -36,6 +36,9 @@ public final class Job {
     @SerializedName("finished_at")
     private String mFinishedAt;
 
+    @SerializedName("duration")
+    private long mDuration;
+
     @SerializedName("queue")
     private String mQueue;
 
@@ -135,5 +138,13 @@ public final class Job {
 
     public void setAllowFailure(boolean allowFailure) {
         mAllowFailure = allowFailure;
+    }
+
+    public long getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(long duration) {
+        mDuration = duration;
     }
 }

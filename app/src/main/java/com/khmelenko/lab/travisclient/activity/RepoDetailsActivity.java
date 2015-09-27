@@ -1,5 +1,6 @@
 package com.khmelenko.lab.travisclient.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -122,8 +123,11 @@ public class RepoDetailsActivity extends AppCompatActivity implements BuildHisto
     }
 
     @Override
-    public void onBuildSelected(String buildNumber) {
-        // TODO
+    public void onBuildSelected(long buildId) {
+        Intent intent = new Intent(this, BuildDetailsActivity.class);
+        intent.putExtra(BuildDetailsActivity.EXTRA_BUILD_ID, buildId);
+        intent.putExtra(BuildDetailsActivity.EXTRA_REPO_SLUG, mRepoSlug);
+        startActivity(intent);
     }
 
     @Override
