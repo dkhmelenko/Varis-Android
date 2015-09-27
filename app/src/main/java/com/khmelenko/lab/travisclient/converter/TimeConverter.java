@@ -31,6 +31,10 @@ public final class TimeConverter {
             builder.append(sec).append(" sec");
         }
 
+        if(duration == 0) {
+            builder.append(sec).append(" sec");
+        }
+
         return builder.toString();
 
     }

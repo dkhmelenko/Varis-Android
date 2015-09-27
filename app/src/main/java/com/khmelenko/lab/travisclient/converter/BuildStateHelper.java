@@ -2,6 +2,7 @@ package com.khmelenko.lab.travisclient.converter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
@@ -71,7 +72,9 @@ public final class BuildStateHelper {
      * @param state Build state
      * @return Image drawable
      */
-    public static @Nullable Drawable getBuildImage(String state) {
+    public static
+    @Nullable
+    Drawable getBuildImage(String state) {
         Context context = TravisApp.getAppContext();
 
         Drawable drawable = null;
@@ -93,5 +96,16 @@ public final class BuildStateHelper {
         }
 
         return drawable;
+    }
+
+    /**
+     * Checks whether the state passed or not
+     *
+     * @param state State
+     * @return True, if state is passed. False otherwise
+     */
+    public static boolean isPassed(@NonNull String state) {
+        boolean passed = state.equals("passed");
+        return passed;
     }
 }

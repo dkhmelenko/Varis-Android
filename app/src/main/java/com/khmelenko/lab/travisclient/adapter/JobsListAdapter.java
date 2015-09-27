@@ -42,7 +42,7 @@ public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobVie
         if (mJobs != null) {
             Job job = mJobs.get(position);
 
-            // build data
+            // job data
             holder.mNumber.setText(mContext.getString(R.string.build_details_job_number, job.getNumber()));
             String state = job.getState();
             if (!TextUtils.isEmpty(state)) {
@@ -59,7 +59,7 @@ public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobVie
             }
 
             // duration
-            if (job.getDuration() != 0) {
+            if (BuildStateHelper.isPassed(job.getState())) {
                 String duration = TimeConverter.durationToString(job.getDuration());
                 duration = mContext.getString(R.string.build_details_job_duration, duration);
                 holder.mDuration.setText(duration);
