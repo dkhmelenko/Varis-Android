@@ -25,10 +25,12 @@ public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobVie
 
     private final Context mContext;
     private List<Job> mJobs;
+    private final OnListItemListener mListener;
 
-    public JobsListAdapter(Context context, List<Job> jobs) {
+    public JobsListAdapter(Context context, List<Job> jobs, OnListItemListener listener) {
         mContext = context;
         mJobs = jobs;
+        mListener = listener;
     }
 
     @Override
@@ -79,7 +81,7 @@ public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobVie
     /**
      * Viewholder class
      */
-    class JobViewHolder extends RecyclerView.ViewHolder {
+    class JobViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         View mParent;
         TextView mNumber;
@@ -91,9 +93,17 @@ public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobVie
             itemView.setClickable(true);
 
             mParent = itemView.findViewById(R.id.card_view);
+            mParent.setOnClickListener(this);
             mNumber = (TextView) itemView.findViewById(R.id.item_job_number);
             mState = (TextView) itemView.findViewById(R.id.item_job_state);
             mDuration = (TextView) itemView.findViewById(R.id.item_job_duration);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(mListener != null) {
+                mListener.onItemSelected(getLayoutPosition());
+            }
         }
     }
 }

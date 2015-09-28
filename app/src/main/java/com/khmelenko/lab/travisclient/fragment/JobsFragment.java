@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.adapter.BranchesListAdapter;
 import com.khmelenko.lab.travisclient.adapter.JobsListAdapter;
+import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.network.response.Job;
 
 import java.util.ArrayList;
@@ -67,7 +68,15 @@ public class JobsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(layoutManager);
 
-        mJobsListAdapter = new JobsListAdapter(getContext(), mJobs);
+        mJobsListAdapter = new JobsListAdapter(getContext(), mJobs, new OnListItemListener() {
+            @Override
+            public void onItemSelected(int position) {
+                if(mJobs != null && !mJobs.isEmpty()) {
+                    Job job = mJobs.get(position);
+                    mListener.onJobSelected(job);
+                }
+            }
+        });
         mJobsRecyclerView.setAdapter(mJobsListAdapter);
 
         return view;
@@ -115,7 +124,7 @@ public class JobsFragment extends Fragment {
          *
          * @param job Selected job
          */
-        void onJobSelected(String job);
+        void onJobSelected(Job job);
     }
 
 }

@@ -243,13 +243,13 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
                 mJobsFragment = JobsFragment.newInstance();
             }
             mJobsFragment.setJobs(details.getJobs());
-            addFragment(R.id.build_details_jobs_container, mJobsFragment, "JobsFragment");
+            addFragment(R.id.build_details_container, mJobsFragment, "JobsFragment");
         } else if(details.getJobs().size() == 1){
             Job job = details.getJobs().get(0);
             if(mRawLogFragment == null) {
                 mRawLogFragment = RawLogFragment.newInstance(job.getId());
             }
-            addFragment(R.id.build_details_jobs_container, mRawLogFragment, "RawLogFragment");
+            addFragment(R.id.build_details_container, mRawLogFragment, "RawLogFragment");
         }
     }
 
@@ -266,8 +266,11 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
     }
 
     @Override
-    public void onJobSelected(String job) {
-        // TODO
+    public void onJobSelected(Job job) {
+        if(mRawLogFragment == null) {
+            mRawLogFragment = RawLogFragment.newInstance(job.getId());
+        }
+        replaceFragment(R.id.build_details_container, mRawLogFragment, "RawLogFragment", null);
     }
 
     @Override
