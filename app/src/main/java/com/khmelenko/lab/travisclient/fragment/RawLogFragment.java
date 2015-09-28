@@ -25,7 +25,8 @@ public class RawLogFragment extends Fragment {
     private static final String JOB_ID_KEY = "JobId";
 
     // TODO Use the resource from settings
-    private static final String RAW_LOG_URL = "https://api.travis-ci.org/jobs/%1$s/log";
+    private static final String RAW_LOG_RESOURCE = "https://api.travis-ci.org";
+    private static final String RAW_LOG_PATH = "/jobs/%1$s/log";
 
     @Bind(R.id.raw_log_webview)
     WebView mWebView;
@@ -74,7 +75,7 @@ public class RawLogFragment extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if(mListener != null) {
+                if (mListener != null) {
                     mListener.onLogLoaded();
                 }
 
@@ -87,7 +88,8 @@ public class RawLogFragment extends Fragment {
             }
         });
 
-        mWebView.loadUrl(String.format(RAW_LOG_URL, String.valueOf(mJobId)));
+        String path = String.format(RAW_LOG_PATH, String.valueOf(mJobId));
+        mWebView.loadUrl(RAW_LOG_RESOURCE + path);
 
         return view;
     }
