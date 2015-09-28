@@ -19,9 +19,11 @@ import com.khmelenko.lab.travisclient.converter.TimeConverter;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.fragment.JobsFragment;
+import com.khmelenko.lab.travisclient.fragment.RawLogFragment;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildDetails;
 import com.khmelenko.lab.travisclient.network.response.Commit;
+import com.khmelenko.lab.travisclient.network.response.Job;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 
@@ -34,7 +36,8 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class BuildDetailsActivity extends AppCompatActivity implements JobsFragment.JobsListener {
+public class BuildDetailsActivity extends AppCompatActivity implements JobsFragment.JobsListener,
+        RawLogFragment.OnRawLogFragmentListener {
 
     public static final String EXTRA_REPO_SLUG = "RepoSlug";
     public static final String EXTRA_BUILD_ID = "BuildId";
@@ -50,6 +53,7 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
 
     private TaskManager mTaskManager;
     private JobsFragment mJobsFragment;
+    private RawLogFragment mRawLogFragment;
 
 
     @Override
@@ -82,7 +86,12 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        detachFragment(mJobsFragment);
+        if(mJobsFragment != null) {
+            detachFragment(mJobsFragment);
+        }
+        if(mRawLogFragment != null) {
+            detachFragment(mRawLogFragment);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -229,14 +238,18 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
         BuildDetails details = event.getBuildDetails();
         showBuildDetails(details);
 
-        if (details.getJobs().size() > 0) {
+        if (details.getJobs().size() > 1) {
             if(mJobsFragment == null) {
                 mJobsFragment = JobsFragment.newInstance();
             }
             mJobsFragment.setJobs(details.getJobs());
             addFragment(R.id.build_details_jobs_container, mJobsFragment, "JobsFragment");
-        } else {
-            // TODO Show logs on the job
+        } else if(details.getJobs().size() == 1){
+            Job job = details.getJobs().get(0);
+            if(mRawLogFragment == null) {
+                mRawLogFragment = RawLogFragment.newInstance(job.getId());
+            }
+            addFragment(R.id.build_details_jobs_container, mRawLogFragment, "RawLogFragment");
         }
     }
 
@@ -254,6 +267,11 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
 
     @Override
     public void onJobSelected(String job) {
+        // TODO
+    }
+
+    @Override
+    public void onLogLoaded() {
         // TODO
     }
 }
