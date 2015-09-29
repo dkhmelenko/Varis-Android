@@ -21,9 +21,11 @@
             />
     </LinearLayout>
 
-    <include
+    <com.khmelenko.lab.travisclient.view.BuildView
         android:id="@+id/build_details_build_data"
-        layout="@layout/item_build"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
 
     <LinearLayout
         android:id="@+id/build_details_container"
