@@ -31,12 +31,13 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
     private Requests mRequests;
     private List<RequestData> mPullRequests;
     private final Context mContext;
+    private final OnListItemListener mListener;
 
-    public PullRequestsListAdapter(Context context, Requests requests) {
+    public PullRequestsListAdapter(Context context, Requests requests, OnListItemListener listener) {
         mContext = context;
         mRequests = requests;
         mPullRequests = new ArrayList<>();
-        fetchPullRequests();
+        mListener = listener;
     }
 
     /**
@@ -44,22 +45,9 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
      *
      * @param requests Requests
      */
-    public void setRequests(Requests requests) {
+    public void setRequests(Requests requests, List<RequestData> pullRequests) {
         mRequests = requests;
-        fetchPullRequests();
-    }
-
-    /**
-     * Fetches pull requests
-     */
-    private void fetchPullRequests() {
-        if(mRequests != null) {
-            for (RequestData request : mRequests.getRequests()) {
-                if (request.isPullRequest() && !mPullRequests.contains(request)) {
-                    mPullRequests.add(request);
-                }
-            }
-        }
+        mPullRequests = pullRequests;
     }
 
     @Override
@@ -149,7 +137,7 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
     /**
      * Viewholder class
      */
-    class BranchViewHolder extends RecyclerView.ViewHolder {
+    class BranchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         View mParent;
         TextView mNumber;
@@ -164,12 +152,20 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
             itemView.setClickable(true);
 
             mParent = itemView.findViewById(R.id.card_view);
+            mParent.setOnClickListener(this);
             mNumber = (TextView) itemView.findViewById(R.id.item_pull_request_number);
             mState = (TextView) itemView.findViewById(R.id.item_pull_request_state);
             mTitle = (TextView) itemView.findViewById(R.id.item_pull_request_title);
             mCommitPerson = (TextView) itemView.findViewById(R.id.item_pull_request_commit_person);
             mDuration = (TextView) itemView.findViewById(R.id.item_pull_request_duration);
             mFinished = (TextView) itemView.findViewById(R.id.item_pull_request_finished);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mListener != null) {
+                mListener.onItemSelected(getLayoutPosition());
+            }
         }
     }
 }

@@ -27,10 +27,12 @@ public class BranchesListAdapter extends RecyclerView.Adapter<BranchesListAdapte
 
     private Branches mBranches;
     private final Context mContext;
+    private final OnListItemListener mListener;
 
-    public BranchesListAdapter(Context context, Branches branches) {
+    public BranchesListAdapter(Context context, Branches branches, OnListItemListener listener) {
         mContext = context;
         mBranches = branches;
+        mListener = listener;
     }
 
     @Override
@@ -67,7 +69,7 @@ public class BranchesListAdapter extends RecyclerView.Adapter<BranchesListAdapte
     /**
      * Viewholder class
      */
-    class BranchViewHolder extends RecyclerView.ViewHolder {
+    class BranchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         View mParent;
         BuildView mBuildView;
@@ -77,8 +79,15 @@ public class BranchesListAdapter extends RecyclerView.Adapter<BranchesListAdapte
             itemView.setClickable(true);
 
             mParent = itemView.findViewById(R.id.card_view);
-            mParent.setClickable(true);
+            mParent.setOnClickListener(this);
             mBuildView = (BuildView) itemView.findViewById(R.id.item_branch_data);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mListener != null) {
+                mListener.onItemSelected(getLayoutPosition());
+            }
         }
     }
 }

@@ -124,19 +124,23 @@ public class RepoDetailsActivity extends AppCompatActivity implements BuildHisto
 
     @Override
     public void onBuildSelected(long buildId) {
+        goToBuildDetails(buildId);
+    }
+
+    @Override
+    public void onBranchSelected(long buildId) {
+        goToBuildDetails(buildId);
+    }
+
+    @Override
+    public void onPullRequestSelected(long buildId) {
+        goToBuildDetails(buildId);
+    }
+
+    private void goToBuildDetails(long buildId) {
         Intent intent = new Intent(this, BuildDetailsActivity.class);
         intent.putExtra(BuildDetailsActivity.EXTRA_BUILD_ID, buildId);
         intent.putExtra(BuildDetailsActivity.EXTRA_REPO_SLUG, mRepoSlug);
         startActivity(intent);
-    }
-
-    @Override
-    public void onBranchSelected(String branchName) {
-        // TODO
-    }
-
-    @Override
-    public void onPullRequestSelected(String pullRequest) {
-        // TODO
     }
 }

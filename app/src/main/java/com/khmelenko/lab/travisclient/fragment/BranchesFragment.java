@@ -14,9 +14,12 @@ import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.adapter.BranchesListAdapter;
+import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.event.travis.BranchesLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
+import com.khmelenko.lab.travisclient.network.response.Branch;
 import com.khmelenko.lab.travisclient.network.response.Branches;
+import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 
 import butterknife.Bind;
@@ -28,7 +31,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class BranchesFragment extends Fragment {
+public class BranchesFragment extends Fragment implements OnListItemListener {
 
     private static final String REPO_SLUG_KEY = "RepoSlug";
 
@@ -85,7 +88,7 @@ public class BranchesFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mBranchesRecyclerView.setLayoutManager(layoutManager);
 
-        mBranchesListAdapter = new BranchesListAdapter(getContext(), mBranches);
+        mBranchesListAdapter = new BranchesListAdapter(getContext(), mBranches, this);
         mBranchesRecyclerView.setAdapter(mBranchesListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
@@ -166,6 +169,14 @@ public class BranchesFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemSelected(int position) {
+        if(mListener != null) {
+            Branch branch = mBranches.getBranches().get(position);
+            mListener.onBranchSelected(branch.getId());
+        }
+    }
+
     /**
      * Interface for communication with this fragment
      */
@@ -174,9 +185,9 @@ public class BranchesFragment extends Fragment {
         /**
          * Handles selection of the branch
          *
-         * @param branchName Branch name
+         * @param buildId Id of the last build in branch
          */
-        void onBranchSelected(String branchName);
+        void onBranchSelected(long buildId);
     }
 
 }

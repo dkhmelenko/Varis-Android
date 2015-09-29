@@ -13,11 +13,18 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.adapter.PullRequestsListAdapter;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.RequestsLoadedEvent;
+import com.khmelenko.lab.travisclient.network.response.Branch;
+import com.khmelenko.lab.travisclient.network.response.Request;
+import com.khmelenko.lab.travisclient.network.response.RequestData;
 import com.khmelenko.lab.travisclient.network.response.Requests;
 import com.khmelenko.lab.travisclient.task.TaskManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,7 +35,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class PullRequestsFragment extends Fragment {
+public class PullRequestsFragment extends Fragment implements OnListItemListener {
 
     private static final String REPO_SLUG_KEY = "RepoSlug";
 
@@ -43,6 +50,7 @@ public class PullRequestsFragment extends Fragment {
 
     private PullRequestsListAdapter mPullRequestsListAdapter;
     private Requests mRequests;
+    private List<RequestData> mPullRequests;
     private String mRepoSlug;
 
     private PullRequestsListener mListener;
@@ -85,7 +93,7 @@ public class PullRequestsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mPullRequestsRecyclerView.setLayoutManager(layoutManager);
 
-        mPullRequestsListAdapter = new PullRequestsListAdapter(getContext(), mRequests);
+        mPullRequestsListAdapter = new PullRequestsListAdapter(getContext(), mRequests, this);
         mPullRequestsRecyclerView.setAdapter(mPullRequestsListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
@@ -123,6 +131,21 @@ public class PullRequestsFragment extends Fragment {
     }
 
     /**
+     * Fetches pull requests
+     */
+    private List<RequestData> fetchPullRequests(Requests requests) {
+        List<RequestData> pullRequest = new ArrayList<>();
+        if (mRequests != null) {
+            for (RequestData request : requests.getRequests()) {
+                if (request.isPullRequest() && !pullRequest.contains(request)) {
+                    pullRequest.add(request);
+                }
+            }
+        }
+        return pullRequest;
+    }
+
+    /**
      * Raised on loaded requests
      *
      * @param event Event data
@@ -132,7 +155,8 @@ public class PullRequestsFragment extends Fragment {
         mProgressBar.setVisibility(View.GONE);
 
         mRequests = event.getRequests();
-        mPullRequestsListAdapter.setRequests(mRequests);
+        mPullRequests = fetchPullRequests(mRequests);
+        mPullRequestsListAdapter.setRequests(mRequests, mPullRequests);
         mPullRequestsListAdapter.notifyDataSetChanged();
     }
 
@@ -166,6 +190,14 @@ public class PullRequestsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemSelected(int position) {
+        if (mListener != null) {
+            RequestData requestData = mPullRequests.get(position);
+            mListener.onPullRequestSelected(requestData.getBuildId());
+        }
+    }
+
     /**
      * Interface for communication with this fragment
      */
@@ -174,8 +206,8 @@ public class PullRequestsFragment extends Fragment {
         /**
          * Handles selection of the pull request
          *
-         * @param pullRequest Pull request name
+         * @param buildId ID of the build of the pull request
          */
-        void onPullRequestSelected(String pullRequest);
+        void onPullRequestSelected(long buildId);
     }
 }
