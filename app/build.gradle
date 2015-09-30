@@ -33,4 +33,5 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.6.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
 }
