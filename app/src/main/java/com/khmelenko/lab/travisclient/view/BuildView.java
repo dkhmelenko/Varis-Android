@@ -56,7 +56,7 @@ public class BuildView extends LinearLayout {
     private void initializeViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.build_view, this);
+        inflater.inflate(R.layout.view_build, this);
     }
 
     @Override
