@@ -60,6 +60,7 @@ public final class RestClient {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(GITHUB_URL)
                 .setConverter(new GsonConverter(gson))
+                .setErrorHandler(new RestErrorHandling())
                 .build();
         mGithubApiService = restAdapter.create(GithubApiService.class);
     }
