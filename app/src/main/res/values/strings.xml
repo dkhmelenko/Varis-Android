@@ -26,6 +26,9 @@
     <string name="auth_login_btn">Login</string>
     <string name="auth_invalid_username_msg">Username cannot be empty</string>
     <string name="auth_invalid_password_msg">Password cannot be empty</string>
+    <string name="auth_security_code_hint">Security code</string>
+    <string name="auth_confirm_btn">Confirm</string>
+    <string name="auth_invalid_security_code">Security code cannot be empty</string>
 
     <!-- Search screen -->
     <string name="search_results_title">Search results</string>
@@ -66,7 +69,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pull_request_number">PR #%1$s</string>
-
 
 
 </resources>

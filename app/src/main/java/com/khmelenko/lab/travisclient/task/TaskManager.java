@@ -31,6 +31,18 @@ public final class TaskManager {
     }
 
     /**
+     * Creates new authorization task
+     *
+     * @param basicAuth     Basic GitHub authorization
+     * @param request       Request data
+     * @param twoFactorCode Two factor authorization code
+     */
+    public void createNewAuthorization(String basicAuth, AuthorizationRequest request, String twoFactorCode) {
+        CreateAuthorizationTask task = new CreateAuthorizationTask(basicAuth, request, twoFactorCode);
+        LoaderAsyncTask.executeTask(task);
+    }
+
+    /**
      * Deletes authorization
      *
      * @param basicAuth       Basic GitHub authorization
@@ -38,6 +50,18 @@ public final class TaskManager {
      */
     public void deleteAuthorization(String basicAuth, String authorizationId) {
         DeleteAuthorizationTask task = new DeleteAuthorizationTask(basicAuth, authorizationId);
+        LoaderAsyncTask.executeTask(task);
+    }
+
+    /**
+     * Deletes authorization
+     *
+     * @param basicAuth       Basic GitHub authorization
+     * @param authorizationId Authorization ID to delete
+     * @param twoFactorCode   Two factor authorization code
+     */
+    public void deleteAuthorization(String basicAuth, String authorizationId, String twoFactorCode) {
+        DeleteAuthorizationTask task = new DeleteAuthorizationTask(basicAuth, authorizationId, twoFactorCode);
         LoaderAsyncTask.executeTask(task);
     }
 

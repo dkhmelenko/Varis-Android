@@ -20,6 +20,7 @@ import com.khmelenko.lab.travisclient.event.travis.AuthSuccessEvent;
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.Authorization;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
+import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.util.EncryptionUtils;
 import com.khmelenko.lab.travisclient.util.StringUtils;
@@ -39,6 +40,12 @@ import de.greenrobot.event.EventBus;
  */
 public class AuthActivity extends AppCompatActivity {
 
+    @Bind(R.id.auth_login_section)
+    View mLoginSection;
+
+    @Bind(R.id.auth_confirm_section)
+    View mConfirmSection;
+
     @Bind(R.id.auth_username)
     EditText mUsername;
 
@@ -47,6 +54,9 @@ public class AuthActivity extends AppCompatActivity {
 
     @Bind(R.id.auth_login_btn)
     Button mLoginBtn;
+
+    @Bind(R.id.auth_security_code)
+    EditText mSecurityCode;
 
     private ProgressDialog mProgressDialog;
 
@@ -73,6 +83,19 @@ public class AuthActivity extends AppCompatActivity {
             mBasicAuth = EncryptionUtils.generateBasicAuthorization(
                     mUsername.getText().toString(), mPassword.getText().toString());
             mTaskManager.createNewAuthorization(mBasicAuth, prepareAuthorizationRequest());
+        }
+    }
+
+    @OnClick(R.id.auth_confirm_btn)
+    public void startConfirmation() {
+        if(TextUtils.isEmpty(mSecurityCode.getText())) {
+            mSecurityCode.setError(getString(R.string.auth_invalid_security_code));
+        } else {
+            mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
+            String securityCode = mSecurityCode.getText().toString();
+            mBasicAuth = EncryptionUtils.generateBasicAuthorization(
+                    mUsername.getText().toString(), mPassword.getText().toString());
+            mTaskManager.createNewAuthorization(mBasicAuth, prepareAuthorizationRequest(), securityCode);
         }
     }
 
@@ -167,8 +190,14 @@ public class AuthActivity extends AppCompatActivity {
     public void onEvent(GithubAuthorizationFailEvent event) {
         mProgressDialog.dismiss();
 
-        // TODO Improve error handling
-        Toast.makeText(this, event.getTaskError().getMessage(), Toast.LENGTH_SHORT).show();
+        TaskError taskError = event.getTaskError();
+        if (taskError.getCode() == TaskError.TWO_FACTOR_AUTH_REQUIRED) {
+            mLoginSection.setVisibility(View.GONE);
+            mConfirmSection.setVisibility(View.VISIBLE);
+        } else {
+            // TODO Improve error handling
+            Toast.makeText(this, event.getTaskError().getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -180,7 +209,12 @@ public class AuthActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
 
         // start deletion authorization on Github, because we don't need it anymore
-        mTaskManager.deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()));
+        if(!TextUtils.isEmpty(mSecurityCode.getText())) {
+            mTaskManager.deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()),
+                    mSecurityCode.getText().toString());
+        } else {
+            mTaskManager.deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()));
+        }
 
         // save access token to settings
         String accessToken = event.getAccessToken();

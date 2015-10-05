@@ -1,5 +1,7 @@
 package com.khmelenko.lab.travisclient.task;
 
+import retrofit.client.Response;
+
 /**
  * Defines the error for the Task
  *
@@ -13,6 +15,7 @@ public final class TaskError {
 
     private final int mCode;
     private final String mMessage;
+    private Response mResponse;
 
     public TaskError(int code, String message) {
         mCode = code;
@@ -25,5 +28,13 @@ public final class TaskError {
 
     public String getMessage() {
         return mMessage;
+    }
+
+    public Response getResponse() {
+        return mResponse;
+    }
+
+    public void setResponse(Response response) {
+        mResponse = response;
     }
 }

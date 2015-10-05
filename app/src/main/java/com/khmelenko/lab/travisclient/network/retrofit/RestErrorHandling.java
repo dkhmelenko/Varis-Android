@@ -38,6 +38,7 @@ final class RestErrorHandling implements ErrorHandler {
                 } else {
                     taskError = new TaskError(httpStatus, cause.getResponse().getReason());
                 }
+                taskError.setResponse(cause.getResponse());
             }
         }
 

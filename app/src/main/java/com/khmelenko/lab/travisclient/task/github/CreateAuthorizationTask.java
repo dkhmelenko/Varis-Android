@@ -11,9 +11,6 @@ import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskException;
 
-import java.util.List;
-
-import retrofit.RetrofitError;
 import retrofit.client.Header;
 import retrofit.client.Response;
 
@@ -51,23 +48,19 @@ public final class CreateAuthorizationTask extends Task<Authorization> {
                 authorization = mRestClient.getGithubApiService()
                         .createNewAuthorization(mBasicAuth, mAuthorizationRequest);
             }
-        } catch (RetrofitError error) {
+        } catch (TaskException error) {
 
-            if(!error.isNetworkError()) {
-                Response response = error.getResponse();
-                boolean twoFactorAuthRequired = false;
-                for (Header header : response.getHeaders()) {
-                    if (header.getName().equals(GithubApiService.TWO_FACTOR_HEADER)) {
-                        twoFactorAuthRequired = true;
-                        break;
-                    }
+            Response response = error.getTaskError().getResponse();
+            boolean twoFactorAuthRequired = false;
+            for (Header header : response.getHeaders()) {
+                if (GithubApiService.TWO_FACTOR_HEADER.equals(header.getName())) {
+                    twoFactorAuthRequired = true;
+                    break;
                 }
-                if(response.getStatus() == 401 && twoFactorAuthRequired) {
-                    TaskError taskError = new TaskError(TaskError.TWO_FACTOR_AUTH_REQUIRED, "");
-                    throw new TaskException(taskError);
-                } else {
-                    throw error;
-                }
+            }
+            if (response.getStatus() == 401 && twoFactorAuthRequired) {
+                TaskError taskError = new TaskError(TaskError.TWO_FACTOR_AUTH_REQUIRED, "");
+                throw new TaskException(taskError);
             } else {
                 throw error;
             }
