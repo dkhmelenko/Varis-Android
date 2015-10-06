@@ -161,6 +161,10 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                         startActivity(getIntent());
                         break;
+                    case R.id.drawer_settings:
+                        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(settingsIntent);
+                        break;
                     case R.id.drawer_about:
                         Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
                         startActivity(aboutIntent);

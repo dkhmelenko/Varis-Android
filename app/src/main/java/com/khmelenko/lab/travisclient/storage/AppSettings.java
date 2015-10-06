@@ -14,6 +14,7 @@ import com.khmelenko.lab.travisclient.TravisApp;
 public final class AppSettings {
 
     private static final String ACCESS_TOKEN_KEY = "TravisAccessToken";
+    private static final String SERVER_TYPE_KEY = "ServerTypeKey";
 
     // denied constructor
     private AppSettings() {
@@ -50,6 +51,28 @@ public final class AppSettings {
         SharedPreferences pref = getPreferences();
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(ACCESS_TOKEN_KEY, accessToken);
+        editor.commit();
+    }
+
+    /**
+     * Gets server type from Settings
+     *
+     * @return Server type
+     */
+    public static String getServerType() {
+        SharedPreferences pref = getPreferences();
+        return pref.getString(SERVER_TYPE_KEY, "");
+    }
+
+    /**
+     * Puts server type to the settings
+     *
+     * @param serverType Server type
+     */
+    public static void putServerType(String serverType) {
+        SharedPreferences pref = getPreferences();
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(SERVER_TYPE_KEY, serverType);
         editor.commit();
     }
 
