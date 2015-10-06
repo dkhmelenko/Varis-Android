@@ -24,12 +24,57 @@ public final class RestClient {
     private TravisApiService mApiService;
     private GithubApiService mGithubApiService;
 
-    public RestClient() {
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
-                .registerTypeAdapterFactory(new ItemTypeAdapterFactory())
-                .create();
+    private static RestClient sInstance;
 
+    private RestClient() {
+
+        updateTravisEndpoint(TRAVIS_URL);
+
+        // rest adapter for github API service
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setEndpoint(GITHUB_URL)
+                .setConverter(new GsonConverter(constructGsonConverter()))
+                .setErrorHandler(new RestErrorHandling())
+                .build();
+        mGithubApiService = restAdapter.create(GithubApiService.class);
+    }
+
+    /**
+     * Gets the instance of the rest client
+     *
+     * @return Instance
+     */
+    public static RestClient getInstance() {
+        if (sInstance == null) {
+            sInstance = new RestClient();
+        }
+        return sInstance;
+    }
+
+    /**
+     * Updates Travis endpoint
+     *
+     * @param newEndpoint New endpoint
+     */
+    public void updateTravisEndpoint(String newEndpoint) {
+        // rest adapter for travis API service
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setEndpoint(newEndpoint)
+                .setConverter(new GsonConverter(constructGsonConverter()))
+                .setRequestInterceptor(constructRequestInterceptor())
+                .setErrorHandler(new RestErrorHandling())
+                .build();
+        mApiService = restAdapter.create(TravisApiService.class);
+    }
+
+    /**
+     * Constructs request interceptor
+     *
+     * @return Request interceptor
+     */
+    private RequestInterceptor constructRequestInterceptor() {
         RequestInterceptor requestInterceptor = new RequestInterceptor() {
             @Override
             public void intercept(RequestFacade request) {
@@ -38,31 +83,26 @@ public final class RestClient {
                 request.addHeader("Accept", "application/vnd.travis-ci.2+json");
 
                 String accessToken = AppSettings.getAccessToken();
-                if(!TextUtils.isEmpty(accessToken)) {
+                if (!TextUtils.isEmpty(accessToken)) {
                     String headerValue = String.format("token %1$s", accessToken);
                     request.addHeader("Authorization", headerValue);
                 }
             }
         };
+        return requestInterceptor;
+    }
 
-        // rest adapter for travis API service
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setEndpoint(TRAVIS_URL)
-                .setConverter(new GsonConverter(gson))
-                .setRequestInterceptor(requestInterceptor)
-                .setErrorHandler(new RestErrorHandling())
-                .build();
-        mApiService = restAdapter.create(TravisApiService.class);
-
-        // rest adapter for github API service
-        restAdapter = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setEndpoint(GITHUB_URL)
-                .setConverter(new GsonConverter(gson))
-                .setErrorHandler(new RestErrorHandling())
-                .build();
-        mGithubApiService = restAdapter.create(GithubApiService.class);
+    /**
+     * Construct Gson converter
+     *
+     * @return Gson converter
+     */
+    private Gson constructGsonConverter() {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
+                .registerTypeAdapterFactory(new ItemTypeAdapterFactory())
+                .create();
+        return gson;
     }
 
     /**

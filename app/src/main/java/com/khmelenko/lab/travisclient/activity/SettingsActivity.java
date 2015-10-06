@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.common.Constants;
+import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 
 /**
@@ -58,6 +59,14 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        String server = AppSettings.getServerUrl();
+        RestClient.getInstance().updateTravisEndpoint(server);
     }
 
     public static class SettingsFragment extends PreferenceFragment {
@@ -160,7 +169,7 @@ public class SettingsActivity extends AppCompatActivity {
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         }
-        
+
     }
 
 }

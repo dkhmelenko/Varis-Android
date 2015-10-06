@@ -13,7 +13,7 @@ import retrofit.RetrofitError;
 public abstract class Task<T> {
 
     // TODO Move to DI
-    protected RestClient mRestClient = new RestClient();
+    protected RestClient mRestClient = RestClient.getInstance();
 
     protected EventBus mEventBus = EventBus.getDefault();
 
