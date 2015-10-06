@@ -5,10 +5,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -23,14 +25,39 @@ import com.khmelenko.lab.travisclient.storage.AppSettings;
  *
  * @author Dmytro Khmelenko
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends AppCompatActivity {
 
+    private static final String SETTINGS_SCREEN_KEY = "settings_screen";
     private static final String SERVER_TYPE_KEY = "settings_server_type";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
+        setContentView(R.layout.activity_settings);
+        
+        initToolbar();
+
+        getFragmentManager().beginTransaction().replace(R.id.settings_content, new SettingsFragment()).commit();
+    }
+
+    /**
+     * Initializes toolbar
+     */
+    private void initToolbar() {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
     }
 
     public static class SettingsFragment extends PreferenceFragment {
@@ -60,15 +87,15 @@ public class SettingsActivity extends PreferenceActivity {
             });
         }
 
+        /**
+         * Shows input dialog
+         */
         private void showInputDialog() {
-            // get prompts.xml view
             LayoutInflater li = LayoutInflater.from(getActivity());
             View promptsView = li.inflate(R.layout.prompt_dialog, null);
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                     getActivity());
-
-            // set prompts.xml to alertdialog builder
             alertDialogBuilder.setView(promptsView);
 
             TextView promptIntro = (TextView) promptsView.findViewById(R.id.prompt_dialog_intro);
@@ -83,26 +110,32 @@ public class SettingsActivity extends PreferenceActivity {
                     .setPositiveButton(getString(R.string.settings_server_input_btn_ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    String serverAdress = userInput.getText().toString();
-                                    if (!TextUtils.isEmpty(serverAdress)) {
-                                        AppSettings.putServerType(serverAdress);
-                                    } else {
-                                        userInput.setError(getString(R.string.settings_server_input_error_empty));
-                                    }
+                                    String serverAddress = userInput.getText().toString();
+                                    AppSettings.putServerType(serverAddress);
                                 }
                             })
                     .setNegativeButton(getString(R.string.settings_server_input_btn_cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
+
+                                    openPreference(SERVER_TYPE_KEY);
                                 }
                             });
 
-            // create alert dialog
             AlertDialog alertDialog = alertDialogBuilder.create();
-
-            // show it
             alertDialog.show();
+        }
+
+        /**
+         * Opens settings items by key
+         *
+         * @param key Settings key
+         */
+        private void openPreference(String key) {
+            PreferenceScreen screen = (PreferenceScreen) findPreference(SETTINGS_SCREEN_KEY);
+            int pos = findPreference(SERVER_TYPE_KEY).getOrder();
+            screen.onItemClick(null, null, pos, 0);
         }
     }
 
