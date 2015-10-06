@@ -6,22 +6,22 @@
 
         <item
             android:id="@+id/drawer_login"
-            android:icon="@drawable/login_icon"
+            android:icon="@drawable/ic_login"
             android:title="@string/navigation_drawer_login"/>
 
         <item
             android:id="@+id/drawer_logout"
-            android:icon="@drawable/login_icon"
+            android:icon="@drawable/ic_login"
             android:title="@string/navigation_drawer_logout"/>
 
         <item
             android:id="@+id/drawer_settings"
-            android:icon="@drawable/settings_icon"
+            android:icon="@drawable/ic_settings"
             android:title="@string/navigation_drawer_settings"/>
 
         <item
             android:id="@+id/drawer_about"
-            android:icon="@drawable/about_icon"
+            android:icon="@drawable/ic_about"
             android:title="@string/navigation_drawer_about"/>
 
     </group>
