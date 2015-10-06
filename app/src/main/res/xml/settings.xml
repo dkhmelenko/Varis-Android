@@ -5,7 +5,6 @@
     <PreferenceCategory android:title="@string/settings_category_general">
 
         <ListPreference
-            android:defaultValue="1"
             android:entries="@array/settings_server_types"
             android:entryValues="@array/settings_server_types_values"
             android:key="settings_server_type"

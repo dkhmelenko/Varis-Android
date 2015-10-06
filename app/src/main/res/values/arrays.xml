@@ -8,9 +8,9 @@
     </string-array>
 
     <string-array name="settings_server_types_values">
+        <item>0</item>
         <item>1</item>
         <item>2</item>
-        <item>3</item>
     </string-array>
 
 </resources>

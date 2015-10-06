@@ -15,6 +15,7 @@ public final class AppSettings {
 
     private static final String ACCESS_TOKEN_KEY = "TravisAccessToken";
     private static final String SERVER_TYPE_KEY = "ServerTypeKey";
+    private static final String SERVER_URL_KEY = "ServerUrlKey";
 
     // denied constructor
     private AppSettings() {
@@ -59,9 +60,9 @@ public final class AppSettings {
      *
      * @return Server type
      */
-    public static String getServerType() {
+    public static int getServerType() {
         SharedPreferences pref = getPreferences();
-        return pref.getString(SERVER_TYPE_KEY, "");
+        return pref.getInt(SERVER_TYPE_KEY, 1);
     }
 
     /**
@@ -69,10 +70,32 @@ public final class AppSettings {
      *
      * @param serverType Server type
      */
-    public static void putServerType(String serverType) {
+    public static void putServerType(int serverType) {
         SharedPreferences pref = getPreferences();
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString(SERVER_TYPE_KEY, serverType);
+        editor.putInt(SERVER_TYPE_KEY, serverType);
+        editor.commit();
+    }
+
+    /**
+     * Gets server url from Settings
+     *
+     * @return Server type
+     */
+    public static String getServerUrl() {
+        SharedPreferences pref = getPreferences();
+        return pref.getString(SERVER_URL_KEY, "");
+    }
+
+    /**
+     * Puts server url to the settings
+     *
+     * @param serverUrl Server type
+     */
+    public static void putServerUrl(String serverUrl) {
+        SharedPreferences pref = getPreferences();
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(SERVER_URL_KEY, serverUrl);
         editor.commit();
     }
 

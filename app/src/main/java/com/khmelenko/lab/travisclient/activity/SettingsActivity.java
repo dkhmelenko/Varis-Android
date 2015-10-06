@@ -34,7 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        
+
         initToolbar();
 
         getFragmentManager().beginTransaction().replace(R.id.settings_content, new SettingsFragment()).commit();
@@ -61,24 +61,32 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
+
+        private ListPreference mServerTypeSetting;
+
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings);
 
-            ListPreference serverTypeSetting = (ListPreference) findPreference(SERVER_TYPE_KEY);
-            serverTypeSetting.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            mServerTypeSetting = (ListPreference) findPreference(SERVER_TYPE_KEY);
+            updateServerSummary(AppSettings.getServerType());
+            mServerTypeSetting.setValue(String.valueOf(AppSettings.getServerType()));
+            mServerTypeSetting.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     Integer selectedItem = Integer.valueOf(newValue.toString());
+                    updateServerSummary(selectedItem);
                     switch (selectedItem) {
+                        case 0:
+                            AppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
+                            AppSettings.putServerType(0);
+                            break;
                         case 1:
-                            AppSettings.putServerType(Constants.OPEN_SOURCE_TRAVIS_URL);
+                            AppSettings.putServerUrl(Constants.PRIVATE_TRAVIS_URL);
+                            AppSettings.putServerType(1);
                             break;
                         case 2:
-                            AppSettings.putServerType(Constants.PRIVATE_TRAVIS_URL);
-                            break;
-                        case 3:
                             showInputDialog();
                             break;
                     }
@@ -88,11 +96,33 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         /**
+         * Updates the summary for the server setting
+         *
+         * @param serverType Server type
+         */
+        private void updateServerSummary(int serverType) {
+            String[] items = getResources().getStringArray(R.array.settings_server_types);
+            switch (serverType) {
+                case 0:
+                    AppSettings.putServerType(0);
+                    mServerTypeSetting.setSummary(items[0]);
+                    break;
+                case 1:
+                    AppSettings.putServerType(1);
+                    mServerTypeSetting.setSummary(items[1]);
+                    break;
+                case 2:
+                    // do nothing
+                    break;
+            }
+        }
+
+        /**
          * Shows input dialog
          */
         private void showInputDialog() {
             LayoutInflater li = LayoutInflater.from(getActivity());
-            View promptsView = li.inflate(R.layout.prompt_dialog, null);
+            View promptsView = li.inflate(R.layout.dialog_prompt, null);
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                     getActivity());
@@ -103,6 +133,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             final EditText userInput = (EditText) promptsView
                     .findViewById(R.id.prompt_dialog_input);
+            userInput.requestFocus();
 
             // set dialog message
             alertDialogBuilder
@@ -111,7 +142,9 @@ public class SettingsActivity extends AppCompatActivity {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     String serverAddress = userInput.getText().toString();
-                                    AppSettings.putServerType(serverAddress);
+                                    AppSettings.putServerUrl(serverAddress);
+                                    AppSettings.putServerType(2);
+                                    mServerTypeSetting.setSummary(serverAddress);
                                 }
                             })
                     .setNegativeButton(getString(R.string.settings_server_input_btn_cancel),
@@ -119,24 +152,15 @@ public class SettingsActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
 
-                                    openPreference(SERVER_TYPE_KEY);
+                                    // restore previous selection
+                                    mServerTypeSetting.setValue(String.valueOf(AppSettings.getServerType()));
                                 }
                             });
 
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         }
-
-        /**
-         * Opens settings items by key
-         *
-         * @param key Settings key
-         */
-        private void openPreference(String key) {
-            PreferenceScreen screen = (PreferenceScreen) findPreference(SETTINGS_SCREEN_KEY);
-            int pos = findPreference(SERVER_TYPE_KEY).getOrder();
-            screen.onItemClick(null, null, pos, 0);
-        }
+        
     }
 
 }
