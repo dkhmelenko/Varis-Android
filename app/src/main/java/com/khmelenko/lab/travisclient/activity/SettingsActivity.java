@@ -121,7 +121,8 @@ public class SettingsActivity extends AppCompatActivity {
                     mServerTypeSetting.setSummary(items[1]);
                     break;
                 case 2:
-                    // do nothing
+                    String server = AppSettings.getServerUrl();
+                    mServerTypeSetting.setSummary(server);
                     break;
             }
         }

@@ -18,7 +18,6 @@ import retrofit.converter.GsonConverter;
  * @author Dmytro Khmelenko
  */
 public final class RestClient {
-    private static final String TRAVIS_URL = Constants.OPEN_SOURCE_TRAVIS_URL;
     private static final String GITHUB_URL = Constants.GITHUB_URL;
 
     private TravisApiService mApiService;
@@ -28,7 +27,8 @@ public final class RestClient {
 
     private RestClient() {
 
-        updateTravisEndpoint(TRAVIS_URL);
+        final String travisUrl = AppSettings.getServerUrl();
+        updateTravisEndpoint(travisUrl);
 
         // rest adapter for github API service
         RestAdapter restAdapter = new RestAdapter.Builder()
