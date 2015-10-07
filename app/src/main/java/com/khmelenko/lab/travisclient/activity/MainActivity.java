@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
@@ -31,6 +32,7 @@ import com.khmelenko.lab.travisclient.event.travis.UserSuccessEvent;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.User;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
+import com.khmelenko.lab.travisclient.storage.CacheStorage;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 
 import java.util.ArrayList;
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     private SearchView mSearchView;
     private TaskManager mTaskManager;
+    private CacheStorage mCache;
+
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         mTaskManager = new TaskManager();
+        mCache = CacheStorage.newInstance();
 
         mReposRecyclerView.setHasFixedSize(true);
 
@@ -96,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
         initToolbar();
         setupDrawerLayout();
+
+        mUser = mCache.restoreUser();
+        updateNavigationViewData();
 
         mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
         loadRepos();
@@ -157,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(loginIntent);
                         break;
                     case R.id.drawer_logout:
+                        mCache.deleteUser();
                         AppSettings.putAccessToken("");
                         finish();
                         startActivity(getIntent());
@@ -267,12 +277,38 @@ public class MainActivity extends AppCompatActivity {
      * @param event Event data
      */
     public void onEvent(UserSuccessEvent event) {
-        User user = event.getUser();
+        mUser = event.getUser();
 
-        // TODO Cache user data
+        // cache user data
+        mCache.saveUser(mUser);
 
-        String loginName = user.getLogin();
+        updateNavigationViewData();
+
+        String loginName = mUser.getLogin();
         mTaskManager.userRepos(loginName);
+    }
+
+    /**
+     * Updates user data in navigation view
+     */
+    private void updateNavigationViewData() {
+        final NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
+        TextView usernameView = (TextView) view.findViewById(R.id.drawer_header_username);
+        TextView emailView = (TextView) view.findViewById(R.id.drawer_header_email);
+
+        if(mUser != null) {
+            String username = mUser.getLogin();
+            if(!TextUtils.isEmpty(mUser.getName())) {
+                username = String.format("%1$s (%2$s)", mUser.getName(), mUser.getLogin());
+            }
+            usernameView.setText(username);
+            emailView.setText(mUser.getEmail());
+
+            // TODO Update image, when service will provide it
+        } else {
+            usernameView.setText(R.string.navigation_drawer_username_placeholder);
+            emailView.setText(R.string.navigation_drawer_email_placeholder);
+        }
     }
 
 }

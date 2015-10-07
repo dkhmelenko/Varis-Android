@@ -18,7 +18,7 @@
             android:id="@+id/drawer_header_profile_image"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/avatar_placeholder"/>
 
     </LinearLayout>
 
@@ -33,7 +33,7 @@
             android:id="@+id/drawer_header_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username"
+            android:text="@string/navigation_drawer_username_placeholder"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:text="username@mymail.com"
+            android:text="@string/navigation_drawer_email_placeholder"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
 
