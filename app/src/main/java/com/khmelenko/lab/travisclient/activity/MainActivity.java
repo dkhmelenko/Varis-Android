@@ -49,6 +49,8 @@ import de.greenrobot.event.EventBus;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final int AUTH_ACTIVITY_CODE = 0;
+
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
@@ -163,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.drawer_login:
                         Intent loginIntent = new Intent(MainActivity.this, AuthActivity.class);
-                        startActivity(loginIntent);
+                        startActivityForResult(loginIntent, AUTH_ACTIVITY_CODE);
                         break;
                     case R.id.drawer_logout:
                         mCache.deleteUser();
@@ -186,6 +188,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case AUTH_ACTIVITY_CODE:
+                    mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
+                    loadRepos();
+                    break;
+            }
+        }
     }
 
     /**

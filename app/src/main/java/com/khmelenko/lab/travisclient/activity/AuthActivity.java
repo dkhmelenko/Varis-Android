@@ -220,6 +220,7 @@ public class AuthActivity extends AppCompatActivity {
         String accessToken = event.getAccessToken();
         AppSettings.putAccessToken(accessToken);
 
+        setResult(RESULT_OK);
         finish();
     }
 
