@@ -8,16 +8,12 @@ It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for retchi
 - [Android appcompat v7](https://github.com/android/platform_frameworks_support/tree/master/v7/appcompat)
 - [Retrofit](https://github.com/square/retrofit)
 - [Gson](https://code.google.com/p/google-gson/)
-- [Parceler](http://parceler.org/)
 - [Butter Knife](http://jakewharton.github.io/butterknife/)
 - [Event Bus](https://github.com/greenrobot/EventBus)
+- [CircleImageView](https://github.com/hdodenhof/CircleImageView)
 
 # Contribution
-In case you have ideas or found an issue, don't hesitate to create pull request.
-
-# Warning
-The project is under development!
-If you have any ideas or improvements, feel free to create pull request.
+In case you have ideas or found an issue, don't hesitate to create pull request or an issue.
 
 #License
 
