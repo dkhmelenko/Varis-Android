@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
@@ -172,6 +174,19 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
     }
 
     /**
+     * Checks whether data existing or not
+     */
+    private void checkIfEmpty(BuildDetails details) {
+        TextView emptyText = (TextView) findViewById(R.id.empty_text);
+        emptyText.setText(R.string.build_details_empty);
+        if(details == null) {
+            emptyText.setVisibility(View.VISIBLE);
+        } else {
+            emptyText.setVisibility(View.GONE);
+        }
+    }
+
+    /**
      * Raised on loaded build details
      *
      * @param event Event data
@@ -182,6 +197,8 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
 
         BuildDetails details = event.getBuildDetails();
         showBuildDetails(details);
+
+        checkIfEmpty(details);
 
         if (details.getJobs().size() > 1) {
             if (mJobsFragment == null) {
@@ -207,7 +224,10 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
         mProgressBar.setVisibility(View.GONE);
         mBuildDetailsData.setVisibility(View.GONE);
 
-        // TODO Show error
+        checkIfEmpty(null);
+
+        String msg = getString(R.string.error_failed_loading_build_details, event.getTaskError().getMessage());
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

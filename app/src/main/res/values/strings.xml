@@ -12,6 +12,7 @@
     <!-- Messages -->
     <string name="error_failed_loading_repos">Failed to load repositories: \n%1$s</string>
     <string name="error_failed_loading_build_history">Failed to load build history: \n%1$s</string>
+    <string name="error_failed_loading_build_details">Failed to load build details: \n%1$s</string>
     <string name="error_network">Network problem. Check your network connection and try again</string>
     <string name="error_no_response">No response from the server. Try again later</string>
     <string name="error_parsing">Parsing error occurred. Try again later</string>
@@ -69,6 +70,7 @@
     <string name="build_details_job_number">Job #%1$s</string>
     <string name="build_details_job_duration">Duration: %1$s</string>
     <string name="build_details_job_in_progress">In progress</string>
+    <string name="build_details_empty">No build details</string>
     <string name="pull_request_number">PR #%1$s</string>
 
     <!-- Settings -->
@@ -78,11 +80,12 @@
     <string name="settings_setver_custom_input_text">Input address of the server</string>
     <string name="settings_server_input_btn_ok">OK</string>
     <string name="settings_server_input_btn_cancel">Cancel</string>
-    <string name="settings_server_input_error_empty">Adress cannot be empty</string>
+    <string name="settings_server_input_error_empty">Address cannot be empty</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>
