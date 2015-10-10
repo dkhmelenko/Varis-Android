@@ -49,6 +49,9 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     @Bind(R.id.progressbar)
     ProgressBar mProgressBar;
 
+    @Bind(R.id.empty_text)
+    TextView mEmptyText;
+
     private PullRequestsListAdapter mPullRequestsListAdapter;
     private Requests mRequests;
     private List<RequestData> mPullRequests;
@@ -150,12 +153,11 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
      * Checks whether data existing or not
      */
     private void checkIfEmpty() {
-        TextView emptyText = (TextView) getActivity().findViewById(R.id.empty_text);
-        emptyText.setText(R.string.repo_details_pull_request_empty);
-        if(mPullRequests != null && mPullRequests.isEmpty()) {
-            emptyText.setVisibility(View.VISIBLE);
+        mEmptyText.setText(R.string.repo_details_pull_request_empty);
+        if(mPullRequests == null || mPullRequests.isEmpty()) {
+            mEmptyText.setVisibility(View.VISIBLE);
         } else {
-            emptyText.setVisibility(View.GONE);
+            mEmptyText.setVisibility(View.GONE);
         }
     }
 
@@ -168,12 +170,12 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
         mSwipeRefreshLayout.setRefreshing(false);
         mProgressBar.setVisibility(View.GONE);
 
-        checkIfEmpty();
-
         mRequests = event.getRequests();
         mPullRequests = fetchPullRequests(mRequests);
         mPullRequestsListAdapter.setRequests(mRequests, mPullRequests);
         mPullRequestsListAdapter.notifyDataSetChanged();
+
+        checkIfEmpty();
     }
 
     /**

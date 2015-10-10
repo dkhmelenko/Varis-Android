@@ -45,6 +45,9 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
     @Bind(R.id.progressbar)
     ProgressBar mProgressBar;
 
+    @Bind(R.id.empty_text)
+    TextView mEmptyText;
+
     private BranchesListAdapter mBranchesListAdapter;
     private Branches mBranches;
     private String mRepoSlug;
@@ -130,12 +133,11 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
      * Checks whether data existing or not
      */
     private void checkIfEmpty() {
-        TextView emptyText = (TextView) getActivity().findViewById(R.id.empty_text);
-        emptyText.setText(R.string.repo_details_branches_empty);
-        if(mBranches != null && mBranches.getBranches().isEmpty()) {
-            emptyText.setVisibility(View.VISIBLE);
+        mEmptyText.setText(R.string.repo_details_branches_empty);
+        if(mBranches == null || mBranches.getBranches().isEmpty()) {
+            mEmptyText.setVisibility(View.VISIBLE);
         } else {
-            emptyText.setVisibility(View.GONE);
+            mEmptyText.setVisibility(View.GONE);
         }
     }
 
@@ -148,11 +150,11 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
         mSwipeRefreshLayout.setRefreshing(false);
         mProgressBar.setVisibility(View.GONE);
 
-        checkIfEmpty();
-
         mBranches = event.getBranches();
         mBranchesListAdapter.setBranches(mBranches);
         mBranchesListAdapter.notifyDataSetChanged();
+
+        checkIfEmpty();
     }
 
     /**

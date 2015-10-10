@@ -44,6 +44,9 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
     @Bind(R.id.progressbar)
     ProgressBar mProgressBar;
 
+    @Bind(R.id.empty_text)
+    TextView mEmptyText;
+
     private BuildListAdapter mBuildListAdapter;
     private BuildHistory mBuildHistory;
     private String mRepoSlug;
@@ -128,12 +131,11 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
      * Checks whether data existing or not
      */
     private void checkIfEmpty() {
-        TextView emptyText = (TextView) getActivity().findViewById(R.id.empty_text);
-        emptyText.setText(R.string.repo_details_builds_empty);
-        if(mBuildHistory != null && mBuildHistory.getBuilds().isEmpty()) {
-            emptyText.setVisibility(View.VISIBLE);
+        mEmptyText.setText(R.string.repo_details_builds_empty);
+        if(mBuildHistory == null || mBuildHistory.getBuilds().isEmpty()) {
+            mEmptyText.setVisibility(View.VISIBLE);
         } else {
-            emptyText.setVisibility(View.GONE);
+            mEmptyText.setVisibility(View.GONE);
         }
     }
 
@@ -146,11 +148,11 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
         mSwipeRefreshLayout.setRefreshing(false);
         mProgressBar.setVisibility(View.GONE);
 
-        checkIfEmpty();
-
         mBuildHistory = event.getBuildHistory();
         mBuildListAdapter.setBuildHistory(mBuildHistory);
         mBuildListAdapter.notifyDataSetChanged();
+
+        checkIfEmpty();
     }
 
     /**
