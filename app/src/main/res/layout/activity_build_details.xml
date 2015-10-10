@@ -21,17 +21,32 @@
             />
     </LinearLayout>
 
-    <com.khmelenko.lab.travisclient.view.BuildView
-        android:id="@+id/build_details_build_data"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <LinearLayout
-        android:id="@+id/build_details_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <com.khmelenko.lab.travisclient.view.BuildView
+                android:id="@+id/build_details_build_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"/>
+
+            <LinearLayout
+                android:id="@+id/build_details_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

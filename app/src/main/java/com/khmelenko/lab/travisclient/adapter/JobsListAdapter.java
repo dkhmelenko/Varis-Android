@@ -78,10 +78,16 @@ public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobVie
         return mJobs != null ? mJobs.size() : 0;
     }
 
+    public int getItemHeight() {
+        return JobViewHolder.HEIGHT;
+    }
+
     /**
      * Viewholder class
      */
-    class JobViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class JobViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private static final int HEIGHT = 88; // height in DP
 
         View mParent;
         TextView mNumber;
@@ -101,7 +107,7 @@ public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobVie
 
         @Override
         public void onClick(View view) {
-            if(mListener != null) {
+            if (mListener != null) {
                 mListener.onItemSelected(getLayoutPosition());
             }
         }

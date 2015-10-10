@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.khmelenko.lab.travisclient.R;
-import com.khmelenko.lab.travisclient.adapter.BranchesListAdapter;
 import com.khmelenko.lab.travisclient.adapter.JobsListAdapter;
 import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.network.response.Job;
@@ -64,20 +64,26 @@ public class JobsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_jobs, container, false);
         ButterKnife.bind(this, view);
 
+        mJobsRecyclerView.setNestedScrollingEnabled(false);
         mJobsRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(layoutManager);
 
-        mJobsListAdapter = new JobsListAdapter(getContext(), mJobs, new OnListItemListener() {
-            @Override
-            public void onItemSelected(int position) {
-                if(mJobs != null && !mJobs.isEmpty()) {
-                    Job job = mJobs.get(position);
-                    mListener.onJobSelected(job);
-                }
-            }
-        });
+        mJobsListAdapter = new JobsListAdapter(getContext(), mJobs,
+                new OnListItemListener() {
+                    @Override
+                    public void onItemSelected(int position) {
+                        if (mJobs != null && !mJobs.isEmpty()) {
+                            Job job = mJobs.get(position);
+                            mListener.onJobSelected(job);
+                        }
+                    }
+                });
         mJobsRecyclerView.setAdapter(mJobsListAdapter);
+
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int itemHeight = (int)((mJobsListAdapter.getItemHeight() * metrics.density) + 0.5);
+        mJobsRecyclerView.getLayoutParams().height = itemHeight * mJobsListAdapter.getItemCount();
 
         return view;
     }
@@ -109,7 +115,7 @@ public class JobsFragment extends Fragment {
         mJobs.clear();
         mJobs.addAll(jobs);
 
-        if(mJobsListAdapter != null) {
+        if (mJobsListAdapter != null) {
             mJobsListAdapter.notifyDataSetChanged();
         }
     }
