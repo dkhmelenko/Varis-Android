@@ -195,6 +195,10 @@ public class MainActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK) {
             switch (requestCode) {
                 case AUTH_ACTIVITY_CODE:
+                    // clear previous data
+                    mRepos.clear();
+                    mRepoListAdapter.notifyDataSetChanged();
+
                     mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
                     loadRepos();
                     break;
