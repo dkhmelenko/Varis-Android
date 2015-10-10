@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
@@ -131,12 +132,27 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     /**
+     * Checks whether data existing or not
+     */
+    private void checkIfEmpty() {
+        TextView emptyText = (TextView) findViewById(R.id.empty_text);
+        emptyText.setText(R.string.repo_empty_text);
+        if(mRepos.isEmpty()) {
+            emptyText.setVisibility(View.VISIBLE);
+        } else {
+            emptyText.setVisibility(View.GONE);
+        }
+    }
+
+    /**
      * Raised on loaded repositories
      *
      * @param event Event data
      */
     public void onEvent(FindReposEvent event) {
         mProgressDialog.dismiss();
+
+        checkIfEmpty();
 
         mRepos.clear();
         mRepos.addAll(event.getRepos());
@@ -150,6 +166,8 @@ public class SearchResultsActivity extends AppCompatActivity {
      */
     public void onEvent(LoadingFailedEvent event) {
         mProgressDialog.dismiss();
+
+        checkIfEmpty();
 
         String msg = getString(R.string.error_failed_loading_repos, event.getTaskError().getMessage());
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();

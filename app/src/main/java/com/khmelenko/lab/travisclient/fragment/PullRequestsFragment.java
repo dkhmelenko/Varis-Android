@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
@@ -146,6 +147,19 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     }
 
     /**
+     * Checks whether data existing or not
+     */
+    private void checkIfEmpty() {
+        TextView emptyText = (TextView) getActivity().findViewById(R.id.empty_text);
+        emptyText.setText(R.string.repo_details_pull_request_empty);
+        if(mPullRequests != null && mPullRequests.isEmpty()) {
+            emptyText.setVisibility(View.VISIBLE);
+        } else {
+            emptyText.setVisibility(View.GONE);
+        }
+    }
+
+    /**
      * Raised on loaded requests
      *
      * @param event Event data
@@ -153,6 +167,8 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     public void onEvent(RequestsLoadedEvent event) {
         mSwipeRefreshLayout.setRefreshing(false);
         mProgressBar.setVisibility(View.GONE);
+
+        checkIfEmpty();
 
         mRequests = event.getRequests();
         mPullRequests = fetchPullRequests(mRequests);
@@ -168,6 +184,8 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     public void onEvent(LoadingFailedEvent event) {
         mSwipeRefreshLayout.setRefreshing(false);
         mProgressBar.setVisibility(View.GONE);
+
+        checkIfEmpty();
 
         String msg = getString(R.string.error_failed_loading_build_history, event.getTaskError().getMessage());
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();

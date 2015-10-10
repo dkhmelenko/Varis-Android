@@ -13,6 +13,8 @@
         android:layout_gravity="center"
         />
 
+    <include layout="@layout/view_empty"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pull_requests_swipe_view"
         android:layout_width="match_parent"

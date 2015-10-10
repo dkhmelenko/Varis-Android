@@ -262,6 +262,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Checks whether data existing or not
+     */
+    private void checkIfEmpty() {
+        TextView emptyText = (TextView) findViewById(R.id.empty_text);
+        emptyText.setText(R.string.repo_empty_text);
+        if(mRepos.isEmpty()) {
+            emptyText.setVisibility(View.VISIBLE);
+        } else {
+            emptyText.setVisibility(View.GONE);
+        }
+    }
+
+    /**
      * Raised on loaded repositories
      *
      * @param event Event data
@@ -273,6 +286,8 @@ public class MainActivity extends AppCompatActivity {
         mRepos.clear();
         mRepos.addAll(event.getRepos());
         mRepoListAdapter.notifyDataSetChanged();
+
+        checkIfEmpty();
     }
 
     /**
@@ -283,6 +298,8 @@ public class MainActivity extends AppCompatActivity {
     public void onEvent(LoadingFailedEvent event) {
         mSwipeRefreshLayout.setRefreshing(false);
         mProgressDialog.dismiss();
+
+        checkIfEmpty();
 
         String error = event.getTaskError().getMessage();
         String msg = getString(R.string.error_failed_loading_repos, error);

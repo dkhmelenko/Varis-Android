@@ -23,6 +23,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <include layout="@layout/view_empty"/>
+
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/main_repos_swipe_view"
                 android:layout_width="match_parent"
