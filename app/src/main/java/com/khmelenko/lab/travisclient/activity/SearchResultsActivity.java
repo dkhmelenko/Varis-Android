@@ -152,11 +152,11 @@ public class SearchResultsActivity extends AppCompatActivity {
     public void onEvent(FindReposEvent event) {
         mProgressDialog.dismiss();
 
-        checkIfEmpty();
-
         mRepos.clear();
         mRepos.addAll(event.getRepos());
         mRepoListAdapter.notifyDataSetChanged();
+
+        checkIfEmpty();
     }
 
     /**
