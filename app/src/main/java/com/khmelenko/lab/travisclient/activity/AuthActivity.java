@@ -195,8 +195,8 @@ public class AuthActivity extends AppCompatActivity {
             mLoginSection.setVisibility(View.GONE);
             mConfirmSection.setVisibility(View.VISIBLE);
         } else {
-            // TODO Improve error handling
-            Toast.makeText(this, event.getTaskError().getMessage(), Toast.LENGTH_SHORT).show();
+            String msg = getString(R.string.error_failed_auth, event.getTaskError().getMessage());
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -232,8 +232,8 @@ public class AuthActivity extends AppCompatActivity {
     public void onEvent(AuthFailEvent event) {
         mProgressDialog.dismiss();
 
-        // TODO Improve error handling
-        Toast.makeText(this, event.getTaskError().getMessage(), Toast.LENGTH_SHORT).show();
+        String msg = getString(R.string.error_failed_auth, event.getTaskError().getMessage());
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 

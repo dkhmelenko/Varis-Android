@@ -189,7 +189,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
 
         checkIfEmpty();
 
-        String msg = getString(R.string.error_failed_loading_build_history, event.getTaskError().getMessage());
+        String msg = getString(R.string.error_failed_loading_pull_requests, event.getTaskError().getMessage());
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 

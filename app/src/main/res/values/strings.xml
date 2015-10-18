@@ -13,6 +13,9 @@
     <string name="error_failed_loading_repos">Failed to load repositories: \n%1$s</string>
     <string name="error_failed_loading_build_history">Failed to load build history: \n%1$s</string>
     <string name="error_failed_loading_build_details">Failed to load build details: \n%1$s</string>
+    <string name="error_failed_loading_pull_requests">Failed to load pull requests: \n%1$s</string>
+    <string name="error_failed_loading_branches">Failed to load branches: \n%1$s</string>
+    <string name="error_failed_auth">Unable to authenticate: \n%1$s</string>
     <string name="error_network">Network problem. Check your network connection and try again</string>
     <string name="error_no_response">No response from the server. Try again later</string>
     <string name="error_parsing">Parsing error occurred. Try again later</string>
