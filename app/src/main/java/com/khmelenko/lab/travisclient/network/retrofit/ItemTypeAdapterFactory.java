@@ -44,7 +44,7 @@ final class ItemTypeAdapterFactory implements TypeAdapterFactory {
                         jsonElement = jsonObject.get("user");
                     }
 
-                    // TODO Add more objects here
+                    // NOTE Add more objects here, if needed
                 }
 
                 return delegate.fromJsonTree(jsonElement);

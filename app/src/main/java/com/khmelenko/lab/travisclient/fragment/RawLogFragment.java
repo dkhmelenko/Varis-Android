@@ -11,6 +11,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.storage.AppSettings;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,8 +25,6 @@ public class RawLogFragment extends Fragment {
 
     private static final String JOB_ID_KEY = "JobId";
 
-    // TODO Use the resource from settings
-    private static final String RAW_LOG_RESOURCE = "https://api.travis-ci.org";
     private static final String RAW_LOG_PATH = "/jobs/%1$s/log";
 
     @Bind(R.id.raw_log_webview)
@@ -79,19 +78,26 @@ public class RawLogFragment extends Fragment {
                     mListener.onLogLoaded();
                 }
 
-                // TODO Add scrolling to the botton
-//                double height = Math.floor(mWebView.getContentHeight() * mWebView.getScaleY());
-//                mWebView.scrollTo(0, (int)height);
-
                 mProgressBar.setVisibility(View.GONE);
                 mWebView.setVisibility(View.VISIBLE);
             }
         });
 
-        String path = String.format(RAW_LOG_PATH, String.valueOf(mJobId));
-        mWebView.loadUrl(RAW_LOG_RESOURCE + path);
+        String path = formatLogPath();
+        mWebView.loadUrl(path);
 
         return view;
+    }
+
+    /**
+     * Formats the path to the job logs
+     *
+     * @return Path to logs
+     */
+    private String formatLogPath() {
+        String server = AppSettings.getServerUrl();
+        String path = String.format(RAW_LOG_PATH, String.valueOf(mJobId));
+        return server + path;
     }
 
     @Override
