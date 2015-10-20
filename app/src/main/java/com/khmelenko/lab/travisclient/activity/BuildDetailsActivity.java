@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ import com.khmelenko.lab.travisclient.view.BuildView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -44,6 +47,15 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
 
     @Bind(R.id.build_details_build_data)
     View mBuildDetailsData;
+
+    @Bind(R.id.build_details_layout)
+    ScrollView mBuildDetailsLayout;
+
+    @Bind(R.id.build_details_scroll_btn)
+    FloatingActionButton mScrollBtn;
+
+    @Bind(R.id.build_details_scroll_up_btn)
+    FloatingActionButton mScrollUpBtn;
 
     private String mRepoSlug;
     private long mBuildId;
@@ -179,7 +191,7 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
     private void checkIfEmpty(BuildDetails details) {
         TextView emptyText = (TextView) findViewById(R.id.empty_text);
         emptyText.setText(R.string.build_details_empty);
-        if(details == null) {
+        if (details == null) {
             emptyText.setVisibility(View.VISIBLE);
         } else {
             emptyText.setVisibility(View.GONE);
@@ -240,6 +252,39 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
 
     @Override
     public void onLogLoaded() {
-        // TODO
+        mScrollBtn.show();
+    }
+
+    @OnClick(R.id.build_details_scroll_btn)
+    public void scrollContent() {
+        mScrollBtn.hide();
+        mScrollUpBtn.show();
+
+        mBuildDetailsLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mBuildDetailsLayout.fullScroll(View.FOCUS_DOWN);
+            }
+        });
+    }
+
+    @OnClick(R.id.build_details_scroll_up_btn)
+    public void setScrollUpContent() {
+        mScrollBtn.show();
+        mScrollUpBtn.hide();
+
+        mBuildDetailsLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mBuildDetailsLayout.fullScroll(View.FOCUS_UP);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mScrollBtn.hide();
+        mScrollUpBtn.hide();
     }
 }
