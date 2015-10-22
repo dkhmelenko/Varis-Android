@@ -4,6 +4,8 @@
 This project is Android client for Travis CI.
 It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
 
+![Repositories list](/screenshots/main_screen.png) ![Build history](/screenshots/build_history.png) ![Build Details](/screenshots/build_details.png)
+
 # Open source libraries
 - [Android appcompat v7](https://github.com/android/platform_frameworks_support/tree/master/v7/appcompat)
 - [Retrofit](https://github.com/square/retrofit)
