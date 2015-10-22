@@ -2,9 +2,17 @@
 [![Build Status on Travis:](https://travis-ci.org/brave-warrior/TravisClient-Android.svg?branch=master)](https://travis-ci.org/brave-warrior/TravisClient_Android)
 
 This project is Android client for Travis CI.
-It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
 
-![Repositories list](/screenshots/main_screen.png) ![Build history](/screenshots/build_history.png) ![Build Details](/screenshots/build_details.png)
+**NOTE**: Currently the app works only with the end point for open source projects (travis-ci.org). Support of the private repositories will be added soon.
+
+It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
+The app has the following features:
+- user login
+- list of repositories
+- build history (commits and pull requests)
+- build log
+
+![Repositories list](/screenshots/main_screen.png)   ![Build history](/screenshots/build_history.png)   ![Build Details](/screenshots/build_details.png)
 
 # Open source libraries
 - [Android appcompat v7](https://github.com/android/platform_frameworks_support/tree/master/v7/appcompat)
