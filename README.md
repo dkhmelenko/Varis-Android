@@ -12,6 +12,8 @@ The app has the following features:
 - build history (commits and pull requests)
 - build log
 
+[![Travis Client on Google Play Store](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.khmelenko.lab.travisclient)
+
 ![Repositories list](/screenshots/main_screen.png)   ![Build history](/screenshots/build_history.png)   ![Build Details](/screenshots/build_details.png)
 
 # Open source libraries
