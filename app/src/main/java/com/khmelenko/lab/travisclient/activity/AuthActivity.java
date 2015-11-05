@@ -40,6 +40,8 @@ import de.greenrobot.event.EventBus;
  */
 public class AuthActivity extends AppCompatActivity {
 
+    private static final String SECURITY_CODE_INPUT = "securityCodeInput";
+
     @Bind(R.id.auth_login_section)
     View mLoginSection;
 
@@ -66,6 +68,8 @@ public class AuthActivity extends AppCompatActivity {
     private String mBasicAuth;
     private Authorization mAuthorization;
 
+    private boolean mSecurityCodeInput;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +78,21 @@ public class AuthActivity extends AppCompatActivity {
 
         initToolbar();
 
+        if(savedInstanceState != null) {
+            mSecurityCodeInput = savedInstanceState.getBoolean(SECURITY_CODE_INPUT);
+        }
+
+        if(mSecurityCodeInput) {
+            showSecurityCodeInput();
+        }
+    }
+
+    /**
+     * Shows the input for security code
+     */
+    private void showSecurityCodeInput() {
+        mLoginSection.setVisibility(View.GONE);
+        mConfirmSection.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.auth_login_btn)
@@ -143,6 +162,13 @@ public class AuthActivity extends AppCompatActivity {
         mEventBus.unregister(this);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(SECURITY_CODE_INPUT, mSecurityCodeInput);
+    }
+
     /**
      * Initializes toolbar
      */
@@ -192,8 +218,8 @@ public class AuthActivity extends AppCompatActivity {
 
         TaskError taskError = event.getTaskError();
         if (taskError.getCode() == TaskError.TWO_FACTOR_AUTH_REQUIRED) {
-            mLoginSection.setVisibility(View.GONE);
-            mConfirmSection.setVisibility(View.VISIBLE);
+            mSecurityCodeInput = true;
+            showSecurityCodeInput();
         } else {
             String msg = getString(R.string.error_failed_auth, event.getTaskError().getMessage());
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
