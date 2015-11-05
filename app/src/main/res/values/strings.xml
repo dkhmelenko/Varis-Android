@@ -37,6 +37,9 @@
     <string name="auth_security_code_hint">Security code</string>
     <string name="auth_confirm_btn">Confirm</string>
     <string name="auth_invalid_security_code">Security code cannot be empty</string>
+    <string name="auth_server_opensource">Travis CI (travis-ci.org)</string>
+    <string name="auth_server_pro">Travis CI Pro (travis-ci.com)</string>
+    <string name="auth_server_header">Server</string>
 
     <!-- Search screen -->
     <string name="search_results_title">Search results</string>

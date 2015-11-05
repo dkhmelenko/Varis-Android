@@ -9,9 +9,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.common.Constants;
 import com.khmelenko.lab.travisclient.event.github.CreateAuthorizationSuccessEvent;
 import com.khmelenko.lab.travisclient.event.github.DeleteAuthorizationSuccessEvent;
 import com.khmelenko.lab.travisclient.event.github.GithubAuthorizationFailEvent;
@@ -19,6 +22,7 @@ import com.khmelenko.lab.travisclient.event.travis.AuthFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.AuthSuccessEvent;
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.Authorization;
+import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskManager;
@@ -41,6 +45,12 @@ import de.greenrobot.event.EventBus;
 public class AuthActivity extends AppCompatActivity {
 
     private static final String SECURITY_CODE_INPUT = "securityCodeInput";
+
+    @Bind(R.id.auth_server_section)
+    View mServerSection;
+
+    @Bind(R.id.auth_server_selector)
+    RadioGroup mServerSelector;
 
     @Bind(R.id.auth_login_section)
     View mLoginSection;
@@ -85,6 +95,41 @@ public class AuthActivity extends AppCompatActivity {
         if(mSecurityCodeInput) {
             showSecurityCodeInput();
         }
+
+        prepareServerSelection();
+    }
+
+    /**
+     * Prepares server selection section
+     */
+    private void prepareServerSelection() {
+        mServerSelector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int buttonId) {
+                String server = Constants.OPEN_SOURCE_TRAVIS_URL;
+                switch (buttonId) {
+                    case R.id.auth_server_opensource:
+                        server = Constants.OPEN_SOURCE_TRAVIS_URL;
+                        break;
+                    case R.id.auth_server_pro:
+                        server = Constants.PRIVATE_TRAVIS_URL;
+                        break;
+                }
+
+                AppSettings.putServerUrl(server);
+                RestClient.getInstance().updateTravisEndpoint(server);
+            }
+        });
+
+        String currentServer = AppSettings.getServerUrl();
+        switch (currentServer) {
+            case Constants.OPEN_SOURCE_TRAVIS_URL:
+                mServerSelector.check(R.id.auth_server_opensource);
+                break;
+            case Constants.PRIVATE_TRAVIS_URL:
+                mServerSelector.check(R.id.auth_server_pro);
+                break;
+        }
     }
 
     /**
@@ -92,6 +137,7 @@ public class AuthActivity extends AppCompatActivity {
      */
     private void showSecurityCodeInput() {
         mLoginSection.setVisibility(View.GONE);
+        mServerSection.setVisibility(View.GONE);
         mConfirmSection.setVisibility(View.VISIBLE);
     }
 

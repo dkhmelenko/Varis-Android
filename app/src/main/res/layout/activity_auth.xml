@@ -21,6 +21,42 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/auth_server_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/auth_server_header"
+                    android:textSize="19sp"/>
+
+                <RadioGroup
+                    android:id="@+id/auth_server_selector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/auth_server_opensource"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auth_server_opensource"/>
+
+                    <RadioButton
+                        android:id="@+id/auth_server_pro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auth_server_pro"/>
+
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/auth_login_section"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
