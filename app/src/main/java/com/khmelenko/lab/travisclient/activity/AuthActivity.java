@@ -106,7 +106,7 @@ public class AuthActivity extends AppCompatActivity {
      */
     private AuthorizationRequest prepareAuthorizationRequest() {
         List<String> scopes = Arrays.asList("read:org", "user:email", "repo_deployment",
-                "repo:status", "write:repo_hook");
+                "repo:status", "write:repo_hook", "repo");
         String note = String.format("travis_client_%1$s", StringUtils.getRandomString());
         AuthorizationRequest request = new AuthorizationRequest(scopes, note);
         return request;
