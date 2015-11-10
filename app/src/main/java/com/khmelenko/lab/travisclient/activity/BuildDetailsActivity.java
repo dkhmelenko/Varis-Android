@@ -147,11 +147,13 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
     protected void addFragment(@IdRes int containerViewId,
                                @NonNull Fragment fragment,
                                @NonNull String fragmentTag) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(containerViewId, fragment, fragmentTag)
-                .disallowAddToBackStack()
-                .commit();
+        if (!fragment.isAdded()) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(containerViewId, fragment, fragmentTag)
+                    .disallowAddToBackStack()
+                    .commit();
+        }
     }
 
     /**
