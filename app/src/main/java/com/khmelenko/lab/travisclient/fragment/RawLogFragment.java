@@ -3,6 +3,7 @@ package com.khmelenko.lab.travisclient.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import android.widget.ProgressBar;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -84,9 +88,25 @@ public class RawLogFragment extends Fragment {
         });
 
         String path = formatLogPath();
-        mWebView.loadUrl(path);
+        Map<String, String> headers = prepareHeaders();
+        mWebView.loadUrl(path, headers);
 
         return view;
+    }
+
+    /**
+     * Prepares request headers
+     *
+     * @return Request headers
+     */
+    private Map<String, String> prepareHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        String accessToken = AppSettings.getAccessToken();
+        if (!TextUtils.isEmpty(accessToken)) {
+            String headerValue = String.format("token %1$s", accessToken);
+            headers.put("Authorization", headerValue);
+        }
+        return headers;
     }
 
     /**
