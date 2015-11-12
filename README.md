@@ -3,8 +3,6 @@
 
 This project is Android client for Travis CI.
 
-**NOTE**: Currently the app works only with the end point for open source projects (travis-ci.org). Support of the private repositories will be added soon.
-
 It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
 The app has the following features:
 - user login
@@ -24,6 +22,10 @@ The app has the following features:
 - [Event Bus](https://github.com/greenrobot/EventBus)
 - [CircleImageView](https://github.com/hdodenhof/CircleImageView)
 
+# Known issues
+This section contains current know issues.
+- REST API for Travis CI doesn't provide an access to the log file of the private repositories
+ 
 # Contribution
 In case you have ideas or found an issue, don't hesitate to create pull request or an issue.
 
