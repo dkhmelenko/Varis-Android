@@ -22,6 +22,11 @@
         <item name="actionMenuTextColor">@android:color/white</item>
     </style>
 
+    <style name="ViewEmpty">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <!-- Style for the image icon in view build -->
     <style name="ViewBuildImageIcon">
         <item name="android:layout_width">17dp</item>
