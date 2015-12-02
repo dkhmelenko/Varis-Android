@@ -22,4 +22,54 @@
         <item name="actionMenuTextColor">@android:color/white</item>
     </style>
 
+    <!-- Style for the image icon in view build -->
+    <style name="ViewBuildImageIcon">
+        <item name="android:layout_width">17dp</item>
+        <item name="android:layout_height">17dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="ViewBuildImageIcon.Big" parent="ViewBuildImageIcon">
+        <item name="android:layout_width">19dp</item>
+        <item name="android:layout_height">19dp</item>
+    </style>
+
+    <style name="ViewBuildImageIcon.TopAligned" parent="ViewBuildImageIcon">
+        <item name="android:layout_gravity">center|top</item>
+        <item name="android:layout_marginTop">4dp</item>
+    </style>
+
+    <!-- Style for the text in view build -->
+    <style name="ViewBuildText">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ViewBuildText.OneLine" parent="ViewBuildText">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ViewBuildText.OneLine.Big" parent="ViewBuildText.OneLine">
+        <item name="android:textSize">23sp</item>
+    </style>
+
+    <style name="ViewBuildText.TwoLines" parent="ViewBuildText">
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ViewBuildText.TwoLines.Big" parent="ViewBuildText.TwoLines">
+        <item name="android:textSize">23sp</item>
+    </style>
+
+    <style name="ViewBuildText.TwoLines.Title.NoImage" parent="ViewBuildText.TwoLines">
+        <item name="android:textSize">23sp</item>
+        <item name="android:drawableLeft">@null</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:paddingRight">10dp</item>
+    </style>
+
 </resources>
