@@ -95,4 +95,19 @@
         <item name="contentPadding">10dp</item>
     </style>
 
+    <!-- Style of the FloatingActionButton -->
+    <style name="FloatingActionButton" parent="FloatingActionButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:clickable">true</item>
+        <item name="fabSize">normal</item>
+    </style>
+
+    <style name="FloatingActionButton.RightBottom" parent="FloatingActionButton">
+        <item name="android:layout_gravity">bottom|right</item>
+        <item name="layout_anchorGravity">bottom|right|end</item>
+    </style>
+
+
 </resources>
