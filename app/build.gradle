@@ -14,6 +14,12 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            // Library specific proguard files
+            proguardFile 'proguard-butterknife-7.pro'
+            proguardFile 'proguard-eventbus.pro'
+            proguardFile 'proguard-gson.pro'
+            proguardFile 'proguard-square-retrofit.pro'
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
