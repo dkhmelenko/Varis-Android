@@ -77,4 +77,13 @@
         <item name="android:paddingRight">10dp</item>
     </style>
 
+    <!-- Style of the CardView container -->
+    <style name="CardViewContainer" parent="CardView">
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="cardCornerRadius">1dp</item>
+        <item name="contentPadding">10dp</item>
+    </style>
+
 </resources>

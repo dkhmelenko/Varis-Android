@@ -6,14 +6,10 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        style="@style/CardViewContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        card_view:cardCornerRadius="1dp"
-        card_view:contentPadding="10dp">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,8 +48,8 @@
                 <ImageView
                     android:layout_width="19dp"
                     android:layout_height="19dp"
-                    android:layout_marginTop="4dp"
                     android:layout_gravity="center|top"
+                    android:layout_marginTop="4dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/pull_request"/>
 
