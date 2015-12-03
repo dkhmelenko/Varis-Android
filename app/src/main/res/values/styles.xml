@@ -77,6 +77,15 @@
         <item name="android:paddingRight">10dp</item>
     </style>
 
+    <style name="ViewBuildText.ThreeLines" parent="ViewBuildText">
+        <item name="android:maxLines">3</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ViewBuildText.ThreeLines.Big" parent="ViewBuildText.ThreeLines">
+        <item name="android:textSize">23sp</item>
+    </style>
+
     <!-- Style of the CardView container -->
     <style name="CardViewContainer" parent="CardView">
         <item name="android:layout_margin">5dp</item>
