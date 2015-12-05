@@ -1,6 +1,5 @@
 package com.khmelenko.lab.travisclient.activity;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -8,35 +7,27 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
-import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
-import com.khmelenko.lab.travisclient.adapter.RepoListAdapter;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.UserSuccessEvent;
+import com.khmelenko.lab.travisclient.fragment.MainFragment;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.User;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.storage.CacheStorage;
 import com.khmelenko.lab.travisclient.task.TaskManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -47,23 +38,15 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainFragment.MainFragmentListener {
 
     private static final int AUTH_ACTIVITY_CODE = 0;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
-    @Bind(R.id.main_repos_swipe_view)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private MainFragment mFragment;
 
-    @Bind(R.id.main_repos_recycler_view)
-    RecyclerView mReposRecyclerView;
-
-    private RepoListAdapter mRepoListAdapter;
-    private List<Repo> mRepos = new ArrayList<>();
-
-    private ProgressDialog mProgressDialog;
     private SearchView mSearchView;
     private TaskManager mTaskManager;
     private CacheStorage mCache;
@@ -75,41 +58,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mFragment = (MainFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
+
         mTaskManager = new TaskManager();
         mCache = CacheStorage.newInstance();
-
-        mReposRecyclerView.setHasFixedSize(true);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mReposRecyclerView.setLayoutManager(layoutManager);
-
-        mRepoListAdapter = new RepoListAdapter(this, mRepos, new OnListItemListener() {
-            @Override
-            public void onItemSelected(int position) {
-                Repo repo = mRepos.get(position);
-                Intent intent = new Intent(MainActivity.this, RepoDetailsActivity.class);
-                intent.putExtra(RepoDetailsActivity.REPO_SLUG_KEY, repo.getSlug());
-                startActivity(intent);
-            }
-        });
-        mReposRecyclerView.setAdapter(mRepoListAdapter);
-
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadRepos();
-            }
-        });
 
         initToolbar();
         setupDrawerLayout();
 
         mUser = mCache.restoreUser();
         updateNavigationViewData();
-
-        mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
-        loadRepos();
     }
 
     @Override
@@ -123,18 +82,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
-    }
-
-    /**
-     * Starts loading repositories
-     */
-    private void loadRepos() {
-        String accessToken = AppSettings.getAccessToken();
-        if (TextUtils.isEmpty(accessToken)) {
-            mTaskManager.findRepos(null);
-        } else {
-            mTaskManager.getUser();
-        }
+        mFragment.setLoadingProgress(false);
     }
 
     /**
@@ -148,6 +96,18 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    /**
+     * Starts loading repositories
+     */
+    private void loadRepos() {
+        String accessToken = AppSettings.getAccessToken();
+        if (TextUtils.isEmpty(accessToken)) {
+            mTaskManager.findRepos(null);
+        } else {
+            mTaskManager.getUser();
         }
     }
 
@@ -196,10 +156,8 @@ public class MainActivity extends AppCompatActivity {
             switch (requestCode) {
                 case AUTH_ACTIVITY_CODE:
                     // clear previous data
-                    mRepos.clear();
-                    mRepoListAdapter.notifyDataSetChanged();
-
-                    mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
+                    mFragment.clearData();
+                    mFragment.setLoadingProgress(true);
                     loadRepos();
                     break;
             }
@@ -238,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.menu_main, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
-
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
         mSearchView = null;
@@ -262,32 +219,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Checks whether data existing or not
-     */
-    private void checkIfEmpty() {
-        TextView emptyText = (TextView) findViewById(R.id.empty_text);
-        emptyText.setText(R.string.repo_empty_text);
-        if(mRepos.isEmpty()) {
-            emptyText.setVisibility(View.VISIBLE);
-        } else {
-            emptyText.setVisibility(View.GONE);
-        }
-    }
-
-    /**
      * Raised on loaded repositories
      *
      * @param event Event data
      */
     public void onEvent(FindReposEvent event) {
-        mSwipeRefreshLayout.setRefreshing(false);
-        mProgressDialog.dismiss();
-
-        mRepos.clear();
-        mRepos.addAll(event.getRepos());
-        mRepoListAdapter.notifyDataSetChanged();
-
-        checkIfEmpty();
+        mFragment.setLoadingProgress(false);
+        mFragment.setRepos(event.getRepos());
     }
 
     /**
@@ -296,14 +234,8 @@ public class MainActivity extends AppCompatActivity {
      * @param event Event data
      */
     public void onEvent(LoadingFailedEvent event) {
-        mSwipeRefreshLayout.setRefreshing(false);
-        mProgressDialog.dismiss();
-
-        checkIfEmpty();
-
-        String error = event.getTaskError().getMessage();
-        String msg = getString(R.string.error_failed_loading_repos, error);
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        mFragment.setLoadingProgress(false);
+        mFragment.handleLoadingFailed(event.getTaskError().getMessage());
     }
 
     /**
@@ -346,4 +278,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRepositorySelected(Repo repo) {
+        Intent intent = new Intent(MainActivity.this, RepoDetailsActivity.class);
+        intent.putExtra(RepoDetailsActivity.REPO_SLUG_KEY, repo.getSlug());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRefreshData() {
+        loadRepos();
+    }
 }
