@@ -16,13 +16,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.UserSuccessEvent;
-import com.khmelenko.lab.travisclient.fragment.MainFragment;
+import com.khmelenko.lab.travisclient.fragment.ReposFragment;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.User;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
@@ -38,14 +37,14 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class MainActivity extends AppCompatActivity implements MainFragment.MainFragmentListener {
+public class MainActivity extends AppCompatActivity implements ReposFragment.MainFragmentListener {
 
     private static final int AUTH_ACTIVITY_CODE = 0;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
-    private MainFragment mFragment;
+    private ReposFragment mFragment;
 
     private SearchView mSearchView;
     private TaskManager mTaskManager;
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mFragment = (MainFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
+        mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
 
         mTaskManager = new TaskManager();
         mCache = CacheStorage.newInstance();

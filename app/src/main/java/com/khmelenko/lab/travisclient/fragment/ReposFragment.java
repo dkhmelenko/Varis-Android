@@ -23,14 +23,13 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Fragment for main app screen
  *
  * @author Dmytro Khmelenko
  */
-public class MainFragment extends Fragment {
+public class ReposFragment extends Fragment {
 
     private MainFragmentListener mListener;
 
@@ -53,11 +52,11 @@ public class MainFragment extends Fragment {
      *
      * @return Fragment instance
      */
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static ReposFragment newInstance() {
+        return new ReposFragment();
     }
 
-    public MainFragment() {
+    public ReposFragment() {
         // Required empty public constructor
     }
 
@@ -70,7 +69,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_repos, container, false);
         ButterKnife.bind(this, view);
 
         mReposRecyclerView.setHasFixedSize(true);
