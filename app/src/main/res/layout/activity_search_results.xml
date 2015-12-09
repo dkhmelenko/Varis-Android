@@ -9,18 +9,10 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
 
-    <FrameLayout
+    <fragment
+        android:id="@+id/search_fragment_repos"
+        android:name="com.khmelenko.lab.travisclient.fragment.ReposFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/view_empty"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/search_repos_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"/>
-
-    </FrameLayout>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

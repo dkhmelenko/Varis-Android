@@ -1,30 +1,20 @@
 package com.khmelenko.lab.travisclient.activity;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
-import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
-import com.khmelenko.lab.travisclient.adapter.RepoListAdapter;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
+import com.khmelenko.lab.travisclient.fragment.ReposFragment;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 
@@ -33,15 +23,11 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class SearchResultsActivity extends AppCompatActivity {
+public class SearchResultsActivity extends AppCompatActivity implements ReposFragment.ReposFragmentListener {
 
-    @Bind(R.id.search_repos_recycler_view)
-    RecyclerView mReposRecyclerView;
+    private ReposFragment mFragment;
 
-    private RepoListAdapter mRepoListAdapter;
-    private List<Repo> mRepos = new ArrayList<>();
-
-    private ProgressDialog mProgressDialog;
+    private String mSearchQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +35,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_results);
         ButterKnife.bind(this);
 
-        mReposRecyclerView.setHasFixedSize(true);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mReposRecyclerView.setLayoutManager(layoutManager);
-
-        mRepoListAdapter = new RepoListAdapter(this, mRepos, new OnListItemListener() {
-            @Override
-            public void onItemSelected(int position) {
-                Repo repo = mRepos.get(position);
-                Intent intent = new Intent(SearchResultsActivity.this, RepoDetailsActivity.class);
-                intent.putExtra(RepoDetailsActivity.REPO_SLUG_KEY, repo.getSlug());
-                startActivity(intent);
-            }
-        });
-        mReposRecyclerView.setAdapter(mRepoListAdapter);
+        mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.search_fragment_repos);
 
         initToolbar();
 
@@ -86,6 +58,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+        mFragment.setLoadingProgress(false);
     }
 
     /**
@@ -96,6 +69,8 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            mSearchQuery = query;
+            mFragment.setLoadingProgress(true);
             startRepoSearch(query);
         }
     }
@@ -106,7 +81,6 @@ public class SearchResultsActivity extends AppCompatActivity {
      * @param query Query string for search
      */
     private void startRepoSearch(String query) {
-        mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
         TaskManager taskManager = new TaskManager();
         taskManager.findRepos(query);
     }
@@ -132,31 +106,13 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     /**
-     * Checks whether data existing or not
-     */
-    private void checkIfEmpty() {
-        TextView emptyText = (TextView) findViewById(R.id.empty_text);
-        emptyText.setText(R.string.repo_empty_text);
-        if(mRepos.isEmpty()) {
-            emptyText.setVisibility(View.VISIBLE);
-        } else {
-            emptyText.setVisibility(View.GONE);
-        }
-    }
-
-    /**
      * Raised on loaded repositories
      *
      * @param event Event data
      */
     public void onEvent(FindReposEvent event) {
-        mProgressDialog.dismiss();
-
-        mRepos.clear();
-        mRepos.addAll(event.getRepos());
-        mRepoListAdapter.notifyDataSetChanged();
-
-        checkIfEmpty();
+        mFragment.setLoadingProgress(false);
+        mFragment.setRepos(event.getRepos());
     }
 
     /**
@@ -165,12 +121,19 @@ public class SearchResultsActivity extends AppCompatActivity {
      * @param event Event data
      */
     public void onEvent(LoadingFailedEvent event) {
-        mProgressDialog.dismiss();
-
-        checkIfEmpty();
-
-        String msg = getString(R.string.error_failed_loading_repos, event.getTaskError().getMessage());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        mFragment.setLoadingProgress(false);
+        mFragment.handleLoadingFailed(event.getTaskError().getMessage());
     }
 
+    @Override
+    public void onRepositorySelected(Repo repo) {
+        Intent intent = new Intent(SearchResultsActivity.this, RepoDetailsActivity.class);
+        intent.putExtra(RepoDetailsActivity.REPO_SLUG_KEY, repo.getSlug());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRefreshData() {
+        startRepoSearch(mSearchQuery);
+    }
 }

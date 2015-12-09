@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
  */
 public class ReposFragment extends Fragment {
 
-    private MainFragmentListener mListener;
+    private ReposFragmentListener mListener;
 
     @Bind(R.id.empty_text)
     TextView mEmptyView;
@@ -97,17 +97,7 @@ public class ReposFragment extends Fragment {
             }
         });
 
-        mProgressDialog = ProgressDialog.show(getActivity(), "", getString(R.string.loading_msg));
-
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (mListener != null) {
-            mListener.onRefreshData();
-        }
     }
 
     /**
@@ -134,7 +124,7 @@ public class ReposFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (MainFragmentListener) activity;
+            mListener = (ReposFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement MainFragmentListener");
@@ -170,7 +160,9 @@ public class ReposFragment extends Fragment {
             mProgressDialog = ProgressDialog.show(getActivity(), "", getString(R.string.loading_msg));
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
-            mProgressDialog.dismiss();
+            if(mProgressDialog != null) {
+                mProgressDialog.dismiss();
+            }
         }
     }
 
@@ -187,7 +179,7 @@ public class ReposFragment extends Fragment {
     /**
      * Fragment listener
      */
-    public interface MainFragmentListener {
+    public interface ReposFragmentListener {
 
         /**
          * Handles repository selection

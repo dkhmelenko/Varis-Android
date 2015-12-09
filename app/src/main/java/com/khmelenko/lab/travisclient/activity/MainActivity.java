@@ -37,7 +37,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class MainActivity extends AppCompatActivity implements ReposFragment.MainFragmentListener {
+public class MainActivity extends AppCompatActivity implements ReposFragment.ReposFragmentListener {
 
     private static final int AUTH_ACTIVITY_CODE = 0;
 
@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements ReposFragment.Mai
 
         mUser = mCache.restoreUser();
         updateNavigationViewData();
+
+        mFragment.setLoadingProgress(true);
+        loadRepos();
     }
 
     @Override
