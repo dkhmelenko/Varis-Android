@@ -48,6 +48,27 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/build_pull_request_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/ViewBuildImageIcon.TopAligned"
+                android:src="@drawable/pull_request"
+                />
+
+            <TextView
+                android:id="@+id/build_pull_request_title"
+                style="@style/ViewBuildText.ThreeLines.Big"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/build_branch_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -69,6 +90,7 @@
 
 
         <LinearLayout
+            android:id="@+id/build_build_commit_msg_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

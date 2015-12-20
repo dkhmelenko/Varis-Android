@@ -5,114 +5,17 @@
               android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
+        android:id="@+id/item_pull_request_card_view"
         style="@style/CardViewContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <com.khmelenko.lab.travisclient.view.BuildView
+            android:id="@+id/item_pull_request_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/item_pull_request_number"
-                    style="@style/ViewBuildText.TwoLines.Title.NoImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-
-                <TextView
-                    android:id="@+id/item_pull_request_state"
-                    style="@style/ViewBuildText.TwoLines.Big"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/ViewBuildImageIcon.TopAligned"
-                    android:src="@drawable/pull_request"
-                    />
-
-                <TextView
-                    android:id="@+id/item_pull_request_title"
-                    style="@style/ViewBuildText.ThreeLines.Big"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/ViewBuildImageIcon.Big"
-                    android:src="@drawable/person"
-                    />
-
-                <TextView
-                    android:id="@+id/item_pull_request_commit_person"
-                    style="@style/ViewBuildText.OneLine.Big"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-
-            </LinearLayout>
-            
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/ViewBuildImageIcon"
-                    android:src="@drawable/duration"
-                    />
-
-                <TextView
-                    android:id="@+id/item_pull_request_duration"
-                    style="@style/ViewBuildText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/ViewBuildImageIcon"
-                    android:src="@drawable/finished_at"
-                    />
-
-                <TextView
-                    android:id="@+id/item_pull_request_finished"
-                    style="@style/ViewBuildText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-
-            </LinearLayout>
-
-        </LinearLayout>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
