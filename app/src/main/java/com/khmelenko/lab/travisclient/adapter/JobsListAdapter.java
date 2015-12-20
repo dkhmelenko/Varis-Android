@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  *
  * @author Dmytro Khmelenko
  */
-public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobViewHolder> {
+public final class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobViewHolder> {
 
     private final Context mContext;
     private List<Job> mJobs;

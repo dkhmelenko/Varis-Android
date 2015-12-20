@@ -1,21 +1,15 @@
 package com.khmelenko.lab.travisclient.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.khmelenko.lab.travisclient.R;
-import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
-import com.khmelenko.lab.travisclient.converter.TimeConverter;
 import com.khmelenko.lab.travisclient.network.response.Branch;
 import com.khmelenko.lab.travisclient.network.response.Branches;
 import com.khmelenko.lab.travisclient.network.response.Commit;
-import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 import com.khmelenko.lab.travisclient.view.BuildView;
 
 import butterknife.Bind;
@@ -26,7 +20,7 @@ import butterknife.ButterKnife;
  *
  * @author Dmytro Khmelenko
  */
-public class BranchesListAdapter extends RecyclerView.Adapter<BranchesListAdapter.BranchViewHolder> {
+public final class BranchesListAdapter extends RecyclerView.Adapter<BranchesListAdapter.BranchViewHolder> {
 
     private Branches mBranches;
     private final Context mContext;

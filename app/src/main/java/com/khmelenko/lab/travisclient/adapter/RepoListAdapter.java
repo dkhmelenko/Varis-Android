@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
  *
  * @author Dmytro Khmelenko
  */
-public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoViewHolder> {
+public final class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoViewHolder> {
 
     private final List<Repo> mRepos;
     private final Context mContext;
@@ -109,7 +109,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
 
         @Override
         public void onClick(View view) {
-            if(mListener != null) {
+            if (mListener != null) {
                 mListener.onItemSelected(getLayoutPosition());
             }
         }

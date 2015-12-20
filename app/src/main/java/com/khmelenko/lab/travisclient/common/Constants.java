@@ -26,8 +26,4 @@ public final class Constants {
      */
     public static final String GITHUB_URL = "https://api.github.com";
 
-    /**
-     * Defines the file for properties
-     */
-    public static final String KEY_PROPERTIES = "key.properties";
 }

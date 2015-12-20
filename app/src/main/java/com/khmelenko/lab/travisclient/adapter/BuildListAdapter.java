@@ -1,7 +1,6 @@
 package com.khmelenko.lab.travisclient.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
  *
  * @author Dmytro Khmelenko
  */
-public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.BuildViewHolder> {
+public final class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.BuildViewHolder> {
 
     private BuildHistory mBuildHistory;
     private final Context mContext;

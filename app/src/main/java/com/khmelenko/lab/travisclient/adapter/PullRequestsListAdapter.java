@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  *
  * @author Dmytro Khmelenko
  */
-public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsListAdapter.BranchViewHolder> {
+public final class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsListAdapter.BranchViewHolder> {
 
     private Requests mRequests;
     private List<RequestData> mPullRequests;
