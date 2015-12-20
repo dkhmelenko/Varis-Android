@@ -21,6 +21,9 @@ import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * List adapter for Pull requests
  *
@@ -139,26 +142,32 @@ public class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequestsLi
      */
     class BranchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        @Bind(R.id.card_view)
         View mParent;
+
+        @Bind(R.id.item_pull_request_number)
         TextView mNumber;
+
+        @Bind(R.id.item_pull_request_state)
         TextView mState;
+
+        @Bind(R.id.item_pull_request_title)
         TextView mTitle;
+
+        @Bind(R.id.item_pull_request_commit_person)
         TextView mCommitPerson;
+
+        @Bind(R.id.item_pull_request_duration)
         TextView mDuration;
+
+        @Bind(R.id.item_pull_request_finished)
         TextView mFinished;
 
         public BranchViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setClickable(true);
-
-            mParent = itemView.findViewById(R.id.card_view);
             mParent.setOnClickListener(this);
-            mNumber = (TextView) itemView.findViewById(R.id.item_pull_request_number);
-            mState = (TextView) itemView.findViewById(R.id.item_pull_request_state);
-            mTitle = (TextView) itemView.findViewById(R.id.item_pull_request_title);
-            mCommitPerson = (TextView) itemView.findViewById(R.id.item_pull_request_commit_person);
-            mDuration = (TextView) itemView.findViewById(R.id.item_pull_request_duration);
-            mFinished = (TextView) itemView.findViewById(R.id.item_pull_request_finished);
         }
 
         @Override

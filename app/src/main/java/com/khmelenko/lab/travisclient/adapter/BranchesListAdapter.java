@@ -18,6 +18,9 @@ import com.khmelenko.lab.travisclient.network.response.Commit;
 import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 import com.khmelenko.lab.travisclient.view.BuildView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * List adapter for branches
  *
@@ -71,16 +74,17 @@ public class BranchesListAdapter extends RecyclerView.Adapter<BranchesListAdapte
      */
     class BranchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @Bind(R.id.card_view)
         View mParent;
+
+        @Bind(R.id.item_branch_data)
         BuildView mBuildView;
 
         public BranchViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setClickable(true);
-
-            mParent = itemView.findViewById(R.id.card_view);
             mParent.setOnClickListener(this);
-            mBuildView = (BuildView) itemView.findViewById(R.id.item_branch_data);
         }
 
         @Override

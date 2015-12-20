@@ -18,6 +18,9 @@ import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Adapter class for the list of repositories
  *
@@ -88,18 +91,20 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
      */
     class RepoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mName;
-        private TextView mDuration;
-        private TextView mFinished;
+        @Bind(R.id.item_repo_name)
+        TextView mName;
+
+        @Bind(R.id.item_repo_duration)
+        TextView mDuration;
+
+        @Bind(R.id.item_repo_finished)
+        TextView mFinished;
 
         public RepoViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             CardView cardView = (CardView) itemView.findViewById(R.id.card_view);
             cardView.setOnClickListener(this);
-
-            mName = (TextView) itemView.findViewById(R.id.item_repo_name);
-            mDuration = (TextView) itemView.findViewById(R.id.item_repo_duration);
-            mFinished = (TextView) itemView.findViewById(R.id.item_repo_finished);
         }
 
         @Override

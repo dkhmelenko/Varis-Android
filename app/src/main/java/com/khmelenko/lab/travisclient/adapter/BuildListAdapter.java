@@ -1,6 +1,7 @@
 package com.khmelenko.lab.travisclient.adapter;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,9 @@ import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.network.response.Commit;
 import com.khmelenko.lab.travisclient.view.BuildView;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Adapter for the list of builds
@@ -64,16 +68,17 @@ public class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.Buil
      */
     class BuildViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @Bind(R.id.item_build_card_view)
         View mParent;
+
+        @Bind(R.id.item_build_data)
         BuildView mBuildView;
 
         public BuildViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setClickable(true);
-
-            mParent = itemView.findViewById(R.id.card_view);
             mParent.setOnClickListener(this);
-            mBuildView = (BuildView) itemView.findViewById(R.id.item_build_data);
         }
 
         @Override

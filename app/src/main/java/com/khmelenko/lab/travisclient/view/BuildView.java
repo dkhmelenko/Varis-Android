@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +16,8 @@ import com.khmelenko.lab.travisclient.network.response.Branch;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.Commit;
 import com.khmelenko.lab.travisclient.util.DateTimeUtils;
+
+import butterknife.ButterKnife;
 
 /**
  * View with build info
@@ -56,12 +59,14 @@ public class BuildView extends LinearLayout {
     private void initializeViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.view_build, this);
+        View view = inflater.inflate(R.layout.view_build, this);
+        ButterKnife.bind(this, view);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        ButterKnife.bind(this);
 
         mNumber = (TextView) findViewById(R.id.build_number);
         mState = (TextView) findViewById(R.id.build_state);

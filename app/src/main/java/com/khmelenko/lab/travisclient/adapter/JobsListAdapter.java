@@ -16,6 +16,9 @@ import com.khmelenko.lab.travisclient.network.response.Job;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * List adapter for jobs
  *
@@ -89,20 +92,23 @@ public class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.JobVie
 
         private static final int HEIGHT = 88; // height in DP
 
+        @Bind(R.id.card_view)
         View mParent;
+
+        @Bind(R.id.item_job_number)
         TextView mNumber;
+
+        @Bind(R.id.item_job_state)
         TextView mState;
+
+        @Bind(R.id.item_job_duration)
         TextView mDuration;
 
         public JobViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setClickable(true);
-
-            mParent = itemView.findViewById(R.id.card_view);
             mParent.setOnClickListener(this);
-            mNumber = (TextView) itemView.findViewById(R.id.item_job_number);
-            mState = (TextView) itemView.findViewById(R.id.item_job_state);
-            mDuration = (TextView) itemView.findViewById(R.id.item_job_duration);
         }
 
         @Override
