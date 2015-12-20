@@ -17,6 +17,7 @@ import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.Commit;
 import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -26,13 +27,26 @@ import butterknife.ButterKnife;
  */
 public class BuildView extends LinearLayout {
 
-    private TextView mNumber;
-    private TextView mState;
-    private TextView mBranch;
-    private TextView mCommitMessage;
-    private TextView mCommitPerson;
-    private TextView mDuration;
-    private TextView mFinished;
+    @Bind(R.id.build_number)
+    TextView mNumber;
+
+    @Bind(R.id.build_state)
+    TextView mState;
+
+    @Bind(R.id.build_branch)
+    TextView mBranch;
+
+    @Bind(R.id.build_commit_message)
+    TextView mCommitMessage;
+
+    @Bind(R.id.build_commit_person)
+    TextView mCommitPerson;
+
+    @Bind(R.id.build_duration)
+    TextView mDuration;
+
+    @Bind(R.id.build_finished)
+    TextView mFinished;
 
     public BuildView(Context context) {
         super(context);
@@ -61,20 +75,6 @@ public class BuildView extends LinearLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.view_build, this);
         ButterKnife.bind(this, view);
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        ButterKnife.bind(this);
-
-        mNumber = (TextView) findViewById(R.id.build_number);
-        mState = (TextView) findViewById(R.id.build_state);
-        mBranch = (TextView) findViewById(R.id.build_branch);
-        mCommitMessage = (TextView) findViewById(R.id.build_commit_message);
-        mCommitPerson = (TextView) findViewById(R.id.build_commit_person);
-        mDuration = (TextView) findViewById(R.id.build_duration);
-        mFinished = (TextView) findViewById(R.id.build_finished);
     }
 
     /**
