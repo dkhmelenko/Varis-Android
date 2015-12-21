@@ -7,9 +7,11 @@ import com.google.gson.GsonBuilder;
 import com.khmelenko.lab.travisclient.common.Constants;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.util.PackageUtils;
+import com.squareup.okhttp.OkHttpClient;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -22,6 +24,7 @@ public final class RestClient {
 
     private TravisApiService mApiService;
     private GithubApiService mGithubApiService;
+    private RawApiService mRawApiService;
 
     private static RestClient sInstance;
 
@@ -67,6 +70,19 @@ public final class RestClient {
                 .setErrorHandler(new RestErrorHandling())
                 .build();
         mApiService = restAdapter.create(TravisApiService.class);
+
+        final OkHttpClient client = new OkHttpClient();
+        client.setFollowRedirects(false);
+
+        // rest adapter for raw calls
+        restAdapter = new RestAdapter.Builder()
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setEndpoint(newEndpoint)
+                .setConverter(new GsonConverter(constructGsonConverter()))
+                .setErrorHandler(new RestErrorHandling())
+                .setClient(new OkClient(client))
+                .build();
+        mRawApiService = restAdapter.create(RawApiService.class);
     }
 
     /**
@@ -123,4 +139,12 @@ public final class RestClient {
         return mGithubApiService;
     }
 
+    /**
+     * Gets Raw API service
+     *
+     * @return Raw API service
+     */
+    public RawApiService getRawApiService() {
+        return mRawApiService;
+    }
 }
