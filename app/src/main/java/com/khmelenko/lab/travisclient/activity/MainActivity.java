@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.khmelenko.lab.travisclient.R;
@@ -262,8 +263,9 @@ public class MainActivity extends AppCompatActivity implements ReposFragment.Rep
      */
     private void updateNavigationViewData() {
         final NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
-        TextView usernameView = (TextView) view.findViewById(R.id.drawer_header_username);
-        TextView emailView = (TextView) view.findViewById(R.id.drawer_header_email);
+        View header = view.getHeaderView(0);
+        TextView usernameView = (TextView) header.findViewById(R.id.drawer_header_username);
+        TextView emailView = (TextView) header.findViewById(R.id.drawer_header_email);
 
         if(mUser != null) {
             String username = mUser.getLogin();
