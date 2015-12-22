@@ -242,8 +242,6 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
     private void startLoadingLog(long jobId) {
         String auth = String.format("token %1$s", AppSettings.getAccessToken());
         mTaskManager.getLogUrl(auth, jobId);
-
-        mRawLogFragment.showProgress(true);
     }
 
     /**

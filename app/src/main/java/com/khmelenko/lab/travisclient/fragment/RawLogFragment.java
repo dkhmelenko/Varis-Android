@@ -56,6 +56,7 @@ public class RawLogFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_raw_log, container, false);
         ButterKnife.bind(this, view);
+        showProgress(true);
         showError(false);
         return view;
     }
