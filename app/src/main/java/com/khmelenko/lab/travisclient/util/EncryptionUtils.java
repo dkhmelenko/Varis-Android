@@ -46,7 +46,7 @@ public final class EncryptionUtils {
      */
     public static String generateBasicAuthorization(String username, String password) {
         String credentials = String.format("%1$s:%2$s", username, password);
-        String basic = String.format("Basic %1$s", toBase64(credentials));
+        String basic = String.format("Basic %1$s", toBase64(credentials)).trim();
         return basic;
     }
 }
