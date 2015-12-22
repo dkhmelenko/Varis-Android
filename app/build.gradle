@@ -19,6 +19,7 @@ android {
             proguardFile 'proguard-eventbus.pro'
             proguardFile 'proguard-gson.pro'
             proguardFile 'proguard-square-retrofit.pro'
+            proguardFile 'proguard-square-okhttp.pro'
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -43,7 +44,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.7.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
