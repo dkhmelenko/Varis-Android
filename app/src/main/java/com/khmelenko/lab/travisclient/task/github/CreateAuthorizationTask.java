@@ -51,16 +51,20 @@ public final class CreateAuthorizationTask extends Task<Authorization> {
         } catch (TaskException error) {
 
             Response response = error.getTaskError().getResponse();
-            boolean twoFactorAuthRequired = false;
-            for (Header header : response.getHeaders()) {
-                if (GithubApiService.TWO_FACTOR_HEADER.equals(header.getName())) {
-                    twoFactorAuthRequired = true;
-                    break;
+            if(response != null) {
+                boolean twoFactorAuthRequired = false;
+                for (Header header : response.getHeaders()) {
+                    if (GithubApiService.TWO_FACTOR_HEADER.equals(header.getName())) {
+                        twoFactorAuthRequired = true;
+                        break;
+                    }
                 }
-            }
-            if (response.getStatus() == 401 && twoFactorAuthRequired) {
-                TaskError taskError = new TaskError(TaskError.TWO_FACTOR_AUTH_REQUIRED, "");
-                throw new TaskException(taskError);
+                if (response.getStatus() == 401 && twoFactorAuthRequired) {
+                    TaskError taskError = new TaskError(TaskError.TWO_FACTOR_AUTH_REQUIRED, "");
+                    throw new TaskException(taskError);
+                } else {
+                    throw error;
+                }
             } else {
                 throw error;
             }
