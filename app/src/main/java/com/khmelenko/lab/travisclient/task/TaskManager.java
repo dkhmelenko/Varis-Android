@@ -8,6 +8,7 @@ import com.khmelenko.lab.travisclient.task.travis.BranchesTask;
 import com.khmelenko.lab.travisclient.task.travis.BuildDetailsTask;
 import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
 import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
+import com.khmelenko.lab.travisclient.task.travis.LogTask;
 import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
 import com.khmelenko.lab.travisclient.task.travis.UserReposTask;
 import com.khmelenko.lab.travisclient.task.travis.UserTask;
@@ -143,4 +144,16 @@ public final class TaskManager {
         BuildDetailsTask task = new BuildDetailsTask(repoSlug, buildId);
         LoaderAsyncTask.executeTask(task);
     }
+
+    /**
+     * Loads an url for the log file
+     *
+     * @param auth  Authentication
+     * @param jobId Job ID
+     */
+    public void getLogUrl(String auth, long jobId) {
+        LogTask task = new LogTask(auth, jobId);
+        LoaderAsyncTask.executeTask(task);
+    }
+
 }

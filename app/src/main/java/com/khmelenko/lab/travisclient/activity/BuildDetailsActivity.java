@@ -17,12 +17,15 @@ import android.widget.Toast;
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
+import com.khmelenko.lab.travisclient.event.travis.LogFailEvent;
+import com.khmelenko.lab.travisclient.event.travis.LogLoadedEvent;
 import com.khmelenko.lab.travisclient.fragment.JobsFragment;
 import com.khmelenko.lab.travisclient.fragment.RawLogFragment;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildDetails;
 import com.khmelenko.lab.travisclient.network.response.Commit;
 import com.khmelenko.lab.travisclient.network.response.Job;
+import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.view.BuildView;
 
@@ -222,11 +225,25 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
             addFragment(R.id.build_details_container, mJobsFragment, "JobsFragment");
         } else if (details.getJobs().size() == 1) {
             Job job = details.getJobs().get(0);
+
             if (mRawLogFragment == null) {
-                mRawLogFragment = RawLogFragment.newInstance(job.getId());
+                mRawLogFragment = RawLogFragment.newInstance();
             }
             addFragment(R.id.build_details_container, mRawLogFragment, "RawLogFragment");
+            startLoadingLog(job.getId());
         }
+    }
+
+    /**
+     * Starts loading log file
+     *
+     * @param jobId Job ID
+     */
+    private void startLoadingLog(long jobId) {
+        String auth = String.format("token %1$s", AppSettings.getAccessToken());
+        mTaskManager.getLogUrl(auth, jobId);
+
+        mRawLogFragment.showProgress(true);
     }
 
     /**
@@ -244,12 +261,36 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Raised on failed loading log data
+     *
+     * @param event Event data
+     */
+    public void onEvent(LogFailEvent event) {
+        mRawLogFragment.showProgress(false);
+        mRawLogFragment.showError(true);
+
+        String msg = getString(R.string.error_failed_loading_build_details, event.getTaskError().getMessage());
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Raised on loaded url for the log file
+     *
+     * @param event Event data
+     */
+    public void onEvent(LogLoadedEvent event) {
+        mRawLogFragment.loadUrl(event.getLogUrl());
+    }
+
     @Override
     public void onJobSelected(Job job) {
         if (mRawLogFragment == null) {
-            mRawLogFragment = RawLogFragment.newInstance(job.getId());
+            mRawLogFragment = RawLogFragment.newInstance();
         }
         replaceFragment(R.id.build_details_container, mRawLogFragment, "RawLogFragment", null);
+
+        startLoadingLog(job.getId());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.khmelenko.lab.travisclient.network.retrofit;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Path;
@@ -11,5 +12,5 @@ import retrofit.http.Path;
 public interface RawApiService {
 
     @GET("/jobs/{jobId}/log")
-    void getLog(@Header("Authorization") String basicAuth, @Path("jobId") String jobId, Callback<String> response);
+    Response getLog(@Header("Authorization") String basicAuth, @Path("jobId") String jobId);
 }

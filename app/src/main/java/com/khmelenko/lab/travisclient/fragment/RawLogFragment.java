@@ -3,19 +3,15 @@ package com.khmelenko.lab.travisclient.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.khmelenko.lab.travisclient.R;
-import com.khmelenko.lab.travisclient.storage.AppSettings;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,9 +23,7 @@ import butterknife.ButterKnife;
  */
 public class RawLogFragment extends Fragment {
 
-    private static final String JOB_ID_KEY = "JobId";
-
-    private static final String RAW_LOG_PATH = "/jobs/%1$s/log";
+    private static final String LOG_URL = "LogUrl";
 
     @Bind(R.id.raw_log_webview)
     WebView mWebView;
@@ -37,20 +31,18 @@ public class RawLogFragment extends Fragment {
     @Bind(R.id.progressbar)
     ProgressBar mProgressBar;
 
-    private long mJobId;
+    @Bind(R.id.empty_text)
+    TextView mEmptyText;
+
     private OnRawLogFragmentListener mListener;
 
     /**
      * Creates an instance of the fragment
      *
-     * @param jobId Job ID
      * @return Fragment instance
      */
-    public static RawLogFragment newInstance(long jobId) {
+    public static RawLogFragment newInstance() {
         RawLogFragment fragment = new RawLogFragment();
-        Bundle args = new Bundle();
-        args.putLong(JOB_ID_KEY, jobId);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -59,65 +51,13 @@ public class RawLogFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mJobId = getArguments().getLong(JOB_ID_KEY);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_raw_log, container, false);
         ButterKnife.bind(this, view);
-
-        mWebView.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                if (mListener != null) {
-                    mListener.onLogLoaded();
-                }
-
-                mProgressBar.setVisibility(View.GONE);
-                mWebView.setVisibility(View.VISIBLE);
-            }
-        });
-
-        String path = formatLogPath();
-        Map<String, String> headers = prepareHeaders();
-        mWebView.loadUrl(path, headers);
-
+        showError(false);
         return view;
-    }
-
-    /**
-     * Prepares request headers
-     *
-     * @return Request headers
-     */
-    private Map<String, String> prepareHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        String accessToken = AppSettings.getAccessToken();
-        if (!TextUtils.isEmpty(accessToken)) {
-            String headerValue = String.format("token %1$s", accessToken);
-            headers.put("Authorization", headerValue);
-        }
-        return headers;
-    }
-
-    /**
-     * Formats the path to the job logs
-     *
-     * @return Path to logs
-     */
-    private String formatLogPath() {
-        String server = AppSettings.getServerUrl();
-        String path = String.format(RAW_LOG_PATH, String.valueOf(mJobId));
-        return server + path;
     }
 
     @Override
@@ -135,6 +75,59 @@ public class RawLogFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    /**
+     * Shows the loading progress of the fragment
+     *
+     * @param inProgress True, if the progress should be shown. False otherwise
+     */
+    public void showProgress(boolean inProgress) {
+        if (inProgress) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mWebView.setVisibility(View.GONE);
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+            mWebView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Shows the error message
+     *
+     * @param isError True, if error text should be shown. False otherwise
+     */
+    public void showError(boolean isError) {
+        if (isError) {
+            mEmptyText.setVisibility(View.VISIBLE);
+            mEmptyText.setText(R.string.build_details_empty);
+        } else {
+            mEmptyText.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Loads URL for showing in web view
+     *
+     * @param url URL
+     */
+    public void loadUrl(String url) {
+        showError(false);
+
+        mWebView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if (mListener != null) {
+                    mListener.onLogLoaded();
+                }
+
+                showProgress(false);
+            }
+        });
+
+        mWebView.loadUrl(url);
     }
 
     /**
