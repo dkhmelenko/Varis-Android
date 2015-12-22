@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -240,8 +241,13 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
      * @param jobId Job ID
      */
     private void startLoadingLog(long jobId) {
-        String auth = String.format("token %1$s", AppSettings.getAccessToken());
-        mTaskManager.getLogUrl(auth, jobId);
+        String accessToken = AppSettings.getAccessToken();
+        if(TextUtils.isEmpty(accessToken)) {
+            mTaskManager.getLogUrl(jobId);
+        } else {
+            String auth = String.format("token %1$s", AppSettings.getAccessToken());
+            mTaskManager.getLogUrl(auth, jobId);
+        }
     }
 
     /**

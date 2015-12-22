@@ -156,4 +156,13 @@ public final class TaskManager {
         LoaderAsyncTask.executeTask(task);
     }
 
+    /**
+     * Loads an url for the log file
+     *
+     * @param jobId Job ID
+     */
+    public void getLogUrl(long jobId) {
+        getLogUrl(null, jobId);
+    }
+
 }

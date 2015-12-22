@@ -13,4 +13,7 @@ public interface RawApiService {
 
     @GET("/jobs/{jobId}/log")
     Response getLog(@Header("Authorization") String basicAuth, @Path("jobId") String jobId);
+
+    @GET("/jobs/{jobId}/log")
+    Response getLog(@Path("jobId") String jobId);
 }

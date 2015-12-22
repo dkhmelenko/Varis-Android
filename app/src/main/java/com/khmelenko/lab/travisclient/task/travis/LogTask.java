@@ -2,7 +2,6 @@ package com.khmelenko.lab.travisclient.task.travis;
 
 import android.text.TextUtils;
 
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogLoadedEvent;
 import com.khmelenko.lab.travisclient.task.Task;
@@ -38,7 +37,11 @@ public final class LogTask extends Task<String> {
         String redirectUrl = "";
 
         try {
-            Response response = mRestClient.getRawApiService().getLog(mAuth, String.valueOf(mJobId));
+            if(TextUtils.isEmpty(mAuth)) {
+                mRestClient.getRawApiService().getLog(String.valueOf(mJobId));
+            } else {
+                mRestClient.getRawApiService().getLog(mAuth, String.valueOf(mJobId));
+            }
 
         } catch (TaskException exception) {
             Response response = exception.getTaskError().getResponse();
@@ -49,9 +52,8 @@ public final class LogTask extends Task<String> {
                 }
             }
 
-            if (response.getStatus() == 307 && !TextUtils.isEmpty(redirectUrl)) {
-
-            } else {
+            boolean redirect = response.getStatus() == 307 && !TextUtils.isEmpty(redirectUrl);
+            if (!redirect) {
                 throw exception;
             }
         }
