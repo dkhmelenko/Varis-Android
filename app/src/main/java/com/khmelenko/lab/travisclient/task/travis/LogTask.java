@@ -37,10 +37,17 @@ public final class LogTask extends Task<String> {
         String redirectUrl = "";
 
         try {
-            if(TextUtils.isEmpty(mAuth)) {
-                mRestClient.getRawApiService().getLog(String.valueOf(mJobId));
+            Response response;
+            if (TextUtils.isEmpty(mAuth)) {
+                response = mRestClient.getRawApiService().getLog(String.valueOf(mJobId));
             } else {
-                mRestClient.getRawApiService().getLog(mAuth, String.valueOf(mJobId));
+                response = mRestClient.getRawApiService().getLog(mAuth, String.valueOf(mJobId));
+            }
+
+            // in case of success just return the url. It means that the log file can be accessed
+            // by this url already
+            if (response.getStatus() == 200) {
+                redirectUrl = response.getUrl();
             }
 
         } catch (TaskException exception) {
