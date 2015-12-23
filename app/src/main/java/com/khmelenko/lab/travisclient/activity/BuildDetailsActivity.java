@@ -242,7 +242,7 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
      */
     private void startLoadingLog(long jobId) {
         String accessToken = AppSettings.getAccessToken();
-        if(TextUtils.isEmpty(accessToken)) {
+        if (TextUtils.isEmpty(accessToken)) {
             mTaskManager.getLogUrl(jobId);
         } else {
             String auth = String.format("token %1$s", AppSettings.getAccessToken());

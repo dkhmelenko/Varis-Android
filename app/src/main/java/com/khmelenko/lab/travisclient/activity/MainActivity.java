@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements ReposFragment.Rep
                         // reset back to open source url
                         AppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
                         RestClient.getInstance().updateTravisEndpoint(AppSettings.getServerUrl());
-                        
+
                         finish();
                         startActivity(getIntent());
                         break;
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements ReposFragment.Rep
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case AUTH_ACTIVITY_CODE:
                     // clear previous data
@@ -275,9 +275,9 @@ public class MainActivity extends AppCompatActivity implements ReposFragment.Rep
         TextView usernameView = (TextView) header.findViewById(R.id.drawer_header_username);
         TextView emailView = (TextView) header.findViewById(R.id.drawer_header_email);
 
-        if(mUser != null) {
+        if (mUser != null) {
             String username = mUser.getLogin();
-            if(!TextUtils.isEmpty(mUser.getName())) {
+            if (!TextUtils.isEmpty(mUser.getName())) {
                 username = String.format("%1$s (%2$s)", mUser.getName(), mUser.getLogin());
             }
             usernameView.setText(username);
