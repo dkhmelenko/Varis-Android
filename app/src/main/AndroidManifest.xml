@@ -63,10 +63,6 @@
             android:name="android.app.default_searchable"
             android:value=".activity.SearchResultsActivity" />
 
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:label="@string/settings_title" >
-        </activity>
     </application>
 
 </manifest>
