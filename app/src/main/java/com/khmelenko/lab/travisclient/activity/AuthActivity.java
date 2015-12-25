@@ -2,26 +2,27 @@ package com.khmelenko.lab.travisclient.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
-import com.khmelenko.lab.travisclient.common.Constants;
 import com.khmelenko.lab.travisclient.event.github.CreateAuthorizationSuccessEvent;
 import com.khmelenko.lab.travisclient.event.github.DeleteAuthorizationSuccessEvent;
 import com.khmelenko.lab.travisclient.event.github.GithubAuthorizationFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.AuthFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.AuthSuccessEvent;
+import com.khmelenko.lab.travisclient.fragment.AuthFragment;
+import com.khmelenko.lab.travisclient.fragment.SecurityCodeFragment;
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.Authorization;
-import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskManager;
@@ -31,9 +32,7 @@ import com.khmelenko.lab.travisclient.util.StringUtils;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -41,40 +40,20 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class AuthActivity extends AppCompatActivity {
+public class AuthActivity extends AppCompatActivity implements AuthFragment.OnLoginActionListener,
+        SecurityCodeFragment.OnSecurityCodeAction {
 
     private static final String SECURITY_CODE_INPUT = "securityCodeInput";
 
-    @Bind(R.id.auth_server_section)
-    View mServerSection;
-
-    @Bind(R.id.auth_server_selector)
-    RadioGroup mServerSelector;
-
-    @Bind(R.id.auth_login_section)
-    View mLoginSection;
-
-    @Bind(R.id.auth_confirm_section)
-    View mConfirmSection;
-
-    @Bind(R.id.auth_username)
-    EditText mUsername;
-
-    @Bind(R.id.auth_password)
-    EditText mPassword;
-
-    @Bind(R.id.auth_login_btn)
-    Button mLoginBtn;
-
-    @Bind(R.id.auth_security_code)
-    EditText mSecurityCode;
-
+    private AuthFragment mAuthFragment;
+    private SecurityCodeFragment mSecurityCodeFragment;
     private ProgressDialog mProgressDialog;
 
     private EventBus mEventBus = EventBus.getDefault();
     private TaskManager mTaskManager = new TaskManager();
 
     private String mBasicAuth;
+    private String mSecurityCode;
     private Authorization mAuthorization;
 
     private boolean mSecurityCodeInput;
@@ -87,80 +66,85 @@ public class AuthActivity extends AppCompatActivity {
 
         initToolbar();
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mSecurityCodeInput = savedInstanceState.getBoolean(SECURITY_CODE_INPUT);
         }
 
-        if(mSecurityCodeInput) {
+        if (mSecurityCodeInput) {
             showSecurityCodeInput();
+        } else {
+            showLoginSection();
         }
-
-        prepareServerSelection();
     }
 
     /**
-     * Prepares server selection section
+     * Shows login section
      */
-    private void prepareServerSelection() {
-        mServerSelector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int buttonId) {
-                String server = Constants.OPEN_SOURCE_TRAVIS_URL;
-                switch (buttonId) {
-                    case R.id.auth_server_opensource:
-                        server = Constants.OPEN_SOURCE_TRAVIS_URL;
-                        break;
-                    case R.id.auth_server_pro:
-                        server = Constants.PRIVATE_TRAVIS_URL;
-                        break;
-                }
-
-                AppSettings.putServerUrl(server);
-                RestClient.getInstance().updateTravisEndpoint(server);
-            }
-        });
-
-        String currentServer = AppSettings.getServerUrl();
-        switch (currentServer) {
-            case Constants.OPEN_SOURCE_TRAVIS_URL:
-                mServerSelector.check(R.id.auth_server_opensource);
-                break;
-            case Constants.PRIVATE_TRAVIS_URL:
-                mServerSelector.check(R.id.auth_server_pro);
-                break;
-        }
+    private void showLoginSection() {
+        mAuthFragment = AuthFragment.newInstance();
+        addFragment(R.id.auth_container, mAuthFragment, "AuthFragment");
     }
 
     /**
      * Shows the input for security code
      */
     private void showSecurityCodeInput() {
-        mLoginSection.setVisibility(View.GONE);
-        mServerSection.setVisibility(View.GONE);
-        mConfirmSection.setVisibility(View.VISIBLE);
+        if (mAuthFragment != null) {
+            detachFragment(mAuthFragment);
+        }
+
+        mSecurityCodeFragment = SecurityCodeFragment.newInstance();
+        addFragment(R.id.auth_container, mSecurityCodeFragment, "SecurityCodeFragment");
     }
 
-    @OnClick(R.id.auth_login_btn)
-    public void startAuthorization() {
-        if (areCredentialsValid()) {
-            mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
-            mBasicAuth = EncryptionUtils.generateBasicAuthorization(
-                    mUsername.getText().toString(), mPassword.getText().toString());
-            mTaskManager.createNewAuthorization(mBasicAuth, prepareAuthorizationRequest());
+    /**
+     * Adds new fragment
+     *
+     * @param containerViewId ID of the container view for fragment
+     * @param fragment        Fragment instance
+     * @param fragmentTag     Fragment tag
+     */
+    protected void addFragment(@IdRes int containerViewId,
+                               @NonNull Fragment fragment,
+                               @NonNull String fragmentTag) {
+        if (!fragment.isAdded()) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(containerViewId, fragment, fragmentTag)
+                    .disallowAddToBackStack()
+                    .commit();
         }
     }
 
-    @OnClick(R.id.auth_confirm_btn)
-    public void startConfirmation() {
-        if(TextUtils.isEmpty(mSecurityCode.getText())) {
-            mSecurityCode.setError(getString(R.string.auth_invalid_security_code));
-        } else {
-            mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
-            String securityCode = mSecurityCode.getText().toString();
-            mBasicAuth = EncryptionUtils.generateBasicAuthorization(
-                    mUsername.getText().toString(), mPassword.getText().toString());
-            mTaskManager.createNewAuthorization(mBasicAuth, prepareAuthorizationRequest(), securityCode);
-        }
+    /**
+     * Replaces fragment
+     *
+     * @param containerViewId    ID of the container view for fragment
+     * @param fragment           Fragment instance
+     * @param fragmentTag        Fragment tag
+     * @param backStackStateName Name in back stack
+     */
+    protected void replaceFragment(@IdRes int containerViewId,
+                                   @NonNull Fragment fragment,
+                                   @NonNull String fragmentTag,
+                                   @Nullable String backStackStateName) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(containerViewId, fragment, fragmentTag)
+                .addToBackStack(backStackStateName)
+                .commit();
+    }
+
+    /**
+     * Detaches fragment
+     *
+     * @param fragment Fragment
+     */
+    protected void detachFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .detach(fragment)
+                .commit();
     }
 
     /**
@@ -176,24 +160,6 @@ public class AuthActivity extends AppCompatActivity {
         return request;
     }
 
-    /**
-     * Does validation of the inputted credentials
-     *
-     * @return True, if inputted credentials are valid. False otherwise
-     */
-    private boolean areCredentialsValid() {
-        boolean valid = true;
-        if (TextUtils.isEmpty(mUsername.getText())) {
-            valid = false;
-            mUsername.setError(getString(R.string.auth_invalid_username_msg));
-        }
-
-        if (TextUtils.isEmpty(mPassword.getText())) {
-            valid = false;
-            mPassword.setError(getString(R.string.auth_invalid_password_msg));
-        }
-        return valid;
-    }
 
     @Override
     protected void onResume() {
@@ -280,9 +246,8 @@ public class AuthActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
 
         // start deletion authorization on Github, because we don't need it anymore
-        if(!TextUtils.isEmpty(mSecurityCode.getText())) {
-            mTaskManager.deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()),
-                    mSecurityCode.getText().toString());
+        if (!TextUtils.isEmpty(mSecurityCode)) {
+            mTaskManager.deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()), mSecurityCode);
         } else {
             mTaskManager.deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()));
         }
@@ -308,4 +273,18 @@ public class AuthActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onLogin(String userName, String password) {
+        mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
+
+        mBasicAuth = EncryptionUtils.generateBasicAuthorization(userName, password);
+        mTaskManager.createNewAuthorization(mBasicAuth, prepareAuthorizationRequest());
+    }
+
+    @Override
+    public void onSecurityCodeInput(String securityCode) {
+        mSecurityCode = securityCode;
+        mProgressDialog = ProgressDialog.show(this, "", getString(R.string.loading_msg));
+        mTaskManager.createNewAuthorization(mBasicAuth, prepareAuthorizationRequest(), securityCode);
+    }
 }
