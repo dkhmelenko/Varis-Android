@@ -46,6 +46,9 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
     public static final String EXTRA_REPO_SLUG = "RepoSlug";
     public static final String EXTRA_BUILD_ID = "BuildId";
 
+    private static final String RAW_LOG_FRAGMENT_TAG = "RawLogFragment";
+    private static final String JOBS_FRAGMENT_TAG = "JobsFragment";
+
     @Bind(R.id.progressbarview)
     View mProgressBar;
 
@@ -223,14 +226,14 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
                 mJobsFragment = JobsFragment.newInstance();
             }
             mJobsFragment.setJobs(details.getJobs());
-            addFragment(R.id.build_details_container, mJobsFragment, "JobsFragment");
+            addFragment(R.id.build_details_container, mJobsFragment, JOBS_FRAGMENT_TAG);
         } else if (details.getJobs().size() == 1) {
             Job job = details.getJobs().get(0);
 
             if (mRawLogFragment == null) {
                 mRawLogFragment = RawLogFragment.newInstance();
             }
-            addFragment(R.id.build_details_container, mRawLogFragment, "RawLogFragment");
+            addFragment(R.id.build_details_container, mRawLogFragment, RAW_LOG_FRAGMENT_TAG);
             startLoadingLog(job.getId());
         }
     }
@@ -292,7 +295,7 @@ public class BuildDetailsActivity extends AppCompatActivity implements JobsFragm
         if (mRawLogFragment == null) {
             mRawLogFragment = RawLogFragment.newInstance();
         }
-        replaceFragment(R.id.build_details_container, mRawLogFragment, "RawLogFragment", null);
+        replaceFragment(R.id.build_details_container, mRawLogFragment, RAW_LOG_FRAGMENT_TAG, null);
 
         startLoadingLog(job.getId());
     }
