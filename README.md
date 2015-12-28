@@ -21,10 +21,6 @@ The app has the following features:
 - [Butter Knife](http://jakewharton.github.io/butterknife/)
 - [Event Bus](https://github.com/greenrobot/EventBus)
 - [CircleImageView](https://github.com/hdodenhof/CircleImageView)
-
-# Known issues
-This section contains current know issues.
-- REST API for Travis CI doesn't provide an access to the log file of the private repositories
  
 # Contribution
 In case you have ideas or found an issue, don't hesitate to create pull request or an issue.
