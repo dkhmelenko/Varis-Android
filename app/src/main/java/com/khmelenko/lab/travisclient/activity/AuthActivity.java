@@ -43,7 +43,12 @@ import de.greenrobot.event.EventBus;
 public class AuthActivity extends AppCompatActivity implements AuthFragment.OnLoginActionListener,
         SecurityCodeFragment.OnSecurityCodeAction {
 
+
     private static final String SECURITY_CODE_INPUT = "securityCodeInput";
+    private static final String AUTHORIZATION_HEADER = "AuthorizationHeader";
+
+    private static final String AUTH_FRAGMENT_TAG = "AuthFragment";
+    private static final String SECURITY_CODE_FRAGMENT_TAG = "SecurityCodeFragment";
 
     private AuthFragment mAuthFragment;
     private SecurityCodeFragment mSecurityCodeFragment;
@@ -68,6 +73,7 @@ public class AuthActivity extends AppCompatActivity implements AuthFragment.OnLo
 
         if (savedInstanceState != null) {
             mSecurityCodeInput = savedInstanceState.getBoolean(SECURITY_CODE_INPUT);
+            mBasicAuth = savedInstanceState.getString(AUTHORIZATION_HEADER);
         }
 
         if (mSecurityCodeInput) {
@@ -81,20 +87,23 @@ public class AuthActivity extends AppCompatActivity implements AuthFragment.OnLo
      * Shows login section
      */
     private void showLoginSection() {
-        mAuthFragment = AuthFragment.newInstance();
-        addFragment(R.id.auth_container, mAuthFragment, "AuthFragment");
+        mAuthFragment = (AuthFragment) getSupportFragmentManager().findFragmentByTag(AUTH_FRAGMENT_TAG);
+        if (mAuthFragment == null) {
+            mAuthFragment = AuthFragment.newInstance();
+            addFragment(R.id.auth_container, mAuthFragment, AUTH_FRAGMENT_TAG);
+        }
     }
 
     /**
      * Shows the input for security code
      */
     private void showSecurityCodeInput() {
-        if (mAuthFragment != null) {
-            detachFragment(mAuthFragment);
-        }
 
-        mSecurityCodeFragment = SecurityCodeFragment.newInstance();
-        addFragment(R.id.auth_container, mSecurityCodeFragment, "SecurityCodeFragment");
+        mSecurityCodeFragment = (SecurityCodeFragment) getSupportFragmentManager().findFragmentByTag(SECURITY_CODE_FRAGMENT_TAG);
+        if (mSecurityCodeFragment == null) {
+            mSecurityCodeFragment = SecurityCodeFragment.newInstance();
+            replaceFragment(R.id.auth_container, mSecurityCodeFragment, SECURITY_CODE_FRAGMENT_TAG);
+        }
     }
 
     /**
@@ -132,6 +141,22 @@ public class AuthActivity extends AppCompatActivity implements AuthFragment.OnLo
                 .beginTransaction()
                 .replace(containerViewId, fragment, fragmentTag)
                 .addToBackStack(backStackStateName)
+                .commit();
+    }
+
+    /**
+     * Replaces fragment
+     *
+     * @param containerViewId    ID of the container view for fragment
+     * @param fragment           Fragment instance
+     * @param fragmentTag        Fragment tag
+     */
+    protected void replaceFragment(@IdRes int containerViewId,
+                                   @NonNull Fragment fragment,
+                                   @NonNull String fragmentTag) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(containerViewId, fragment, fragmentTag)
                 .commit();
     }
 
@@ -176,8 +201,8 @@ public class AuthActivity extends AppCompatActivity implements AuthFragment.OnLo
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         outState.putBoolean(SECURITY_CODE_INPUT, mSecurityCodeInput);
+        outState.putString(AUTHORIZATION_HEADER, mBasicAuth);
     }
 
     /**
