@@ -17,6 +17,7 @@ The app has the following features:
 # Open source libraries
 - [Android appcompat v7](https://github.com/android/platform_frameworks_support/tree/master/v7/appcompat)
 - [Retrofit](https://github.com/square/retrofit)
+- [OkHttp](https://github.com/square/okhttp)
 - [Gson](https://code.google.com/p/google-gson/)
 - [Butter Knife](http://jakewharton.github.io/butterknife/)
 - [Event Bus](https://github.com/greenrobot/EventBus)
