@@ -20,6 +20,8 @@ android {
             proguardFile 'proguard-gson.pro'
             proguardFile 'proguard-square-retrofit.pro'
             proguardFile 'proguard-square-okhttp.pro'
+            proguardFile 'proguard-support-v4.pro'
+            proguardFile 'proguard-support-v7-appcompat.pro'
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
