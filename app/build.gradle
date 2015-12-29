@@ -8,8 +8,8 @@ android {
         applicationId "com.khmelenko.lab.travisclient"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.00.003"
+        versionCode 4
+        versionName "1.00.004"
     }
     buildTypes {
         release {
