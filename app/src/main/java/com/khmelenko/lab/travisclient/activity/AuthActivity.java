@@ -2,12 +2,7 @@ package com.khmelenko.lab.travisclient.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -40,9 +35,8 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class AuthActivity extends AppCompatActivity implements AuthFragment.OnLoginActionListener,
+public final class AuthActivity extends BaseActivity implements AuthFragment.OnLoginActionListener,
         SecurityCodeFragment.OnSecurityCodeAction {
-
 
     private static final String SECURITY_CODE_INPUT = "securityCodeInput";
     private static final String AUTHORIZATION_HEADER = "AuthorizationHeader";
@@ -104,72 +98,6 @@ public class AuthActivity extends AppCompatActivity implements AuthFragment.OnLo
             mSecurityCodeFragment = SecurityCodeFragment.newInstance();
             replaceFragment(R.id.auth_container, mSecurityCodeFragment, SECURITY_CODE_FRAGMENT_TAG);
         }
-    }
-
-    /**
-     * Adds new fragment
-     *
-     * @param containerViewId ID of the container view for fragment
-     * @param fragment        Fragment instance
-     * @param fragmentTag     Fragment tag
-     */
-    protected void addFragment(@IdRes int containerViewId,
-                               @NonNull Fragment fragment,
-                               @NonNull String fragmentTag) {
-        if (!fragment.isAdded()) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(containerViewId, fragment, fragmentTag)
-                    .disallowAddToBackStack()
-                    .commit();
-        }
-    }
-
-    /**
-     * Replaces fragment
-     *
-     * @param containerViewId    ID of the container view for fragment
-     * @param fragment           Fragment instance
-     * @param fragmentTag        Fragment tag
-     * @param backStackStateName Name in back stack
-     */
-    protected void replaceFragment(@IdRes int containerViewId,
-                                   @NonNull Fragment fragment,
-                                   @NonNull String fragmentTag,
-                                   @Nullable String backStackStateName) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(containerViewId, fragment, fragmentTag)
-                .addToBackStack(backStackStateName)
-                .commit();
-    }
-
-    /**
-     * Replaces fragment
-     *
-     * @param containerViewId    ID of the container view for fragment
-     * @param fragment           Fragment instance
-     * @param fragmentTag        Fragment tag
-     */
-    protected void replaceFragment(@IdRes int containerViewId,
-                                   @NonNull Fragment fragment,
-                                   @NonNull String fragmentTag) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(containerViewId, fragment, fragmentTag)
-                .commit();
-    }
-
-    /**
-     * Detaches fragment
-     *
-     * @param fragment Fragment
-     */
-    protected void detachFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .detach(fragment)
-                .commit();
     }
 
     /**

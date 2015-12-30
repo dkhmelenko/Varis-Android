@@ -2,7 +2,6 @@ package com.khmelenko.lab.travisclient.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
  *
  * @author Dmytro Khmelenko
  */
-public class AboutActivity extends AppCompatActivity {
+public final class AboutActivity extends BaseActivity {
 
     @Bind(R.id.about_version)
     TextView mVersion;

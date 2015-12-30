@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -23,7 +22,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class SearchResultsActivity extends AppCompatActivity implements ReposFragment.ReposFragmentListener {
+public final class SearchResultsActivity extends BaseActivity implements ReposFragment.ReposFragmentListener {
 
     private ReposFragment mFragment;
 

@@ -8,7 +8,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -40,7 +39,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko
  */
-public class MainActivity extends AppCompatActivity implements ReposFragment.ReposFragmentListener {
+public final class MainActivity extends BaseActivity implements ReposFragment.ReposFragmentListener {
 
     private static final int AUTH_ACTIVITY_CODE = 0;
 
