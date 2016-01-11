@@ -22,6 +22,7 @@ import com.khmelenko.lab.travisclient.common.Constants;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.UserSuccessEvent;
+import com.khmelenko.lab.travisclient.fragment.LicensesDialogFragment;
 import com.khmelenko.lab.travisclient.fragment.ReposFragment;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.User;
@@ -142,6 +143,10 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
 
                         finish();
                         startActivity(getIntent());
+                        break;
+                    case R.id.drawer_licenses:
+                        LicensesDialogFragment dialog = LicensesDialogFragment.newInstance();
+                        dialog.show(getSupportFragmentManager(), "LicensesDialog");
                         break;
                     case R.id.drawer_about:
                         Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);

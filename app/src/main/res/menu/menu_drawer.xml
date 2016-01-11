@@ -15,6 +15,11 @@
             android:title="@string/navigation_drawer_logout"/>
 
         <item
+            android:id="@+id/drawer_licenses"
+            android:icon="@drawable/ic_about"
+            android:title="@string/navigation_drawer_licenses"/>
+
+        <item
             android:id="@+id/drawer_about"
             android:icon="@drawable/ic_about"
             android:title="@string/navigation_drawer_about"/>
