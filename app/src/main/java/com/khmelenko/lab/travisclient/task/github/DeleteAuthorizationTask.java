@@ -40,10 +40,10 @@ public final class DeleteAuthorizationTask extends Task<Void> {
 
         try {
             if (!TextUtils.isEmpty(mTwoFactorCode)) {
-                mRestClient.getGithubApiService().deleteAuthorization(mBasicAuth, mTwoFactorCode,
+                restClient().getGithubApiService().deleteAuthorization(mBasicAuth, mTwoFactorCode,
                         mAuthorizationId);
             } else {
-                mRestClient.getGithubApiService().deleteAuthorization(mBasicAuth, mAuthorizationId);
+                restClient().getGithubApiService().deleteAuthorization(mBasicAuth, mAuthorizationId);
             }
         } catch (TaskException error) {
 

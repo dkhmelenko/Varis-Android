@@ -5,6 +5,8 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.khmelenko.lab.travisclient.common.Constants;
+import com.khmelenko.lab.travisclient.component.DaggerNetworkComponent;
+import com.khmelenko.lab.travisclient.component.NetworkComponent;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 
 /**
@@ -16,6 +18,8 @@ public final class TravisApp extends Application {
 
     private static Context mContext;
 
+    private NetworkComponent mNetworkComponent;
+
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
@@ -25,6 +29,8 @@ public final class TravisApp extends Application {
             AppSettings.putServerType(0);
             AppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
         }
+
+        mNetworkComponent = DaggerNetworkComponent.create();
     }
 
     /**
@@ -34,5 +40,14 @@ public final class TravisApp extends Application {
      */
     public static Context getAppContext() {
         return mContext;
+    }
+
+    /**
+     * Gets network component
+     *
+     * @return Network component
+     */
+    public NetworkComponent getNetworkComponent() {
+        return mNetworkComponent;
     }
 }

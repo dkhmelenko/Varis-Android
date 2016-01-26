@@ -4,9 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
-import com.khmelenko.lab.travisclient.event.travis.RepoLoadedEvent;
 import com.khmelenko.lab.travisclient.network.response.Repo;
-import com.khmelenko.lab.travisclient.task.LoaderAsyncTask;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskException;
@@ -28,7 +26,7 @@ public final class UserReposTask extends Task<List<Repo>> {
 
     @Override
     public List<Repo> execute() throws TaskException {
-        List<Repo> repos = mRestClient.getApiService().getUserRepos(mUserName);
+        List<Repo> repos = restClient().getApiService().getUserRepos(mUserName);
         return repos;
     }
 

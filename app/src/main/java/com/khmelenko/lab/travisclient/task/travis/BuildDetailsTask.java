@@ -35,9 +35,9 @@ public final class BuildDetailsTask extends Task<BuildDetails> {
     public BuildDetails execute() throws TaskException {
         BuildDetails details;
         if (!TextUtils.isEmpty(mRepoSlug)) {
-            details = mRestClient.getApiService().getBuild(mRepoSlug, mBuildId);
+            details = restClient().getApiService().getBuild(mRepoSlug, mBuildId);
         } else {
-            details = mRestClient.getApiService().getBuild(mRepoId, mBuildId);
+            details = restClient().getApiService().getBuild(mRepoId, mBuildId);
         }
         return details;
     }

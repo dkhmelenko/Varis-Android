@@ -31,9 +31,9 @@ public final class BuildHistoryTask extends Task<BuildHistory> {
     public BuildHistory execute() throws TaskException {
         BuildHistory builds;
         if (!TextUtils.isEmpty(mRepoSlug)) {
-            builds = mRestClient.getApiService().getBuilds(mRepoSlug);
+            builds = restClient().getApiService().getBuilds(mRepoSlug);
         } else {
-            builds = mRestClient.getApiService().getBuilds(mRepoId);
+            builds = restClient().getApiService().getBuilds(mRepoId);
         }
         return builds;
     }

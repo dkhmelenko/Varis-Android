@@ -16,6 +16,8 @@ import com.khmelenko.lab.travisclient.common.Constants;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,6 +42,9 @@ public class AuthFragment extends Fragment {
     Button mLoginBtn;
 
     private OnLoginActionListener mListener;
+
+    @Inject
+    RestClient mRestClient;
 
     /**
      * Creates new instance of the fragment
@@ -85,7 +90,7 @@ public class AuthFragment extends Fragment {
                 }
 
                 AppSettings.putServerUrl(server);
-                RestClient.getInstance().updateTravisEndpoint(server);
+                mRestClient.updateTravisEndpoint(server);
             }
         });
 

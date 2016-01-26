@@ -16,7 +16,7 @@ public final class UserTask extends Task<User> {
 
     @Override
     public User execute() throws TaskException {
-        User user = mRestClient.getApiService().getUser();
+        User user = restClient().getApiService().getUser();
         return user;
     }
 

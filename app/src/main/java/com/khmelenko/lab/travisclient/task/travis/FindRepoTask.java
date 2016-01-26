@@ -31,9 +31,9 @@ public final class FindRepoTask extends Task<List<Repo>> {
     public List<Repo> execute() throws TaskException {
         List<Repo> repos;
         if (!TextUtils.isEmpty(mSearch)) {
-            repos = mRestClient.getApiService().getRepos(mSearch);
+            repos = restClient().getApiService().getRepos(mSearch);
         } else {
-            repos = mRestClient.getApiService().getRepos();
+            repos = restClient().getApiService().getRepos();
         }
         return repos;
     }

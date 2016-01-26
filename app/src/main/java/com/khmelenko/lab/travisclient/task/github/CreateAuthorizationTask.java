@@ -42,10 +42,10 @@ public final class CreateAuthorizationTask extends Task<Authorization> {
         Authorization authorization;
         try {
             if (!TextUtils.isEmpty(mTwoFactorCode)) {
-                authorization = mRestClient.getGithubApiService().createNewAuthorization(mBasicAuth,
+                authorization = restClient().getGithubApiService().createNewAuthorization(mBasicAuth,
                         mTwoFactorCode, mAuthorizationRequest);
             } else {
-                authorization = mRestClient.getGithubApiService()
+                authorization = restClient().getGithubApiService()
                         .createNewAuthorization(mBasicAuth, mAuthorizationRequest);
             }
         } catch (TaskException error) {

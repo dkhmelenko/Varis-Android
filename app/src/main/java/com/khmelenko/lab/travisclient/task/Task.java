@@ -3,7 +3,6 @@ package com.khmelenko.lab.travisclient.task;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 
 import de.greenrobot.event.EventBus;
-import retrofit.RetrofitError;
 
 /**
  * Defines an interface for Task
@@ -12,7 +11,8 @@ import retrofit.RetrofitError;
  */
 public abstract class Task<T> {
 
-    protected RestClient mRestClient = RestClient.getInstance();
+    private TaskHelper mTaskHelper = new TaskHelper();
+
     protected EventBus mEventBus = EventBus.getDefault();
 
     /**
@@ -35,5 +35,14 @@ public abstract class Task<T> {
      * @param error Task error
      */
     public abstract void onFail(TaskError error);
+
+    /**
+     * Gets rest client instance
+     *
+     * @return REST client
+     */
+    protected RestClient restClient() {
+        return mTaskHelper.mRestClient;
+    }
 
 }

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.common.Constants;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
@@ -30,6 +31,8 @@ import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.storage.CacheStorage;
 import com.khmelenko.lab.travisclient.task.TaskManager;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,6 +56,9 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
     private TaskManager mTaskManager;
     private CacheStorage mCache;
 
+    @Inject
+    RestClient mRestClient;
+
     private User mUser;
 
     @Override
@@ -60,6 +66,7 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        ((TravisApp) getApplication()).getNetworkComponent().inject(this);
 
         mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
 
@@ -139,7 +146,7 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
 
                         // reset back to open source url
                         AppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
-                        RestClient.getInstance().updateTravisEndpoint(AppSettings.getServerUrl());
+                        mRestClient.updateTravisEndpoint(AppSettings.getServerUrl());
 
                         finish();
                         startActivity(getIntent());
