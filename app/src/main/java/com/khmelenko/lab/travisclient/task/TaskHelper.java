@@ -1,5 +1,6 @@
 package com.khmelenko.lab.travisclient.task;
 
+import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 
 import javax.inject.Inject;
@@ -12,6 +13,11 @@ import javax.inject.Inject;
 public final class TaskHelper {
 
     @Inject
-    RestClient mRestClient = RestClient.getInstance();
+    RestClient mRestClient;
+
+    public TaskHelper() {
+        TravisApp app = (TravisApp) TravisApp.getAppContext();
+        app.getNetworkComponent().inject(this);
+    }
 
 }

@@ -18,6 +18,6 @@ public class NetworkModule {
     @Provides
     @Singleton
     public RestClient provideRestClient() {
-        return RestClient.getInstance();
+        return RestClient.newInstance();
     }
 }

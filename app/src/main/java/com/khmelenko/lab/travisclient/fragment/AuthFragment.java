@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.common.Constants;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
@@ -66,6 +67,7 @@ public class AuthFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
         ButterKnife.bind(this, view);
+        ((TravisApp) getActivity().getApplication()).getNetworkComponent().inject(this);
 
         prepareServerSelection();
 

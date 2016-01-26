@@ -26,8 +26,6 @@ public final class RestClient {
     private GithubApiService mGithubApiService;
     private RawApiService mRawApiService;
 
-    private static RestClient sInstance;
-
     private RestClient() {
 
         final String travisUrl = AppSettings.getServerUrl();
@@ -44,15 +42,12 @@ public final class RestClient {
     }
 
     /**
-     * Gets the instance of the rest client
+     * Creates new instance of the rest client
      *
      * @return Instance
      */
-    public static RestClient getInstance() {
-        if (sInstance == null) {
-            sInstance = new RestClient();
-        }
-        return sInstance;
+    public static RestClient newInstance() {
+        return new RestClient();
     }
 
     /**
