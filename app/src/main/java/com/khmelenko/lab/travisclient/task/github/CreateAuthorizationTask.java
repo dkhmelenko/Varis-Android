@@ -76,12 +76,12 @@ public final class CreateAuthorizationTask extends Task<Authorization> {
     @Override
     public void onSuccess(Authorization result) {
         CreateAuthorizationSuccessEvent event = new CreateAuthorizationSuccessEvent(result);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         GithubAuthorizationFailEvent event = new GithubAuthorizationFailEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }

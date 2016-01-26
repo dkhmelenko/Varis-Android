@@ -14,13 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.adapter.BuildListAdapter;
 import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.BuildHistoryLoadedEvent;
+import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.task.TaskManager;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,6 +49,9 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
 
     @Bind(R.id.empty_text)
     TextView mEmptyText;
+
+    @Inject
+    EventBus mEventBus;
 
     private BuildListAdapter mBuildListAdapter;
     private BuildHistory mBuildHistory;
@@ -84,6 +90,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_build_history, container, false);
         ButterKnife.bind(this, view);
+        ((TravisApp) getActivity().getApplication()).getNetworkComponent().inject(this);
 
         mBuildHistoryRecyclerView.setHasFixedSize(true);
 
@@ -110,13 +117,13 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+        mEventBus.register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+        mEventBus.unregister(this);
     }
 
     /**
@@ -132,7 +139,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
      */
     private void checkIfEmpty() {
         mEmptyText.setText(R.string.repo_details_builds_empty);
-        if(mBuildHistory == null || mBuildHistory.getBuilds().isEmpty()) {
+        if (mBuildHistory == null || mBuildHistory.getBuilds().isEmpty()) {
             mEmptyText.setVisibility(View.VISIBLE);
         } else {
             mEmptyText.setVisibility(View.GONE);
@@ -189,7 +196,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
 
     @Override
     public void onItemSelected(int position) {
-        if(mListener != null) {
+        if (mListener != null) {
             Build build = mBuildHistory.getBuilds().get(position);
             mListener.onBuildSelected(build.getId());
         }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogFailEvent;
@@ -24,6 +25,8 @@ import com.khmelenko.lab.travisclient.network.response.Job;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.view.BuildView;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -62,6 +65,9 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
     private String mRepoSlug;
     private long mBuildId;
 
+    @Inject
+    EventBus mEventBus;
+
     private TaskManager mTaskManager;
     private JobsFragment mJobsFragment;
     private RawLogFragment mRawLogFragment;
@@ -72,6 +78,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_build_details);
         ButterKnife.bind(this);
+        ((TravisApp) getApplication()).getNetworkComponent().inject(this);
         initToolbar();
 
         mTaskManager = new TaskManager();
@@ -83,7 +90,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
     @Override
     protected void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+        mEventBus.register(this);
 
         mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -92,7 +99,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
     @Override
     protected void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+        mEventBus.unregister(this);
     }
 
     @Override

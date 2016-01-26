@@ -13,8 +13,6 @@ public abstract class Task<T> {
 
     private TaskHelper mTaskHelper = new TaskHelper();
 
-    protected EventBus mEventBus = EventBus.getDefault();
-
     /**
      * Starts executing task
      *
@@ -45,4 +43,7 @@ public abstract class Task<T> {
         return mTaskHelper.mRestClient;
     }
 
+    protected EventBus eventBus() {
+        return mTaskHelper.mEventBus;
+    }
 }

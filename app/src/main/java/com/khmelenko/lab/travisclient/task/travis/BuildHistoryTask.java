@@ -41,12 +41,12 @@ public final class BuildHistoryTask extends Task<BuildHistory> {
     @Override
     public void onSuccess(BuildHistory result) {
         BuildHistoryLoadedEvent event = new BuildHistoryLoadedEvent(result);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         LoadingFailedEvent event = new LoadingFailedEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }

@@ -32,12 +32,12 @@ public final class AuthTask extends Task<AccessToken> {
     @Override
     public void onSuccess(AccessToken result) {
         AuthSuccessEvent successEvent = new AuthSuccessEvent(result.getAccessToken());
-        mEventBus.post(successEvent);
+        eventBus().post(successEvent);
     }
 
     @Override
     public void onFail(TaskError error) {
         AuthFailEvent failEvent = new AuthFailEvent(error);
-        mEventBus.post(failEvent);
+        eventBus().post(failEvent);
     }
 }

@@ -45,12 +45,12 @@ public final class BuildDetailsTask extends Task<BuildDetails> {
     @Override
     public void onSuccess(BuildDetails result) {
         BuildDetailsLoadedEvent event = new BuildDetailsLoadedEvent(result);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         LoadingFailedEvent event = new LoadingFailedEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }

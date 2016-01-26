@@ -8,11 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.fragment.ReposFragment;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.task.TaskManager;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
@@ -24,6 +27,9 @@ import de.greenrobot.event.EventBus;
  */
 public final class SearchResultsActivity extends BaseActivity implements ReposFragment.ReposFragmentListener {
 
+    @Inject
+    EventBus mEventBus;
+
     private ReposFragment mFragment;
 
     private String mSearchQuery;
@@ -32,6 +38,7 @@ public final class SearchResultsActivity extends BaseActivity implements ReposFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
+        ((TravisApp) getApplication()).getNetworkComponent().inject(this);
         ButterKnife.bind(this);
 
         mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.search_fragment_repos);
@@ -50,13 +57,13 @@ public final class SearchResultsActivity extends BaseActivity implements ReposFr
     @Override
     protected void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+        mEventBus.register(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+        mEventBus.unregister(this);
         mFragment.setLoadingProgress(false);
     }
 

@@ -33,12 +33,12 @@ public final class UserReposTask extends Task<List<Repo>> {
     @Override
     public void onSuccess(List<Repo> result) {
         FindReposEvent event = new FindReposEvent(result);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         LoadingFailedEvent event = new LoadingFailedEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }

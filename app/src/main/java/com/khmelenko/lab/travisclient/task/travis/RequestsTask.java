@@ -45,12 +45,12 @@ public final class RequestsTask extends Task<Requests> {
     @Override
     public void onSuccess(Requests result) {
         RequestsLoadedEvent event = new RequestsLoadedEvent(result);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         LoadingFailedEvent event = new LoadingFailedEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }

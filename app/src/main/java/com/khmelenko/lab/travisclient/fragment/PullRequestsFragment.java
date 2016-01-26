@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.adapter.PullRequestsListAdapter;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
@@ -26,6 +27,8 @@ import com.khmelenko.lab.travisclient.task.TaskManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,6 +54,9 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
 
     @Bind(R.id.empty_text)
     TextView mEmptyText;
+
+    @Inject
+    EventBus mEventBus;
 
     private PullRequestsListAdapter mPullRequestsListAdapter;
     private Requests mRequests;
@@ -89,8 +95,8 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pull_requests, container, false);
-
         ButterKnife.bind(this, view);
+        ((TravisApp) getActivity().getApplication()).getNetworkComponent().inject(this);
 
         mPullRequestsRecyclerView.setHasFixedSize(true);
 
@@ -117,13 +123,13 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+        mEventBus.register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+        mEventBus.unregister(this);
     }
 
     /**

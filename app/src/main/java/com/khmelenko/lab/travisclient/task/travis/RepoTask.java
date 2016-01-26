@@ -41,12 +41,12 @@ public final class RepoTask extends Task<Repo> {
     @Override
     public void onSuccess(Repo result) {
         RepoLoadedEvent event = new RepoLoadedEvent(result);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         LoadingFailedEvent event = new LoadingFailedEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }

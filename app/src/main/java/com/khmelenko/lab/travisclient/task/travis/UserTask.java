@@ -23,12 +23,12 @@ public final class UserTask extends Task<User> {
     @Override
     public void onSuccess(User result) {
         UserSuccessEvent event = new UserSuccessEvent(result);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         LoadingFailedEvent event = new LoadingFailedEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }

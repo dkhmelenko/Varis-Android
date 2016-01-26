@@ -70,12 +70,12 @@ public final class LogTask extends Task<String> {
     @Override
     public void onSuccess(String result) {
         LogLoadedEvent event = new LogLoadedEvent(result);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         LogFailEvent event = new LogFailEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }

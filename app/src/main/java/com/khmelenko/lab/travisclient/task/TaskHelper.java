@@ -5,6 +5,8 @@ import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 
 import javax.inject.Inject;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Helper class for Task
  *
@@ -14,6 +16,9 @@ public final class TaskHelper {
 
     @Inject
     RestClient mRestClient;
+
+    @Inject
+    EventBus mEventBus;
 
     public TaskHelper() {
         TravisApp app = (TravisApp) TravisApp.getAppContext();

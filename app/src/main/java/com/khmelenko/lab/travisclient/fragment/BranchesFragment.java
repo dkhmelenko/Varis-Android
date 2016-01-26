@@ -14,14 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.adapter.BranchesListAdapter;
 import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.event.travis.BranchesLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.network.response.Branch;
 import com.khmelenko.lab.travisclient.network.response.Branches;
-import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.task.TaskManager;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -47,6 +49,9 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
 
     @Bind(R.id.empty_text)
     TextView mEmptyText;
+
+    @Inject
+    EventBus mEventBus;
 
     private BranchesListAdapter mBranchesListAdapter;
     private Branches mBranches;
@@ -84,8 +89,8 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_branches, container, false);
-
         ButterKnife.bind(this, view);
+        ((TravisApp) getActivity().getApplication()).getNetworkComponent().inject(this);
 
         mBranchesRecyclerView.setHasFixedSize(true);
 
@@ -112,13 +117,13 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+        mEventBus.register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+        mEventBus.unregister(this);
     }
 
     /**
@@ -134,7 +139,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
      */
     private void checkIfEmpty() {
         mEmptyText.setText(R.string.repo_details_branches_empty);
-        if(mBranches == null || mBranches.getBranches().isEmpty()) {
+        if (mBranches == null || mBranches.getBranches().isEmpty()) {
             mEmptyText.setVisibility(View.VISIBLE);
         } else {
             mEmptyText.setVisibility(View.GONE);
@@ -191,7 +196,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
 
     @Override
     public void onItemSelected(int position) {
-        if(mListener != null) {
+        if (mListener != null) {
             Branch branch = mBranches.getBranches().get(position);
             mListener.onBranchSelected(branch.getId());
         }

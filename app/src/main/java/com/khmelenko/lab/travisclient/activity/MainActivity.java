@@ -59,6 +59,9 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
     @Inject
     RestClient mRestClient;
 
+    @Inject
+    EventBus mEventBus;
+
     private User mUser;
 
     @Override
@@ -86,14 +89,14 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
     @Override
     protected void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+        mEventBus.register(this);
         updateMenuState();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+        mEventBus.unregister(this);
         mFragment.setLoadingProgress(false);
     }
 

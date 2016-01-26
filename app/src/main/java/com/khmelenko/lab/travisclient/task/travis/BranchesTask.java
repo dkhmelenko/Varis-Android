@@ -41,12 +41,12 @@ public final class BranchesTask extends Task<Branches> {
     @Override
     public void onSuccess(Branches result) {
         BranchesLoadedEvent event = new BranchesLoadedEvent(result);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         LoadingFailedEvent event = new LoadingFailedEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.event.github.CreateAuthorizationSuccessEvent;
 import com.khmelenko.lab.travisclient.event.github.DeleteAuthorizationSuccessEvent;
 import com.khmelenko.lab.travisclient.event.github.GithubAuthorizationFailEvent;
@@ -26,6 +27,8 @@ import com.khmelenko.lab.travisclient.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
@@ -48,8 +51,10 @@ public final class AuthActivity extends BaseActivity implements AuthFragment.OnL
     private SecurityCodeFragment mSecurityCodeFragment;
     private ProgressDialog mProgressDialog;
 
-    private EventBus mEventBus = EventBus.getDefault();
     private TaskManager mTaskManager = new TaskManager();
+
+    @Inject
+    EventBus mEventBus;
 
     private String mBasicAuth;
     private String mSecurityCode;
@@ -62,6 +67,7 @@ public final class AuthActivity extends BaseActivity implements AuthFragment.OnL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
+        ((TravisApp) getApplication()).getNetworkComponent().inject(this);
 
         initToolbar();
 

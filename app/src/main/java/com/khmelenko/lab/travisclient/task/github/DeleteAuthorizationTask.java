@@ -69,12 +69,12 @@ public final class DeleteAuthorizationTask extends Task<Void> {
     @Override
     public void onSuccess(Void result) {
         DeleteAuthorizationSuccessEvent event = new DeleteAuthorizationSuccessEvent();
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 
     @Override
     public void onFail(TaskError error) {
         GithubAuthorizationFailEvent event = new GithubAuthorizationFailEvent(error);
-        mEventBus.post(event);
+        eventBus().post(event);
     }
 }
