@@ -67,7 +67,7 @@ public final class AuthActivity extends BaseActivity implements AuthFragment.OnL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
-        ((TravisApp) getApplication()).getNetworkComponent().inject(this);
+        TravisApp.instance().getNetworkComponent().inject(this);
 
         initToolbar();
 

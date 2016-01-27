@@ -96,7 +96,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pull_requests, container, false);
         ButterKnife.bind(this, view);
-        ((TravisApp) getActivity().getApplication()).getNetworkComponent().inject(this);
+        TravisApp.instance().getNetworkComponent().inject(this);
 
         mPullRequestsRecyclerView.setHasFixedSize(true);
 

@@ -38,7 +38,7 @@ public final class SearchResultsActivity extends BaseActivity implements ReposFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-        ((TravisApp) getApplication()).getNetworkComponent().inject(this);
+        TravisApp.instance().getNetworkComponent().inject(this);
         ButterKnife.bind(this);
 
         mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.search_fragment_repos);

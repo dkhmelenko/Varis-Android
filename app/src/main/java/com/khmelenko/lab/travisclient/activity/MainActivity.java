@@ -69,7 +69,7 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        ((TravisApp) getApplication()).getNetworkComponent().inject(this);
+        TravisApp.instance().getNetworkComponent().inject(this);
 
         mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
 

@@ -16,13 +16,13 @@ import com.khmelenko.lab.travisclient.storage.AppSettings;
  */
 public final class TravisApp extends Application {
 
-    private static Context mContext;
+    private static Context sContext;
 
     private NetworkComponent mNetworkComponent;
 
     public void onCreate() {
         super.onCreate();
-        mContext = getApplicationContext();
+        sContext = getApplicationContext();
 
         String server = AppSettings.getServerUrl();
         if (TextUtils.isEmpty(server)) {
@@ -39,7 +39,16 @@ public final class TravisApp extends Application {
      * @return Application context
      */
     public static Context getAppContext() {
-        return mContext;
+        return sContext;
+    }
+
+    /**
+     * Gets application instance
+     *
+     * @return Application instance
+     */
+    public static TravisApp instance() {
+        return (TravisApp) sContext;
     }
 
     /**
