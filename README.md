@@ -19,6 +19,7 @@ The app has the following features:
 - [Retrofit](https://github.com/square/retrofit)
 - [OkHttp](https://github.com/square/okhttp)
 - [Gson](https://code.google.com/p/google-gson/)
+- [Dagger 2](https://github.com/google/dagger)
 - [Butter Knife](http://jakewharton.github.io/butterknife/)
 - [Event Bus](https://github.com/greenrobot/EventBus)
 - [CircleImageView](https://github.com/hdodenhof/CircleImageView)
