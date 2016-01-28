@@ -90,7 +90,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_build_history, container, false);
         ButterKnife.bind(this, view);
-        TravisApp.instance().getNetworkComponent().inject(this);
+        TravisApp.instance().activityInjector().inject(this);
 
         mBuildHistoryRecyclerView.setHasFixedSize(true);
 

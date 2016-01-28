@@ -4,15 +4,12 @@ import com.khmelenko.lab.travisclient.activity.AuthActivity;
 import com.khmelenko.lab.travisclient.activity.BuildDetailsActivity;
 import com.khmelenko.lab.travisclient.activity.MainActivity;
 import com.khmelenko.lab.travisclient.activity.SearchResultsActivity;
-import com.khmelenko.lab.travisclient.dagger.module.NetworkModule;
-import com.khmelenko.lab.travisclient.dagger.module.NotificationModule;
+import com.khmelenko.lab.travisclient.dagger.scope.ActivityScope;
 import com.khmelenko.lab.travisclient.fragment.AuthFragment;
 import com.khmelenko.lab.travisclient.fragment.BranchesFragment;
 import com.khmelenko.lab.travisclient.fragment.BuildHistoryFragment;
 import com.khmelenko.lab.travisclient.fragment.PullRequestsFragment;
 import com.khmelenko.lab.travisclient.task.TaskHelper;
-
-import javax.inject.Singleton;
 
 import dagger.Component;
 
@@ -21,9 +18,9 @@ import dagger.Component;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-@Singleton
-@Component(modules = {NetworkModule.class, NotificationModule.class})
-public interface NetworkComponent {
+@ActivityScope
+@Component(dependencies = BaseComponent.class)
+public interface ActivityInjectionComponent {
 
     void inject(MainActivity activity);
     void inject(AuthActivity activity);

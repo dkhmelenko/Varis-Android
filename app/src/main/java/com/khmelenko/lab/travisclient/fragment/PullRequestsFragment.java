@@ -19,8 +19,6 @@ import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.adapter.PullRequestsListAdapter;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.RequestsLoadedEvent;
-import com.khmelenko.lab.travisclient.network.response.Branch;
-import com.khmelenko.lab.travisclient.network.response.Request;
 import com.khmelenko.lab.travisclient.network.response.RequestData;
 import com.khmelenko.lab.travisclient.network.response.Requests;
 import com.khmelenko.lab.travisclient.task.TaskManager;
@@ -96,7 +94,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pull_requests, container, false);
         ButterKnife.bind(this, view);
-        TravisApp.instance().getNetworkComponent().inject(this);
+        TravisApp.instance().activityInjector().inject(this);
 
         mPullRequestsRecyclerView.setHasFixedSize(true);
 

@@ -21,7 +21,7 @@ public final class TaskHelper {
     EventBus mEventBus;
 
     public TaskHelper() {
-        TravisApp.instance().getNetworkComponent().inject(this);
+        TravisApp.instance().activityInjector().inject(this);
     }
 
 }

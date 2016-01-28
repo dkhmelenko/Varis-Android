@@ -5,8 +5,10 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.khmelenko.lab.travisclient.common.Constants;
-import com.khmelenko.lab.travisclient.dagger.component.DaggerNetworkComponent;
-import com.khmelenko.lab.travisclient.dagger.component.NetworkComponent;
+import com.khmelenko.lab.travisclient.dagger.component.ActivityInjectionComponent;
+import com.khmelenko.lab.travisclient.dagger.component.BaseComponent;
+import com.khmelenko.lab.travisclient.dagger.component.DaggerActivityInjectionComponent;
+import com.khmelenko.lab.travisclient.dagger.component.DaggerBaseComponent;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 
 /**
@@ -18,7 +20,7 @@ public final class TravisApp extends Application {
 
     private static Context sContext;
 
-    private NetworkComponent mNetworkComponent;
+    private ActivityInjectionComponent mActivityInjection;
 
     public void onCreate() {
         super.onCreate();
@@ -30,7 +32,11 @@ public final class TravisApp extends Application {
             AppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
         }
 
-        mNetworkComponent = DaggerNetworkComponent.create();
+        BaseComponent baseComponent = DaggerBaseComponent.create();
+
+        mActivityInjection = DaggerActivityInjectionComponent.builder()
+                .baseComponent(baseComponent)
+                .build();
     }
 
     /**
@@ -52,11 +58,11 @@ public final class TravisApp extends Application {
     }
 
     /**
-     * Gets network component
+     * Gets activity injection component
      *
-     * @return Network component
+     * @return Activity injection component
      */
-    public NetworkComponent getNetworkComponent() {
-        return mNetworkComponent;
+    public ActivityInjectionComponent activityInjector() {
+        return mActivityInjection;
     }
 }

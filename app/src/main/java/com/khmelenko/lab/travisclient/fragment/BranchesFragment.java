@@ -90,7 +90,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_branches, container, false);
         ButterKnife.bind(this, view);
-        TravisApp.instance().getNetworkComponent().inject(this);
+        TravisApp.instance().activityInjector().inject(this);
 
         mBranchesRecyclerView.setHasFixedSize(true);
 

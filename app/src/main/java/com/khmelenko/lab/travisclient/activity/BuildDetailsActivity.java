@@ -78,7 +78,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_build_details);
         ButterKnife.bind(this);
-        TravisApp.instance().getNetworkComponent().inject(this);
+        TravisApp.instance().activityInjector().inject(this);
         initToolbar();
 
         mTaskManager = new TaskManager();
