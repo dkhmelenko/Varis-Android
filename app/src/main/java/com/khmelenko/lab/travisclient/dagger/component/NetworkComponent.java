@@ -1,15 +1,15 @@
-package com.khmelenko.lab.travisclient.component;
+package com.khmelenko.lab.travisclient.dagger.component;
 
 import com.khmelenko.lab.travisclient.activity.AuthActivity;
 import com.khmelenko.lab.travisclient.activity.BuildDetailsActivity;
 import com.khmelenko.lab.travisclient.activity.MainActivity;
 import com.khmelenko.lab.travisclient.activity.SearchResultsActivity;
+import com.khmelenko.lab.travisclient.dagger.module.NetworkModule;
+import com.khmelenko.lab.travisclient.dagger.module.NotificationModule;
 import com.khmelenko.lab.travisclient.fragment.AuthFragment;
 import com.khmelenko.lab.travisclient.fragment.BranchesFragment;
 import com.khmelenko.lab.travisclient.fragment.BuildHistoryFragment;
 import com.khmelenko.lab.travisclient.fragment.PullRequestsFragment;
-import com.khmelenko.lab.travisclient.module.NetworkModule;
-import com.khmelenko.lab.travisclient.module.NotificationModule;
 import com.khmelenko.lab.travisclient.task.TaskHelper;
 
 import javax.inject.Singleton;

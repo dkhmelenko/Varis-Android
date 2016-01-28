@@ -5,8 +5,8 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.khmelenko.lab.travisclient.common.Constants;
-import com.khmelenko.lab.travisclient.component.DaggerNetworkComponent;
-import com.khmelenko.lab.travisclient.component.NetworkComponent;
+import com.khmelenko.lab.travisclient.dagger.component.DaggerNetworkComponent;
+import com.khmelenko.lab.travisclient.dagger.component.NetworkComponent;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 
 /**

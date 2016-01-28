@@ -1,4 +1,4 @@
-package com.khmelenko.lab.travisclient.module;
+package com.khmelenko.lab.travisclient.dagger.module;
 
 import javax.inject.Singleton;
 
