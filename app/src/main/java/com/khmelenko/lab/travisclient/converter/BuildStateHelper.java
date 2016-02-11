@@ -108,4 +108,15 @@ public final class BuildStateHelper {
         boolean passed = state.equals("passed");
         return passed;
     }
+
+    /**
+     * Checks whether the build is in progress or not
+     *
+     * @param state State
+     * @return True, if the build is in progress state. False otherwise
+     */
+    public static boolean isInProgress(@NonNull String state) {
+        boolean inProgress = state.equals("created") || state.equals("started");
+        return inProgress;
+    }
 }

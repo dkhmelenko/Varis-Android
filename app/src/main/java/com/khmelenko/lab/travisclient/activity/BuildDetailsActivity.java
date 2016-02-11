@@ -5,6 +5,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -12,6 +15,7 @@ import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.TravisApp;
+import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogFailEvent;
@@ -23,6 +27,7 @@ import com.khmelenko.lab.travisclient.network.response.BuildDetails;
 import com.khmelenko.lab.travisclient.network.response.Commit;
 import com.khmelenko.lab.travisclient.network.response.Job;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
+import com.khmelenko.lab.travisclient.storage.CacheStorage;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.view.BuildView;
 
@@ -69,8 +74,11 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
     EventBus mEventBus;
 
     private TaskManager mTaskManager;
+    private CacheStorage mCache;
     private JobsFragment mJobsFragment;
     private RawLogFragment mRawLogFragment;
+    private boolean mCanContributeToRepo;
+    private boolean mBuildInProgressState;
 
 
     @Override
@@ -82,6 +90,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         initToolbar();
 
         mTaskManager = new TaskManager();
+        mCache = CacheStorage.newInstance();
 
         mRepoSlug = getIntent().getStringExtra(EXTRA_REPO_SLUG);
         mBuildId = getIntent().getLongExtra(EXTRA_BUILD_ID, 0L);
@@ -113,6 +122,40 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_build_details, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mCanContributeToRepo) {
+            if (mBuildInProgressState) {
+                MenuItem itemCancel = menu.findItem(R.id.build_activity_action_cancel);
+                itemCancel.setVisible(true);
+            } else {
+                MenuItem itemRestart = menu.findItem(R.id.build_activity_action_restart);
+                itemRestart.setVisible(true);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.build_activity_action_restart:
+                // TODO Restart build
+                return true;
+            case R.id.build_activity_action_cancel:
+                // TODO cancel build
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Initializes toolbar
      */
@@ -130,6 +173,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
                     onBackPressed();
                 }
             });
+
         }
     }
 
@@ -173,22 +217,54 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
 
         checkIfEmpty(details);
 
-        if (details.getJobs().size() > 1) {
-            if (mJobsFragment == null) {
-                mJobsFragment = JobsFragment.newInstance();
-            }
-            mJobsFragment.setJobs(details.getJobs());
-            addFragment(R.id.build_details_container, mJobsFragment, JOBS_FRAGMENT_TAG);
-        } else if (details.getJobs().size() == 1) {
-            Job job = details.getJobs().get(0);
+        if (details != null) {
+            if (details.getJobs().size() > 1) {
+                if (mJobsFragment == null) {
+                    mJobsFragment = JobsFragment.newInstance();
+                }
+                mJobsFragment.setJobs(details.getJobs());
+                addFragment(R.id.build_details_container, mJobsFragment, JOBS_FRAGMENT_TAG);
+            } else if (details.getJobs().size() == 1) {
+                Job job = details.getJobs().get(0);
 
-            if (mRawLogFragment == null) {
-                mRawLogFragment = RawLogFragment.newInstance();
+                if (mRawLogFragment == null) {
+                    mRawLogFragment = RawLogFragment.newInstance();
+                }
+                addFragment(R.id.build_details_container, mRawLogFragment, RAW_LOG_FRAGMENT_TAG);
+                startLoadingLog(job.getId());
             }
-            addFragment(R.id.build_details_container, mRawLogFragment, RAW_LOG_FRAGMENT_TAG);
-            startLoadingLog(job.getId());
+
+            // if user logged in, show additional actions for the repo
+            String appToken = AppSettings.getAccessToken();
+            if (!TextUtils.isEmpty(appToken)) {
+                showAdditionalActionsForBuild(details);
+            }
         }
     }
+
+    /**
+     * Shows additional actions for build
+     *
+     * @param details Build details
+     */
+    private void showAdditionalActionsForBuild(BuildDetails details) {
+
+        // check whether the user can contribute to this repo
+        mCanContributeToRepo = false;
+        String[] userRepos = mCache.restoreRepos();
+        for (String repo : userRepos) {
+            if (repo.equals(mRepoSlug)) {
+                mCanContributeToRepo = true;
+                break;
+            }
+        }
+
+        if (mCanContributeToRepo) {
+            mBuildInProgressState = BuildStateHelper.isInProgress(details.getBuild().getState());
+            invalidateOptionsMenu();
+        }
+    }
+
 
     /**
      * Starts loading log file

@@ -78,6 +78,8 @@
     <string name="build_details_job_duration">Duration: %1$s</string>
     <string name="build_details_job_in_progress">In progress</string>
     <string name="build_details_empty">No build details</string>
+    <string name="build_details_action_restart">Restart</string>
+    <string name="build_details_action_cancel">Cancel</string>
     <string name="pull_request_number">PR #%1$s</string>
 
     <!-- Settings -->
