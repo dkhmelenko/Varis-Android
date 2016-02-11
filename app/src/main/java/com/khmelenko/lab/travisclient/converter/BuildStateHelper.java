@@ -16,6 +16,13 @@ import com.khmelenko.lab.travisclient.TravisApp;
  */
 public final class BuildStateHelper {
 
+    private static final String STATE_CREATED = "created";
+    private static final String STATE_STARTED = "started";
+    private static final String STATE_PASSED = "passed";
+    private static final String STATE_CANCELED = "canceled";
+    private static final String STATE_FAILED = "failed";
+    private static final String STATE_ERRORED = "errored";
+
     /**
      * Gets the color according to the build state
      *
@@ -27,16 +34,16 @@ public final class BuildStateHelper {
 
         int color = ContextCompat.getColor(context, R.color.secondary_text);
         switch (state) {
-            case "created":
-            case "started":
+            case STATE_CREATED:
+            case STATE_STARTED:
                 color = ContextCompat.getColor(context, R.color.build_state_started);
                 break;
-            case "passed":
+            case STATE_PASSED:
                 color = ContextCompat.getColor(context, R.color.build_state_passed);
                 break;
-            case "canceled":
-            case "failed":
-            case "errored":
+            case STATE_CANCELED:
+            case STATE_FAILED:
+            case STATE_ERRORED:
                 color = ContextCompat.getColor(context, R.color.build_state_failed);
                 break;
         }
@@ -49,16 +56,16 @@ public final class BuildStateHelper {
 
         int color = ContextCompat.getColor(context, android.R.color.transparent);
         switch (state) {
-            case "created":
-            case "started":
+            case STATE_CREATED:
+            case STATE_STARTED:
                 color = ContextCompat.getColor(context, R.color.build_state_started_bg);
                 break;
-            case "passed":
+            case STATE_PASSED:
                 color = ContextCompat.getColor(context, R.color.build_state_passed_bg);
                 break;
-            case "canceled":
-            case "failed":
-            case "errored":
+            case STATE_CANCELED:
+            case STATE_FAILED:
+            case STATE_ERRORED:
                 color = ContextCompat.getColor(context, R.color.build_state_failed_bg);
                 break;
         }
@@ -79,18 +86,18 @@ public final class BuildStateHelper {
 
         Drawable drawable = null;
         switch (state) {
-            case "created":
-            case "started":
+            case STATE_CREATED:
+            case STATE_STARTED:
                 drawable = ContextCompat.getDrawable(context, R.drawable.build_state_started);
                 break;
-            case "passed":
+            case STATE_PASSED:
                 drawable = ContextCompat.getDrawable(context, R.drawable.build_state_passed);
                 break;
-            case "canceled":
-            case "errored":
+            case STATE_CANCELED:
+            case STATE_ERRORED:
                 drawable = ContextCompat.getDrawable(context, R.drawable.build_state_errored);
                 break;
-            case "failed":
+            case STATE_FAILED:
                 drawable = ContextCompat.getDrawable(context, R.drawable.build_state_failed);
                 break;
         }
@@ -105,7 +112,7 @@ public final class BuildStateHelper {
      * @return True, if state is passed. False otherwise
      */
     public static boolean isPassed(@NonNull String state) {
-        boolean passed = state.equals("passed");
+        boolean passed = state.equals(STATE_PASSED);
         return passed;
     }
 
@@ -116,7 +123,7 @@ public final class BuildStateHelper {
      * @return True, if the build is in progress state. False otherwise
      */
     public static boolean isInProgress(@NonNull String state) {
-        boolean inProgress = state.equals("created") || state.equals("started");
+        boolean inProgress = state.equals(STATE_CREATED) || state.equals(STATE_STARTED);
         return inProgress;
     }
 }
