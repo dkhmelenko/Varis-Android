@@ -147,7 +147,8 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.build_activity_action_restart:
-                // TODO Restart build
+                mTaskManager.restartBuild(mBuildId);
+                recreate();
                 return true;
             case R.id.build_activity_action_cancel:
                 // TODO cancel build

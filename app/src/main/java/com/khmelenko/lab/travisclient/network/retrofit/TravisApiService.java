@@ -23,6 +23,7 @@ import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
+import retrofit.mime.TypedOutput;
 
 /**
  * Defines an interface for the REST service
@@ -85,10 +86,10 @@ public interface TravisApiService {
     BuildDetails getBuild(@EncodedPath("repositorySlug") String repositorySlug, @Path("buildId") long buildId);
 
     @POST("/builds/{buildId}/cancel")
-    void cancelBuild(@Path("buildId") long buildId);
+    Object cancelBuild(@Path("buildId") long buildId, @Body TypedOutput emptyBody);
 
     @POST("/builds/{buildId}/restart")
-    void restartBuild(@Path("buildId") long buildId);
+    Object restartBuild(@Path("buildId") long buildId, @Body TypedOutput emptyBody);
 
 
     // requests

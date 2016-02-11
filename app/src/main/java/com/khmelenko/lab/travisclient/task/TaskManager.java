@@ -10,6 +10,7 @@ import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
 import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
 import com.khmelenko.lab.travisclient.task.travis.LogTask;
 import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
+import com.khmelenko.lab.travisclient.task.travis.RestartBuildTask;
 import com.khmelenko.lab.travisclient.task.travis.UserReposTask;
 import com.khmelenko.lab.travisclient.task.travis.UserTask;
 
@@ -165,4 +166,13 @@ public final class TaskManager {
         getLogUrl(null, jobId);
     }
 
+    /**
+     * Restarts build
+     *
+     * @param buildId Build ID to restart
+     */
+    public void restartBuild(long buildId) {
+        RestartBuildTask task = new RestartBuildTask(buildId);
+        LoaderAsyncTask.executeTask(task);
+    }
 }
