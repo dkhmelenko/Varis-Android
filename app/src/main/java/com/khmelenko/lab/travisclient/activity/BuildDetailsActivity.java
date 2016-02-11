@@ -20,6 +20,7 @@ import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogLoadedEvent;
+import com.khmelenko.lab.travisclient.event.travis.RestartBuildSuccessEvent;
 import com.khmelenko.lab.travisclient.fragment.JobsFragment;
 import com.khmelenko.lab.travisclient.fragment.RawLogFragment;
 import com.khmelenko.lab.travisclient.network.response.Build;
@@ -77,6 +78,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
     private CacheStorage mCache;
     private JobsFragment mJobsFragment;
     private RawLogFragment mRawLogFragment;
+
     private boolean mCanContributeToRepo;
     private boolean mBuildInProgressState;
 
@@ -131,14 +133,17 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem itemCancel = menu.findItem(R.id.build_activity_action_cancel);
+        MenuItem itemRestart = menu.findItem(R.id.build_activity_action_restart);
         if (mCanContributeToRepo) {
             if (mBuildInProgressState) {
-                MenuItem itemCancel = menu.findItem(R.id.build_activity_action_cancel);
                 itemCancel.setVisible(true);
             } else {
-                MenuItem itemRestart = menu.findItem(R.id.build_activity_action_restart);
                 itemRestart.setVisible(true);
             }
+        } else {
+            itemCancel.setVisible(false);
+            itemRestart.setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -148,7 +153,10 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         switch (item.getItemId()) {
             case R.id.build_activity_action_restart:
                 mTaskManager.restartBuild(mBuildId);
-                recreate();
+                mProgressBar.setVisibility(View.VISIBLE);
+
+                mCanContributeToRepo = false;
+                invalidateOptionsMenu();
                 return true;
             case R.id.build_activity_action_cancel:
                 // TODO cancel build
@@ -308,6 +316,16 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
 
         String msg = getString(R.string.error_failed_loading_build_details, event.getTaskError().getMessage());
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Raised on success build restart
+     *
+     * @param event Event data
+     */
+    public void onEvent(RestartBuildSuccessEvent event) {
+        // reload build details
+        mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
     }
 
     /**
