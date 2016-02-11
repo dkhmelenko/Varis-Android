@@ -17,6 +17,7 @@ import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
+import com.khmelenko.lab.travisclient.event.travis.CancelBuildSuccessEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogLoadedEvent;
@@ -153,16 +154,24 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         switch (item.getItemId()) {
             case R.id.build_activity_action_restart:
                 mTaskManager.restartBuild(mBuildId);
-                mProgressBar.setVisibility(View.VISIBLE);
-
-                mCanContributeToRepo = false;
-                invalidateOptionsMenu();
+                handleBuildAction();
                 return true;
             case R.id.build_activity_action_cancel:
-                // TODO cancel build
+                mTaskManager.cancelBuild(mBuildId);
+                handleBuildAction();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Handles build action
+     */
+    private void handleBuildAction() {
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        mCanContributeToRepo = false;
+        invalidateOptionsMenu();
     }
 
     /**
@@ -324,6 +333,16 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
      * @param event Event data
      */
     public void onEvent(RestartBuildSuccessEvent event) {
+        // reload build details
+        mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
+    }
+
+    /**
+     * Raised on success build cancel
+     *
+     * @param event Event data
+     */
+    public void onEvent(CancelBuildSuccessEvent event) {
         // reload build details
         mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
     }

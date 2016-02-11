@@ -7,6 +7,7 @@ import com.khmelenko.lab.travisclient.task.travis.AuthTask;
 import com.khmelenko.lab.travisclient.task.travis.BranchesTask;
 import com.khmelenko.lab.travisclient.task.travis.BuildDetailsTask;
 import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
+import com.khmelenko.lab.travisclient.task.travis.CancelBuildTask;
 import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
 import com.khmelenko.lab.travisclient.task.travis.LogTask;
 import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
@@ -173,6 +174,16 @@ public final class TaskManager {
      */
     public void restartBuild(long buildId) {
         RestartBuildTask task = new RestartBuildTask(buildId);
+        LoaderAsyncTask.executeTask(task);
+    }
+
+    /**
+     * Cancels build
+     *
+     * @param buildId Build ID to cancel
+     */
+    public void cancelBuild(long buildId) {
+        CancelBuildTask task = new CancelBuildTask(buildId);
         LoaderAsyncTask.executeTask(task);
     }
 }
