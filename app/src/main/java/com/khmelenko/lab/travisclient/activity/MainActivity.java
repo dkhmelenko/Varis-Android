@@ -145,6 +145,7 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
                     case R.id.drawer_logout:
                         // clear user data
                         mCache.deleteUser();
+                        mCache.deleteRepos();
                         AppSettings.putAccessToken("");
 
                         // reset back to open source url
@@ -247,6 +248,8 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
     public void onEvent(FindReposEvent event) {
         mFragment.setLoadingProgress(false);
         mFragment.setRepos(event.getRepos());
+
+        mCache.saveRepos(event.getRepos());
     }
 
     /**
