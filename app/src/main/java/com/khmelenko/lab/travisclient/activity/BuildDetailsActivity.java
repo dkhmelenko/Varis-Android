@@ -17,10 +17,12 @@ import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
+import com.khmelenko.lab.travisclient.event.travis.CancelBuildFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.CancelBuildSuccessEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogLoadedEvent;
+import com.khmelenko.lab.travisclient.event.travis.RestartBuildFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.RestartBuildSuccessEvent;
 import com.khmelenko.lab.travisclient.fragment.JobsFragment;
 import com.khmelenko.lab.travisclient.fragment.RawLogFragment;
@@ -338,11 +340,37 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
     }
 
     /**
+     * Raised on failed build restart
+     *
+     * @param event Event data
+     */
+    public void onEvent(RestartBuildFailedEvent event) {
+        String msg = getString(R.string.error_failed_loading_build_details, event.getTaskError().getMessage());
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
+        // reload build details
+        mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
+    }
+
+    /**
      * Raised on success build cancel
      *
      * @param event Event data
      */
     public void onEvent(CancelBuildSuccessEvent event) {
+        // reload build details
+        mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
+    }
+
+    /**
+     * Raised on failed build cancel
+     *
+     * @param event Event data
+     */
+    public void onEvent(CancelBuildFailedEvent event) {
+        String msg = getString(R.string.error_failed_loading_build_details, event.getTaskError().getMessage());
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
         // reload build details
         mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
     }

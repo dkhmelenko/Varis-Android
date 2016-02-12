@@ -7,7 +7,7 @@ import com.khmelenko.lab.travisclient.task.TaskError;
  *
  * @author Dmytro Khmelenko
  */
-public final class LoadingFailedEvent {
+public class LoadingFailedEvent {
 
     private final TaskError mTaskError;
 

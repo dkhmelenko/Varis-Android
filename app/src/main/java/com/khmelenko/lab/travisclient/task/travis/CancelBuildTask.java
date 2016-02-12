@@ -1,8 +1,7 @@
 package com.khmelenko.lab.travisclient.task.travis;
 
+import com.khmelenko.lab.travisclient.event.travis.CancelBuildFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.CancelBuildSuccessEvent;
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
-import com.khmelenko.lab.travisclient.event.travis.RestartBuildSuccessEvent;
 import com.khmelenko.lab.travisclient.network.retrofit.EmptyOutput;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
@@ -13,7 +12,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public class CancelBuildTask extends Task<Void> {
+public final class CancelBuildTask extends Task<Void> {
 
     private final long mBuildId;
 
@@ -35,7 +34,7 @@ public class CancelBuildTask extends Task<Void> {
 
     @Override
     public void onFail(TaskError error) {
-        LoadingFailedEvent event = new LoadingFailedEvent(error);
+        CancelBuildFailedEvent event = new CancelBuildFailedEvent(error);
         eventBus().post(event);
     }
 }

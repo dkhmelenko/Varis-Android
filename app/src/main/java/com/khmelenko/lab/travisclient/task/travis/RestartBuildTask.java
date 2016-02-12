@@ -1,6 +1,6 @@
 package com.khmelenko.lab.travisclient.task.travis;
 
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
+import com.khmelenko.lab.travisclient.event.travis.RestartBuildFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.RestartBuildSuccessEvent;
 import com.khmelenko.lab.travisclient.network.retrofit.EmptyOutput;
 import com.khmelenko.lab.travisclient.task.Task;
@@ -12,7 +12,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public class RestartBuildTask extends Task<Void> {
+public final class RestartBuildTask extends Task<Void> {
 
     private final long mBuildId;
 
@@ -34,7 +34,7 @@ public class RestartBuildTask extends Task<Void> {
 
     @Override
     public void onFail(TaskError error) {
-        LoadingFailedEvent event = new LoadingFailedEvent(error);
+        RestartBuildFailedEvent event = new RestartBuildFailedEvent(error);
         eventBus().post(event);
     }
 }
