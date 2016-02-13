@@ -5,10 +5,12 @@ This project is Android client for Travis CI.
 
 It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
 The app has the following features:
-- user login
+- user login to Travis CI and Travis CI Pro
 - list of repositories
 - build history (commits and pull requests)
 - build log
+- restart build
+- cancel build
 
 [![Travis Client on Google Play Store](/screenshots/google-play-badge.png)](https://play.google.com/store/apps/details?id=com.khmelenko.lab.travisclient)
 
