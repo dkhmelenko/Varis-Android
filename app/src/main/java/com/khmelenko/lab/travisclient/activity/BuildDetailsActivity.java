@@ -76,9 +76,11 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
 
     @Inject
     EventBus mEventBus;
+    @Inject
+    TaskManager mTaskManager;
+    @Inject
+    CacheStorage mCache;
 
-    private TaskManager mTaskManager;
-    private CacheStorage mCache;
     private JobsFragment mJobsFragment;
     private RawLogFragment mRawLogFragment;
 
@@ -93,9 +95,6 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         ButterKnife.bind(this);
         TravisApp.instance().activityInjector().inject(this);
         initToolbar();
-
-        mTaskManager = new TaskManager();
-        mCache = CacheStorage.newInstance();
 
         mRepoSlug = getIntent().getStringExtra(EXTRA_REPO_SLUG);
         mBuildId = getIntent().getLongExtra(EXTRA_BUILD_ID, 0L);

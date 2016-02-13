@@ -53,14 +53,15 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
     private ReposFragment mFragment;
 
     private SearchView mSearchView;
-    private TaskManager mTaskManager;
-    private CacheStorage mCache;
 
     @Inject
     RestClient mRestClient;
-
     @Inject
     EventBus mEventBus;
+    @Inject
+    TaskManager mTaskManager;
+    @Inject
+    CacheStorage mCache;
 
     private User mUser;
 
@@ -72,9 +73,6 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
         TravisApp.instance().activityInjector().inject(this);
 
         mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
-
-        mTaskManager = new TaskManager();
-        mCache = CacheStorage.newInstance();
 
         initToolbar();
         setupDrawerLayout();

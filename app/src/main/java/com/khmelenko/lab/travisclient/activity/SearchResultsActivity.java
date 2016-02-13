@@ -29,6 +29,8 @@ public final class SearchResultsActivity extends BaseActivity implements ReposFr
 
     @Inject
     EventBus mEventBus;
+    @Inject
+    TaskManager mTaskManager;
 
     private ReposFragment mFragment;
 
@@ -87,8 +89,7 @@ public final class SearchResultsActivity extends BaseActivity implements ReposFr
      * @param query Query string for search
      */
     private void startRepoSearch(String query) {
-        TaskManager taskManager = new TaskManager();
-        taskManager.findRepos(query);
+        mTaskManager.findRepos(query);
     }
 
     /**

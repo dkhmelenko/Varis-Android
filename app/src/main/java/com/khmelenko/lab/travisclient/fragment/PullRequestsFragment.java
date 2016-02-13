@@ -55,6 +55,8 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
 
     @Inject
     EventBus mEventBus;
+    @Inject
+    TaskManager mTaskManager;
 
     private PullRequestsListAdapter mPullRequestsListAdapter;
     private Requests mRequests;
@@ -134,8 +136,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
      * Starts loading requests
      */
     private void loadRequests() {
-        TaskManager taskManager = new TaskManager();
-        taskManager.getRequests(mRepoSlug);
+        mTaskManager.getRequests(mRepoSlug);
     }
 
     /**
@@ -158,7 +159,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
      */
     private void checkIfEmpty() {
         mEmptyText.setText(R.string.repo_details_pull_request_empty);
-        if(mPullRequests == null || mPullRequests.isEmpty()) {
+        if (mPullRequests == null || mPullRequests.isEmpty()) {
             mEmptyText.setVisibility(View.VISIBLE);
         } else {
             mEmptyText.setVisibility(View.GONE);

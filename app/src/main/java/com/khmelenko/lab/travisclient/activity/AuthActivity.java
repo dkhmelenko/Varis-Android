@@ -51,7 +51,8 @@ public final class AuthActivity extends BaseActivity implements AuthFragment.OnL
     private SecurityCodeFragment mSecurityCodeFragment;
     private ProgressDialog mProgressDialog;
 
-    private TaskManager mTaskManager = new TaskManager();
+    @Inject
+    TaskManager mTaskManager;
 
     @Inject
     EventBus mEventBus;

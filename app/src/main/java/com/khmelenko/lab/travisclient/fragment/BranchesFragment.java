@@ -52,11 +52,13 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
 
     @Inject
     EventBus mEventBus;
+    @Inject
+    TaskManager mTaskManager;
 
     private BranchesListAdapter mBranchesListAdapter;
     private Branches mBranches;
-    private String mRepoSlug;
 
+    private String mRepoSlug;
     private BranchesListener mListener;
 
     /**
@@ -130,8 +132,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
      * Starts loading branches
      */
     private void loadBranches() {
-        TaskManager taskManager = new TaskManager();
-        taskManager.getBranches(mRepoSlug);
+        mTaskManager.getBranches(mRepoSlug);
     }
 
     /**

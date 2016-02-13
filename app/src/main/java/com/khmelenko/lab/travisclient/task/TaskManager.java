@@ -22,6 +22,10 @@ import com.khmelenko.lab.travisclient.task.travis.UserTask;
  */
 public final class TaskManager {
 
+    public TaskManager() {
+
+    }
+
     /**
      * Creates new authorization task
      *

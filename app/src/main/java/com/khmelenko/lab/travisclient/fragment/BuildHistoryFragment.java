@@ -52,11 +52,13 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
 
     @Inject
     EventBus mEventBus;
+    @Inject
+    TaskManager mTaskManager;
 
     private BuildListAdapter mBuildListAdapter;
     private BuildHistory mBuildHistory;
-    private String mRepoSlug;
 
+    private String mRepoSlug;
     private BuildHistoryListener mListener;
 
     /**
@@ -130,8 +132,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
      * Starts loading build history
      */
     private void loadBuilds() {
-        TaskManager taskManager = new TaskManager();
-        taskManager.getBuildHistory(mRepoSlug);
+        mTaskManager.getBuildHistory(mRepoSlug);
     }
 
     /**
