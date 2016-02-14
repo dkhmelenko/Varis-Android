@@ -15,6 +15,8 @@ import com.khmelenko.lab.travisclient.task.travis.RestartBuildTask;
 import com.khmelenko.lab.travisclient.task.travis.UserReposTask;
 import com.khmelenko.lab.travisclient.task.travis.UserTask;
 
+import javax.inject.Inject;
+
 /**
  * Manages the tasks
  *
@@ -22,8 +24,11 @@ import com.khmelenko.lab.travisclient.task.travis.UserTask;
  */
 public final class TaskManager {
 
-    public TaskManager() {
+    private final TaskHelper mTaskHelper;
 
+    @Inject
+    public TaskManager(TaskHelper taskHelper) {
+        mTaskHelper = taskHelper;
     }
 
     /**
@@ -34,7 +39,7 @@ public final class TaskManager {
      */
     public void createNewAuthorization(String basicAuth, AuthorizationRequest request) {
         CreateAuthorizationTask task = new CreateAuthorizationTask(basicAuth, request);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -46,7 +51,7 @@ public final class TaskManager {
      */
     public void createNewAuthorization(String basicAuth, AuthorizationRequest request, String twoFactorCode) {
         CreateAuthorizationTask task = new CreateAuthorizationTask(basicAuth, request, twoFactorCode);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -57,7 +62,7 @@ public final class TaskManager {
      */
     public void deleteAuthorization(String basicAuth, String authorizationId) {
         DeleteAuthorizationTask task = new DeleteAuthorizationTask(basicAuth, authorizationId);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -69,7 +74,7 @@ public final class TaskManager {
      */
     public void deleteAuthorization(String basicAuth, String authorizationId, String twoFactorCode) {
         DeleteAuthorizationTask task = new DeleteAuthorizationTask(basicAuth, authorizationId, twoFactorCode);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -79,7 +84,7 @@ public final class TaskManager {
      */
     public void startAuth(String githubToken) {
         AuthTask task = new AuthTask(githubToken);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -89,7 +94,7 @@ public final class TaskManager {
      */
     public void findRepos(String searchText) {
         FindRepoTask task = new FindRepoTask(searchText);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -99,7 +104,7 @@ public final class TaskManager {
      */
     public void getBuildHistory(String repoSlug) {
         BuildHistoryTask task = new BuildHistoryTask(repoSlug);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -109,7 +114,7 @@ public final class TaskManager {
      */
     public void getBranches(String repoSlug) {
         BranchesTask task = new BranchesTask(repoSlug);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -119,7 +124,7 @@ public final class TaskManager {
      */
     public void getRequests(String repoSlug) {
         RequestsTask task = new RequestsTask(repoSlug);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -127,7 +132,7 @@ public final class TaskManager {
      */
     public void getUser() {
         UserTask task = new UserTask();
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -137,7 +142,7 @@ public final class TaskManager {
      */
     public void userRepos(String userName) {
         UserReposTask task = new UserReposTask(userName);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -148,7 +153,7 @@ public final class TaskManager {
      */
     public void getBuildDetails(String repoSlug, long buildId) {
         BuildDetailsTask task = new BuildDetailsTask(repoSlug, buildId);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -159,7 +164,7 @@ public final class TaskManager {
      */
     public void getLogUrl(String auth, long jobId) {
         LogTask task = new LogTask(auth, jobId);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -178,7 +183,7 @@ public final class TaskManager {
      */
     public void restartBuild(long buildId) {
         RestartBuildTask task = new RestartBuildTask(buildId);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
     /**
@@ -188,6 +193,6 @@ public final class TaskManager {
      */
     public void cancelBuild(long buildId) {
         CancelBuildTask task = new CancelBuildTask(buildId);
-        LoaderAsyncTask.executeTask(task);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 }

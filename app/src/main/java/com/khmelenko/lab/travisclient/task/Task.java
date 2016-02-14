@@ -11,7 +11,7 @@ import de.greenrobot.event.EventBus;
  */
 public abstract class Task<T> {
 
-    private TaskHelper mTaskHelper = new TaskHelper();
+    private TaskHelper mTaskHelper;
 
     /**
      * Starts executing task
@@ -35,15 +35,30 @@ public abstract class Task<T> {
     public abstract void onFail(TaskError error);
 
     /**
+     * Sets task helper
+     *
+     * @param helper Task helper
+     */
+    public void setHelper(TaskHelper helper) {
+        mTaskHelper = helper;
+    }
+
+    /**
      * Gets rest client instance
      *
      * @return REST client
      */
     protected RestClient restClient() {
-        return mTaskHelper.mRestClient;
+        return mTaskHelper.getRestClient();
     }
 
+    /**
+     * Gets event bus instance
+     *
+     * @return Event bus
+     */
     protected EventBus eventBus() {
-        return mTaskHelper.mEventBus;
+        return mTaskHelper.getEventBus();
     }
+
 }

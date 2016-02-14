@@ -1,6 +1,5 @@
 package com.khmelenko.lab.travisclient.task;
 
-import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 
 import javax.inject.Inject;
@@ -14,14 +13,20 @@ import de.greenrobot.event.EventBus;
  */
 public final class TaskHelper {
 
-    @Inject
-    RestClient mRestClient;
+    private final RestClient mRestClient;
+    private final EventBus mEventBus;
 
     @Inject
-    EventBus mEventBus;
-
-    public TaskHelper() {
-        TravisApp.instance().activityInjector().inject(this);
+    public TaskHelper(RestClient restClient, EventBus eventBus) {
+        mRestClient = restClient;
+        mEventBus = eventBus;
     }
 
+    public RestClient getRestClient() {
+        return mRestClient;
+    }
+
+    public EventBus getEventBus() {
+        return mEventBus;
+    }
 }

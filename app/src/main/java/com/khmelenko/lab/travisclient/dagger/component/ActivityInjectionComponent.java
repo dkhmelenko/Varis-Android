@@ -31,6 +31,4 @@ public interface ActivityInjectionComponent {
     void inject(BranchesFragment fragment);
     void inject(BuildHistoryFragment fragment);
     void inject(PullRequestsFragment fragment);
-
-    void inject(TaskHelper task);
 }

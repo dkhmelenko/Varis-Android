@@ -7,21 +7,23 @@ import android.os.AsyncTask;
  *
  * @author Dmytro Khmelenko
  */
-public final class LoaderAsyncTask<T> extends AsyncTask<Void, Void, TaskResult<T>> {
+final class LoaderAsyncTask<T> extends AsyncTask<Void, Void, TaskResult<T>> {
 
     private final Task<T> mTask;
 
-    private LoaderAsyncTask(Task<T> task) {
+    private LoaderAsyncTask(Task<T> task, TaskHelper helper) {
         mTask = task;
+        mTask.setHelper(helper);
     }
 
     /**
      * Executes new task
      *
-     * @param task Task for execution
+     * @param task   Task for execution
+     * @param helper Task helper
      */
-    public static <T> void executeTask(Task<T> task) {
-        LoaderAsyncTask<T> executor = new LoaderAsyncTask<T>(task);
+    public static <T> void executeTask(Task<T> task, TaskHelper helper) {
+        LoaderAsyncTask<T> executor = new LoaderAsyncTask<T>(task, helper);
         executor.execute();
     }
 
