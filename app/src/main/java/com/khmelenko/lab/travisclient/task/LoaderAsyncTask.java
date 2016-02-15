@@ -7,7 +7,7 @@ import android.os.AsyncTask;
  *
  * @author Dmytro Khmelenko
  */
-final class LoaderAsyncTask<T> extends AsyncTask<Void, Void, TaskResult<T>> {
+public final class LoaderAsyncTask<T> extends AsyncTask<Void, Void, TaskResult<T>> {
 
     private final Task<T> mTask;
 
