@@ -13,4 +13,10 @@ android:
 before_install:
  - chmod +x gradlew
 
+before_script:
+ - pip install --user codecov
+
+after_success:
+ - codecov
+
 script: ./gradlew testRelease assembleRelease
