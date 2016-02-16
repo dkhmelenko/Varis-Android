@@ -1,5 +1,10 @@
 package com.khmelenko.lab.travisclient;
 
+import com.khmelenko.lab.travisclient.network.request.AccessTokenRequest;
+import com.khmelenko.lab.travisclient.network.response.AccessToken;
+import com.khmelenko.lab.travisclient.network.response.Build;
+import com.khmelenko.lab.travisclient.network.response.BuildHistory;
+import com.khmelenko.lab.travisclient.network.response.Requests;
 import com.khmelenko.lab.travisclient.network.retrofit.EmptyOutput;
 import com.khmelenko.lab.travisclient.network.retrofit.GithubApiService;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
@@ -32,7 +37,8 @@ import static org.mockito.Mockito.*;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 @PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
-@PrepareForTest({RestClient.class, TaskHelper.class, TaskManager.class, RestartBuildTask.class})
+@PrepareForTest({RestClient.class, TaskHelper.class, TaskManager.class, RestartBuildTask.class,
+        BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class})
 public class TestTaskManager {
 
     @Rule
@@ -76,6 +82,55 @@ public class TestTaskManager {
     public void testCancelBuildTask() {
         mTaskManager.cancelBuild(anyLong());
         verify(mRestClient.getApiService()).cancelBuild(anyLong(), eq(EmptyOutput.INSTANCE));
+    }
+
+    @Test
+    public void testSearchRepo() {
+        mTaskManager.findRepos("test");
+        verify(mRestClient.getApiService()).getRepos("test");
+
+        mTaskManager.findRepos(eq(""));
+        verify(mRestClient.getApiService()).getRepos();
+    }
+
+    @Test
+    public void testGetUserRepos() {
+        mTaskManager.userRepos(anyString());
+        verify(mRestClient.getApiService()).getUserRepos(anyString());
+    }
+
+    @Test
+    public void testGetBuildHistory() {
+        mTaskManager.getBuildHistory("test");
+        verify(mRestClient.getApiService()).getBuilds("test");
+    }
+
+    @Test
+    public void testGetBranches() {
+        mTaskManager.getBranches("test");
+        verify(mRestClient.getApiService()).getBranches("test");
+    }
+
+    @Test
+    public void testGetRequests() {
+        when(mRestClient.getApiService().getRequests(anyString())).thenReturn(spy(new Requests()));
+        when(mRestClient.getApiService().getPullRequestBuilds(anyString())).thenReturn(mock(BuildHistory.class));
+
+        mTaskManager.getRequests("test");
+        verify(mRestClient.getApiService()).getRequests("test");
+        verify(mRestClient.getApiService()).getPullRequestBuilds("test");
+    }
+
+    @Test
+    public void testGetBuildDetails() {
+        mTaskManager.getBuildDetails("test", 0);
+        verify(mRestClient.getApiService()).getBuild("test", 0);
+    }
+
+    @Test
+    public void testUser() {
+        mTaskManager.getUser();
+        verify(mRestClient.getApiService()).getUser();
     }
 
 }
