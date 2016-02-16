@@ -13,6 +13,4 @@ android:
 before_install:
  - chmod +x gradlew
 
-script:
- - ./gradlew testRelease
- - ./gradlew build assembleRelease
+script: ./gradlew testRelease assembleRelease
