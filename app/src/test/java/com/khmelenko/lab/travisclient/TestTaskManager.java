@@ -7,6 +7,7 @@ import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.network.response.Requests;
 import com.khmelenko.lab.travisclient.network.retrofit.EmptyOutput;
 import com.khmelenko.lab.travisclient.network.retrofit.GithubApiService;
+import com.khmelenko.lab.travisclient.network.retrofit.RawApiService;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.network.retrofit.TravisApiService;
 import com.khmelenko.lab.travisclient.task.LoaderAsyncTask;
@@ -26,6 +27,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import de.greenrobot.event.EventBus;
+import retrofit.client.Response;
 
 import static org.mockito.Mockito.*;
 
@@ -37,7 +39,7 @@ import static org.mockito.Mockito.*;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 @PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
-@PrepareForTest({RestClient.class, TaskHelper.class, TaskManager.class, RestartBuildTask.class,
+@PrepareForTest({RestClient.class, Response.class, TaskHelper.class, TaskManager.class, RestartBuildTask.class,
         BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class})
 public class TestTaskManager {
 
@@ -56,6 +58,8 @@ public class TestTaskManager {
         when(mRestClient.getApiService()).thenReturn(apiService);
         GithubApiService githubApiService = mock(GithubApiService.class);
         when(mRestClient.getGithubApiService()).thenReturn(githubApiService);
+        RawApiService rawApiService = mock(RawApiService.class);
+        when(mRestClient.getRawApiService()).thenReturn(rawApiService);
 
         mEventBus = mock(EventBus.class);
 
@@ -131,6 +135,21 @@ public class TestTaskManager {
     public void testUser() {
         mTaskManager.getUser();
         verify(mRestClient.getApiService()).getUser();
+    }
+
+    @Test
+    public void testGetLogs() {
+        Response response = mock(Response.class);
+        when(response.getStatus()).thenReturn(200);
+        when(response.getUrl()).thenReturn("url");
+        when(mRestClient.getRawApiService().getLog(anyString())).thenReturn(response);
+        when(mRestClient.getRawApiService().getLog(anyString(), anyString())).thenReturn(response);
+
+        mTaskManager.getLogUrl(anyLong());
+        verify(mRestClient.getRawApiService()).getLog(anyString());
+
+        mTaskManager.getLogUrl("test", 0);
+        verify(mRestClient.getRawApiService()).getLog(anyString(), anyString());
     }
 
 }
