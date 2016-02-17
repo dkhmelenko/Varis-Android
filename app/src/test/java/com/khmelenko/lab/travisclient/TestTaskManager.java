@@ -1,6 +1,7 @@
 package com.khmelenko.lab.travisclient;
 
 import com.khmelenko.lab.travisclient.network.request.AccessTokenRequest;
+import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.AccessToken;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
@@ -40,7 +41,7 @@ import static org.mockito.Mockito.*;
 @Config(constants = BuildConfig.class, sdk = 21)
 @PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
 @PrepareForTest({RestClient.class, Response.class, TaskHelper.class, TaskManager.class, RestartBuildTask.class,
-        BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class})
+        BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class, AuthorizationRequest.class})
 public class TestTaskManager {
 
     @Rule
@@ -150,6 +151,27 @@ public class TestTaskManager {
 
         mTaskManager.getLogUrl("test", 0);
         verify(mRestClient.getRawApiService()).getLog(anyString(), anyString());
+    }
+
+    @Test
+    public void testGithubCreateNewAuth() {
+        String authToken = "test";
+        AuthorizationRequest request = mock(AuthorizationRequest.class);
+        mTaskManager.createNewAuthorization(authToken, request);
+        verify(mRestClient.getGithubApiService()).createNewAuthorization(authToken, request);
+
+        mTaskManager.createNewAuthorization(authToken, request, authToken);
+        verify(mRestClient.getGithubApiService()).createNewAuthorization(authToken, authToken, request);
+    }
+
+    @Test
+    public void testGithubDeleteAuth() {
+        String auth = "test";
+        mTaskManager.deleteAuthorization(auth, auth);
+        verify(mRestClient.getGithubApiService()).deleteAuthorization(auth, auth);
+
+        mTaskManager.deleteAuthorization(auth, auth, auth);
+        verify(mRestClient.getGithubApiService()).deleteAuthorization(auth, auth, auth);
     }
 
 }
