@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -37,6 +38,7 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 import retrofit.client.Response;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
@@ -90,14 +92,21 @@ public class TestTaskManager {
 
     @Test
     public void testTaskFailed() {
+        final int errorCode = 401;
+        final String errorMsg = "error";
+
         RestartBuildTask task = spy(new RestartBuildTask(0));
         task.setHelper(mTaskHelper);
-        TaskError error = spy(new TaskError(0, "error"));
+        TaskError error = spy(new TaskError(errorCode, errorMsg));
         TaskException exception = spy(new TaskException(error));
         when(task.execute()).thenThrow(exception);
 
+        ArgumentCaptor<TaskError> argument = ArgumentCaptor.forClass(TaskError.class);
         LoaderAsyncTask.executeTask(task, mTaskHelper);
-        verify(task).onFail(error);
+        verify(task).onFail(argument.capture());
+
+        assertEquals(errorCode, argument.getValue().getCode());
+        assertEquals(errorMsg, argument.getValue().getMessage());
     }
 
     @Test
