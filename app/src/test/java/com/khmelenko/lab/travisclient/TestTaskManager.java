@@ -139,6 +139,19 @@ public class TestTaskManager {
     }
 
     @Test
+    public void testAuth() {
+        final String auth = "test";
+        AccessTokenRequest request = new AccessTokenRequest();
+        request.setGithubToken(auth);
+        AccessToken token = mock(AccessToken.class);
+        when(token.getAccessToken()).thenReturn(auth);
+        when(mRestClient.getApiService().auth(request)).thenReturn(token);
+
+        mTaskManager.startAuth(auth);
+        verify(mRestClient.getApiService()).auth(request);
+    }
+
+    @Test
     public void testGetLogs() {
         Response response = mock(Response.class);
         when(response.getStatus()).thenReturn(200);

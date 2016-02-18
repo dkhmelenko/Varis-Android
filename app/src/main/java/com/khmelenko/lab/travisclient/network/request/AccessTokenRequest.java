@@ -19,4 +19,20 @@ public final class AccessTokenRequest {
     public void setGithubToken(String githubToken) {
         mGithubToken = githubToken;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof AccessTokenRequest))
+            return false;
+        if (o == this)
+            return true;
+
+        AccessTokenRequest that = (AccessTokenRequest) o;
+        return mGithubToken.equals(that.mGithubToken);
+    }
+
+    @Override
+    public int hashCode() {
+        return mGithubToken.hashCode();
+    }
 }
