@@ -5,6 +5,7 @@ import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.AccessToken;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
+import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.Requests;
 import com.khmelenko.lab.travisclient.network.retrofit.EmptyOutput;
 import com.khmelenko.lab.travisclient.network.retrofit.GithubApiService;
@@ -12,8 +13,11 @@ import com.khmelenko.lab.travisclient.network.retrofit.RawApiService;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.network.retrofit.TravisApiService;
 import com.khmelenko.lab.travisclient.task.LoaderAsyncTask;
+import com.khmelenko.lab.travisclient.task.TaskError;
+import com.khmelenko.lab.travisclient.task.TaskException;
 import com.khmelenko.lab.travisclient.task.TaskHelper;
 import com.khmelenko.lab.travisclient.task.TaskManager;
+import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
 import com.khmelenko.lab.travisclient.task.travis.RestartBuildTask;
 
 import org.junit.Before;
@@ -26,6 +30,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import retrofit.client.Response;
@@ -40,8 +47,9 @@ import static org.mockito.Mockito.*;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 @PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
-@PrepareForTest({RestClient.class, Response.class, TaskHelper.class, TaskManager.class, RestartBuildTask.class,
-        BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class, AuthorizationRequest.class})
+@PrepareForTest({RestClient.class, Response.class, TaskHelper.class, TaskManager.class, TaskError.class,
+        RestartBuildTask.class, BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class,
+        AuthorizationRequest.class, FindRepoTask.class})
 public class TestTaskManager {
 
     @Rule
@@ -70,11 +78,26 @@ public class TestTaskManager {
 
     @Test
     public void testTaskExecution() {
-        RestartBuildTask task = spy(new RestartBuildTask(0));
-        TaskHelper taskHelper = new TaskHelper(mRestClient, mEventBus);
+        final String request = "test";
+        FindRepoTask task = spy(new FindRepoTask(request));
+        List<Repo> result = spy(new ArrayList<Repo>());
+        when(mRestClient.getApiService().getRepos(request)).thenReturn(result);
 
-        LoaderAsyncTask.executeTask(task, taskHelper);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
         verify(task).execute();
+        verify(task).onSuccess(result);
+    }
+
+    @Test
+    public void testTaskFailed() {
+        RestartBuildTask task = spy(new RestartBuildTask(0));
+        task.setHelper(mTaskHelper);
+        TaskError error = spy(new TaskError(0, "error"));
+        TaskException exception = spy(new TaskException(error));
+        when(task.execute()).thenThrow(exception);
+
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
+        verify(task).onFail(error);
     }
 
     @Test
