@@ -29,7 +29,7 @@ public final class DateTimeUtils {
     }
 
     public static Date parseXmlDateTime(String xmlDateTime) throws ParseException {
-        xmlDateTime = xmlDateTime.replace("Z", "+00:00");
+        xmlDateTime = xmlDateTime.replace("Z", "+0000");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault());
         Date parsedDate = dateFormat.parse(xmlDateTime);
         return parsedDate;
