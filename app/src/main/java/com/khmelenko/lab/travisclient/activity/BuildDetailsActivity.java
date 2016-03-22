@@ -1,5 +1,6 @@
 package com.khmelenko.lab.travisclient.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -52,6 +53,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
 
     public static final String EXTRA_REPO_SLUG = "RepoSlug";
     public static final String EXTRA_BUILD_ID = "BuildId";
+    public static final String BUILD_STATE_CHANGED = "BuildsStateChanged";
 
     private static final String RAW_LOG_FRAGMENT_TAG = "RawLogFragment";
     private static final String JOBS_FRAGMENT_TAG = "JobsFragment";
@@ -86,6 +88,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
 
     private boolean mCanContributeToRepo;
     private boolean mBuildInProgressState;
+    private boolean mBuildStateChanged;
 
 
     @Override
@@ -173,6 +176,8 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
 
         mCanContributeToRepo = false;
         invalidateOptionsMenu();
+
+        mBuildStateChanged = true;
     }
 
     /**
@@ -426,6 +431,10 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(BUILD_STATE_CHANGED, mBuildStateChanged);
+        setResult(RESULT_OK, intent);
+
         super.onBackPressed();
         mScrollBtn.hide();
         mScrollUpBtn.hide();

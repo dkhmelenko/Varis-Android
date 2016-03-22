@@ -26,9 +26,15 @@ import butterknife.ButterKnife;
 public final class RepoDetailsActivity extends BaseActivity implements BuildHistoryFragment.BuildHistoryListener,
         BranchesFragment.BranchesListener, PullRequestsFragment.PullRequestsListener {
 
+    private static final int BUILD_DETAILS_REQUEST_CODE = 0;
+
     public static final String REPO_SLUG_KEY = "RepoSlug";
+    public static final String RELOAD_REQUIRED_KEY = "ReloadRequiredKey";
 
     private String mRepoSlug;
+    private boolean mReloadRequired;
+
+    private PagerAdapter mAdapterViewPager;
 
     /**
      * Custom adapter for view pager
@@ -76,6 +82,10 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
             }
         }
 
+        @Override
+        public int getItemPosition(Object object) {
+            return mReloadRequired ? POSITION_NONE : POSITION_UNCHANGED;
+        }
     }
 
     @Override
@@ -93,8 +103,8 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
 
         // setting view pager
         ViewPager vpPager = (ViewPager) findViewById(R.id.repo_details_view_pager);
-        PagerAdapter adapterViewPager = new PagerAdapter(getSupportFragmentManager());
-        vpPager.setAdapter(adapterViewPager);
+        mAdapterViewPager = new PagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(mAdapterViewPager);
         vpPager.setOffscreenPageLimit(PagerAdapter.ITEMS_COUNT);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.repo_details_view_tabs);
@@ -136,10 +146,40 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
         goToBuildDetails(buildId);
     }
 
+    /**
+     * Navigates to the build details
+     *
+     * @param buildId Build ID
+     */
     private void goToBuildDetails(long buildId) {
+        mReloadRequired = false;
+
         Intent intent = new Intent(this, BuildDetailsActivity.class);
         intent.putExtra(BuildDetailsActivity.EXTRA_BUILD_ID, buildId);
         intent.putExtra(BuildDetailsActivity.EXTRA_REPO_SLUG, mRepoSlug);
-        startActivity(intent);
+        startActivityForResult(intent, BUILD_DETAILS_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            if(requestCode == BUILD_DETAILS_REQUEST_CODE) {
+                boolean buildStateChanged = data.getBooleanExtra(BuildDetailsActivity.BUILD_STATE_CHANGED, false);
+                if (buildStateChanged) {
+                    mReloadRequired = true;
+                    mAdapterViewPager.notifyDataSetChanged();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(RELOAD_REQUIRED_KEY, mReloadRequired);
+        setResult(RESULT_OK, intent);
+
+        super.onBackPressed();
     }
 }

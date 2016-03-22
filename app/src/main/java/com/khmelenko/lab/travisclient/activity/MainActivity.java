@@ -46,6 +46,7 @@ import de.greenrobot.event.EventBus;
 public final class MainActivity extends BaseActivity implements ReposFragment.ReposFragmentListener {
 
     private static final int AUTH_ACTIVITY_CODE = 0;
+    private static final int REPO_DETAILS_CODE = 1;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
@@ -180,6 +181,13 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
                     mFragment.setLoadingProgress(true);
                     loadRepos();
                     break;
+                case REPO_DETAILS_CODE:
+                    boolean reloadRequired = data.getBooleanExtra(RepoDetailsActivity.RELOAD_REQUIRED_KEY, false);
+                    if(reloadRequired) {
+                        mFragment.setLoadingProgress(true);
+                        loadRepos();
+                    }
+                    break;
             }
         }
     }
@@ -305,7 +313,7 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
     public void onRepositorySelected(Repo repo) {
         Intent intent = new Intent(MainActivity.this, RepoDetailsActivity.class);
         intent.putExtra(RepoDetailsActivity.REPO_SLUG_KEY, repo.getSlug());
-        startActivity(intent);
+        startActivityForResult(intent, REPO_DETAILS_CODE);
     }
 
     @Override
