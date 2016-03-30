@@ -412,35 +412,41 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
      * @param event Event data
      */
     public void onEvent(IntentBuildDetailsSuccessEvent event) {
+
+        parseIntentUrl(event.getRedirectUrl());
+        boolean isError = TextUtils.isEmpty(mRepoSlug) || mBuildId == 0;
+
+        if (isError) {
+            // handle error
+            String msg = getString(R.string.error_network);
+            TaskError taskError = new TaskError(TaskError.NETWORK_ERROR, msg);
+            onEvent(new LoadingFailedEvent(taskError));
+        } else {
+            mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
+        }
+    }
+
+    /**
+     * Parses intent URL
+     *
+     * @param intentUrl Intent URL
+     */
+    private void parseIntentUrl(String intentUrl) {
         final int ownerIndex = 1;
         final int repoNameIndex = 2;
         final int buildIdIndex = 4;
         final int pathLength = 5;
 
-        boolean isError = false;
-
         try {
-            URL url = new URL(event.getRedirectUrl());
+            URL url = new URL(intentUrl);
             String path = url.getPath();
             String[] items = path.split("/");
             if (items.length >= pathLength) {
                 mRepoSlug = String.format("$s/$s", items[ownerIndex], items[repoNameIndex]);
                 mBuildId = Long.valueOf(items[buildIdIndex]);
-            } else {
-                isError = true;
             }
         } catch (MalformedURLException | NumberFormatException e) {
             e.printStackTrace();
-            isError = true;
-        } finally {
-            if (isError) {
-                // handle error
-                String msg = getString(R.string.error_network);
-                TaskError taskError = new TaskError(TaskError.NETWORK_ERROR, msg);
-                onEvent(new LoadingFailedEvent(taskError));
-            } else {
-                mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
-            }
         }
     }
 
