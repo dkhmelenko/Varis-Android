@@ -45,11 +45,34 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
+                <!-- Handling travis-ci.org -->
                 <data
                     android:host="clicks.travis-ci.org"
                     android:scheme="http"/>
                 <data
                     android:host="clicks.travis-ci.org"
+                    android:scheme="https"/>
+
+                <data
+                    android:host="travis-ci.org"
+                    android:scheme="http"/>
+                <data
+                    android:host="travis-ci.org"
+                    android:scheme="https"/>
+
+                <!-- Handling travis-ci.com -->
+                <data
+                    android:host="clicks.travis-ci.com"
+                    android:scheme="http"/>
+                <data
+                    android:host="clicks.travis-ci.com"
+                    android:scheme="https"/>
+
+                <data
+                    android:host="travis-ci.com"
+                    android:scheme="http"/>
+                <data
+                    android:host="travis-ci.com"
                     android:scheme="https"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
