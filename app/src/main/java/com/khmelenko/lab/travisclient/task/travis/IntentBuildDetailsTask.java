@@ -34,11 +34,13 @@ public final class IntentBuildDetailsTask extends Task<String> {
 
     @Override
     public String execute() throws TaskException {
-        String redirectUrl = "";
+        String redirectUrl = mUrl;
 
         try {
             Response response = restClient().singleRequest(mUrl);
-            redirectUrl = response.header("Location", "");
+            if(response.isRedirect()) {
+                redirectUrl = response.header("Location", "");
+            }
         } catch (IOException e) {
             Context context = TravisApp.getAppContext();
             String msg = context.getString(R.string.error_network);
