@@ -9,6 +9,7 @@ import com.khmelenko.lab.travisclient.task.travis.BuildDetailsTask;
 import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
 import com.khmelenko.lab.travisclient.task.travis.CancelBuildTask;
 import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
+import com.khmelenko.lab.travisclient.task.travis.IntentBuildDetailsTask;
 import com.khmelenko.lab.travisclient.task.travis.LogTask;
 import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
 import com.khmelenko.lab.travisclient.task.travis.RestartBuildTask;
@@ -193,6 +194,16 @@ public final class TaskManager {
      */
     public void cancelBuild(long buildId) {
         CancelBuildTask task = new CancelBuildTask(buildId);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
+    }
+
+    /**
+     * Executes the task for intent build details
+     *
+     * @param url Url
+     */
+    public void intentBuildDetails(String url) {
+        IntentBuildDetailsTask task = new IntentBuildDetailsTask(url);
         LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 }

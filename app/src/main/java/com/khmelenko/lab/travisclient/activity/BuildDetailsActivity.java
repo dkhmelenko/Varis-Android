@@ -20,6 +20,7 @@ import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.CancelBuildFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.CancelBuildSuccessEvent;
+import com.khmelenko.lab.travisclient.event.travis.IntentBuildDetailsSuccessEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogLoadedEvent;
@@ -33,8 +34,12 @@ import com.khmelenko.lab.travisclient.network.response.Commit;
 import com.khmelenko.lab.travisclient.network.response.Job;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.storage.CacheStorage;
+import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.view.BuildView;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.inject.Inject;
 
@@ -75,6 +80,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
 
     private String mRepoSlug;
     private long mBuildId;
+    private String mIntentUrl;
 
     @Inject
     EventBus mEventBus;
@@ -99,8 +105,15 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         TravisApp.instance().activityInjector().inject(this);
         initToolbar();
 
-        mRepoSlug = getIntent().getStringExtra(EXTRA_REPO_SLUG);
-        mBuildId = getIntent().getLongExtra(EXTRA_BUILD_ID, 0L);
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
+
+        if (Intent.ACTION_VIEW.equals(action)) {
+            mIntentUrl = intent.getDataString();
+        } else {
+            mRepoSlug = getIntent().getStringExtra(EXTRA_REPO_SLUG);
+            mBuildId = getIntent().getLongExtra(EXTRA_BUILD_ID, 0L);
+        }
     }
 
     @Override
@@ -108,7 +121,12 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         super.onResume();
         mEventBus.register(this);
 
-        mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
+        if (!TextUtils.isEmpty(mIntentUrl)) {
+            mTaskManager.intentBuildDetails(mIntentUrl);
+        } else {
+            mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
+        }
+
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -386,6 +404,44 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
      */
     public void onEvent(LogLoadedEvent event) {
         mRawLogFragment.loadUrl(event.getLogUrl());
+    }
+
+    /**
+     * Raised on finished intent build details
+     *
+     * @param event Event data
+     */
+    public void onEvent(IntentBuildDetailsSuccessEvent event) {
+        final int ownerIndex = 1;
+        final int repoNameIndex = 2;
+        final int buildIdIndex = 4;
+        final int pathLength = 5;
+
+        boolean isError = false;
+
+        try {
+            URL url = new URL(event.getRedirectUrl());
+            String path = url.getPath();
+            String[] items = path.split("/");
+            if (items.length >= pathLength) {
+                mRepoSlug = String.format("$s/$s", items[ownerIndex], items[repoNameIndex]);
+                mBuildId = Long.valueOf(items[buildIdIndex]);
+            } else {
+                isError = true;
+            }
+        } catch (MalformedURLException | NumberFormatException e) {
+            e.printStackTrace();
+            isError = true;
+        } finally {
+            if (isError) {
+                // handle error
+                String msg = getString(R.string.error_network);
+                TaskError taskError = new TaskError(TaskError.NETWORK_ERROR, msg);
+                onEvent(new LoadingFailedEvent(taskError));
+            } else {
+                mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
+            }
+        }
     }
 
     @Override

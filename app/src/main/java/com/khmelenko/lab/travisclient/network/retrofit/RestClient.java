@@ -8,6 +8,10 @@ import com.khmelenko.lab.travisclient.common.Constants;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.util.PackageUtils;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -141,5 +145,23 @@ public final class RestClient {
      */
     public RawApiService getRawApiService() {
         return mRawApiService;
+    }
+
+    /**
+     * Executes single request
+     *
+     * @param url URL for request
+     * @return Response
+     */
+    public Response singleRequest(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        client.setFollowRedirects(false);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        return response;
     }
 }
