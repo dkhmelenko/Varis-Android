@@ -32,6 +32,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ import static org.mockito.Mockito.*;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 @PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
-@PrepareForTest({RestClient.class, Response.class, TaskHelper.class, TaskManager.class, TaskError.class,
+@PrepareForTest({RestClient.class, Response.class, com.squareup.okhttp.Response.class, TaskHelper.class, TaskManager.class, TaskError.class,
         RestartBuildTask.class, BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class,
         AuthorizationRequest.class, FindRepoTask.class})
 public class TestTaskManager {
@@ -217,6 +218,16 @@ public class TestTaskManager {
 
         mTaskManager.deleteAuthorization(auth, auth, auth);
         verify(mRestClient.getGithubApiService()).deleteAuthorization(auth, auth, auth);
+    }
+
+    @Test
+    public void testSingleRequest() throws IOException {
+        String anyUrl = "https://google.com.ua";
+        com.squareup.okhttp.Response response = mock(com.squareup.okhttp.Response.class);
+        when(mRestClient.singleRequest(anyUrl)).thenReturn(response);
+
+        mTaskManager.intentBuildDetails(anyUrl);
+        verify(mRestClient).singleRequest(anyUrl);
     }
 
 }
