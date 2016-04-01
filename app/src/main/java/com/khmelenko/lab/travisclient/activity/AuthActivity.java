@@ -19,6 +19,7 @@ import com.khmelenko.lab.travisclient.fragment.AuthFragment;
 import com.khmelenko.lab.travisclient.fragment.SecurityCodeFragment;
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.Authorization;
+import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskManager;
@@ -57,6 +58,9 @@ public final class AuthActivity extends BaseActivity implements AuthFragment.OnL
     @Inject
     EventBus mEventBus;
 
+    @Inject
+    RestClient mRestClient;
+
     private String mBasicAuth;
     private String mSecurityCode;
     private Authorization mAuthorization;
@@ -90,7 +94,7 @@ public final class AuthActivity extends BaseActivity implements AuthFragment.OnL
     private void showLoginSection() {
         mAuthFragment = (AuthFragment) getSupportFragmentManager().findFragmentByTag(AUTH_FRAGMENT_TAG);
         if (mAuthFragment == null) {
-            mAuthFragment = AuthFragment.newInstance();
+            mAuthFragment = AuthFragment.newInstance(AppSettings.getServerUrl());
             addFragment(R.id.auth_container, mAuthFragment, AUTH_FRAGMENT_TAG);
         }
     }
@@ -239,6 +243,12 @@ public final class AuthActivity extends BaseActivity implements AuthFragment.OnL
 
         mBasicAuth = EncryptionUtils.generateBasicAuthorization(userName, password);
         mTaskManager.createNewAuthorization(mBasicAuth, prepareAuthorizationRequest());
+    }
+
+    @Override
+    public void onChangeServer(String newServer) {
+        AppSettings.putServerUrl(newServer);
+        mRestClient.updateTravisEndpoint(newServer);
     }
 
     @Override

@@ -12,12 +12,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.khmelenko.lab.travisclient.R;
-import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.common.Constants;
-import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
-import com.khmelenko.lab.travisclient.storage.AppSettings;
-
-import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +24,8 @@ import butterknife.OnClick;
  * @author Dmytro Khmelenko
  */
 public class AuthFragment extends Fragment {
+
+    private static final String SERVER_URL = "ServerUrl";
 
     @Bind(R.id.auth_server_selector)
     RadioGroup mServerSelector;
@@ -42,18 +39,20 @@ public class AuthFragment extends Fragment {
     @Bind(R.id.auth_login_btn)
     Button mLoginBtn;
 
-    private OnLoginActionListener mListener;
+    private String mCurrentServer;
 
-    @Inject
-    RestClient mRestClient;
+    private OnLoginActionListener mListener;
 
     /**
      * Creates new instance of the fragment
      *
      * @return Fragment instance
      */
-    public static AuthFragment newInstance() {
+    public static AuthFragment newInstance(String serverUrl) {
         AuthFragment fragment = new AuthFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(SERVER_URL, serverUrl);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -67,11 +66,17 @@ public class AuthFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
         ButterKnife.bind(this, view);
-        TravisApp.instance().activityInjector().inject(this);
 
         prepareServerSelection();
 
         return view;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        mCurrentServer = args.getString(SERVER_URL);
     }
 
     /**
@@ -91,13 +96,11 @@ public class AuthFragment extends Fragment {
                         break;
                 }
 
-                AppSettings.putServerUrl(server);
-                mRestClient.updateTravisEndpoint(server);
+                mListener.onChangeServer(server);
             }
         });
 
-        String currentServer = AppSettings.getServerUrl();
-        switch (currentServer) {
+        switch (mCurrentServer) {
             case Constants.OPEN_SOURCE_TRAVIS_URL:
                 mServerSelector.check(R.id.auth_server_opensource);
                 break;
@@ -164,6 +167,13 @@ public class AuthFragment extends Fragment {
          * @param password Password
          */
         void onLogin(String userName, String password);
+
+        /**
+         * Called on changed server
+         *
+         * @param newServer New server URL
+         */
+        void onChangeServer(String newServer);
     }
 
 }
