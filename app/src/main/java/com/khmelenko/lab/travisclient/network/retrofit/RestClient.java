@@ -30,7 +30,11 @@ public final class RestClient {
     private GithubApiService mGithubApiService;
     private RawApiService mRawApiService;
 
+    private OkHttpClient mHttpClient;
+
     private RestClient() {
+
+        initHttpClient();
 
         final String travisUrl = AppSettings.getServerUrl();
         updateTravisEndpoint(travisUrl);
@@ -43,6 +47,14 @@ public final class RestClient {
                 .setErrorHandler(new RestErrorHandling())
                 .build();
         mGithubApiService = restAdapter.create(GithubApiService.class);
+    }
+
+    /**
+     * Initializes HTTP client
+     */
+    private void initHttpClient() {
+        mHttpClient = new OkHttpClient();
+        mHttpClient.setFollowRedirects(false);
     }
 
     /**
@@ -70,16 +82,13 @@ public final class RestClient {
                 .build();
         mApiService = restAdapter.create(TravisApiService.class);
 
-        final OkHttpClient client = new OkHttpClient();
-        client.setFollowRedirects(false);
-
         // rest adapter for raw calls
         restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(newEndpoint)
                 .setConverter(new GsonConverter(constructGsonConverter()))
                 .setErrorHandler(new RestErrorHandling())
-                .setClient(new OkClient(client))
+                .setClient(new OkClient(mHttpClient))
                 .build();
         mRawApiService = restAdapter.create(RawApiService.class);
     }
@@ -154,14 +163,14 @@ public final class RestClient {
      * @return Response
      */
     public Response singleRequest(String url) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        client.setFollowRedirects(false);
+
+        mHttpClient.setFollowRedirects(false);
 
         Request request = new Request.Builder()
                 .url(url)
                 .build();
 
-        Response response = client.newCall(request).execute();
+        Response response = mHttpClient.newCall(request).execute();
         return response;
     }
 }
