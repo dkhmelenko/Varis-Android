@@ -1,11 +1,11 @@
 package com.khmelenko.lab.travisclient.event.travis;
 
 /**
- * Event on success execution of the IntentBuildDetails task
+ * Event on success execution of the IntentUrl task
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class IntentBuildDetailsSuccessEvent {
+public final class IntentUrlSuccessEvent {
 
     private final String mRedirectUrl;
 
@@ -13,7 +13,7 @@ public final class IntentBuildDetailsSuccessEvent {
         return mRedirectUrl;
     }
 
-    public IntentBuildDetailsSuccessEvent(String redirectUrl) {
+    public IntentUrlSuccessEvent(String redirectUrl) {
         mRedirectUrl = redirectUrl;
     }
 }

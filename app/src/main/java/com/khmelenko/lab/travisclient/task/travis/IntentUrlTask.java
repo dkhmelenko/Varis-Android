@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.TravisApp;
-import com.khmelenko.lab.travisclient.event.travis.IntentBuildDetailsSuccessEvent;
+import com.khmelenko.lab.travisclient.event.travis.IntentUrlSuccessEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
@@ -15,11 +15,11 @@ import java.io.IOException;
 import com.squareup.okhttp.Response;
 
 /**
- * Intent build details task
+ * Intent URL task
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class IntentBuildDetailsTask extends Task<String> {
+public final class IntentUrlTask extends Task<String> {
 
     private final String mUrl;
 
@@ -28,7 +28,7 @@ public final class IntentBuildDetailsTask extends Task<String> {
      *
      * @param url URL
      */
-    public IntentBuildDetailsTask(String url) {
+    public IntentUrlTask(String url) {
         mUrl = url;
     }
 
@@ -52,7 +52,7 @@ public final class IntentBuildDetailsTask extends Task<String> {
 
     @Override
     public void onSuccess(String result) {
-        IntentBuildDetailsSuccessEvent event = new IntentBuildDetailsSuccessEvent(result);
+        IntentUrlSuccessEvent event = new IntentUrlSuccessEvent(result);
         eventBus().post(event);
     }
 

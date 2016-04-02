@@ -20,7 +20,7 @@ import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.event.travis.BuildDetailsLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.CancelBuildFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.CancelBuildSuccessEvent;
-import com.khmelenko.lab.travisclient.event.travis.IntentBuildDetailsSuccessEvent;
+import com.khmelenko.lab.travisclient.event.travis.IntentUrlSuccessEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogFailEvent;
 import com.khmelenko.lab.travisclient.event.travis.LogLoadedEvent;
@@ -122,7 +122,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
         mEventBus.register(this);
 
         if (!TextUtils.isEmpty(mIntentUrl)) {
-            mTaskManager.intentBuildDetails(mIntentUrl);
+            mTaskManager.intentUrl(mIntentUrl);
         } else {
             mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
         }
@@ -407,11 +407,11 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
     }
 
     /**
-     * Raised on finished intent build details
+     * Raised on finished intent URL
      *
      * @param event Event data
      */
-    public void onEvent(IntentBuildDetailsSuccessEvent event) {
+    public void onEvent(IntentUrlSuccessEvent event) {
 
         parseIntentUrl(event.getRedirectUrl());
         boolean isError = TextUtils.isEmpty(mRepoSlug) || mBuildId == 0;

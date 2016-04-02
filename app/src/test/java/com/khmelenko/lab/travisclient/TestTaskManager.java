@@ -3,7 +3,6 @@ package com.khmelenko.lab.travisclient;
 import com.khmelenko.lab.travisclient.network.request.AccessTokenRequest;
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.AccessToken;
-import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.Requests;
@@ -25,7 +24,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
@@ -226,7 +224,7 @@ public class TestTaskManager {
         com.squareup.okhttp.Response response = mock(com.squareup.okhttp.Response.class);
         when(mRestClient.singleRequest(anyUrl)).thenReturn(response);
 
-        mTaskManager.intentBuildDetails(anyUrl);
+        mTaskManager.intentUrl(anyUrl);
         verify(mRestClient).singleRequest(anyUrl);
     }
 
