@@ -442,7 +442,7 @@ public final class BuildDetailsActivity extends BaseActivity implements JobsFrag
             String path = url.getPath();
             String[] items = path.split("/");
             if (items.length >= pathLength) {
-                mRepoSlug = String.format("$s/$s", items[ownerIndex], items[repoNameIndex]);
+                mRepoSlug = String.format("%s/%s", items[ownerIndex], items[repoNameIndex]);
                 mBuildId = Long.valueOf(items[buildIdIndex]);
             }
         } catch (MalformedURLException | NumberFormatException e) {
