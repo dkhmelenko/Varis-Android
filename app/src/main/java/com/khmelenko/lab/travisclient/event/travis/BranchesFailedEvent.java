@@ -7,7 +7,7 @@ import com.khmelenko.lab.travisclient.task.TaskError;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public class BranchesFailedEvent extends LoadingFailedEvent {
+public final class BranchesFailedEvent extends LoadingFailedEvent {
 
     public BranchesFailedEvent(TaskError taskError) {
         super(taskError);

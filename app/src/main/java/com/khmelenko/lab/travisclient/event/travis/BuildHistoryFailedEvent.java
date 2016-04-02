@@ -7,7 +7,7 @@ import com.khmelenko.lab.travisclient.task.TaskError;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public class BuildHistoryFailedEvent extends LoadingFailedEvent {
+public final class BuildHistoryFailedEvent extends LoadingFailedEvent {
 
     public BuildHistoryFailedEvent(TaskError taskError) {
         super(taskError);
