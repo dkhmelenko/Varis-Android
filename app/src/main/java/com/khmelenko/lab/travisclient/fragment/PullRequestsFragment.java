@@ -11,26 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
-import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
 import com.khmelenko.lab.travisclient.adapter.PullRequestsListAdapter;
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
-import com.khmelenko.lab.travisclient.event.travis.RequestsLoadedEvent;
 import com.khmelenko.lab.travisclient.network.response.RequestData;
 import com.khmelenko.lab.travisclient.network.response.Requests;
-import com.khmelenko.lab.travisclient.task.TaskManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Repository pull requests
@@ -38,8 +30,6 @@ import de.greenrobot.event.EventBus;
  * @author Dmytro Khmelenko
  */
 public class PullRequestsFragment extends Fragment implements OnListItemListener {
-
-    private static final String REPO_SLUG_KEY = "RepoSlug";
 
     @Bind(R.id.pull_requests_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -53,11 +43,6 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     @Bind(R.id.empty_text)
     TextView mEmptyText;
 
-    @Inject
-    EventBus mEventBus;
-    @Inject
-    TaskManager mTaskManager;
-
     private PullRequestsListAdapter mPullRequestsListAdapter;
     private Requests mRequests;
     private List<RequestData> mPullRequests;
@@ -68,14 +53,10 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     /**
      * Creates new instance of the fragment
      *
-     * @param repoSlug Repository slug
      * @return Fragment instance
      */
-    public static PullRequestsFragment newInstance(String repoSlug) {
+    public static PullRequestsFragment newInstance() {
         PullRequestsFragment fragment = new PullRequestsFragment();
-        Bundle args = new Bundle();
-        args.putString(REPO_SLUG_KEY, repoSlug);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -84,19 +65,10 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mRepoSlug = getArguments().getString(REPO_SLUG_KEY);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pull_requests, container, false);
         ButterKnife.bind(this, view);
-        TravisApp.instance().activityInjector().inject(this);
 
         mPullRequestsRecyclerView.setHasFixedSize(true);
 
@@ -110,33 +82,13 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadRequests();
+                mListener.onReloadPullRequests();
             }
         });
 
         mProgressBar.setVisibility(View.VISIBLE);
-        loadRequests();
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mEventBus.register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mEventBus.unregister(this);
-    }
-
-    /**
-     * Starts loading requests
-     */
-    private void loadRequests() {
-        mTaskManager.getRequests(mRepoSlug);
     }
 
     /**
@@ -166,38 +118,6 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
         }
     }
 
-    /**
-     * Raised on loaded requests
-     *
-     * @param event Event data
-     */
-    public void onEvent(RequestsLoadedEvent event) {
-        mSwipeRefreshLayout.setRefreshing(false);
-        mProgressBar.setVisibility(View.GONE);
-
-        mRequests = event.getRequests();
-        mPullRequests = fetchPullRequests(mRequests);
-        mPullRequestsListAdapter.setRequests(mRequests, mPullRequests);
-        mPullRequestsListAdapter.notifyDataSetChanged();
-
-        checkIfEmpty();
-    }
-
-    /**
-     * Raised on failed loading data
-     *
-     * @param event Event data
-     */
-    public void onEvent(LoadingFailedEvent event) {
-        mSwipeRefreshLayout.setRefreshing(false);
-        mProgressBar.setVisibility(View.GONE);
-
-        checkIfEmpty();
-
-        String msg = getString(R.string.error_failed_loading_pull_requests, event.getTaskError().getMessage());
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -224,6 +144,25 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     }
 
     /**
+     * Sets pull request data
+     *
+     * @param request Pull requests
+     */
+    public void setPullRequests(Requests request) {
+        mSwipeRefreshLayout.setRefreshing(false);
+        mProgressBar.setVisibility(View.GONE);
+
+        if (request != null) {
+            mRequests = request;
+            mPullRequests = fetchPullRequests(mRequests);
+            mPullRequestsListAdapter.setRequests(mRequests, mPullRequests);
+            mPullRequestsListAdapter.notifyDataSetChanged();
+        }
+
+        checkIfEmpty();
+    }
+
+    /**
      * Interface for communication with this fragment
      */
     public interface PullRequestsListener {
@@ -234,5 +173,10 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
          * @param buildId ID of the build of the pull request
          */
         void onPullRequestSelected(long buildId);
+
+        /**
+         * Handles reload action for pull request
+         */
+        void onReloadPullRequests();
     }
 }

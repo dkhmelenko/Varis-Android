@@ -2,6 +2,7 @@ package com.khmelenko.lab.travisclient.task.travis;
 
 import android.text.TextUtils;
 
+import com.khmelenko.lab.travisclient.event.travis.BuildHistoryFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.BuildHistoryLoadedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
@@ -46,7 +47,7 @@ public final class BuildHistoryTask extends Task<BuildHistory> {
 
     @Override
     public void onFail(TaskError error) {
-        LoadingFailedEvent event = new LoadingFailedEvent(error);
+        BuildHistoryFailedEvent event = new BuildHistoryFailedEvent(error);
         eventBus().post(event);
     }
 }

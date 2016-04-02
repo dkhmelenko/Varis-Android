@@ -11,23 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
-import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.adapter.BranchesListAdapter;
 import com.khmelenko.lab.travisclient.adapter.OnListItemListener;
-import com.khmelenko.lab.travisclient.event.travis.BranchesLoadedEvent;
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.network.response.Branch;
 import com.khmelenko.lab.travisclient.network.response.Branches;
-import com.khmelenko.lab.travisclient.task.TaskManager;
-
-import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Fragment with repository branches
@@ -35,8 +27,6 @@ import de.greenrobot.event.EventBus;
  * @author Dmytro Khmelenko
  */
 public class BranchesFragment extends Fragment implements OnListItemListener {
-
-    private static final String REPO_SLUG_KEY = "RepoSlug";
 
     @Bind(R.id.branches_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -50,28 +40,18 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
     @Bind(R.id.empty_text)
     TextView mEmptyText;
 
-    @Inject
-    EventBus mEventBus;
-    @Inject
-    TaskManager mTaskManager;
-
     private BranchesListAdapter mBranchesListAdapter;
     private Branches mBranches;
 
-    private String mRepoSlug;
     private BranchesListener mListener;
 
     /**
      * Creates new instance of the fragment
      *
-     * @param repoSlug Repository slug
      * @return Fragment instance
      */
-    public static BranchesFragment newInstance(String repoSlug) {
+    public static BranchesFragment newInstance() {
         BranchesFragment fragment = new BranchesFragment();
-        Bundle args = new Bundle();
-        args.putString(REPO_SLUG_KEY, repoSlug);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -80,19 +60,10 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mRepoSlug = getArguments().getString(REPO_SLUG_KEY);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_branches, container, false);
         ButterKnife.bind(this, view);
-        TravisApp.instance().activityInjector().inject(this);
 
         mBranchesRecyclerView.setHasFixedSize(true);
 
@@ -106,33 +77,13 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadBranches();
+                mListener.onReloadBranches();
             }
         });
 
         mProgressBar.setVisibility(View.VISIBLE);
-        loadBranches();
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mEventBus.register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mEventBus.unregister(this);
-    }
-
-    /**
-     * Starts loading branches
-     */
-    private void loadBranches() {
-        mTaskManager.getBranches(mRepoSlug);
     }
 
     /**
@@ -145,37 +96,6 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
         } else {
             mEmptyText.setVisibility(View.GONE);
         }
-    }
-
-    /**
-     * Raised on loaded repositories
-     *
-     * @param event Event data
-     */
-    public void onEvent(BranchesLoadedEvent event) {
-        mSwipeRefreshLayout.setRefreshing(false);
-        mProgressBar.setVisibility(View.GONE);
-
-        mBranches = event.getBranches();
-        mBranchesListAdapter.setBranches(mBranches);
-        mBranchesListAdapter.notifyDataSetChanged();
-
-        checkIfEmpty();
-    }
-
-    /**
-     * Raised on failed loading data
-     *
-     * @param event Event data
-     */
-    public void onEvent(LoadingFailedEvent event) {
-        mSwipeRefreshLayout.setRefreshing(false);
-        mProgressBar.setVisibility(View.GONE);
-
-        checkIfEmpty();
-
-        String msg = getString(R.string.error_failed_loading_branches, event.getTaskError().getMessage());
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -204,6 +124,24 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
     }
 
     /**
+     * Sets branches data
+     *
+     * @param branches Branches
+     */
+    public void setBranches(Branches branches) {
+        mSwipeRefreshLayout.setRefreshing(false);
+        mProgressBar.setVisibility(View.GONE);
+
+        if (branches != null) {
+            mBranches = branches;
+            mBranchesListAdapter.setBranches(mBranches);
+            mBranchesListAdapter.notifyDataSetChanged();
+        }
+
+        checkIfEmpty();
+    }
+
+    /**
      * Interface for communication with this fragment
      */
     public interface BranchesListener {
@@ -214,6 +152,11 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
          * @param buildId Id of the last build in branch
          */
         void onBranchSelected(long buildId);
+
+        /**
+         * Handles request for reloading branches data
+         */
+        void onReloadBranches();
     }
 
 }

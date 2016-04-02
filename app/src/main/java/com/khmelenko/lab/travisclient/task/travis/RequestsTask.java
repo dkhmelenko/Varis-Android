@@ -3,6 +3,7 @@ package com.khmelenko.lab.travisclient.task.travis;
 import android.text.TextUtils;
 
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
+import com.khmelenko.lab.travisclient.event.travis.RequestsFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.RequestsLoadedEvent;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.network.response.Requests;
@@ -50,7 +51,7 @@ public final class RequestsTask extends Task<Requests> {
 
     @Override
     public void onFail(TaskError error) {
-        LoadingFailedEvent event = new LoadingFailedEvent(error);
+        RequestsFailedEvent event = new RequestsFailedEvent(error);
         eventBus().post(event);
     }
 }

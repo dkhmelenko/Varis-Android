@@ -2,7 +2,9 @@ package com.khmelenko.lab.travisclient.task.travis;
 
 import android.text.TextUtils;
 
+import com.khmelenko.lab.travisclient.event.travis.BranchesFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.BranchesLoadedEvent;
+import com.khmelenko.lab.travisclient.event.travis.BuildHistoryFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.network.response.Branches;
 import com.khmelenko.lab.travisclient.task.Task;
@@ -46,7 +48,7 @@ public final class BranchesTask extends Task<Branches> {
 
     @Override
     public void onFail(TaskError error) {
-        LoadingFailedEvent event = new LoadingFailedEvent(error);
+        BranchesFailedEvent event = new BranchesFailedEvent(error);
         eventBus().post(event);
     }
 }
