@@ -97,6 +97,8 @@
                 android:resource="@xml/searchable"/>
         </activity>
 
+        <provider android:name=".storage.SearchHistoryProvider"
+                  android:authorities="com.khmelenko.lab.travisclient.storage.SearchHistoryProvider" />
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".activity.SearchResultsActivity"/>

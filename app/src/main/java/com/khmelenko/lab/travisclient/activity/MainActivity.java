@@ -3,7 +3,9 @@ package com.khmelenko.lab.travisclient.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.TravisApp;
+import com.khmelenko.lab.travisclient.adapter.SearchResultsAdapter;
 import com.khmelenko.lab.travisclient.common.Constants;
 import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
 import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
@@ -30,7 +33,10 @@ import com.khmelenko.lab.travisclient.network.response.User;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.storage.CacheStorage;
+import com.khmelenko.lab.travisclient.storage.SearchHistoryProvider;
 import com.khmelenko.lab.travisclient.task.TaskManager;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -65,6 +71,7 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
     CacheStorage mCache;
 
     private User mUser;
+    private List<String> mQueryItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,7 +190,7 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
                     break;
                 case REPO_DETAILS_CODE:
                     boolean reloadRequired = data.getBooleanExtra(RepoDetailsActivity.RELOAD_REQUIRED_KEY, false);
-                    if(reloadRequired) {
+                    if (reloadRequired) {
                         mFragment.setLoadingProgress(true);
                         loadRepos();
                     }
@@ -232,6 +239,37 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
         }
         if (mSearchView != null) {
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    // save search query to history
+                    SearchRecentSuggestions suggestionsProvider = new SearchRecentSuggestions(MainActivity.this,
+                            SearchHistoryProvider.AUTHORITY, SearchHistoryProvider.MODE);
+                    suggestionsProvider.saveRecentQuery(query, null);
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    reloadSearchHistoryAdapter(newText);
+                    return true;
+                }
+
+            });
+            mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+                @Override
+                public boolean onSuggestionClick(int position) {
+                    mSearchView.setQuery(mQueryItems.get(position), true);
+                    return true;
+                }
+
+                @Override
+                public boolean onSuggestionSelect(int position) {
+                    return true;
+                }
+            });
+            reloadSearchHistoryAdapter("");
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -244,6 +282,18 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
         } else {
             super.onBackPressed();
         }
+    }
+
+    /**
+     * Reloads search history adapter
+     *
+     * @param query Query
+     */
+    private void reloadSearchHistoryAdapter(String query) {
+        Cursor cursor = SearchHistoryProvider.queryRecentSearch(this, query);
+        mQueryItems = SearchHistoryProvider.transformSearchResultToList(cursor);
+
+        mSearchView.setSuggestionsAdapter(new SearchResultsAdapter(this, cursor));
     }
 
     /**

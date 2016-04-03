@@ -27,6 +27,10 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="GeneralText">
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <!-- Style for the image icon in view build -->
     <style name="ViewBuildImageIcon">
         <item name="android:layout_width">17dp</item>
