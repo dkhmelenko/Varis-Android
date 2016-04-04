@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -54,6 +55,8 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
     private static final int AUTH_ACTIVITY_CODE = 0;
     private static final int REPO_DETAILS_CODE = 1;
 
+    private static final String SAVED_QUERY = "SavedQuery";
+
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
@@ -72,6 +75,8 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
 
     private User mUser;
     private List<String> mQueryItems;
+
+    private String mSavedQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +109,18 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
         super.onPause();
         mEventBus.unregister(this);
         mFragment.setLoadingProgress(false);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(SAVED_QUERY, mSearchView.getQuery().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mSavedQuery = savedInstanceState.getString(SAVED_QUERY);
     }
 
     /**
@@ -269,7 +286,14 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
                     return true;
                 }
             });
+
             reloadSearchHistoryAdapter("");
+
+            // restore query if it was
+            if(!TextUtils.isEmpty(mSavedQuery)) {
+                mSearchView.setQuery(mSavedQuery, false);
+                mSearchView.setIconified(false);
+            }
         }
         return super.onCreateOptionsMenu(menu);
     }
