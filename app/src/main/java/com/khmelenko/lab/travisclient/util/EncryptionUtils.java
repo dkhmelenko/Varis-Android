@@ -21,7 +21,7 @@ public final class EncryptionUtils {
      * @return Base64 string
      */
     public static String toBase64(String input) {
-        String base64Str = Base64.encodeToString(input.getBytes(), Base64.DEFAULT);
+        String base64Str = Base64.encodeToString(input.getBytes(), Base64.NO_WRAP);
         return base64Str;
     }
 
