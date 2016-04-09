@@ -12,12 +12,25 @@ import com.khmelenko.lab.travisclient.network.retrofit.RawApiService;
 import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
 import com.khmelenko.lab.travisclient.network.retrofit.TravisApiService;
 import com.khmelenko.lab.travisclient.task.LoaderAsyncTask;
+import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskException;
 import com.khmelenko.lab.travisclient.task.TaskHelper;
 import com.khmelenko.lab.travisclient.task.TaskManager;
+import com.khmelenko.lab.travisclient.task.github.CreateAuthorizationTask;
+import com.khmelenko.lab.travisclient.task.github.DeleteAuthorizationTask;
+import com.khmelenko.lab.travisclient.task.travis.AuthTask;
+import com.khmelenko.lab.travisclient.task.travis.BranchesTask;
+import com.khmelenko.lab.travisclient.task.travis.BuildDetailsTask;
+import com.khmelenko.lab.travisclient.task.travis.BuildHistoryTask;
+import com.khmelenko.lab.travisclient.task.travis.CancelBuildTask;
 import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
+import com.khmelenko.lab.travisclient.task.travis.LogTask;
+import com.khmelenko.lab.travisclient.task.travis.RepoTask;
+import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
 import com.khmelenko.lab.travisclient.task.travis.RestartBuildTask;
+import com.khmelenko.lab.travisclient.task.travis.UserReposTask;
+import com.khmelenko.lab.travisclient.task.travis.UserTask;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -35,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import retrofit.client.Header;
 import retrofit.client.Response;
 
 import static junit.framework.TestCase.assertEquals;
@@ -50,7 +64,9 @@ import static org.mockito.Mockito.*;
 @PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
 @PrepareForTest({RestClient.class, Response.class, com.squareup.okhttp.Response.class, TaskHelper.class, TaskManager.class, TaskError.class,
         RestartBuildTask.class, BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class,
-        AuthorizationRequest.class, FindRepoTask.class})
+        AuthorizationRequest.class, FindRepoTask.class, BranchesTask.class, BuildDetailsTask.class, CancelBuildTask.class,
+        UserTask.class, RequestsTask.class, BuildHistoryTask.class, UserReposTask.class, RepoTask.class, AuthTask.class,
+        CreateAuthorizationTask.class, AuthorizationRequest.class, LogTask.class, DeleteAuthorizationTask.class})
 public class TestTaskManager {
 
     @Rule
@@ -89,16 +105,17 @@ public class TestTaskManager {
         verify(task).onSuccess(result);
     }
 
-    @Test
-    public void testTaskFailed() {
+    private void testTaskFailed(Task task) {
         final int errorCode = 401;
         final String errorMsg = "error";
 
-        RestartBuildTask task = spy(new RestartBuildTask(0));
         task.setHelper(mTaskHelper);
+        List<Header> headers = new ArrayList<>();
+        Response response = spy(new Response("url", errorCode, errorMsg, headers, null));
         TaskError error = spy(new TaskError(errorCode, errorMsg));
         TaskException exception = spy(new TaskException(error));
         when(task.execute()).thenThrow(exception);
+        when(error.getResponse()).thenReturn(response);
 
         ArgumentCaptor<TaskError> argument = ArgumentCaptor.forClass(TaskError.class);
         LoaderAsyncTask.executeTask(task, mTaskHelper);
@@ -112,12 +129,20 @@ public class TestTaskManager {
     public void testRestartBuildTask() {
         mTaskManager.restartBuild(anyLong());
         verify(mRestClient.getApiService()).restartBuild(anyLong(), eq(EmptyOutput.INSTANCE));
+
+        final int buildId = 0;
+        RestartBuildTask task = spy(new RestartBuildTask(buildId));
+        testTaskFailed(task);
     }
 
     @Test
     public void testCancelBuildTask() {
         mTaskManager.cancelBuild(anyLong());
         verify(mRestClient.getApiService()).cancelBuild(anyLong(), eq(EmptyOutput.INSTANCE));
+
+        final int buildId = 0;
+        CancelBuildTask task = spy(new CancelBuildTask(buildId));
+        testTaskFailed(task);
     }
 
     @Test
@@ -127,24 +152,50 @@ public class TestTaskManager {
 
         mTaskManager.findRepos(eq(""));
         verify(mRestClient.getApiService()).getRepos();
+
+        final String testRepo = "testRepo";
+        FindRepoTask task = spy(new FindRepoTask(testRepo));
+        testTaskFailed(task);
+    }
+
+    @Test
+    public void testGetRepo() {
+        final String testRepo = "testRepo";
+        mTaskManager.getRepo(testRepo);
+        verify(mRestClient.getApiService()).getRepo(testRepo);
+
+        RepoTask task = spy(new RepoTask(testRepo));
+        testTaskFailed(task);
     }
 
     @Test
     public void testGetUserRepos() {
         mTaskManager.userRepos(anyString());
         verify(mRestClient.getApiService()).getUserRepos(anyString());
+
+        final String testRepo = "testRepo";
+        UserReposTask task = spy(new UserReposTask(testRepo));
+        testTaskFailed(task);
     }
 
     @Test
     public void testGetBuildHistory() {
         mTaskManager.getBuildHistory("test");
         verify(mRestClient.getApiService()).getBuilds("test");
+
+        final String testRepo = "testRepo";
+        BuildHistoryTask task = spy(new BuildHistoryTask(testRepo));
+        testTaskFailed(task);
     }
 
     @Test
     public void testGetBranches() {
         mTaskManager.getBranches("test");
         verify(mRestClient.getApiService()).getBranches("test");
+
+        final String testRepo = "testRepo";
+        BranchesTask task = spy(new BranchesTask(testRepo));
+        testTaskFailed(task);
     }
 
     @Test
@@ -155,18 +206,31 @@ public class TestTaskManager {
         mTaskManager.getRequests("test");
         verify(mRestClient.getApiService()).getRequests("test");
         verify(mRestClient.getApiService()).getPullRequestBuilds("test");
+
+        final String testRepo = "testRepo";
+        RequestsTask task = spy(new RequestsTask(testRepo));
+        testTaskFailed(task);
     }
 
     @Test
     public void testGetBuildDetails() {
-        mTaskManager.getBuildDetails("test", 0);
-        verify(mRestClient.getApiService()).getBuild("test", 0);
+        final String testRepo = "testRepo";
+        final int buildId = 0;
+
+        mTaskManager.getBuildDetails(testRepo, buildId);
+        verify(mRestClient.getApiService()).getBuild(testRepo, buildId);
+
+        BuildDetailsTask task = spy(new BuildDetailsTask(testRepo, buildId));
+        testTaskFailed(task);
     }
 
     @Test
     public void testUser() {
         mTaskManager.getUser();
         verify(mRestClient.getApiService()).getUser();
+
+        UserTask task = spy(new UserTask());
+        testTaskFailed(task);
     }
 
     @Test
@@ -180,10 +244,17 @@ public class TestTaskManager {
 
         mTaskManager.startAuth(auth);
         verify(mRestClient.getApiService()).auth(request);
+
+        final String accessToken = "token";
+        AuthTask task = spy(new AuthTask(accessToken));
+        testTaskFailed(task);
     }
 
     @Test
     public void testGetLogs() {
+        final String auth = "test";
+        final long jobId = 0;
+
         Response response = mock(Response.class);
         when(response.getStatus()).thenReturn(200);
         when(response.getUrl()).thenReturn("url");
@@ -193,8 +264,11 @@ public class TestTaskManager {
         mTaskManager.getLogUrl(anyLong());
         verify(mRestClient.getRawApiService()).getLog(anyString());
 
-        mTaskManager.getLogUrl("test", 0);
+        mTaskManager.getLogUrl(auth, jobId);
         verify(mRestClient.getRawApiService()).getLog(anyString(), anyString());
+
+        LogTask task = spy(new LogTask(auth, jobId));
+        testTaskFailed(task);
     }
 
     @Test
@@ -206,6 +280,11 @@ public class TestTaskManager {
 
         mTaskManager.createNewAuthorization(authToken, request, authToken);
         verify(mRestClient.getGithubApiService()).createNewAuthorization(authToken, authToken, request);
+
+        List<String> scopes = new ArrayList<>();
+        AuthorizationRequest authRequest = spy(new AuthorizationRequest(scopes, ""));
+        CreateAuthorizationTask task = spy(new CreateAuthorizationTask(authToken, authRequest));
+        testTaskFailed(task);
     }
 
     @Test
@@ -216,6 +295,9 @@ public class TestTaskManager {
 
         mTaskManager.deleteAuthorization(auth, auth, auth);
         verify(mRestClient.getGithubApiService()).deleteAuthorization(auth, auth, auth);
+
+        DeleteAuthorizationTask task = spy(new DeleteAuthorizationTask(auth, auth));
+        testTaskFailed(task);
     }
 
     @Test

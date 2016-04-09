@@ -11,6 +11,7 @@ import com.khmelenko.lab.travisclient.task.travis.CancelBuildTask;
 import com.khmelenko.lab.travisclient.task.travis.FindRepoTask;
 import com.khmelenko.lab.travisclient.task.travis.IntentUrlTask;
 import com.khmelenko.lab.travisclient.task.travis.LogTask;
+import com.khmelenko.lab.travisclient.task.travis.RepoTask;
 import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
 import com.khmelenko.lab.travisclient.task.travis.RestartBuildTask;
 import com.khmelenko.lab.travisclient.task.travis.UserReposTask;
@@ -95,6 +96,16 @@ public final class TaskManager {
      */
     public void findRepos(String searchText) {
         FindRepoTask task = new FindRepoTask(searchText);
+        LoaderAsyncTask.executeTask(task, mTaskHelper);
+    }
+
+    /**
+     * Gets repository details
+     *
+     * @param repoSlug Repository slug
+     */
+    public void getRepo(String repoSlug) {
+        RepoTask task = new RepoTask(repoSlug);
         LoaderAsyncTask.executeTask(task, mTaskHelper);
     }
 
