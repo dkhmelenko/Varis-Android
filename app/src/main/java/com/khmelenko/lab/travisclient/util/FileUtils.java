@@ -26,12 +26,23 @@ public final class FileUtils {
     /**
      * Writes data to the file in internal memory
      *
-     * @param fileName File name
+     * @param fileName Filename
      * @param data     Data for saving
      */
     public static void writeInternalFile(String fileName, String data) {
+        Context context = TravisApp.getAppContext();
+        writeInternalFile(fileName, data, context);
+    }
+
+    /**
+     * Writes data to the file in internal memory
+     *
+     * @param fileName File name
+     * @param data     Data for saving
+     * @param context  Context
+     */
+    public static void writeInternalFile(String fileName, String data, Context context) {
         try {
-            Context context = TravisApp.getAppContext();
             FileOutputStream stream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             OutputStreamWriter outputWriter = new OutputStreamWriter(stream);
             outputWriter.write(data);
@@ -44,13 +55,24 @@ public final class FileUtils {
     /**
      * Reads data from the file in internal memory
      *
-     * @param fileName File name
-     * @return Read data
+     * @param fileName Filename
+     * @return File content
      */
     public static String readInternalFile(String fileName) {
+        Context context = TravisApp.getAppContext();
+        return readInternalFile(fileName, context);
+    }
+
+    /**
+     * Reads data from the file in internal memory
+     *
+     * @param fileName File name
+     * @param context  Context
+     * @return Read data
+     */
+    public static String readInternalFile(String fileName, Context context) {
         String dataFromFile = "";
 
-        Context context = TravisApp.getAppContext();
         File file = context.getFileStreamPath(fileName);
         if (file.exists()) {
 
@@ -69,7 +91,7 @@ public final class FileUtils {
                     inputStream.close();
                     dataFromFile = stringBuilder.toString();
                 }
-            }catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -80,11 +102,21 @@ public final class FileUtils {
     /**
      * Deletes the file in internal memory
      *
-     * @param fileName File name
+     * @param fileName Filename
      */
     public static void deleteInternalFile(String fileName) {
+        Context context = TravisApp.getAppContext();
+        deleteInternalFile(fileName, context);
+    }
+
+    /**
+     * Deletes the file in internal memory
+     *
+     * @param fileName File name
+     * @param context  Context
+     */
+    public static void deleteInternalFile(String fileName, Context context) {
         try {
-            Context context = TravisApp.getAppContext();
             context.deleteFile(fileName);
         } catch (Exception e) {
             e.printStackTrace();
