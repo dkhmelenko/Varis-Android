@@ -11,6 +11,8 @@ The app has the following features:
 - build log
 - restart build
 - cancel build
+- search with history
+- intent filter for opening build links
 
 [![Travis Client on Google Play Store](/screenshots/google-play-badge.png)](https://play.google.com/store/apps/details?id=com.khmelenko.lab.travisclient)
 
