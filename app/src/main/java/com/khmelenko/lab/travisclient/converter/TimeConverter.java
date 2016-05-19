@@ -22,12 +22,18 @@ public final class TimeConverter {
         int sec = (int) (duration % 60);
         StringBuilder builder = new StringBuilder();
         if (hour != 0) {
-            builder.append(hour).append(" hours").append(" ");
+            builder.append(hour).append(" hours");
         }
         if (min != 0) {
-            builder.append(min).append(" min").append(" ");
+            if(builder.length() > 0) {
+                builder.append(" ");
+            }
+            builder.append(min).append(" min");
         }
         if(sec != 0) {
+            if(builder.length() > 0) {
+                builder.append(" ");
+            }
             builder.append(sec).append(" sec");
         }
 
@@ -36,6 +42,6 @@ public final class TimeConverter {
         }
 
         return builder.toString();
-
     }
+
 }
