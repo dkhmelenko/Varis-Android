@@ -51,6 +51,12 @@ public final class BuildStateHelper {
         return color;
     }
 
+    /**
+     * Gets the color for the build background
+     *
+     * @param state Build state
+     * @return Color
+     */
     public static int getBuildBackground(String state) {
         Context context = TravisApp.getAppContext();
 
@@ -79,9 +85,8 @@ public final class BuildStateHelper {
      * @param state Build state
      * @return Image drawable
      */
-    public static
     @Nullable
-    Drawable getBuildImage(String state) {
+    public static Drawable getBuildImage(String state) {
         Context context = TravisApp.getAppContext();
 
         Drawable drawable = null;
