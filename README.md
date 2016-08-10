@@ -1,5 +1,5 @@
 # Project description
-[![Build Status on Travis:](https://travis-ci.org/brave-warrior/TravisClient-Android.svg?branch=master)](https://travis-ci.org/brave-warrior/TravisClient-Android)
+[![Build Status on Travis:](https://travis-ci.org/dkhmelenko/TravisClient-Android.svg?branch=master)](https://travis-ci.org/dkhmelenko/TravisClient-Android)
 
 This project is Android client for Travis CI.
 
