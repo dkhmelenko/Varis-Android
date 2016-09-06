@@ -12,6 +12,7 @@ android {
         versionCode 6
         versionName "1.00.006"
     }
+
     buildTypes {
         release {
             minifyEnabled true
