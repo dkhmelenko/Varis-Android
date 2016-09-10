@@ -22,7 +22,7 @@ public final class RestartBuildTask extends Task<Void> {
 
     @Override
     public Void execute() throws TaskException {
-        restClient().getApiService().restartBuild(mBuildId, EmptyOutput.INSTANCE);
+        travisClient().getApiService().restartBuild(mBuildId, EmptyOutput.INSTANCE);
         return null;
     }
 

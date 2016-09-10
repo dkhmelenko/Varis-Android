@@ -37,7 +37,7 @@ public final class IntentUrlTask extends Task<String> {
         String redirectUrl = mUrl;
 
         try {
-            Response response = restClient().singleRequest(mUrl);
+            Response response = rawClient().singleRequest(mUrl);
             if(response.isRedirect()) {
                 redirectUrl = response.header("Location", "");
             }

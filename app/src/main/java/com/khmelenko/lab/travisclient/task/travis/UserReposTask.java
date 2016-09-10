@@ -26,7 +26,7 @@ public final class UserReposTask extends Task<List<Repo>> {
 
     @Override
     public List<Repo> execute() throws TaskException {
-        List<Repo> repos = restClient().getApiService().getUserRepos(mUserName);
+        List<Repo> repos = travisClient().getApiService().getUserRepos(mUserName);
         return repos;
     }
 

@@ -1,4 +1,4 @@
-package com.khmelenko.lab.travisclient.network.retrofit;
+package com.khmelenko.lab.travisclient.network.retrofit.raw;
 
 import retrofit.Callback;
 import retrofit.client.Response;

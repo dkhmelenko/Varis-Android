@@ -1,6 +1,8 @@
 package com.khmelenko.lab.travisclient.dagger.module;
 
-import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.github.GitHubRestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.raw.RawClient;
+import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
 
 import javax.inject.Singleton;
 
@@ -17,7 +19,19 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public RestClient provideRestClient() {
-        return RestClient.newInstance();
+    public TravisRestClient provideTravisRestClient() {
+        return TravisRestClient.newInstance();
+    }
+
+    @Provides
+    @Singleton
+    public GitHubRestClient provideGitHubRestClient() {
+        return GitHubRestClient.newInstance();
+    }
+
+    @Provides
+    @Singleton
+    public RawClient provideRawRestClient() {
+        return RawClient.newInstance();
     }
 }

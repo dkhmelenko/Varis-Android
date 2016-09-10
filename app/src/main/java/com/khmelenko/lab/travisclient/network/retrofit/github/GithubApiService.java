@@ -1,4 +1,4 @@
-package com.khmelenko.lab.travisclient.network.retrofit;
+package com.khmelenko.lab.travisclient.network.retrofit.github;
 
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.Authorization;

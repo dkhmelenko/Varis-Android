@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -31,7 +30,7 @@ import com.khmelenko.lab.travisclient.fragment.LicensesDialogFragment;
 import com.khmelenko.lab.travisclient.fragment.ReposFragment;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.User;
-import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.storage.CacheStorage;
 import com.khmelenko.lab.travisclient.storage.SearchHistoryProvider;
@@ -65,7 +64,7 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
     private SearchView mSearchView;
 
     @Inject
-    RestClient mRestClient;
+    TravisRestClient mTravisRestClient;
     @Inject
     EventBus mEventBus;
     @Inject
@@ -173,7 +172,7 @@ public final class MainActivity extends BaseActivity implements ReposFragment.Re
 
                         // reset back to open source url
                         AppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
-                        mRestClient.updateTravisEndpoint(AppSettings.getServerUrl());
+                        mTravisRestClient.updateTravisEndpoint(AppSettings.getServerUrl());
 
                         finish();
                         startActivity(getIntent());

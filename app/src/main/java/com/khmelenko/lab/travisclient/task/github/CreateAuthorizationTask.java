@@ -6,7 +6,7 @@ import com.khmelenko.lab.travisclient.event.github.CreateAuthorizationSuccessEve
 import com.khmelenko.lab.travisclient.event.github.GithubAuthorizationFailEvent;
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.Authorization;
-import com.khmelenko.lab.travisclient.network.retrofit.GithubApiService;
+import com.khmelenko.lab.travisclient.network.retrofit.github.GithubApiService;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskException;
@@ -42,10 +42,10 @@ public final class CreateAuthorizationTask extends Task<Authorization> {
         Authorization authorization;
         try {
             if (!TextUtils.isEmpty(mTwoFactorCode)) {
-                authorization = restClient().getGithubApiService().createNewAuthorization(mBasicAuth,
+                authorization = gitHubClient().getApiService().createNewAuthorization(mBasicAuth,
                         mTwoFactorCode, mAuthorizationRequest);
             } else {
-                authorization = restClient().getGithubApiService()
+                authorization = gitHubClient().getApiService()
                         .createNewAuthorization(mBasicAuth, mAuthorizationRequest);
             }
         } catch (TaskException error) {

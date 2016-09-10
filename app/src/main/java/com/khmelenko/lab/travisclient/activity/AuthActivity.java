@@ -19,7 +19,7 @@ import com.khmelenko.lab.travisclient.fragment.AuthFragment;
 import com.khmelenko.lab.travisclient.fragment.SecurityCodeFragment;
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.Authorization;
-import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskManager;
@@ -59,7 +59,7 @@ public final class AuthActivity extends BaseActivity implements AuthFragment.OnL
     EventBus mEventBus;
 
     @Inject
-    RestClient mRestClient;
+    TravisRestClient mTravisRestClient;
 
     private String mBasicAuth;
     private String mSecurityCode;
@@ -248,7 +248,7 @@ public final class AuthActivity extends BaseActivity implements AuthFragment.OnL
     @Override
     public void onChangeServer(String newServer) {
         AppSettings.putServerUrl(newServer);
-        mRestClient.updateTravisEndpoint(newServer);
+        mTravisRestClient.updateTravisEndpoint(newServer);
     }
 
     @Override

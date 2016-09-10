@@ -7,10 +7,12 @@ import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.Requests;
 import com.khmelenko.lab.travisclient.network.retrofit.EmptyOutput;
-import com.khmelenko.lab.travisclient.network.retrofit.GithubApiService;
-import com.khmelenko.lab.travisclient.network.retrofit.RawApiService;
-import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
-import com.khmelenko.lab.travisclient.network.retrofit.TravisApiService;
+import com.khmelenko.lab.travisclient.network.retrofit.github.GitHubRestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.github.GithubApiService;
+import com.khmelenko.lab.travisclient.network.retrofit.raw.RawApiService;
+import com.khmelenko.lab.travisclient.network.retrofit.raw.RawClient;
+import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisApiService;
 import com.khmelenko.lab.travisclient.task.LoaderAsyncTask;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
@@ -62,7 +64,8 @@ import static org.mockito.Mockito.*;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 @PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
-@PrepareForTest({RestClient.class, Response.class, com.squareup.okhttp.Response.class, TaskHelper.class, TaskManager.class, TaskError.class,
+@PrepareForTest({TravisRestClient.class, GitHubRestClient.class, RawClient.class,
+        Response.class, com.squareup.okhttp.Response.class, TaskHelper.class, TaskManager.class, TaskError.class,
         RestartBuildTask.class, BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class,
         AuthorizationRequest.class, FindRepoTask.class, BranchesTask.class, BuildDetailsTask.class, CancelBuildTask.class,
         UserTask.class, RequestsTask.class, BuildHistoryTask.class, UserReposTask.class, RepoTask.class, AuthTask.class,
@@ -75,21 +78,27 @@ public class TestTaskManager {
     private TaskManager mTaskManager;
     private TaskHelper mTaskHelper;
     private EventBus mEventBus;
-    private RestClient mRestClient;
+    private TravisRestClient mTravisRestClient;
+    private GitHubRestClient mGitHubRestClient;
+    private RawClient mRawClient;
 
     @Before
     public void setupMock() {
-        mRestClient = mock(RestClient.class);
+        mTravisRestClient = mock(TravisRestClient.class);
         TravisApiService apiService = mock(TravisApiService.class);
-        when(mRestClient.getApiService()).thenReturn(apiService);
+        when(mTravisRestClient.getApiService()).thenReturn(apiService);
+
+        mGitHubRestClient = mock(GitHubRestClient.class);
         GithubApiService githubApiService = mock(GithubApiService.class);
-        when(mRestClient.getGithubApiService()).thenReturn(githubApiService);
+        when(mGitHubRestClient.getApiService()).thenReturn(githubApiService);
+
+        mRawClient = mock(RawClient.class);
         RawApiService rawApiService = mock(RawApiService.class);
-        when(mRestClient.getRawApiService()).thenReturn(rawApiService);
+        when(mRawClient.getApiService()).thenReturn(rawApiService);
 
         mEventBus = mock(EventBus.class);
 
-        mTaskHelper = spy(new TaskHelper(mRestClient, mEventBus));
+        mTaskHelper = spy(new TaskHelper(mTravisRestClient, mGitHubRestClient, mRawClient, mEventBus));
         mTaskManager = spy(new TaskManager(mTaskHelper));
     }
 
@@ -98,7 +107,7 @@ public class TestTaskManager {
         final String request = "test";
         FindRepoTask task = spy(new FindRepoTask(request));
         List<Repo> result = spy(new ArrayList<Repo>());
-        when(mRestClient.getApiService().getRepos(request)).thenReturn(result);
+        when(mTravisRestClient.getApiService().getRepos(request)).thenReturn(result);
 
         LoaderAsyncTask.executeTask(task, mTaskHelper);
         verify(task).execute();
@@ -128,7 +137,7 @@ public class TestTaskManager {
     @Test
     public void testRestartBuildTask() {
         mTaskManager.restartBuild(anyLong());
-        verify(mRestClient.getApiService()).restartBuild(anyLong(), eq(EmptyOutput.INSTANCE));
+        verify(mTravisRestClient.getApiService()).restartBuild(anyLong(), eq(EmptyOutput.INSTANCE));
 
         final int buildId = 0;
         RestartBuildTask task = spy(new RestartBuildTask(buildId));
@@ -138,7 +147,7 @@ public class TestTaskManager {
     @Test
     public void testCancelBuildTask() {
         mTaskManager.cancelBuild(anyLong());
-        verify(mRestClient.getApiService()).cancelBuild(anyLong(), eq(EmptyOutput.INSTANCE));
+        verify(mTravisRestClient.getApiService()).cancelBuild(anyLong(), eq(EmptyOutput.INSTANCE));
 
         final int buildId = 0;
         CancelBuildTask task = spy(new CancelBuildTask(buildId));
@@ -148,10 +157,10 @@ public class TestTaskManager {
     @Test
     public void testSearchRepo() {
         mTaskManager.findRepos("test");
-        verify(mRestClient.getApiService()).getRepos("test");
+        verify(mTravisRestClient.getApiService()).getRepos("test");
 
         mTaskManager.findRepos(eq(""));
-        verify(mRestClient.getApiService()).getRepos();
+        verify(mTravisRestClient.getApiService()).getRepos();
 
         final String testRepo = "testRepo";
         FindRepoTask task = spy(new FindRepoTask(testRepo));
@@ -162,7 +171,7 @@ public class TestTaskManager {
     public void testGetRepo() {
         final String testRepo = "testRepo";
         mTaskManager.getRepo(testRepo);
-        verify(mRestClient.getApiService()).getRepo(testRepo);
+        verify(mTravisRestClient.getApiService()).getRepo(testRepo);
 
         RepoTask task = spy(new RepoTask(testRepo));
         testTaskFailed(task);
@@ -171,7 +180,7 @@ public class TestTaskManager {
     @Test
     public void testGetUserRepos() {
         mTaskManager.userRepos(anyString());
-        verify(mRestClient.getApiService()).getUserRepos(anyString());
+        verify(mTravisRestClient.getApiService()).getUserRepos(anyString());
 
         final String testRepo = "testRepo";
         UserReposTask task = spy(new UserReposTask(testRepo));
@@ -181,7 +190,7 @@ public class TestTaskManager {
     @Test
     public void testGetBuildHistory() {
         mTaskManager.getBuildHistory("test");
-        verify(mRestClient.getApiService()).getBuilds("test");
+        verify(mTravisRestClient.getApiService()).getBuilds("test");
 
         final String testRepo = "testRepo";
         BuildHistoryTask task = spy(new BuildHistoryTask(testRepo));
@@ -191,7 +200,7 @@ public class TestTaskManager {
     @Test
     public void testGetBranches() {
         mTaskManager.getBranches("test");
-        verify(mRestClient.getApiService()).getBranches("test");
+        verify(mTravisRestClient.getApiService()).getBranches("test");
 
         final String testRepo = "testRepo";
         BranchesTask task = spy(new BranchesTask(testRepo));
@@ -200,12 +209,12 @@ public class TestTaskManager {
 
     @Test
     public void testGetRequests() {
-        when(mRestClient.getApiService().getRequests(anyString())).thenReturn(spy(new Requests()));
-        when(mRestClient.getApiService().getPullRequestBuilds(anyString())).thenReturn(mock(BuildHistory.class));
+        when(mTravisRestClient.getApiService().getRequests(anyString())).thenReturn(spy(new Requests()));
+        when(mTravisRestClient.getApiService().getPullRequestBuilds(anyString())).thenReturn(mock(BuildHistory.class));
 
         mTaskManager.getRequests("test");
-        verify(mRestClient.getApiService()).getRequests("test");
-        verify(mRestClient.getApiService()).getPullRequestBuilds("test");
+        verify(mTravisRestClient.getApiService()).getRequests("test");
+        verify(mTravisRestClient.getApiService()).getPullRequestBuilds("test");
 
         final String testRepo = "testRepo";
         RequestsTask task = spy(new RequestsTask(testRepo));
@@ -218,7 +227,7 @@ public class TestTaskManager {
         final int buildId = 0;
 
         mTaskManager.getBuildDetails(testRepo, buildId);
-        verify(mRestClient.getApiService()).getBuild(testRepo, buildId);
+        verify(mTravisRestClient.getApiService()).getBuild(testRepo, buildId);
 
         BuildDetailsTask task = spy(new BuildDetailsTask(testRepo, buildId));
         testTaskFailed(task);
@@ -227,7 +236,7 @@ public class TestTaskManager {
     @Test
     public void testUser() {
         mTaskManager.getUser();
-        verify(mRestClient.getApiService()).getUser();
+        verify(mTravisRestClient.getApiService()).getUser();
 
         UserTask task = spy(new UserTask());
         testTaskFailed(task);
@@ -240,10 +249,10 @@ public class TestTaskManager {
         request.setGithubToken(auth);
         AccessToken token = mock(AccessToken.class);
         when(token.getAccessToken()).thenReturn(auth);
-        when(mRestClient.getApiService().auth(request)).thenReturn(token);
+        when(mTravisRestClient.getApiService().auth(request)).thenReturn(token);
 
         mTaskManager.startAuth(auth);
-        verify(mRestClient.getApiService()).auth(request);
+        verify(mTravisRestClient.getApiService()).auth(request);
 
         final String accessToken = "token";
         AuthTask task = spy(new AuthTask(accessToken));
@@ -258,14 +267,14 @@ public class TestTaskManager {
         Response response = mock(Response.class);
         when(response.getStatus()).thenReturn(200);
         when(response.getUrl()).thenReturn("url");
-        when(mRestClient.getRawApiService().getLog(anyString())).thenReturn(response);
-        when(mRestClient.getRawApiService().getLog(anyString(), anyString())).thenReturn(response);
+        when(mRawClient.getApiService().getLog(anyString())).thenReturn(response);
+        when(mRawClient.getApiService().getLog(anyString(), anyString())).thenReturn(response);
 
         mTaskManager.getLogUrl(anyLong());
-        verify(mRestClient.getRawApiService()).getLog(anyString());
+        verify(mRawClient.getApiService()).getLog(anyString());
 
         mTaskManager.getLogUrl(auth, jobId);
-        verify(mRestClient.getRawApiService()).getLog(anyString(), anyString());
+        verify(mRawClient.getApiService()).getLog(anyString(), anyString());
 
         LogTask task = spy(new LogTask(auth, jobId));
         testTaskFailed(task);
@@ -276,10 +285,10 @@ public class TestTaskManager {
         String authToken = "test";
         AuthorizationRequest request = mock(AuthorizationRequest.class);
         mTaskManager.createNewAuthorization(authToken, request);
-        verify(mRestClient.getGithubApiService()).createNewAuthorization(authToken, request);
+        verify(mGitHubRestClient.getApiService()).createNewAuthorization(authToken, request);
 
         mTaskManager.createNewAuthorization(authToken, request, authToken);
-        verify(mRestClient.getGithubApiService()).createNewAuthorization(authToken, authToken, request);
+        verify(mGitHubRestClient.getApiService()).createNewAuthorization(authToken, authToken, request);
 
         List<String> scopes = new ArrayList<>();
         AuthorizationRequest authRequest = spy(new AuthorizationRequest(scopes, ""));
@@ -291,10 +300,10 @@ public class TestTaskManager {
     public void testGithubDeleteAuth() {
         String auth = "test";
         mTaskManager.deleteAuthorization(auth, auth);
-        verify(mRestClient.getGithubApiService()).deleteAuthorization(auth, auth);
+        verify(mGitHubRestClient.getApiService()).deleteAuthorization(auth, auth);
 
         mTaskManager.deleteAuthorization(auth, auth, auth);
-        verify(mRestClient.getGithubApiService()).deleteAuthorization(auth, auth, auth);
+        verify(mGitHubRestClient.getApiService()).deleteAuthorization(auth, auth, auth);
 
         DeleteAuthorizationTask task = spy(new DeleteAuthorizationTask(auth, auth));
         testTaskFailed(task);
@@ -304,10 +313,10 @@ public class TestTaskManager {
     public void testSingleRequest() throws IOException {
         String anyUrl = "https://google.com.ua";
         com.squareup.okhttp.Response response = mock(com.squareup.okhttp.Response.class);
-        when(mRestClient.singleRequest(anyUrl)).thenReturn(response);
+        when(mRawClient.singleRequest(anyUrl)).thenReturn(response);
 
         mTaskManager.intentUrl(anyUrl);
-        verify(mRestClient).singleRequest(anyUrl);
+        verify(mRawClient).singleRequest(anyUrl);
     }
 
 }

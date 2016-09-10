@@ -39,9 +39,9 @@ public final class LogTask extends Task<String> {
         try {
             Response response;
             if (TextUtils.isEmpty(mAuth)) {
-                response = restClient().getRawApiService().getLog(String.valueOf(mJobId));
+                response = rawClient().getApiService().getLog(String.valueOf(mJobId));
             } else {
-                response = restClient().getRawApiService().getLog(mAuth, String.valueOf(mJobId));
+                response = rawClient().getApiService().getLog(mAuth, String.valueOf(mJobId));
             }
 
             // in case of success just return the url. It means that the log file can be accessed

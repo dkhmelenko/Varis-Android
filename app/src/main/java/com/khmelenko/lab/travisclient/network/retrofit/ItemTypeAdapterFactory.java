@@ -16,7 +16,7 @@ import java.io.IOException;
  *
  * @author Dmytro Khmelenko
  */
-final class ItemTypeAdapterFactory implements TypeAdapterFactory {
+public final class ItemTypeAdapterFactory implements TypeAdapterFactory {
 
     public <T> TypeAdapter<T> create(Gson gson, final TypeToken<T> type) {
 

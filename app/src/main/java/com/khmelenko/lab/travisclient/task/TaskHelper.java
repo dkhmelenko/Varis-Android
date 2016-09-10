@@ -1,6 +1,8 @@
 package com.khmelenko.lab.travisclient.task;
 
-import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.github.GitHubRestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.raw.RawClient;
+import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
 
 import javax.inject.Inject;
 
@@ -13,20 +15,33 @@ import de.greenrobot.event.EventBus;
  */
 public final class TaskHelper {
 
-    private final RestClient mRestClient;
+    private final TravisRestClient mTravisRestClient;
+    private final GitHubRestClient mGitHubRestClient;
+    private final RawClient mRawClient;
     private final EventBus mEventBus;
 
     @Inject
-    public TaskHelper(RestClient restClient, EventBus eventBus) {
-        mRestClient = restClient;
+    public TaskHelper(TravisRestClient travisRestClient, GitHubRestClient gitHubRestClient,
+                      RawClient rawClient, EventBus eventBus) {
+        mTravisRestClient = travisRestClient;
+        mGitHubRestClient = gitHubRestClient;
+        mRawClient = rawClient;
         mEventBus = eventBus;
     }
 
-    public RestClient getRestClient() {
-        return mRestClient;
+    public TravisRestClient getTravisRestClient() {
+        return mTravisRestClient;
     }
 
     public EventBus getEventBus() {
         return mEventBus;
+    }
+
+    public GitHubRestClient getGitHubRestClient() {
+        return mGitHubRestClient;
+    }
+
+    public RawClient getRawClient() {
+        return mRawClient;
     }
 }

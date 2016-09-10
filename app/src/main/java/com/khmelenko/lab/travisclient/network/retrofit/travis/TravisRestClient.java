@@ -1,10 +1,12 @@
-package com.khmelenko.lab.travisclient.network.retrofit;
+package com.khmelenko.lab.travisclient.network.retrofit.travis;
 
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.khmelenko.lab.travisclient.common.Constants;
+import com.khmelenko.lab.travisclient.network.retrofit.ItemTypeAdapterFactory;
+import com.khmelenko.lab.travisclient.network.retrofit.raw.RawApiService;
+import com.khmelenko.lab.travisclient.network.retrofit.RestErrorHandling;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.util.PackageUtils;
 import com.squareup.okhttp.OkHttpClient;
@@ -23,38 +25,13 @@ import retrofit.converter.GsonConverter;
  *
  * @author Dmytro Khmelenko
  */
-public final class RestClient {
-    private static final String GITHUB_URL = Constants.GITHUB_URL;
+public final class TravisRestClient {
 
     private TravisApiService mApiService;
-    private GithubApiService mGithubApiService;
-    private RawApiService mRawApiService;
 
-    private OkHttpClient mHttpClient;
-
-    private RestClient() {
-
-        initHttpClient();
-
+    private TravisRestClient() {
         final String travisUrl = AppSettings.getServerUrl();
         updateTravisEndpoint(travisUrl);
-
-        // rest adapter for github API service
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setEndpoint(GITHUB_URL)
-                .setConverter(new GsonConverter(constructGsonConverter()))
-                .setErrorHandler(new RestErrorHandling())
-                .build();
-        mGithubApiService = restAdapter.create(GithubApiService.class);
-    }
-
-    /**
-     * Initializes HTTP client
-     */
-    private void initHttpClient() {
-        mHttpClient = new OkHttpClient();
-        mHttpClient.setFollowRedirects(false);
     }
 
     /**
@@ -62,8 +39,8 @@ public final class RestClient {
      *
      * @return Instance
      */
-    public static RestClient newInstance() {
-        return new RestClient();
+    public static TravisRestClient newInstance() {
+        return new TravisRestClient();
     }
 
     /**
@@ -72,7 +49,6 @@ public final class RestClient {
      * @param newEndpoint New endpoint
      */
     public void updateTravisEndpoint(String newEndpoint) {
-        // rest adapter for travis API service
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(newEndpoint)
@@ -81,16 +57,6 @@ public final class RestClient {
                 .setErrorHandler(new RestErrorHandling())
                 .build();
         mApiService = restAdapter.create(TravisApiService.class);
-
-        // rest adapter for raw calls
-        restAdapter = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setEndpoint(newEndpoint)
-                .setConverter(new GsonConverter(constructGsonConverter()))
-                .setErrorHandler(new RestErrorHandling())
-                .setClient(new OkClient(mHttpClient))
-                .build();
-        mRawApiService = restAdapter.create(RawApiService.class);
     }
 
     /**
@@ -99,7 +65,7 @@ public final class RestClient {
      * @return Request interceptor
      */
     private RequestInterceptor constructRequestInterceptor() {
-        RequestInterceptor requestInterceptor = new RequestInterceptor() {
+        return new RequestInterceptor() {
             @Override
             public void intercept(RequestFacade request) {
                 String userAgent = String.format("TravisClient/%1$s", PackageUtils.getAppVersion());
@@ -113,7 +79,6 @@ public final class RestClient {
                 }
             }
         };
-        return requestInterceptor;
     }
 
     /**
@@ -122,11 +87,10 @@ public final class RestClient {
      * @return Gson converter
      */
     private Gson constructGsonConverter() {
-        Gson gson = new GsonBuilder()
+        return new GsonBuilder()
                 .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
                 .registerTypeAdapterFactory(new ItemTypeAdapterFactory())
                 .create();
-        return gson;
     }
 
     /**
@@ -138,39 +102,4 @@ public final class RestClient {
         return mApiService;
     }
 
-    /**
-     * Gets Github API service
-     *
-     * @return Github API service
-     */
-    public GithubApiService getGithubApiService() {
-        return mGithubApiService;
-    }
-
-    /**
-     * Gets Raw API service
-     *
-     * @return Raw API service
-     */
-    public RawApiService getRawApiService() {
-        return mRawApiService;
-    }
-
-    /**
-     * Executes single request
-     *
-     * @param url URL for request
-     * @return Response
-     */
-    public Response singleRequest(String url) throws IOException {
-
-        mHttpClient.setFollowRedirects(false);
-
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        Response response = mHttpClient.newCall(request).execute();
-        return response;
-    }
 }

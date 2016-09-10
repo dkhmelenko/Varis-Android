@@ -1,4 +1,4 @@
-package com.khmelenko.lab.travisclient.network.retrofit;
+package com.khmelenko.lab.travisclient.network.retrofit.travis;
 
 
 import com.khmelenko.lab.travisclient.network.request.AccessTokenRequest;

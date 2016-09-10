@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.khmelenko.lab.travisclient.event.github.DeleteAuthorizationSuccessEvent;
 import com.khmelenko.lab.travisclient.event.github.GithubAuthorizationFailEvent;
-import com.khmelenko.lab.travisclient.network.retrofit.GithubApiService;
+import com.khmelenko.lab.travisclient.network.retrofit.github.GithubApiService;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskException;
@@ -40,10 +40,10 @@ public final class DeleteAuthorizationTask extends Task<Void> {
 
         try {
             if (!TextUtils.isEmpty(mTwoFactorCode)) {
-                restClient().getGithubApiService().deleteAuthorization(mBasicAuth, mTwoFactorCode,
+                gitHubClient().getApiService().deleteAuthorization(mBasicAuth, mTwoFactorCode,
                         mAuthorizationId);
             } else {
-                restClient().getGithubApiService().deleteAuthorization(mBasicAuth, mAuthorizationId);
+                gitHubClient().getApiService().deleteAuthorization(mBasicAuth, mAuthorizationId);
             }
         } catch (TaskException error) {
 

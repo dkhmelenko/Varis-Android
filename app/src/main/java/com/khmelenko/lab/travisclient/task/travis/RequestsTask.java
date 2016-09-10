@@ -2,7 +2,6 @@ package com.khmelenko.lab.travisclient.task.travis;
 
 import android.text.TextUtils;
 
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.RequestsFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.RequestsLoadedEvent;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
@@ -32,12 +31,12 @@ public final class RequestsTask extends Task<Requests> {
         Requests requests;
         BuildHistory buildHistory;
         if(!TextUtils.isEmpty(mRepoSlug)) {
-            requests = restClient().getApiService().getRequests(mRepoSlug);
-            buildHistory = restClient().getApiService().getPullRequestBuilds(mRepoSlug);
+            requests = travisClient().getApiService().getRequests(mRepoSlug);
+            buildHistory = travisClient().getApiService().getPullRequestBuilds(mRepoSlug);
             requests.setBuilds(buildHistory.getBuilds());
         } else {
-            requests = restClient().getApiService().getRequests(mRepoId);
-            buildHistory = restClient().getApiService().getPullRequestBuilds(mRepoId);
+            requests = travisClient().getApiService().getRequests(mRepoId);
+            buildHistory = travisClient().getApiService().getPullRequestBuilds(mRepoId);
             requests.setBuilds(buildHistory.getBuilds());
         }
         return requests;

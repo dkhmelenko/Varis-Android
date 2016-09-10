@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.khmelenko.lab.travisclient.event.travis.BuildHistoryFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.BuildHistoryLoadedEvent;
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
@@ -32,9 +31,9 @@ public final class BuildHistoryTask extends Task<BuildHistory> {
     public BuildHistory execute() throws TaskException {
         BuildHistory builds;
         if (!TextUtils.isEmpty(mRepoSlug)) {
-            builds = restClient().getApiService().getBuilds(mRepoSlug);
+            builds = travisClient().getApiService().getBuilds(mRepoSlug);
         } else {
-            builds = restClient().getApiService().getBuilds(mRepoId);
+            builds = travisClient().getApiService().getBuilds(mRepoId);
         }
         return builds;
     }

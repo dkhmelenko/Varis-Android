@@ -31,9 +31,9 @@ public final class RepoTask extends Task<Repo> {
     public Repo execute() throws TaskException {
         Repo repo = null;
         if(!TextUtils.isEmpty(mRepositorySlug)) {
-            repo = restClient().getApiService().getRepo(mRepositorySlug);
+            repo = travisClient().getApiService().getRepo(mRepositorySlug);
         } else {
-            repo = restClient().getApiService().getRepo(mRepositoryId);
+            repo = travisClient().getApiService().getRepo(mRepositoryId);
         }
         return repo;
     }

@@ -22,7 +22,7 @@ public final class CancelBuildTask extends Task<Void> {
 
     @Override
     public Void execute() throws TaskException {
-        restClient().getApiService().cancelBuild(mBuildId, EmptyOutput.INSTANCE);
+        travisClient().getApiService().cancelBuild(mBuildId, EmptyOutput.INSTANCE);
         return null;
     }
 

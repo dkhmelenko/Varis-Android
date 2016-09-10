@@ -4,8 +4,6 @@ import android.text.TextUtils;
 
 import com.khmelenko.lab.travisclient.event.travis.BranchesFailedEvent;
 import com.khmelenko.lab.travisclient.event.travis.BranchesLoadedEvent;
-import com.khmelenko.lab.travisclient.event.travis.BuildHistoryFailedEvent;
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.network.response.Branches;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
@@ -33,9 +31,9 @@ public final class BranchesTask extends Task<Branches> {
     public Branches execute() throws TaskException {
         Branches branches;
         if (!TextUtils.isEmpty(mRepoSlug)) {
-            branches = restClient().getApiService().getBranches(mRepoSlug);
+            branches = travisClient().getApiService().getBranches(mRepoSlug);
         } else {
-            branches = restClient().getApiService().getBranches(mRepoId);
+            branches = travisClient().getApiService().getBranches(mRepoId);
         }
         return branches;
     }

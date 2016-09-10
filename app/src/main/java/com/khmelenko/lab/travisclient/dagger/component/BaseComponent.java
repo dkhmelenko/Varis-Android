@@ -4,7 +4,7 @@ import com.khmelenko.lab.travisclient.dagger.module.NetworkModule;
 import com.khmelenko.lab.travisclient.dagger.module.NotificationModule;
 import com.khmelenko.lab.travisclient.dagger.module.StorageModule;
 import com.khmelenko.lab.travisclient.dagger.module.TaskModule;
-import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.travisclient.storage.CacheStorage;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 
@@ -22,7 +22,7 @@ import de.greenrobot.event.EventBus;
 @Component(modules = {NetworkModule.class, NotificationModule.class, TaskModule.class, StorageModule.class})
 public interface BaseComponent {
 
-    RestClient restClient();
+    TravisRestClient restClient();
 
     EventBus eventBus();
 

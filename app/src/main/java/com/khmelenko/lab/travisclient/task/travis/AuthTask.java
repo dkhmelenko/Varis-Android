@@ -25,7 +25,7 @@ public final class AuthTask extends Task<AccessToken> {
     public AccessToken execute() throws TaskException {
         AccessTokenRequest request = new AccessTokenRequest();
         request.setGithubToken(mGithubAccessToken);
-        AccessToken accessToken = restClient().getApiService().auth(request);
+        AccessToken accessToken = travisClient().getApiService().auth(request);
         return accessToken;
     }
 

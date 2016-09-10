@@ -31,9 +31,9 @@ public final class FindRepoTask extends Task<List<Repo>> {
     public List<Repo> execute() throws TaskException {
         List<Repo> repos;
         if (!TextUtils.isEmpty(mSearch)) {
-            repos = restClient().getApiService().getRepos(mSearch);
+            repos = travisClient().getApiService().getRepos(mSearch);
         } else {
-            repos = restClient().getApiService().getRepos();
+            repos = travisClient().getApiService().getRepos();
         }
         return repos;
     }

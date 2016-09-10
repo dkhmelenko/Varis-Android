@@ -1,6 +1,8 @@
 package com.khmelenko.lab.travisclient.task;
 
-import com.khmelenko.lab.travisclient.network.retrofit.RestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.github.GitHubRestClient;
+import com.khmelenko.lab.travisclient.network.retrofit.raw.RawClient;
+import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
 
 import de.greenrobot.event.EventBus;
 
@@ -48,8 +50,26 @@ public abstract class Task<T> {
      *
      * @return REST client
      */
-    protected RestClient restClient() {
-        return mTaskHelper.getRestClient();
+    protected TravisRestClient travisClient() {
+        return mTaskHelper.getTravisRestClient();
+    }
+
+    /**
+     * Gets rest client instance
+     *
+     * @return REST client
+     */
+    protected GitHubRestClient gitHubClient() {
+        return mTaskHelper.getGitHubRestClient();
+    }
+
+    /**
+     * Gets rest client instance
+     *
+     * @return REST client
+     */
+    protected RawClient rawClient() {
+        return mTaskHelper.getRawClient();
     }
 
     /**
