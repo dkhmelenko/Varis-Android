@@ -14,29 +14,30 @@ import android.widget.Toast;
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.adapter.SmartFragmentStatePagerAdapter;
-import com.khmelenko.lab.travisclient.event.travis.BranchesFailedEvent;
-import com.khmelenko.lab.travisclient.event.travis.BranchesLoadedEvent;
-import com.khmelenko.lab.travisclient.event.travis.BuildHistoryFailedEvent;
-import com.khmelenko.lab.travisclient.event.travis.BuildHistoryLoadedEvent;
-import com.khmelenko.lab.travisclient.event.travis.RequestsFailedEvent;
-import com.khmelenko.lab.travisclient.event.travis.RequestsLoadedEvent;
 import com.khmelenko.lab.travisclient.fragment.BranchesFragment;
 import com.khmelenko.lab.travisclient.fragment.BuildHistoryFragment;
 import com.khmelenko.lab.travisclient.fragment.PullRequestsFragment;
-import com.khmelenko.lab.travisclient.task.TaskManager;
+import com.khmelenko.lab.travisclient.mvp.MvpActivity;
+import com.khmelenko.lab.travisclient.network.response.Branches;
+import com.khmelenko.lab.travisclient.network.response.BuildHistory;
+import com.khmelenko.lab.travisclient.network.response.Requests;
+import com.khmelenko.lab.travisclient.presenter.RepoDetailsPresenter;
+import com.khmelenko.lab.travisclient.view.RepoDetailsView;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Repository Details Activity
  *
  * @author Dmytro Khmelenko
  */
-public final class RepoDetailsActivity extends BaseActivity implements BuildHistoryFragment.BuildHistoryListener,
-        BranchesFragment.BranchesListener, PullRequestsFragment.PullRequestsListener {
+public final class RepoDetailsActivity extends MvpActivity<RepoDetailsPresenter> implements
+        RepoDetailsView,
+        BuildHistoryFragment.BuildHistoryListener,
+        BranchesFragment.BranchesListener,
+        PullRequestsFragment.PullRequestsListener {
 
     private static final int BUILD_DETAILS_REQUEST_CODE = 0;
 
@@ -44,15 +45,11 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
     public static final String RELOAD_REQUIRED_KEY = "ReloadRequiredKey";
 
     @Inject
-    EventBus mEventBus;
-    @Inject
-    TaskManager mTaskManager;
+    RepoDetailsPresenter mPresenter;
 
-    private String mRepoSlug;
     private boolean mReloadRequired;
     private boolean mInitialLoad = true;
-
-    private SmartFragmentStatePagerAdapter mAdapterViewPager;
+    private PagerAdapter mAdapterViewPager;
 
     /**
      * Custom adapter for view pager
@@ -109,12 +106,7 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
         ButterKnife.bind(this);
         TravisApp.instance().activityInjector().inject(this);
 
-        mRepoSlug = getIntent().getStringExtra(REPO_SLUG_KEY);
-
         initToolbar();
-
-        String projectName = mRepoSlug.substring(mRepoSlug.indexOf("/") + 1);
-        setTitle(projectName);
 
         // setting view pager
         ViewPager vpPager = (ViewPager) findViewById(R.id.repo_details_view_pager);
@@ -127,23 +119,85 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mEventBus.register(this);
+    protected RepoDetailsPresenter getPresenter() {
+        return mPresenter;
+    }
+
+    @Override
+    protected void attachPresenter() {
+        getPresenter().attach(this);
+
+        String repoSlug = getIntent().getStringExtra(REPO_SLUG_KEY);
+        String projectName = repoSlug.substring(repoSlug.indexOf("/") + 1);
+        setTitle(projectName);
+
+        getPresenter().setRepoSlug(repoSlug);
 
         if (mInitialLoad || mReloadRequired) {
             mInitialLoad = false;
-
-            loadBuildsHistory();
-            loadBranches();
-            loadRequests();
+            getPresenter().loadData();
         }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mEventBus.unregister(this);
+    public void showProgress() {
+        // do nothing, each fragment of the page adapter is responsible for showing progress
+    }
+
+    @Override
+    public void hideProgress() {
+        // do nothing, each fragment of the page adapter is responsible for hiding progress
+    }
+
+    @Override
+    public void updateBuildHistory(BuildHistory buildHistory) {
+        BuildHistoryFragment fragment =
+                (BuildHistoryFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_BUILD_HISTORY);
+        fragment.setBuildHistory(buildHistory);
+    }
+
+    @Override
+    public void updateBranches(Branches branches) {
+        BranchesFragment fragment =
+                (BranchesFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_BRANCHES);
+        fragment.setBranches(branches);
+    }
+
+    @Override
+    public void updatePullRequests(Requests requests) {
+        PullRequestsFragment fragment =
+                (PullRequestsFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_PULL_REQUESTS);
+        fragment.setPullRequests(requests);
+    }
+
+    @Override
+    public void showBuildHistoryLoadingError(String message) {
+        BuildHistoryFragment fragment =
+                (BuildHistoryFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_BUILD_HISTORY);
+        fragment.setBuildHistory(null);
+
+        String msg = getString(R.string.error_failed_loading_build_history, message);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showBranchesLoadingError(String message) {
+        BranchesFragment fragment =
+                (BranchesFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_BRANCHES);
+        fragment.setBranches(null);
+
+        String msg = getString(R.string.error_failed_loading_branches, message);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showPullRequestsLoadingError(String message) {
+        PullRequestsFragment fragment =
+                (PullRequestsFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_PULL_REQUESTS);
+        fragment.setPullRequests(null);
+
+        String msg = getString(R.string.error_failed_loading_pull_requests, message);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -173,7 +227,7 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
 
     @Override
     public void onReloadBuildHistory() {
-        loadBuildsHistory();
+        getPresenter().loadBuildsHistory();
     }
 
     @Override
@@ -183,7 +237,7 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
 
     @Override
     public void onReloadBranches() {
-        loadBranches();
+        getPresenter().loadBranches();
     }
 
     @Override
@@ -193,7 +247,7 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
 
     @Override
     public void onReloadPullRequests() {
-        loadRequests();
+        getPresenter().loadRequests();
     }
 
     /**
@@ -204,7 +258,7 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
     private void goToBuildDetails(long buildId) {
         Intent intent = new Intent(this, BuildDetailsActivity.class);
         intent.putExtra(BuildDetailsActivity.EXTRA_BUILD_ID, buildId);
-        intent.putExtra(BuildDetailsActivity.EXTRA_REPO_SLUG, mRepoSlug);
+        intent.putExtra(BuildDetailsActivity.EXTRA_REPO_SLUG, getPresenter().getRepoSlug());
         startActivityForResult(intent, BUILD_DETAILS_REQUEST_CODE);
     }
 
@@ -225,101 +279,5 @@ public final class RepoDetailsActivity extends BaseActivity implements BuildHist
         setResult(RESULT_OK, intent);
 
         super.onBackPressed();
-    }
-
-    /**
-     * Raised on loaded repositories
-     *
-     * @param event Event data
-     */
-    public void onEvent(BuildHistoryLoadedEvent event) {
-        BuildHistoryFragment fragment =
-                (BuildHistoryFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_BUILD_HISTORY);
-        fragment.setBuildHistory(event.getBuildHistory());
-    }
-
-    /**
-     * Raised on loaded repositories
-     *
-     * @param event Event data
-     */
-    public void onEvent(BranchesLoadedEvent event) {
-        BranchesFragment fragment =
-                (BranchesFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_BRANCHES);
-        fragment.setBranches(event.getBranches());
-    }
-
-    /**
-     * Raised on loaded requests
-     *
-     * @param event Event data
-     */
-    public void onEvent(RequestsLoadedEvent event) {
-        PullRequestsFragment fragment =
-                (PullRequestsFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_PULL_REQUESTS);
-        fragment.setPullRequests(event.getRequests());
-    }
-
-    /**
-     * Raised on failed loading build history
-     *
-     * @param event Event data
-     */
-    public void onEvent(BuildHistoryFailedEvent event) {
-        BuildHistoryFragment fragment =
-                (BuildHistoryFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_BUILD_HISTORY);
-        fragment.setBuildHistory(null);
-
-        String msg = getString(R.string.error_failed_loading_build_history, event.getTaskError().getMessage());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Raised on failed loading branches
-     *
-     * @param event Event data
-     */
-    public void onEvent(BranchesFailedEvent event) {
-        BranchesFragment fragment =
-                (BranchesFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_BRANCHES);
-        fragment.setBranches(null);
-
-        String msg = getString(R.string.error_failed_loading_branches, event.getTaskError().getMessage());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Raised on failed loading requests
-     *
-     * @param event Event data
-     */
-    public void onEvent(RequestsFailedEvent event) {
-        PullRequestsFragment fragment =
-                (PullRequestsFragment) mAdapterViewPager.getRegisteredFragment(PagerAdapter.INDEX_PULL_REQUESTS);
-        fragment.setPullRequests(null);
-
-        String msg = getString(R.string.error_failed_loading_pull_requests, event.getTaskError().getMessage());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Starts loading build history
-     */
-    private void loadBuildsHistory() {
-        mTaskManager.getBuildHistory(mRepoSlug);
-    }
-
-    /**
-     * Starts loading branches
-     */
-    private void loadBranches() {
-        mTaskManager.getBranches(mRepoSlug);
-    }
-
-    /**
-     * Starts loading requests
-     */
-    private void loadRequests() {
-        mTaskManager.getRequests(mRepoSlug);
     }
 }
