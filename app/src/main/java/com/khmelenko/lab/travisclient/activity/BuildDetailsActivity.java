@@ -36,7 +36,7 @@ import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.storage.CacheStorage;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskManager;
-import com.khmelenko.lab.travisclient.view.BuildView;
+import com.khmelenko.lab.travisclient.widget.BuildView;
 
 import java.net.MalformedURLException;
 import java.net.URL;

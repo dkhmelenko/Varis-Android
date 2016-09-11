@@ -6,4 +6,14 @@ package com.khmelenko.lab.travisclient.mvp;
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 public interface MvpView {
+
+    /**
+     * Shows progress
+     */
+    void showProgress();
+
+    /**
+     * Hides progress
+     */
+    void hideProgress();
 }

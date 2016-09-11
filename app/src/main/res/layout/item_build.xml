@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         >
 
-        <com.khmelenko.lab.travisclient.view.BuildView
+        <com.khmelenko.lab.travisclient.widget.BuildView
             android:id="@+id/item_build_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

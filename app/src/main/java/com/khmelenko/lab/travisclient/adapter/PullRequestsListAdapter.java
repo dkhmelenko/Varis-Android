@@ -11,7 +11,7 @@ import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.Commit;
 import com.khmelenko.lab.travisclient.network.response.RequestData;
 import com.khmelenko.lab.travisclient.network.response.Requests;
-import com.khmelenko.lab.travisclient.view.BuildView;
+import com.khmelenko.lab.travisclient.widget.BuildView;
 
 import java.util.ArrayList;
 import java.util.List;

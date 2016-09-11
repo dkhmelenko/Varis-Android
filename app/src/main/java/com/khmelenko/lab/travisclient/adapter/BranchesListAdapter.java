@@ -10,7 +10,7 @@ import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.network.response.Branch;
 import com.khmelenko.lab.travisclient.network.response.Branches;
 import com.khmelenko.lab.travisclient.network.response.Commit;
-import com.khmelenko.lab.travisclient.view.BuildView;
+import com.khmelenko.lab.travisclient.widget.BuildView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

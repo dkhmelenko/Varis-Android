@@ -1,4 +1,4 @@
-package com.khmelenko.lab.travisclient.view;
+package com.khmelenko.lab.travisclient.widget;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
