@@ -9,28 +9,29 @@ import android.view.View;
 
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.TravisApp;
-import com.khmelenko.lab.travisclient.event.travis.FindReposEvent;
-import com.khmelenko.lab.travisclient.event.travis.LoadingFailedEvent;
 import com.khmelenko.lab.travisclient.fragment.ReposFragment;
+import com.khmelenko.lab.travisclient.mvp.MvpActivity;
 import com.khmelenko.lab.travisclient.network.response.Repo;
-import com.khmelenko.lab.travisclient.task.TaskManager;
+import com.khmelenko.lab.travisclient.presenter.SearchResultsPresenter;
+import com.khmelenko.lab.travisclient.view.SearchResultsView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Provides activity with search results
  *
  * @author Dmytro Khmelenko
  */
-public final class SearchResultsActivity extends BaseActivity implements ReposFragment.ReposFragmentListener {
+public final class SearchResultsActivity extends MvpActivity<SearchResultsPresenter> implements
+        SearchResultsView,
+        ReposFragment.ReposFragmentListener {
 
     @Inject
-    EventBus mEventBus;
-    @Inject
-    TaskManager mTaskManager;
+    SearchResultsPresenter mPresenter;
 
     private ReposFragment mFragment;
 
@@ -57,16 +58,13 @@ public final class SearchResultsActivity extends BaseActivity implements ReposFr
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mEventBus.register(this);
+    protected SearchResultsPresenter getPresenter() {
+        return mPresenter;
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mEventBus.unregister(this);
-        mFragment.setLoadingProgress(false);
+    protected void attachPresenter() {
+        getPresenter().attach(this);
     }
 
     /**
@@ -78,18 +76,9 @@ public final class SearchResultsActivity extends BaseActivity implements ReposFr
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             mSearchQuery = query;
-            mFragment.setLoadingProgress(true);
-            startRepoSearch(query);
+            showProgress();
+            getPresenter().startRepoSearch(query);
         }
-    }
-
-    /**
-     * Starts repository search
-     *
-     * @param query Query string for search
-     */
-    private void startRepoSearch(String query) {
-        mTaskManager.findRepos(query);
     }
 
     /**
@@ -112,26 +101,6 @@ public final class SearchResultsActivity extends BaseActivity implements ReposFr
         }
     }
 
-    /**
-     * Raised on loaded repositories
-     *
-     * @param event Event data
-     */
-    public void onEvent(FindReposEvent event) {
-        mFragment.setLoadingProgress(false);
-        mFragment.setRepos(event.getRepos());
-    }
-
-    /**
-     * Raised on failed loading data
-     *
-     * @param event Event data
-     */
-    public void onEvent(LoadingFailedEvent event) {
-        mFragment.setLoadingProgress(false);
-        mFragment.handleLoadingFailed(event.getTaskError().getMessage());
-    }
-
     @Override
     public void onRepositorySelected(Repo repo) {
         Intent intent = new Intent(SearchResultsActivity.this, RepoDetailsActivity.class);
@@ -141,6 +110,26 @@ public final class SearchResultsActivity extends BaseActivity implements ReposFr
 
     @Override
     public void onRefreshData() {
-        startRepoSearch(mSearchQuery);
+        getPresenter().startRepoSearch(mSearchQuery);
+    }
+
+    @Override
+    public void showProgress() {
+        mFragment.setLoadingProgress(true);
+    }
+
+    @Override
+    public void hideProgress() {
+        mFragment.setLoadingProgress(false);
+    }
+
+    @Override
+    public void setSearchResults(List<Repo> repos) {
+        mFragment.setRepos(repos);
+    }
+
+    @Override
+    public void showLoadingError(String message) {
+        mFragment.handleLoadingFailed(message);
     }
 }
