@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
-def SUPPORT_LIBRARY_VERSION = '24.2.0'
+def SUPPORT_LIBRARY_VERSION = '24.2.1'
 
 android {
     compileSdkVersion 24
