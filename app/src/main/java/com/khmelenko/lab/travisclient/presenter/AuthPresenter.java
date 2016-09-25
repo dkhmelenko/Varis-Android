@@ -21,6 +21,8 @@ import com.khmelenko.lab.travisclient.view.AuthView;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import de.greenrobot.event.EventBus;
 
 /**
@@ -38,6 +40,7 @@ public final class AuthPresenter extends MvpPresenter<AuthView> {
     private String mSecurityCode;
     private Authorization mAuthorization;
 
+    @Inject
     public AuthPresenter(TaskManager taskManager, EventBus eventBus, TravisRestClient travisRestClient) {
         mTaskManager = taskManager;
         mEventBus = eventBus;
