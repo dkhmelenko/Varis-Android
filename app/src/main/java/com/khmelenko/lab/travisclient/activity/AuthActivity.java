@@ -90,6 +90,12 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
         getPresenter().attach(this);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mPresenterKeeper.put(AuthPresenter.class, mPresenter);
+    }
+
     /**
      * Initializes toolbar
      */
