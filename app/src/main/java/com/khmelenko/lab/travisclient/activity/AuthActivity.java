@@ -14,6 +14,7 @@ import com.khmelenko.lab.travisclient.fragment.SecurityCodeFragment;
 import com.khmelenko.lab.travisclient.mvp.MvpActivity;
 import com.khmelenko.lab.travisclient.presenter.AuthPresenter;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
+import com.khmelenko.lab.travisclient.util.PresenterKeeper;
 import com.khmelenko.lab.travisclient.view.AuthView;
 
 import javax.inject.Inject;
@@ -38,6 +39,9 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
 
     @Inject
     AuthPresenter mPresenter;
+
+    @Inject
+    PresenterKeeper mPresenterKeeper;
 
     private boolean mSecurityCodeInput;
 
