@@ -25,4 +25,11 @@ public interface AuthView extends MvpView {
      * Shows two-factor authentication
      */
     void showTwoFactorAuth();
+
+    /**
+     * Set appropriate view for showing input
+     *
+     * @param securityCodeInput True, if security code exists
+     */
+    void setInputView(boolean securityCodeInput);
 }

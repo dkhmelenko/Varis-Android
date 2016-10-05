@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 public final class PresenterKeeper<P extends MvpPresenter> {
 
-    private final HashMap<Class<P>, P> mKeeper;
+    private final HashMap<Class<?>, P> mKeeper;
 
     public PresenterKeeper() {
         mKeeper = new HashMap<>();
@@ -23,7 +23,7 @@ public final class PresenterKeeper<P extends MvpPresenter> {
      * @param type      Presenter type
      * @param presenter Presenter instance
      */
-    public void put(Class<P> type, P presenter) {
+    public void put(Class<?> type, P presenter) {
         mKeeper.put(type, presenter);
     }
 
@@ -33,7 +33,7 @@ public final class PresenterKeeper<P extends MvpPresenter> {
      * @param type Presenter type
      * @return Fetched presenter instance or null
      */
-    public P get(Class<P> type) {
+    public P get(Class<?> type) {
         return mKeeper.remove(type);
     }
 

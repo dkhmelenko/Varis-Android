@@ -40,6 +40,8 @@ public final class AuthPresenter extends MvpPresenter<AuthView> {
     private String mSecurityCode;
     private Authorization mAuthorization;
 
+    private boolean mSecurityCodeInput;
+
     @Inject
     public AuthPresenter(TaskManager taskManager, EventBus eventBus, TravisRestClient travisRestClient) {
         mTaskManager = taskManager;
@@ -50,6 +52,7 @@ public final class AuthPresenter extends MvpPresenter<AuthView> {
     @Override
     public void onAttach() {
         mEventBus.register(this);
+        getView().setInputView(mSecurityCodeInput);
     }
 
     @Override
@@ -86,6 +89,7 @@ public final class AuthPresenter extends MvpPresenter<AuthView> {
 
         TaskError taskError = event.getTaskError();
         if (taskError.getCode() == TaskError.TWO_FACTOR_AUTH_REQUIRED) {
+            mSecurityCodeInput = true;
             getView().showTwoFactorAuth();
         } else {
             getView().showErrorMessage(event.getTaskError().getMessage());

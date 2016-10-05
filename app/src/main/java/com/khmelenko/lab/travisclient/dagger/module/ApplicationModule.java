@@ -1,5 +1,6 @@
 package com.khmelenko.lab.travisclient.dagger.module;
 
+import com.khmelenko.lab.travisclient.mvp.MvpPresenter;
 import com.khmelenko.lab.travisclient.util.PresenterKeeper;
 
 import javax.inject.Singleton;
@@ -17,7 +18,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public PresenterKeeper providePresenterKeeper() {
-        return new PresenterKeeper();
+    public PresenterKeeper<MvpPresenter> providePresenterKeeper() {
+        return new PresenterKeeper<>();
     }
 }

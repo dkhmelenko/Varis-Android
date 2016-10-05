@@ -5,6 +5,7 @@ import com.khmelenko.lab.travisclient.dagger.module.NetworkModule;
 import com.khmelenko.lab.travisclient.dagger.module.NotificationModule;
 import com.khmelenko.lab.travisclient.dagger.module.StorageModule;
 import com.khmelenko.lab.travisclient.dagger.module.TaskModule;
+import com.khmelenko.lab.travisclient.mvp.MvpPresenter;
 import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.travisclient.storage.CacheStorage;
 import com.khmelenko.lab.travisclient.task.TaskManager;
@@ -33,5 +34,5 @@ public interface BaseComponent {
 
     CacheStorage cache();
 
-    PresenterKeeper presenterKeeper();
+    PresenterKeeper<MvpPresenter> presenterKeeper();
 }

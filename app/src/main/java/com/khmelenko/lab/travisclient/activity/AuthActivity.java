@@ -12,6 +12,7 @@ import com.khmelenko.lab.travisclient.TravisApp;
 import com.khmelenko.lab.travisclient.fragment.AuthFragment;
 import com.khmelenko.lab.travisclient.fragment.SecurityCodeFragment;
 import com.khmelenko.lab.travisclient.mvp.MvpActivity;
+import com.khmelenko.lab.travisclient.mvp.MvpPresenter;
 import com.khmelenko.lab.travisclient.presenter.AuthPresenter;
 import com.khmelenko.lab.travisclient.storage.AppSettings;
 import com.khmelenko.lab.travisclient.util.PresenterKeeper;
@@ -41,9 +42,7 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
     AuthPresenter mPresenter;
 
     @Inject
-    PresenterKeeper mPresenterKeeper;
-
-    private boolean mSecurityCodeInput;
+    PresenterKeeper<MvpPresenter> mPresenterKeeper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,18 +52,6 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
         TravisApp.instance().activityInjector().inject(this);
 
         initToolbar();
-
-        if (savedInstanceState != null) {
-            mSecurityCodeInput = savedInstanceState.getBoolean(SECURITY_CODE_INPUT);
-            // TODO Save state in presenter
-            // mBasicAuth = savedInstanceState.getString(AUTHORIZATION_HEADER);
-        }
-
-        if (mSecurityCodeInput) {
-            showSecurityCodeInput();
-        } else {
-            showLoginSection();
-        }
     }
 
     /**
@@ -91,20 +78,16 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
 
     @Override
     protected AuthPresenter getPresenter() {
+        MvpPresenter presenter = mPresenterKeeper.get(AuthPresenter.class);
+        if(presenter != null) {
+            mPresenter = (AuthPresenter) presenter;
+        }
         return mPresenter;
     }
 
     @Override
     protected void attachPresenter() {
         getPresenter().attach(this);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(SECURITY_CODE_INPUT, mSecurityCodeInput);
-        // TODO Save state in presenter
-        // outState.putString(AUTHORIZATION_HEADER, mBasicAuth);
     }
 
     /**
@@ -167,7 +150,15 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
 
     @Override
     public void showTwoFactorAuth() {
-        mSecurityCodeInput = true;
         showSecurityCodeInput();
+    }
+
+    @Override
+    public void setInputView(boolean securityCodeInput) {
+        if (securityCodeInput) {
+            showSecurityCodeInput();
+        } else {
+            showLoginSection();
+        }
     }
 }
