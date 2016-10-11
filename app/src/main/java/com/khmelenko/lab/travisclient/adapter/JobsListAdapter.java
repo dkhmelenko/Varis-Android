@@ -13,7 +13,9 @@ import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.converter.TimeConverter;
 import com.khmelenko.lab.travisclient.network.response.Job;
+import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -65,7 +67,10 @@ public final class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.
 
             // duration
             if (BuildStateHelper.isPassed(job.getState())) {
-                String duration = TimeConverter.durationToString(job.getDuration());
+                Date started = DateTimeUtils.parseXmlDateTime(job.getStartedAt());
+                Date finished = DateTimeUtils.parseXmlDateTime(job.getFinishedAt());
+                long durationInSeconds = (finished.getTime() - started.getTime()) / 1000L;
+                String duration = TimeConverter.durationToString(durationInSeconds);
                 duration = mContext.getString(R.string.build_details_job_duration, duration);
                 holder.mDuration.setText(duration);
             } else {

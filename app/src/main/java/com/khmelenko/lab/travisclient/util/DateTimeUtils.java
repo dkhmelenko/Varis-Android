@@ -28,10 +28,23 @@ public final class DateTimeUtils {
         return formatted;
     }
 
-    public static Date parseXmlDateTime(String xmlDateTime) throws ParseException {
-        xmlDateTime = xmlDateTime.replace("Z", "+0000");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault());
-        Date parsedDate = dateFormat.parse(xmlDateTime);
+    /**
+     * Parses XML datetime object to Date object
+     *
+     * @param xmlDateTime XML Datetime as a String
+     * @return Datetime object
+     * @throws ParseException if Parsing exception occurred
+     */
+    public static Date parseXmlDateTime(String xmlDateTime) {
+        Date parsedDate = new Date();
+        try {
+            xmlDateTime = xmlDateTime.replace("Z", "+0000");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault());
+            parsedDate = dateFormat.parse(xmlDateTime);
+            return parsedDate;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return parsedDate;
     }
 
@@ -42,13 +55,8 @@ public final class DateTimeUtils {
      * @return Formatted date time
      */
     public static String parseAndFormatDateTime(String xmlDateTime) {
-        String formattedDate = xmlDateTime;
-        try {
-            Date finishedAt = DateTimeUtils.parseXmlDateTime(xmlDateTime);
-            formattedDate = DateTimeUtils.formatDateTimeLocal(finishedAt);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Date date = DateTimeUtils.parseXmlDateTime(xmlDateTime);
+        String formattedDate = DateTimeUtils.formatDateTimeLocal(date);
         return formattedDate;
     }
 
