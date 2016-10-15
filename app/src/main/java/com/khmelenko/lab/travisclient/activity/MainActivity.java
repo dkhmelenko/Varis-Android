@@ -53,6 +53,8 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
 
     private static final String SAVED_QUERY = "SavedQuery";
 
+    private static final int SEARCH_LIMIT = 3;
+
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
@@ -204,11 +206,15 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
 
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    // save search query to history
-                    SearchRecentSuggestions suggestionsProvider = new SearchRecentSuggestions(MainActivity.this,
-                            SearchHistoryProvider.AUTHORITY, SearchHistoryProvider.MODE);
-                    suggestionsProvider.saveRecentQuery(query, null);
-                    return false;
+                    boolean submitProhibited = true;
+                    if(query.length() > SEARCH_LIMIT) {
+                        // save search query to history
+                        SearchRecentSuggestions suggestionsProvider = new SearchRecentSuggestions(MainActivity.this,
+                                SearchHistoryProvider.AUTHORITY, SearchHistoryProvider.MODE);
+                        suggestionsProvider.saveRecentQuery(query, null);
+                        submitProhibited = false;
+                    }
+                    return submitProhibited;
                 }
 
                 @Override
