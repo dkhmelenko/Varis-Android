@@ -34,12 +34,17 @@ import de.greenrobot.event.EventBus;
  */
 public final class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
 
+    private static final int LOAD_LOG_MAX_ATTEMPT = 3;
+
     public final EventBus mEventBus;
     public final TaskManager mTaskManager;
     public final CacheStorage mCache;
 
     private String mRepoSlug;
     private long mBuildId;
+    private long mJobId;
+
+    private int mLoadLogAttempt = 0;
 
     @Inject
     public BuildsDetailsPresenter(EventBus eventBus, TaskManager taskManager, CacheStorage cache) {
@@ -64,6 +69,7 @@ public final class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView>
      * @param jobId Job ID
      */
     public void startLoadingLog(long jobId) {
+        mJobId = jobId;
         String accessToken = AppSettings.getAccessToken();
         if (TextUtils.isEmpty(accessToken)) {
             mTaskManager.getLogUrl(jobId);
@@ -110,8 +116,13 @@ public final class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView>
      * @param event Event data
      */
     public void onEvent(LogFailEvent event) {
-        getView().showLogError();
-        getView().showLoadingError(event.getTaskError().getMessage());
+        if(mLoadLogAttempt >= LOAD_LOG_MAX_ATTEMPT) {
+            getView().showLogError();
+            getView().showLoadingError(event.getTaskError().getMessage());
+        } else {
+            mLoadLogAttempt++;
+            startLoadingLog(mJobId);
+        }
     }
 
     /**
