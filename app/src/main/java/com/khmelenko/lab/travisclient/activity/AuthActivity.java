@@ -129,6 +129,7 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
 
     @Override
     public void onSecurityCodeInput(String securityCode) {
+        showProgress();
         getPresenter().twoFactorAuth(securityCode);
     }
 
