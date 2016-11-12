@@ -157,11 +157,14 @@ public class ReposFragment extends Fragment {
      */
     public void setLoadingProgress(boolean isLoading) {
         if (isLoading) {
-            mProgressDialog = ProgressDialog.show(getActivity(), "", getString(R.string.loading_msg));
+            if(mProgressDialog == null) {
+                mProgressDialog = ProgressDialog.show(getActivity(), "", getString(R.string.loading_msg));
+            }
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
             if(mProgressDialog != null) {
                 mProgressDialog.dismiss();
+                mProgressDialog = null;
             }
         }
     }
