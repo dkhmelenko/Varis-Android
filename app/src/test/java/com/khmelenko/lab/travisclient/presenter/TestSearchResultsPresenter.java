@@ -8,6 +8,8 @@ import com.khmelenko.lab.travisclient.network.retrofit.raw.RawApiService;
 import com.khmelenko.lab.travisclient.network.retrofit.raw.RawClient;
 import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisApiService;
 import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.travisclient.task.TaskError;
+import com.khmelenko.lab.travisclient.task.TaskException;
 import com.khmelenko.lab.travisclient.task.TaskHelper;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.view.SearchResultsView;
@@ -44,7 +46,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
-@PrepareForTest({TravisRestClient.class, GitHubRestClient.class, RawClient.class,
+@PrepareForTest({TravisRestClient.class, GitHubRestClient.class, RawClient.class, TaskError.class,
         TaskHelper.class, TaskManager.class, SearchResultsPresenter.class})
 public class TestSearchResultsPresenter {
 
@@ -60,7 +62,6 @@ public class TestSearchResultsPresenter {
 
     private SearchResultsPresenter mSearchResultsPresenter;
 
-    @Mock
     private SearchResultsView mSearchResultsView;
 
     @Before
@@ -88,19 +89,6 @@ public class TestSearchResultsPresenter {
     }
 
     @Test
-    public void testAttachDetach() {
-        mSearchResultsPresenter.attach(mSearchResultsView);
-        verify(mSearchResultsPresenter).onAttach();
-        verify(mEventBus).register(mSearchResultsPresenter);
-        assertNotNull(mSearchResultsPresenter.getView());
-
-        mSearchResultsPresenter.detach();
-        verify(mSearchResultsPresenter).onDetach();
-        verify(mEventBus).unregister(mSearchResultsPresenter);
-        assertNull(mSearchResultsPresenter.getView());
-    }
-
-    @Test
     public void testStartRepoSearch() {
         final String searchQuery = "test";
         final List<Repo> responseData = new ArrayList<>();
@@ -108,5 +96,21 @@ public class TestSearchResultsPresenter {
         verify(mTaskManager).findRepos(searchQuery);
         verify(mSearchResultsView).hideProgress();
         verify(mSearchResultsView).setSearchResults(eq(responseData));
+    }
+
+    @Test
+    public void testStartRepoSearchFailed() {
+        final String searchQuery = "test";
+
+        final int errorCode = 401;
+        final String errorMsg = "error";
+        TaskError error = spy(new TaskError(errorCode, errorMsg));
+        TaskException exception = spy(new TaskException(error));
+        when(mTravisRestClient.getApiService().getRepos(searchQuery)).thenThrow(exception);
+
+        mSearchResultsPresenter.startRepoSearch(searchQuery);
+        verify(mTaskManager).findRepos(searchQuery);
+        verify(mSearchResultsView).hideProgress();
+        verify(mSearchResultsView).showLoadingError(eq(error.getMessage()));
     }
 }
