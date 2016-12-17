@@ -1,5 +1,7 @@
 package com.khmelenko.lab.travisclient;
 
+import com.khmelenko.lab.travisclient.dagger.DaggerTestComponent;
+import com.khmelenko.lab.travisclient.dagger.TestComponent;
 import com.khmelenko.lab.travisclient.network.request.AccessTokenRequest;
 import com.khmelenko.lab.travisclient.network.request.AuthorizationRequest;
 import com.khmelenko.lab.travisclient.network.response.AccessToken;
@@ -49,6 +51,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import de.greenrobot.event.EventBus;
 import retrofit.client.Header;
 import retrofit.client.Response;
@@ -75,31 +79,22 @@ public class TestTaskManager {
     @Rule
     public PowerMockRule rule = new PowerMockRule();
 
-    private TaskManager mTaskManager;
-    private TaskHelper mTaskHelper;
-    private EventBus mEventBus;
-    private TravisRestClient mTravisRestClient;
-    private GitHubRestClient mGitHubRestClient;
-    private RawClient mRawClient;
+    @Inject
+    TaskManager mTaskManager;
+
+    @Inject
+    TravisRestClient mTravisRestClient;
+    @Inject
+    GitHubRestClient mGitHubRestClient;
+    @Inject
+    RawClient mRawClient;
+    @Inject
+    TaskHelper mTaskHelper;
 
     @Before
     public void setupMock() {
-        mTravisRestClient = mock(TravisRestClient.class);
-        TravisApiService apiService = mock(TravisApiService.class);
-        when(mTravisRestClient.getApiService()).thenReturn(apiService);
-
-        mGitHubRestClient = mock(GitHubRestClient.class);
-        GithubApiService githubApiService = mock(GithubApiService.class);
-        when(mGitHubRestClient.getApiService()).thenReturn(githubApiService);
-
-        mRawClient = mock(RawClient.class);
-        RawApiService rawApiService = mock(RawApiService.class);
-        when(mRawClient.getApiService()).thenReturn(rawApiService);
-
-        mEventBus = mock(EventBus.class);
-
-        mTaskHelper = spy(new TaskHelper(mTravisRestClient, mGitHubRestClient, mRawClient, mEventBus));
-        mTaskManager = spy(new TaskManager(mTaskHelper));
+        TestComponent component = DaggerTestComponent.builder().build();
+        component.inject(this);
     }
 
     @Test

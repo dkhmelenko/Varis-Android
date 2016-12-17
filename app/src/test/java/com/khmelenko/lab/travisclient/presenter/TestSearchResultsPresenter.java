@@ -1,12 +1,11 @@
 package com.khmelenko.lab.travisclient.presenter;
 
 import com.khmelenko.lab.travisclient.BuildConfig;
+import com.khmelenko.lab.travisclient.dagger.DaggerTestComponent;
+import com.khmelenko.lab.travisclient.dagger.TestComponent;
 import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.retrofit.github.GitHubRestClient;
-import com.khmelenko.lab.travisclient.network.retrofit.github.GithubApiService;
-import com.khmelenko.lab.travisclient.network.retrofit.raw.RawApiService;
 import com.khmelenko.lab.travisclient.network.retrofit.raw.RawClient;
-import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisApiService;
 import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskException;
@@ -18,7 +17,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
@@ -28,15 +26,15 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import de.greenrobot.event.EventBus;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
  * Testing {@link SearchResultsPresenter}
@@ -53,12 +51,14 @@ public class TestSearchResultsPresenter {
     @Rule
     public PowerMockRule rule = new PowerMockRule();
 
-    private TaskManager mTaskManager;
-    private TaskHelper mTaskHelper;
-    private EventBus mEventBus;
-    private TravisRestClient mTravisRestClient;
-    private GitHubRestClient mGitHubRestClient;
-    private RawClient mRawClient;
+    @Inject
+    TaskManager mTaskManager;
+
+    @Inject
+    EventBus mEventBus;
+
+    @Inject
+    TravisRestClient mTravisRestClient;
 
     private SearchResultsPresenter mSearchResultsPresenter;
 
@@ -66,22 +66,8 @@ public class TestSearchResultsPresenter {
 
     @Before
     public void setup() {
-        mTravisRestClient = mock(TravisRestClient.class);
-        TravisApiService apiService = mock(TravisApiService.class);
-        when(mTravisRestClient.getApiService()).thenReturn(apiService);
-
-        mGitHubRestClient = mock(GitHubRestClient.class);
-        GithubApiService githubApiService = mock(GithubApiService.class);
-        when(mGitHubRestClient.getApiService()).thenReturn(githubApiService);
-
-        mRawClient = mock(RawClient.class);
-        RawApiService rawApiService = mock(RawApiService.class);
-        when(mRawClient.getApiService()).thenReturn(rawApiService);
-
-        mEventBus = spy(EventBus.class);
-
-        mTaskHelper = spy(new TaskHelper(mTravisRestClient, mGitHubRestClient, mRawClient, mEventBus));
-        mTaskManager = spy(new TaskManager(mTaskHelper));
+        TestComponent component = DaggerTestComponent.builder().build();
+        component.inject(this);
 
         mSearchResultsPresenter = spy(new SearchResultsPresenter(mTaskManager, mEventBus));
         mSearchResultsView = mock(SearchResultsView.class);
@@ -92,6 +78,8 @@ public class TestSearchResultsPresenter {
     public void testStartRepoSearch() {
         final String searchQuery = "test";
         final List<Repo> responseData = new ArrayList<>();
+        when(mTravisRestClient.getApiService().getRepos(searchQuery)).thenReturn(responseData);
+
         mSearchResultsPresenter.startRepoSearch(searchQuery);
         verify(mTaskManager).findRepos(searchQuery);
         verify(mSearchResultsView).hideProgress();
