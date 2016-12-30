@@ -19,7 +19,7 @@ import retrofit.client.Response;
  *
  * @author Dmytro Khmelenko
  */
-public final class CreateAuthorizationTask extends Task<Authorization> {
+public class CreateAuthorizationTask extends Task<Authorization> {
 
     private final String mBasicAuth;
     private final AuthorizationRequest mAuthorizationRequest;

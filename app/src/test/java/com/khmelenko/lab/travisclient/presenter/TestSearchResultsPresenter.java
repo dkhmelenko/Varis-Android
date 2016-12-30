@@ -4,22 +4,15 @@ import com.khmelenko.lab.travisclient.BuildConfig;
 import com.khmelenko.lab.travisclient.dagger.DaggerTestComponent;
 import com.khmelenko.lab.travisclient.dagger.TestComponent;
 import com.khmelenko.lab.travisclient.network.response.Repo;
-import com.khmelenko.lab.travisclient.network.retrofit.github.GitHubRestClient;
-import com.khmelenko.lab.travisclient.network.retrofit.raw.RawClient;
 import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.travisclient.task.TaskError;
 import com.khmelenko.lab.travisclient.task.TaskException;
-import com.khmelenko.lab.travisclient.task.TaskHelper;
 import com.khmelenko.lab.travisclient.task.TaskManager;
 import com.khmelenko.lab.travisclient.view.SearchResultsView;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -34,7 +27,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.Mockito.when;
 
 /**
  * Testing {@link SearchResultsPresenter}
@@ -43,13 +36,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
-@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
-@PrepareForTest({TravisRestClient.class, GitHubRestClient.class, RawClient.class, TaskError.class,
-        TaskHelper.class, TaskManager.class, SearchResultsPresenter.class})
 public class TestSearchResultsPresenter {
-
-    @Rule
-    public PowerMockRule rule = new PowerMockRule();
 
     @Inject
     TaskManager mTaskManager;

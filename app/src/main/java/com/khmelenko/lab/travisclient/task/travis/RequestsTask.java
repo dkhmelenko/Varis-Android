@@ -13,7 +13,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
 /**
  * @author Dmytro Khmelenko
  */
-public final class RequestsTask extends Task<Requests> {
+public class RequestsTask extends Task<Requests> {
 
     private long mRepoId;
     private String mRepoSlug;

@@ -15,7 +15,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko
  */
-public final class BuildDetailsTask extends Task<BuildDetails> {
+public class BuildDetailsTask extends Task<BuildDetails> {
 
     private String mRepoSlug;
     private long mRepoId;

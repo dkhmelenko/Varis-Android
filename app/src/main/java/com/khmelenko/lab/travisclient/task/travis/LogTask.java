@@ -16,7 +16,7 @@ import retrofit.client.Response;
  *
  * @author Dmytro Khmelenko
  */
-public final class LogTask extends Task<String> {
+public class LogTask extends Task<String> {
 
     private final String mAuth;
     private final long mJobId;

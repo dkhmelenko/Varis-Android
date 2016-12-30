@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public final class UserReposTask extends Task<List<Repo>> {
+public class UserReposTask extends Task<List<Repo>> {
 
     private final String mUserName;
 

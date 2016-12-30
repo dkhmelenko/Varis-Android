@@ -24,7 +24,7 @@ import javax.inject.Inject;
  *
  * @author Dmytro Khmelenko
  */
-public final class TaskManager {
+public class TaskManager {
 
     private final TaskHelper mTaskHelper;
 

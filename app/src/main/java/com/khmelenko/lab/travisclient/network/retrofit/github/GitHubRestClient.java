@@ -14,7 +14,7 @@ import retrofit.converter.GsonConverter;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class GitHubRestClient {
+public class GitHubRestClient {
 
     private static final String GITHUB_URL = Constants.GITHUB_URL;
 

@@ -14,7 +14,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko
  */
-public final class BranchesTask extends Task<Branches> {
+public class BranchesTask extends Task<Branches> {
 
     private long mRepoId;
     private String mRepoSlug;

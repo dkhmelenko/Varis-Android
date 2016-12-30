@@ -12,7 +12,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class RestartBuildTask extends Task<Void> {
+public class RestartBuildTask extends Task<Void> {
 
     private final long mBuildId;
 

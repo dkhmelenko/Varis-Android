@@ -7,7 +7,7 @@ import retrofit.client.Response;
  *
  * @author Dmytro Khmelenko
  */
-public final class TaskError {
+public class TaskError {
 
     public static final int NETWORK_ERROR = -1;
     public static final int NO_RESPONSE = -2;

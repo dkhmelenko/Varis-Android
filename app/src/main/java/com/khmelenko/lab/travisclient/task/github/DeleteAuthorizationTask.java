@@ -17,7 +17,7 @@ import retrofit.client.Response;
  *
  * @author Dmytro Khmelenko
  */
-public final class DeleteAuthorizationTask extends Task<Void> {
+public class DeleteAuthorizationTask extends Task<Void> {
 
     private final String mBasicAuth;
     private final String mAuthorizationId;

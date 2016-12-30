@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public final class AuthorizationRequest {
+public class AuthorizationRequest {
 
     @SerializedName("scopes")
     private final List<String> mScopes;

@@ -25,7 +25,7 @@ import retrofit.converter.GsonConverter;
  *
  * @author Dmytro Khmelenko
  */
-public final class TravisRestClient {
+public class TravisRestClient {
 
     private TravisApiService mApiService;
 

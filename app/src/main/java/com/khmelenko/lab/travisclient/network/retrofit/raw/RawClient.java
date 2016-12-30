@@ -20,7 +20,7 @@ import retrofit.converter.GsonConverter;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class RawClient {
+public class RawClient {
 
     private RawApiService mRawApiService;
 
