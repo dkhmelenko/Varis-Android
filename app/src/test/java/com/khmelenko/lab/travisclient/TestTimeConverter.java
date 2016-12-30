@@ -2,7 +2,6 @@ package com.khmelenko.lab.travisclient;
 
 import com.khmelenko.lab.travisclient.converter.TimeConverter;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

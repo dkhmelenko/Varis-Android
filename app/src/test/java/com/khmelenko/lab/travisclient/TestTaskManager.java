@@ -10,11 +10,8 @@ import com.khmelenko.lab.travisclient.network.response.Repo;
 import com.khmelenko.lab.travisclient.network.response.Requests;
 import com.khmelenko.lab.travisclient.network.retrofit.EmptyOutput;
 import com.khmelenko.lab.travisclient.network.retrofit.github.GitHubRestClient;
-import com.khmelenko.lab.travisclient.network.retrofit.github.GithubApiService;
-import com.khmelenko.lab.travisclient.network.retrofit.raw.RawApiService;
 import com.khmelenko.lab.travisclient.network.retrofit.raw.RawClient;
 import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisRestClient;
-import com.khmelenko.lab.travisclient.network.retrofit.travis.TravisApiService;
 import com.khmelenko.lab.travisclient.task.LoaderAsyncTask;
 import com.khmelenko.lab.travisclient.task.Task;
 import com.khmelenko.lab.travisclient.task.TaskError;
@@ -35,30 +32,34 @@ import com.khmelenko.lab.travisclient.task.travis.RequestsTask;
 import com.khmelenko.lab.travisclient.task.travis.RestartBuildTask;
 import com.khmelenko.lab.travisclient.task.travis.UserReposTask;
 import com.khmelenko.lab.travisclient.task.travis.UserTask;
+import com.squareup.okhttp.Protocol;
+import com.squareup.okhttp.Request;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
 import retrofit.client.Header;
 import retrofit.client.Response;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Testing TaskManager class
@@ -67,17 +68,7 @@ import static org.mockito.Mockito.*;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
-@PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
-@PrepareForTest({TravisRestClient.class, GitHubRestClient.class, RawClient.class,
-        Response.class, com.squareup.okhttp.Response.class, TaskHelper.class, TaskManager.class, TaskError.class,
-        RestartBuildTask.class, BuildHistory.class, Requests.class, AccessTokenRequest.class, AccessToken.class,
-        AuthorizationRequest.class, FindRepoTask.class, BranchesTask.class, BuildDetailsTask.class, CancelBuildTask.class,
-        UserTask.class, RequestsTask.class, BuildHistoryTask.class, UserReposTask.class, RepoTask.class, AuthTask.class,
-        CreateAuthorizationTask.class, AuthorizationRequest.class, LogTask.class, DeleteAuthorizationTask.class})
 public class TestTaskManager {
-
-    @Rule
-    public PowerMockRule rule = new PowerMockRule();
 
     @Inject
     TaskManager mTaskManager;
@@ -115,7 +106,7 @@ public class TestTaskManager {
 
         task.setHelper(mTaskHelper);
         List<Header> headers = new ArrayList<>();
-        Response response = spy(new Response("url", errorCode, errorMsg, headers, null));
+        Response response = new Response("url", errorCode, errorMsg, headers, null);
         TaskError error = spy(new TaskError(errorCode, errorMsg));
         TaskException exception = spy(new TaskException(error));
         when(task.execute()).thenThrow(exception);
@@ -259,9 +250,7 @@ public class TestTaskManager {
         final String auth = "test";
         final long jobId = 0;
 
-        Response response = mock(Response.class);
-        when(response.getStatus()).thenReturn(200);
-        when(response.getUrl()).thenReturn("url");
+        Response response = new Response("url", 200, "", Collections.<Header>emptyList(), null);
         when(mRawClient.getApiService().getLog(anyString())).thenReturn(response);
         when(mRawClient.getApiService().getLog(anyString(), anyString())).thenReturn(response);
 
@@ -307,7 +296,14 @@ public class TestTaskManager {
     @Test
     public void testSingleRequest() throws IOException {
         String anyUrl = "https://google.com.ua";
-        com.squareup.okhttp.Response response = mock(com.squareup.okhttp.Response.class);
+        Request request = new Request.Builder()
+                .url(anyUrl)
+                .build();
+        com.squareup.okhttp.Response response = new com.squareup.okhttp.Response.Builder()
+                .request(request)
+                .protocol(Protocol.HTTP_1_1)
+                .code(200)
+                .build();
         when(mRawClient.singleRequest(anyUrl)).thenReturn(response);
 
         mTaskManager.intentUrl(anyUrl);

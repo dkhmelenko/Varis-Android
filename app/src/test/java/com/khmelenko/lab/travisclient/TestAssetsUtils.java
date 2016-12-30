@@ -6,18 +6,17 @@ import android.content.res.Resources;
 
 import com.khmelenko.lab.travisclient.util.AssetsUtils;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Testing AssetsUtils class
@@ -26,11 +25,7 @@ import static org.mockito.Mockito.*;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
-@PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
 public class TestAssetsUtils {
-
-    @Rule
-    public PowerMockRule rule = new PowerMockRule();
 
     @Test
     public void testGetProperties() throws IOException {

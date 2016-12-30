@@ -12,7 +12,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko
  */
-public final class UserTask extends Task<User> {
+public class UserTask extends Task<User> {
 
     @Override
     public User execute() throws TaskException {

@@ -19,7 +19,7 @@ import com.squareup.okhttp.Response;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class IntentUrlTask extends Task<String> {
+public class IntentUrlTask extends Task<String> {
 
     private final String mUrl;
 

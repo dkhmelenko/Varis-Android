@@ -12,7 +12,7 @@ import com.khmelenko.lab.travisclient.task.TaskException;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class CancelBuildTask extends Task<Void> {
+public class CancelBuildTask extends Task<Void> {
 
     private final long mBuildId;
 

@@ -15,7 +15,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class SearchResultsPresenter extends MvpPresenter<SearchResultsView> {
+public class SearchResultsPresenter extends MvpPresenter<SearchResultsView> {
 
     private final TaskManager mTaskManager;
     private final EventBus mEventBus;
