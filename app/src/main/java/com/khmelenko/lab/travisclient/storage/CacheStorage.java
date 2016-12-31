@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public final class CacheStorage {
+public class CacheStorage {
 
     private static final String USER_FILE = "UserData";
     private static final String REPOS_FILE = "ReposFile";

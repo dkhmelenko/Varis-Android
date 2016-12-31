@@ -23,7 +23,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
+public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
 
     private final TravisRestClient mTravisRestClient;
     private final EventBus mEventBus;
