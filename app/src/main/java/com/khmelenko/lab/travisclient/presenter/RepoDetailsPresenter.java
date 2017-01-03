@@ -19,7 +19,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class RepoDetailsPresenter extends MvpPresenter<RepoDetailsView> {
+public class RepoDetailsPresenter extends MvpPresenter<RepoDetailsView> {
 
     private final TaskManager mTaskManager;
     private final EventBus mEventBus;

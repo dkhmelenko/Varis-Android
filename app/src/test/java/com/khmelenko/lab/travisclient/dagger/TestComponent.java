@@ -2,6 +2,7 @@ package com.khmelenko.lab.travisclient.dagger;
 
 import com.khmelenko.lab.travisclient.TestTaskManager;
 import com.khmelenko.lab.travisclient.dagger.module.ApplicationModule;
+import com.khmelenko.lab.travisclient.presenter.TestRepoDetailsPresenter;
 import com.khmelenko.lab.travisclient.presenter.TestRepositoriesPresenter;
 import com.khmelenko.lab.travisclient.presenter.TestSearchResultsPresenter;
 
@@ -22,6 +23,8 @@ public interface TestComponent {
     void inject(TestSearchResultsPresenter test);
 
     void inject(TestRepositoriesPresenter test);
+
+    void inject(TestRepoDetailsPresenter test);
 
     void inject(TestTaskManager test);
 
