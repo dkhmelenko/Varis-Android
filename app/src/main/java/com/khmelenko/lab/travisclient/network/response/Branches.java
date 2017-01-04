@@ -30,4 +30,12 @@ public final class Branches {
     public List<Commit> getCommits() {
         return Collections.unmodifiableList(mCommits);
     }
+
+    public void setBranches(List<Branch> branches) {
+        mBranches = branches;
+    }
+
+    public void setCommits(List<Commit> commits) {
+        mCommits = commits;
+    }
 }
