@@ -32,9 +32,9 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
+public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
 
-    private static final int LOAD_LOG_MAX_ATTEMPT = 3;
+    public static final int LOAD_LOG_MAX_ATTEMPT = 3;
 
     public final EventBus mEventBus;
     public final TaskManager mTaskManager;
