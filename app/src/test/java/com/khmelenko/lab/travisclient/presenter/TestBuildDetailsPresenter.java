@@ -33,7 +33,9 @@ import javax.inject.Inject;
 import de.greenrobot.event.EventBus;
 import retrofit.client.Header;
 import retrofit.client.Response;
+import retrofit.mime.TypedOutput;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -261,21 +263,51 @@ public class TestBuildDetailsPresenter {
 
     @Test
     public void testRestartBuild() {
+        when(mTravisRestClient.getApiService().restartBuild(any(Long.class), any(TypedOutput.class)))
+                .thenReturn(null);
 
+        mBuildsDetailsPresenter.restartBuild();
+        verify(mTaskManager).getBuildDetails(any(String.class), any(Long.class));
     }
 
     @Test
     public void testRestartBuildFailed() {
+        final int errorCode = 401;
+        final String errorMsg = "error";
+        TaskError error = spy(new TaskError(errorCode, errorMsg));
+        TaskException exception = spy(new TaskException(error));
+
+        when(mTravisRestClient.getApiService().restartBuild(any(Long.class), any(TypedOutput.class)))
+                .thenThrow(exception);
+
+        mBuildsDetailsPresenter.restartBuild();
+        verify(mTaskManager).getBuildDetails(any(String.class), any(Long.class));
+        verify(mBuildDetailsView, times(2)).showLoadingError(error.getMessage());
 
     }
 
     @Test
     public void testCancelBuild() {
+        when(mTravisRestClient.getApiService().cancelBuild(any(Long.class), any(TypedOutput.class)))
+                .thenReturn(null);
 
+        mBuildsDetailsPresenter.cancelBuild();
+        verify(mTaskManager).getBuildDetails(any(String.class), any(Long.class));
     }
 
     @Test
     public void testCancelBuildFailed() {
+        final int errorCode = 401;
+        final String errorMsg = "error";
+        TaskError error = spy(new TaskError(errorCode, errorMsg));
+        TaskException exception = spy(new TaskException(error));
+
+        when(mTravisRestClient.getApiService().cancelBuild(any(Long.class), any(TypedOutput.class)))
+                .thenThrow(exception);
+
+        mBuildsDetailsPresenter.cancelBuild();
+        verify(mTaskManager).getBuildDetails(any(String.class), any(Long.class));
+        verify(mBuildDetailsView, times(2)).showLoadingError(error.getMessage());
 
     }
 
