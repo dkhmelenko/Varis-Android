@@ -35,6 +35,7 @@ import retrofit.client.Header;
 import retrofit.client.Response;
 import retrofit.mime.TypedOutput;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -194,17 +195,7 @@ public class TestBuildDetailsPresenter {
         final String slug = "dkhmelenko/TravisClient-Android";
         final String intentUrl = "https://travis-ci.org/dkhmelenko/TravisClient-Android/builds/188971232";
 
-        final String expectedUrl = "https://sample.org";
-        Request request = new Request.Builder()
-                .url(expectedUrl)
-                .build();
-        com.squareup.okhttp.Response response = new com.squareup.okhttp.Response.Builder()
-                .request(request)
-                .protocol(Protocol.HTTP_1_1)
-                .code(200)
-                .build();
-
-        when(mRawClient.singleRequest(intentUrl)).thenReturn(response);
+        when(mRawClient.singleRequest(intentUrl)).thenReturn(intentResponse());
 
         mBuildsDetailsPresenter.startLoadingData(intentUrl, slug, buildId);
         verify(mTaskManager).intentUrl(intentUrl);
@@ -312,7 +303,44 @@ public class TestBuildDetailsPresenter {
     }
 
     @Test
-    public void testCanUserContributeToRepo() {
+    public void testCanUserContributeToRepoTrue() throws Exception {
+        final long buildId = 188971232L;
+        final String slug = "dkhmelenko/TravisClient-Android";
+        final String intentUrl = "https://travis-ci.org/dkhmelenko/TravisClient-Android/builds/188971232";
 
+        when(mRawClient.singleRequest(intentUrl)).thenReturn(intentResponse());
+        String[] repos = {"Repo1", "Repo2", "Repo3", slug, "Repo4"};
+        when(mCacheStorage.restoreRepos()).thenReturn(repos);
+
+        mBuildsDetailsPresenter.startLoadingData(intentUrl, slug, buildId);
+        boolean actual = mBuildsDetailsPresenter.canUserContributeToRepo();
+        assertEquals(true, actual);
+    }
+
+    @Test
+    public void testCanUserContributeToRepoFalse() throws Exception {
+        final long buildId = 188971232L;
+        final String slug = "dkhmelenko/TravisClient-Android";
+        final String intentUrl = "https://travis-ci.org/dkhmelenko/TravisClient-Android/builds/188971232";
+
+        when(mRawClient.singleRequest(intentUrl)).thenReturn(intentResponse());
+        String[] repos = {"Repo1", "Repo2", "Repo3"};
+        when(mCacheStorage.restoreRepos()).thenReturn(repos);
+
+        mBuildsDetailsPresenter.startLoadingData(intentUrl, slug, buildId);
+        boolean actual = mBuildsDetailsPresenter.canUserContributeToRepo();
+        assertEquals(false, actual);
+    }
+
+    private com.squareup.okhttp.Response intentResponse() {
+        final String expectedUrl = "https://sample.org";
+        Request request = new Request.Builder()
+                .url(expectedUrl)
+                .build();
+        return new com.squareup.okhttp.Response.Builder()
+                .request(request)
+                .protocol(Protocol.HTTP_1_1)
+                .code(200)
+                .build();
     }
 }
