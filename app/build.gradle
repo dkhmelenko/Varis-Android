@@ -47,7 +47,7 @@ coveralls {
 }
 
 tasks.coveralls {
-    dependsOn 'connectedAndroidTest'
+    dependsOn 'testRelease'
     onlyIf { System.env.'CI' }
 }
 
