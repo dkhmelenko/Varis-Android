@@ -30,7 +30,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public final class AuthPresenter extends MvpPresenter<AuthView> {
+public class AuthPresenter extends MvpPresenter<AuthView> {
 
     private final TaskManager mTaskManager;
     private final EventBus mEventBus;

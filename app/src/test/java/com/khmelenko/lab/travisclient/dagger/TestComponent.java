@@ -2,6 +2,8 @@ package com.khmelenko.lab.travisclient.dagger;
 
 import com.khmelenko.lab.travisclient.TestTaskManager;
 import com.khmelenko.lab.travisclient.dagger.module.ApplicationModule;
+import com.khmelenko.lab.travisclient.presenter.AuthPresenter;
+import com.khmelenko.lab.travisclient.presenter.TestAuthPresenter;
 import com.khmelenko.lab.travisclient.presenter.TestBuildDetailsPresenter;
 import com.khmelenko.lab.travisclient.presenter.TestRepoDetailsPresenter;
 import com.khmelenko.lab.travisclient.presenter.TestRepositoriesPresenter;
@@ -28,6 +30,8 @@ public interface TestComponent {
     void inject(TestRepoDetailsPresenter test);
 
     void inject(TestBuildDetailsPresenter test);
+
+    void inject(TestAuthPresenter test);
 
     void inject(TestTaskManager test);
 
