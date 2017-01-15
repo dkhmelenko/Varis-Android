@@ -47,7 +47,7 @@ coveralls {
 }
 
 tasks.coveralls {
-    dependsOn 'testRelease'
+    dependsOn 'testReleaseUnitTest'
     onlyIf { System.env.'CI' }
 }
 
