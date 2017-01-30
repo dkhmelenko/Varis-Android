@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         style="@style/CardViewContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,49 +17,31 @@
 
             <TextView
                 android:id="@+id/item_repo_name"
+                android:drawablePadding="4dp"
                 style="@style/ViewBuildText.TwoLines.Title.NoImage"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/item_repo_duration"
+                style="@style/ViewBuildText.OneLine.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:drawableLeft="@drawable/ic_duration_grey600_24dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_duration_grey600_24dp" />
 
-                <ImageView
-                    style="@style/ViewBuildImageIcon"
-                    android:src="@drawable/ic_duration_grey600_24dp"
-                    />
-
-                <TextView
-                    android:id="@+id/item_repo_duration"
-                    style="@style/ViewBuildText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/item_repo_finished"
+                style="@style/ViewBuildText.OneLine.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/ViewBuildImageIcon"
-                    android:src="@drawable/ic_finished_at_grey600_24dp"
-                    />
-
-                <TextView
-                    android:id="@+id/item_repo_finished"
-                    style="@style/ViewBuildText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-
-            </LinearLayout>
+                android:drawableLeft="@drawable/ic_finished_at_grey600_24dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_finished_at_grey600_24dp" />
 
         </LinearLayout>
+
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
