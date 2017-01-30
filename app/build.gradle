@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.github.kt3k.coveralls'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.khmelenko.lab.travisclient"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 7
         versionName "1.00.007"
     }
@@ -52,7 +52,7 @@ tasks.coveralls {
 
 ext {
     libraryVersion = [
-            support : '24.2.1',
+            support : '25.1.1',
             gson : '2.4',
             retrofit : '1.9.0',
             okhttp : '2.7.0',
