@@ -44,7 +44,7 @@
 
                 <ImageView
                     style="@style/ViewBuildImageIcon"
-                    android:src="@drawable/duration"
+                    android:src="@drawable/ic_duration_grey600_24dp"
                     />
 
                 <TextView

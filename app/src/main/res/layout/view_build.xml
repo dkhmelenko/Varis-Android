@@ -1,30 +1,27 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/build_number"
                 style="@style/ViewBuildText.TwoLines.Title.NoImage"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/build_state"
                 style="@style/ViewBuildText.TwoLines.Big"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -33,17 +30,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                style="@style/ViewBuildImageIcon.Big"
-                android:src="@drawable/person"
-                />
-
             <TextView
                 android:id="@+id/build_commit_person"
-                style="@style/ViewBuildText.OneLine.Big"
+                style="@style/ViewBuildText.OneLine.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:drawableLeft="@drawable/ic_person_grey600_24dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_person_grey600_24dp" />
 
         </LinearLayout>
 
@@ -53,17 +47,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                style="@style/ViewBuildImageIcon.TopAligned"
-                android:src="@drawable/pull_request"
-                />
-
             <TextView
                 android:id="@+id/build_pull_request_title"
-                style="@style/ViewBuildText.ThreeLines.Big"
+                style="@style/ViewBuildText.ThreeLines.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:drawableLeft="@drawable/ic_pull_request_grey600_24dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_pull_request_grey600_24dp" />
 
         </LinearLayout>
 
@@ -71,20 +62,16 @@
             android:id="@+id/build_branch_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <ImageView
-                style="@style/ViewBuildImageIcon"
-                android:src="@drawable/git_branch"
-                />
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/build_branch"
-                style="@style/ViewBuildText.OneLine"
+                style="@style/ViewBuildText.OneLine.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:drawableLeft="@drawable/ic_git_branch_grey600_24dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_git_branch_grey600_24dp" />
 
         </LinearLayout>
 
@@ -93,59 +80,48 @@
             android:id="@+id/build_build_commit_msg_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <ImageView
-                style="@style/ViewBuildImageIcon.TopAligned"
-                android:src="@drawable/git"
-                />
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/build_commit_message"
-                style="@style/ViewBuildText.TwoLines"
+                style="@style/ViewBuildText.TwoLines.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:drawableLeft="@drawable/ic_git_grey600_24dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_git_grey600_24dp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <ImageView
-                style="@style/ViewBuildImageIcon"
-                android:src="@drawable/duration"
-                />
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/build_duration"
-                style="@style/ViewBuildText"
+                style="@style/ViewBuildText.OneLine.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:drawableLeft="@drawable/ic_duration_grey600_24dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_duration_grey600_24dp" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <ImageView
-                style="@style/ViewBuildImageIcon"
-                android:src="@drawable/finished_at"
-                />
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/build_finished"
-                style="@style/ViewBuildText"
+                style="@style/ViewBuildText.OneLine.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:drawableLeft="@drawable/ic_finished_at_grey600_24dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_finished_at_grey600_24dp" />
 
         </LinearLayout>
 

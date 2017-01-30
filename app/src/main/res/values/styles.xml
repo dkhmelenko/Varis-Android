@@ -28,23 +28,19 @@
     </style>
 
     <style name="GeneralText">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 
     <!-- Style for the image icon in view build -->
     <style name="ViewBuildImageIcon">
-        <item name="android:layout_width">17dp</item>
-        <item name="android:layout_height">17dp</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:scaleType">fitCenter</item>
+        <item name="android:padding">4dp</item>
     </style>
 
-    <style name="ViewBuildImageIcon.Big" parent="ViewBuildImageIcon">
-        <item name="android:layout_width">19dp</item>
-        <item name="android:layout_height">19dp</item>
-    </style>
-
-    <style name="ViewBuildImageIcon.TopAligned" parent="ViewBuildImageIcon">
+    <style name="ViewBuildImageIcon.TopAligned">
         <item name="android:layout_gravity">center|top</item>
         <item name="android:layout_marginTop">4dp</item>
     </style>
@@ -53,41 +49,56 @@
     <style name="ViewBuildText">
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">2dp</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 
-    <style name="ViewBuildText.OneLine" parent="ViewBuildText">
+    <style name="ViewBuildText.OneLine">
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="ViewBuildText.OneLine.Big" parent="ViewBuildText.OneLine">
-        <item name="android:textSize">23sp</item>
+    <style name="ViewBuildText.OneLine.Small">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
     </style>
 
-    <style name="ViewBuildText.TwoLines" parent="ViewBuildText">
+    <style name="ViewBuildText.OneLine.Big">
+        <item name="android:textSize">@dimen/text_size_big</item>
+    </style>
+
+    <style name="ViewBuildText.TwoLines">
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="ViewBuildText.TwoLines.Big" parent="ViewBuildText.TwoLines">
-        <item name="android:textSize">23sp</item>
+    <style name="ViewBuildText.TwoLines.Small">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="ViewBuildText.TwoLines.Big">
+        <item name="android:textSize">@dimen/text_size_big</item>
     </style>
 
     <style name="ViewBuildText.TwoLines.Title.NoImage" parent="ViewBuildText.TwoLines">
-        <item name="android:textSize">23sp</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
         <item name="android:drawableLeft">@null</item>
         <item name="android:drawablePadding">2dp</item>
         <item name="android:paddingRight">10dp</item>
     </style>
 
-    <style name="ViewBuildText.ThreeLines" parent="ViewBuildText">
+    <style name="ViewBuildText.ThreeLines">
         <item name="android:maxLines">3</item>
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="ViewBuildText.ThreeLines.Big" parent="ViewBuildText.ThreeLines">
-        <item name="android:textSize">23sp</item>
+    <style name="ViewBuildText.ThreeLines.Small">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="ViewBuildText.ThreeLines.Big">
+        <item name="android:textSize">@dimen/text_size_big</item>
     </style>
 
     <!-- Style of the CardView container -->
@@ -95,7 +106,7 @@
         <item name="android:layout_margin">5dp</item>
         <item name="android:clickable">true</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
-        <item name="cardCornerRadius">1dp</item>
+        <item name="cardCornerRadius">2dp</item>
         <item name="contentPadding">10dp</item>
     </style>
 
@@ -112,6 +123,4 @@
         <item name="android:layout_gravity">bottom|right</item>
         <item name="layout_anchorGravity">bottom|right|end</item>
     </style>
-
-
 </resources>

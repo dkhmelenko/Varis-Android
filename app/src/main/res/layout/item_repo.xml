@@ -30,7 +30,7 @@
 
                 <ImageView
                     style="@style/ViewBuildImageIcon"
-                    android:src="@drawable/duration"
+                    android:src="@drawable/ic_duration_grey600_24dp"
                     />
 
                 <TextView
@@ -48,7 +48,7 @@
 
                 <ImageView
                     style="@style/ViewBuildImageIcon"
-                    android:src="@drawable/finished_at"
+                    android:src="@drawable/ic_finished_at_grey600_24dp"
                     />
 
                 <TextView

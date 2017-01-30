@@ -1,13 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.khmelenko.lab.travisclient.activity.BuildDetailsActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.khmelenko.lab.travisclient.activity.BuildDetailsActivity">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar" />
 
     <LinearLayout
         android:id="@+id/progressbarview"
@@ -17,15 +17,14 @@
         <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            />
+            android:layout_gravity="center" />
     </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/view_empty"/>
+        <include layout="@layout/view_empty" />
 
         <ScrollView
             android:id="@+id/build_details_layout"
@@ -43,14 +42,13 @@
                     android:id="@+id/build_details_build_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="10dp" />
 
                 <LinearLayout
                     android:id="@+id/build_details_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    />
+                    android:orientation="vertical" />
 
             </LinearLayout>
 
@@ -59,16 +57,14 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/build_details_scroll_btn"
             style="@style/FloatingActionButton.RightBottom"
-            android:src="@drawable/ic_arrow_down"
-            android:visibility="gone"
-            />
+            android:src="@drawable/ic_arrow_downward_white_24dp"
+            android:visibility="gone" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/build_details_scroll_up_btn"
             style="@style/FloatingActionButton.RightBottom"
-            android:src="@drawable/ic_arrow_up"
-            android:visibility="gone"
-            />
+            android:src="@drawable/ic_arrow_upward_white_24dp"
+            android:visibility="gone" />
 
     </android.support.design.widget.CoordinatorLayout>
 
