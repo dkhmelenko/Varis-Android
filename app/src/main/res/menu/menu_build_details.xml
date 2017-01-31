@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/build_activity_action_restart"
-        android:icon="@drawable/ic_menu_restart"
+        android:icon="@drawable/ic_menu_restart_white_24dp"
         android:title="@string/build_details_action_restart"
         android:visible="false"
         app:showAsAction="always"
@@ -14,7 +14,7 @@
 
     <item
         android:id="@+id/build_activity_action_cancel"
-        android:icon="@drawable/ic_menu_cancel"
+        android:icon="@drawable/ic_menu_cancel_white_24dp"
         android:title="@string/build_details_action_cancel"
         android:visible="false"
         app:showAsAction="always"

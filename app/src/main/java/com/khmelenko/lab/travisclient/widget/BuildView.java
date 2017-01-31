@@ -35,7 +35,7 @@ public class BuildView extends LinearLayout {
     TextView mState;
 
     @Bind(R.id.build_pull_request_title)
-    TextView mTitle;
+    TextView mPullRequestTitle;
 
     @Bind(R.id.build_branch)
     TextView mBranch;
@@ -51,15 +51,6 @@ public class BuildView extends LinearLayout {
 
     @Bind(R.id.build_finished)
     TextView mFinished;
-
-    @Bind(R.id.build_pull_request_section)
-    View mPullRequestSection;
-
-    @Bind(R.id.build_build_commit_msg_section)
-    View mCommitMessageSection;
-
-    @Bind(R.id.build_branch_section)
-    View mBuildBranchSection;
 
     public BuildView(Context context) {
         super(context);
@@ -97,13 +88,13 @@ public class BuildView extends LinearLayout {
      */
     private void showPullRequestDetails(boolean isPullRequest) {
         if (isPullRequest) {
-            mPullRequestSection.setVisibility(VISIBLE);
-            mBuildBranchSection.setVisibility(GONE);
-            mCommitMessageSection.setVisibility(GONE);
+            mPullRequestTitle.setVisibility(VISIBLE);
+            mBranch.setVisibility(GONE);
+            mCommitMessage.setVisibility(GONE);
         } else {
-            mPullRequestSection.setVisibility(GONE);
-            mBuildBranchSection.setVisibility(VISIBLE);
-            mCommitMessageSection.setVisibility(VISIBLE);
+            mPullRequestTitle.setVisibility(GONE);
+            mBranch.setVisibility(VISIBLE);
+            mCommitMessage.setVisibility(VISIBLE);
         }
     }
 
@@ -121,8 +112,7 @@ public class BuildView extends LinearLayout {
 
             Drawable drawable = BuildStateHelper.getBuildImage(state);
             if (drawable != null) {
-                drawable.setBounds(0, 0, 30, 30);
-                mNumber.setCompoundDrawables(drawable, null, null, null);
+                mNumber.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
             }
         }
     }
@@ -225,8 +215,9 @@ public class BuildView extends LinearLayout {
     public void setPullRequestData(RequestData request, Build build, Commit commit) {
         showPullRequestDetails(true);
 
-        mNumber.setText(getContext().getString(R.string.pull_request_number, request.getPullRequestNumber()));
-        mTitle.setText(request.getPullRequestTitle());
+        mNumber.setText(getContext()
+                .getString(R.string.pull_request_number, request.getPullRequestNumber()));
+        mPullRequestTitle.setText(request.getPullRequestTitle());
 
         // commit data
         if (commit != null) {
