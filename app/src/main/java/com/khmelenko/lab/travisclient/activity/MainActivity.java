@@ -12,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -69,6 +70,8 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
 
     private String mSavedQuery;
 
+    private ActionBarDrawerToggle mDrawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,10 +114,14 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
         }
+        mDrawerToggle.syncState();
     }
 
     /**
@@ -122,37 +129,41 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
      */
     private void setupDrawerLayout() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
         final NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
-        view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        view.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                switch (menuItem.getItemId()) {
-                    case R.id.drawer_login:
-                        Intent loginIntent = new Intent(MainActivity.this, AuthActivity.class);
-                        startActivityForResult(loginIntent, AUTH_ACTIVITY_CODE);
-                        break;
-                    case R.id.drawer_logout:
-                        getPresenter().userLogout();
+                        switch (menuItem.getItemId()) {
+                            case R.id.drawer_login:
+                                Intent loginIntent = new Intent(MainActivity.this,
+                                        AuthActivity.class);
+                                startActivityForResult(loginIntent, AUTH_ACTIVITY_CODE);
+                                break;
+                            case R.id.drawer_logout:
+                                getPresenter().userLogout();
 
-                        finish();
-                        startActivity(getIntent());
-                        break;
-                    case R.id.drawer_licenses:
-                        LicensesDialogFragment dialog = LicensesDialogFragment.newInstance();
-                        dialog.show(getSupportFragmentManager(), "LicensesDialog");
-                        break;
-                    case R.id.drawer_about:
-                        Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
-                        startActivity(aboutIntent);
-                        break;
-                }
-                menuItem.setChecked(false);
-                mDrawerLayout.closeDrawers();
-                return true;
-            }
-        });
+                                finish();
+                                startActivity(getIntent());
+                                break;
+                            case R.id.drawer_licenses:
+                                LicensesDialogFragment dialog = LicensesDialogFragment
+                                        .newInstance();
+                                dialog.show(getSupportFragmentManager(), "LicensesDialog");
+                                break;
+                            case R.id.drawer_about:
+                                Intent aboutIntent = new Intent(MainActivity.this,
+                                        AboutActivity.class);
+                                startActivity(aboutIntent);
+                                break;
+                        }
+                        menuItem.setChecked(false);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
 
     }
 
@@ -167,7 +178,8 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
                     getPresenter().reloadRepos();
                     break;
                 case REPO_DETAILS_CODE:
-                    boolean reloadRequired = data.getBooleanExtra(RepoDetailsActivity.RELOAD_REQUIRED_KEY, false);
+                    boolean reloadRequired = data
+                            .getBooleanExtra(RepoDetailsActivity.RELOAD_REQUIRED_KEY, false);
                     if (reloadRequired) {
                         showProgress();
                         getPresenter().reloadRepos();
@@ -206,9 +218,10 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     boolean submitProhibited = true;
-                    if(query.length() > SEARCH_LIMIT) {
+                    if (query.length() > SEARCH_LIMIT) {
                         // save search query to history
-                        SearchRecentSuggestions suggestionsProvider = new SearchRecentSuggestions(MainActivity.this,
+                        SearchRecentSuggestions suggestionsProvider = new SearchRecentSuggestions(
+                                MainActivity.this,
                                 SearchHistoryProvider.AUTHORITY, SearchHistoryProvider.MODE);
                         suggestionsProvider.saveRecentQuery(query, null);
                         submitProhibited = false;

@@ -61,9 +61,9 @@ ext {
             eventbus : '2.4.0',
             circleimageview : '2.0.0',
             dagger : '2.0.2',
-            mockito : '2.7.0',
+            mockito : '1.10.19',
             junit : '4.12',
-            robolectric : '3.1.4'
+            robolectric : '3.0'
     ]
 }
 
