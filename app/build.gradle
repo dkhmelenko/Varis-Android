@@ -52,18 +52,18 @@ tasks.coveralls {
 
 ext {
     libraryVersion = [
-            support : '25.1.1',
-            gson : '2.4',
-            retrofit : '1.9.0',
-            okhttp : '2.7.0',
-            butterknife : '7.0.1',
-            eventbus : '2.4.0',
-            circleimageview : '2.0.0',
-            dagger : '2.0.2',
-            glassfish : '10.0-b28',
-            mockito : '1.10.19',
-            junit : '4.12',
-            robolectric : '3.0'
+            support        : '25.1.1',
+            gson           : '2.4',
+            retrofit       : '1.9.0',
+            okhttp         : '2.7.0',
+            butterknife    : '7.0.1',
+            eventbus       : '2.4.0',
+            circleimageview: '2.0.0',
+            dagger         : '2.0.2',
+            glassfish      : '10.0-b28',
+            mockito        : '1.10.19',
+            junit          : '4.12',
+            robolectric    : '3.0'
     ]
 }
 
