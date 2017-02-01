@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.github.kt3k.coveralls'
 
 android {
@@ -82,7 +81,7 @@ dependencies {
     compile "de.greenrobot:eventbus:$libraryVersion.eventbus"
     compile "de.hdodenhof:circleimageview:$libraryVersion.circleimageview"
 
-    apt "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
+    annotationProcessor "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
     compile "com.google.dagger:dagger:$libraryVersion.dagger"
     provided "org.glassfish:javax.annotation:$libraryVersion.glassfish"
 
@@ -93,5 +92,5 @@ dependencies {
     testCompile "junit:junit:$libraryVersion.junit"
     testCompile "org.robolectric:robolectric:$libraryVersion.robolectric"
     testCompile "com.google.dagger:dagger:$libraryVersion.dagger"
-    testApt "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
 }
