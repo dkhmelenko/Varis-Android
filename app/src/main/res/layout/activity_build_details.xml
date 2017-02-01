@@ -1,9 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.khmelenko.lab.travisclient.activity.BuildDetailsActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.khmelenko.lab.travisclient.activity.BuildDetailsActivity">
 
     <include
         android:id="@+id/toolbar"
@@ -59,14 +60,14 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/build_details_scroll_btn"
             style="@style/FloatingActionButton.RightBottom"
-            android:src="@drawable/ic_arrow_down"
+            app:srcCompat="@drawable/ic_arrow_downward_white_24dp"
             android:visibility="gone"
             />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/build_details_scroll_up_btn"
             style="@style/FloatingActionButton.RightBottom"
-            android:src="@drawable/ic_arrow_up"
+            app:srcCompat="@drawable/ic_arrow_upward_white_24dp"
             android:visibility="gone"
             />
 
