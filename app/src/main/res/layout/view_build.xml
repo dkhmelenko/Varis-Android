@@ -1,4 +1,5 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +36,7 @@
 
             <ImageView
                 style="@style/ViewBuildImageIcon.Big"
-                android:src="@drawable/person"
+                app:srcCompat="@drawable/ic_person_grey600_16dp"
                 />
 
             <TextView
@@ -55,7 +56,7 @@
 
             <ImageView
                 style="@style/ViewBuildImageIcon.TopAligned"
-                android:src="@drawable/pull_request"
+                app:srcCompat="@drawable/ic_pull_request_grey600_16dp"
                 />
 
             <TextView
@@ -76,7 +77,7 @@
 
             <ImageView
                 style="@style/ViewBuildImageIcon"
-                android:src="@drawable/git_branch"
+                app:srcCompat="@drawable/ic_git_branch_grey600_16dp"
                 />
 
             <TextView
@@ -98,7 +99,7 @@
 
             <ImageView
                 style="@style/ViewBuildImageIcon.TopAligned"
-                android:src="@drawable/git"
+                app:srcCompat="@drawable/ic_git_grey600_16dp"
                 />
 
             <TextView
@@ -118,7 +119,7 @@
 
             <ImageView
                 style="@style/ViewBuildImageIcon"
-                android:src="@drawable/duration"
+                app:srcCompat="@drawable/ic_duration_grey600_16dp"
                 />
 
             <TextView
@@ -137,7 +138,7 @@
 
             <ImageView
                 style="@style/ViewBuildImageIcon"
-                android:src="@drawable/finished_at"
+                app:srcCompat="@drawable/ic_finished_at_grey600_16dp"
                 />
 
             <TextView

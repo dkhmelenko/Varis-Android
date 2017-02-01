@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
@@ -44,7 +45,7 @@
 
                 <ImageView
                     style="@style/ViewBuildImageIcon"
-                    android:src="@drawable/duration"
+                    app:srcCompat="@drawable/ic_duration_grey600_16dp"
                     />
 
                 <TextView
