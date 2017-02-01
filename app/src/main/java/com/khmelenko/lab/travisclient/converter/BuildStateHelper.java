@@ -43,36 +43,10 @@ public final class BuildStateHelper {
                 break;
             case STATE_CANCELED:
             case STATE_FAILED:
-            case STATE_ERRORED:
                 color = ContextCompat.getColor(context, R.color.build_state_failed);
                 break;
-        }
-
-        return color;
-    }
-
-    /**
-     * Gets the color for the build background
-     *
-     * @param state Build state
-     * @return Color
-     */
-    public static int getBuildBackground(String state) {
-        Context context = TravisApp.getAppContext();
-
-        int color = ContextCompat.getColor(context, android.R.color.transparent);
-        switch (state) {
-            case STATE_CREATED:
-            case STATE_STARTED:
-                color = ContextCompat.getColor(context, R.color.build_state_started_bg);
-                break;
-            case STATE_PASSED:
-                color = ContextCompat.getColor(context, R.color.build_state_passed_bg);
-                break;
-            case STATE_CANCELED:
-            case STATE_FAILED:
             case STATE_ERRORED:
-                color = ContextCompat.getColor(context, R.color.build_state_failed_bg);
+                color = ContextCompat.getColor(context, R.color.build_state_errored);
                 break;
         }
 
@@ -93,17 +67,17 @@ public final class BuildStateHelper {
         switch (state) {
             case STATE_CREATED:
             case STATE_STARTED:
-                drawable = ContextCompat.getDrawable(context, R.drawable.build_state_started);
+                drawable = ContextCompat.getDrawable(context, R.drawable.ic_build_state_started_16dp);
                 break;
             case STATE_PASSED:
-                drawable = ContextCompat.getDrawable(context, R.drawable.build_state_passed);
+                drawable = ContextCompat.getDrawable(context, R.drawable.ic_build_state_passed_16dp);
                 break;
             case STATE_CANCELED:
             case STATE_ERRORED:
-                drawable = ContextCompat.getDrawable(context, R.drawable.build_state_errored);
+                drawable = ContextCompat.getDrawable(context, R.drawable.ic_build_state_errored_16dp);
                 break;
             case STATE_FAILED:
-                drawable = ContextCompat.getDrawable(context, R.drawable.build_state_failed);
+                drawable = ContextCompat.getDrawable(context, R.drawable.ic_build_state_failed_16dp);
                 break;
         }
 
@@ -117,8 +91,7 @@ public final class BuildStateHelper {
      * @return True, if state is passed. False otherwise
      */
     public static boolean isPassed(@NonNull String state) {
-        boolean passed = state.equals(STATE_PASSED);
-        return passed;
+        return state.equals(STATE_PASSED);
     }
 
     /**
@@ -128,7 +101,6 @@ public final class BuildStateHelper {
      * @return True, if the build is in progress state. False otherwise
      */
     public static boolean isInProgress(@NonNull String state) {
-        boolean inProgress = state.equals(STATE_CREATED) || state.equals(STATE_STARTED);
-        return inProgress;
+        return state.equals(STATE_CREATED) || state.equals(STATE_STARTED);
     }
 }

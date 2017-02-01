@@ -54,8 +54,7 @@ public final class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.
             repoViewHolder.mName.setTextColor(buildColor);
 
             Drawable drawable = BuildStateHelper.getBuildImage(state);
-            drawable.setBounds(0, 0, 30, 30);
-            repoViewHolder.mName.setCompoundDrawables(drawable, null, null, null);
+            repoViewHolder.mName.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         }
 
         // finished at
