@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.khmelenko.lab.travisclient.R;
@@ -63,25 +64,24 @@ public final class BuildStateHelper {
     public static Drawable getBuildImage(String state) {
         Context context = TravisApp.getAppContext();
 
-        Drawable drawable = null;
         switch (state) {
             case STATE_CREATED:
+                return ContextCompat.getDrawable(context, R.drawable.ic_build_state_created_16dp);
             case STATE_STARTED:
-                drawable = ContextCompat.getDrawable(context, R.drawable.ic_build_state_started_16dp);
-                break;
+                AnimatedVectorDrawableCompat drawable = AnimatedVectorDrawableCompat
+                        .create(context, R.drawable.ic_build_state_started_16dp);
+                drawable.start();
+                return drawable;
             case STATE_PASSED:
-                drawable = ContextCompat.getDrawable(context, R.drawable.ic_build_state_passed_16dp);
-                break;
+                return  ContextCompat.getDrawable(context, R.drawable.ic_build_state_passed_16dp);
             case STATE_CANCELED:
             case STATE_ERRORED:
-                drawable = ContextCompat.getDrawable(context, R.drawable.ic_build_state_errored_16dp);
-                break;
+                return  ContextCompat.getDrawable(context, R.drawable.ic_build_state_errored_16dp);
             case STATE_FAILED:
-                drawable = ContextCompat.getDrawable(context, R.drawable.ic_build_state_failed_16dp);
-                break;
+                return ContextCompat.getDrawable(context, R.drawable.ic_build_state_failed_16dp);
+            default:
+                return null;
         }
-
-        return drawable;
     }
 
     /**
