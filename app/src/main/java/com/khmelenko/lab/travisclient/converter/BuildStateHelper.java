@@ -75,10 +75,10 @@ public final class BuildStateHelper {
                 }
                 return drawable;
             case STATE_PASSED:
-                return  ContextCompat.getDrawable(context, R.drawable.ic_build_state_passed_16dp);
+                return ContextCompat.getDrawable(context, R.drawable.ic_build_state_passed_16dp);
             case STATE_CANCELED:
             case STATE_ERRORED:
-                return  ContextCompat.getDrawable(context, R.drawable.ic_build_state_errored_16dp);
+                return ContextCompat.getDrawable(context, R.drawable.ic_build_state_errored_16dp);
             case STATE_FAILED:
                 return ContextCompat.getDrawable(context, R.drawable.ic_build_state_failed_16dp);
             default:

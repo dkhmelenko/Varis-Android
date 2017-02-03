@@ -98,7 +98,9 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(SAVED_QUERY, mSearchView.getQuery().toString());
+        if(mSearchView != null) {
+            outState.putString(SAVED_QUERY, mSearchView.getQuery().toString());
+        }
     }
 
     @Override
