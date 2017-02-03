@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.khmelenko.lab.travisclient.R;
@@ -66,14 +65,8 @@ public final class BuildStateHelper {
 
         switch (state) {
             case STATE_CREATED:
-                return ContextCompat.getDrawable(context, R.drawable.ic_build_state_created_16dp);
             case STATE_STARTED:
-                AnimatedVectorDrawableCompat drawable = AnimatedVectorDrawableCompat
-                        .create(context, R.drawable.ic_build_state_started_16dp);
-                if (drawable != null) {
-                    drawable.start();
-                }
-                return drawable;
+                return ContextCompat.getDrawable(context, R.drawable.ic_build_state_created_16dp);
             case STATE_PASSED:
                 return ContextCompat.getDrawable(context, R.drawable.ic_build_state_passed_16dp);
             case STATE_CANCELED:
