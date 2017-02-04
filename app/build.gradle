@@ -11,6 +11,7 @@ android {
         targetSdkVersion 25
         versionCode 7
         versionName "1.00.007"
+        vectorDrawables.useSupportLibrary = true
     }
 
     lintOptions {

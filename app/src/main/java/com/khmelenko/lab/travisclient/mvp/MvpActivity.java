@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.widget.Toast;
 
 import com.khmelenko.lab.travisclient.R;
@@ -17,6 +18,10 @@ import com.khmelenko.lab.travisclient.R;
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 public abstract class MvpActivity<T extends MvpPresenter> extends AppCompatActivity {
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     private ProgressDialog mProgressDialog;
 

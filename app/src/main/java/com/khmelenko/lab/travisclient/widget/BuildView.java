@@ -121,8 +121,7 @@ public class BuildView extends LinearLayout {
 
             Drawable drawable = BuildStateHelper.getBuildImage(state);
             if (drawable != null) {
-                drawable.setBounds(0, 0, 30, 30);
-                mNumber.setCompoundDrawables(drawable, null, null, null);
+                mNumber.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
             }
         }
     }
