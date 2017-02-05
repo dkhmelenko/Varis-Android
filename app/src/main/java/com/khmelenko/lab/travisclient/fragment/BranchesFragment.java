@@ -28,10 +28,10 @@ import butterknife.ButterKnife;
  */
 public class BranchesFragment extends Fragment implements OnListItemListener {
 
-    @Bind(R.id.list_swipe_view)
+    @Bind(R.id.list_refreshable_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.list_recycler_view)
+    @Bind(R.id.list_refreshable_recycler_view)
     RecyclerView mBranchesRecyclerView;
 
     @Bind(R.id.progressbar)

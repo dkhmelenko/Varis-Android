@@ -12,12 +12,12 @@
     <include layout="@layout/view_empty" />
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/list_swipe_view"
+        android:id="@+id/list_refreshable_swipe_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_recycler_view"
+            android:id="@+id/list_refreshable_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
