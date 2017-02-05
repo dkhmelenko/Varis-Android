@@ -12,13 +12,10 @@
             android:background="@color/build_state_failed" />
 
         <LinearLayout
+            style="@style/CardViewChild"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="4dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="4dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/build_number"

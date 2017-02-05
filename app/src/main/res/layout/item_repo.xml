@@ -11,13 +11,10 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            style="@style/CardViewChild"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="4dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="4dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/item_repo_name"
