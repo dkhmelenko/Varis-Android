@@ -31,10 +31,10 @@ import butterknife.ButterKnife;
  */
 public class PullRequestsFragment extends Fragment implements OnListItemListener {
 
-    @Bind(R.id.pull_requests_swipe_view)
+    @Bind(R.id.list_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.pull_requests_recycler_view)
+    @Bind(R.id.list_recycler_view)
     RecyclerView mPullRequestsRecyclerView;
 
     @Bind(R.id.progressbar)
@@ -65,7 +65,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pull_requests, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_refreshable, container, false);
         ButterKnife.bind(this, view);
 
         mPullRequestsRecyclerView.setHasFixedSize(true);

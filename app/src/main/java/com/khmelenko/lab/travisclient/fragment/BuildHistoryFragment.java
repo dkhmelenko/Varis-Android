@@ -28,10 +28,10 @@ import butterknife.ButterKnife;
  */
 public class BuildHistoryFragment extends Fragment implements OnListItemListener {
 
-    @Bind(R.id.builds_history_swipe_view)
+    @Bind(R.id.list_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.builds_history_recycler_view)
+    @Bind(R.id.list_recycler_view)
     RecyclerView mBuildHistoryRecyclerView;
 
     @Bind(R.id.progressbar)
@@ -62,7 +62,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_build_history, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_refreshable, container, false);
         ButterKnife.bind(this, view);
 
         mBuildHistoryRecyclerView.setHasFixedSize(true);
