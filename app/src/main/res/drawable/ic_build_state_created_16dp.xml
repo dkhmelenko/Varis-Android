@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector
+<inset
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="16dp"
-    android:height="16dp"
-    android:alpha="1"
-    android:viewportHeight="24"
-    android:viewportWidth="24">
-    <group
-        android:name="group"
-        android:pivotX="12"
-        android:pivotY="12"
-        android:rotation="180">
-        <path
-            android:fillColor="@color/build_state_started"
-            android:pathData="M 3.796 16.555 C 1.284 16.094 -0.385 13.675 0.076 11.164 C 0.537 8.653 2.956 6.984 5.467 7.445 C 7.978 7.906 9.648 10.324 9.187 12.836 C 8.727 15.348 6.308 17.016 3.796 16.555 Z M 5.14 9.234 C 3.615 8.954 2.146 9.967 1.866 11.492 C 1.586 13.017 2.599 14.486 4.125 14.766 C 5.65 15.046 7.119 14.033 7.399 12.507 C 7.679 10.981 6.665 9.514 5.14 9.234 Z"
-            android:strokeLineCap="butt"
-            android:strokeLineJoin="miter"
-            android:strokeMiterLimit="4" />
-        <path
-            android:fillColor="@color/build_state_started"
-            android:pathData="M 18.532 16.556 C 16.02 16.095 14.351 13.676 14.812 11.165 C 15.273 8.653 17.692 6.984 20.203 7.445 C 22.714 7.906 24.384 10.325 23.923 12.836 C 23.462 15.347 21.044 17.016 18.532 16.556 Z M 19.876 9.234 C 18.351 8.954 16.882 9.967 16.602 11.493 C 16.322 13.018 17.335 14.487 18.861 14.767 C 20.386 15.047 21.855 14.034 22.135 12.508 C 22.414 10.982 21.401 9.514 19.876 9.234 Z"
-            android:strokeLineCap="butt"
-            android:strokeLineJoin="miter"
-            android:strokeMiterLimit="4" />
-    </group>
-</vector>
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix"
+    tools:targetApi="lollipop">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="16dp"
+            android:height="16dp"
+            android:alpha="1"
+            android:viewportHeight="24"
+            android:viewportWidth="24">
+            <group
+                android:name="group"
+                android:pivotX="12"
+                android:pivotY="12"
+                android:rotation="180">
+                <path
+                    android:fillColor="@color/build_state_started"
+                    android:pathData="M 3.796 16.555 C 1.284 16.094 -0.385 13.675 0.076 11.164 C 0.537 8.653 2.956 6.984 5.467 7.445 C 7.978 7.906 9.648 10.324 9.187 12.836 C 8.727 15.348 6.308 17.016 3.796 16.555 Z M 5.14 9.234 C 3.615 8.954 2.146 9.967 1.866 11.492 C 1.586 13.017 2.599 14.486 4.125 14.766 C 5.65 15.046 7.119 14.033 7.399 12.507 C 7.679 10.981 6.665 9.514 5.14 9.234 Z"
+                    android:strokeLineCap="butt"
+                    android:strokeLineJoin="miter"
+                    android:strokeMiterLimit="4" />
+                <path
+                    android:fillColor="@color/build_state_started"
+                    android:pathData="M 18.532 16.556 C 16.02 16.095 14.351 13.676 14.812 11.165 C 15.273 8.653 17.692 6.984 20.203 7.445 C 22.714 7.906 24.384 10.325 23.923 12.836 C 23.462 15.347 21.044 17.016 18.532 16.556 Z M 19.876 9.234 C 18.351 8.954 16.882 9.967 16.602 11.493 C 16.322 13.018 17.335 14.487 18.861 14.767 C 20.386 15.047 21.855 14.034 22.135 12.508 C 22.414 10.982 21.401 9.514 19.876 9.234 Z"
+                    android:strokeLineCap="butt"
+                    android:strokeLineJoin="miter"
+                    android:strokeMiterLimit="4" />
+            </group>
+        </vector>
+    </aapt:attr>
+</inset>
