@@ -1,6 +1,6 @@
 package com.khmelenko.lab.travisclient.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -46,9 +46,12 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     private PullRequestsListAdapter mPullRequestsListAdapter;
     private Requests mRequests;
     private List<RequestData> mPullRequests;
-    private String mRepoSlug;
 
     private PullRequestsListener mListener;
+
+    public PullRequestsFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Creates new instance of the fragment
@@ -56,12 +59,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
      * @return Fragment instance
      */
     public static PullRequestsFragment newInstance() {
-        PullRequestsFragment fragment = new PullRequestsFragment();
-        return fragment;
-    }
-
-    public PullRequestsFragment() {
-        // Required empty public constructor
+        return new PullRequestsFragment();
     }
 
     @Override
@@ -119,12 +117,12 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = (PullRequestsListener) activity;
+            mListener = (PullRequestsListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement PullRequestsListener");
         }
     }
