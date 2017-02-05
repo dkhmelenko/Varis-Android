@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar" />
 
     <LinearLayout
         android:id="@+id/progressbarview"
@@ -18,15 +18,14 @@
         <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            />
+            android:layout_gravity="center" />
     </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/view_empty"/>
+        <include layout="@layout/view_empty" />
 
         <ScrollView
             android:id="@+id/build_details_layout"
@@ -44,14 +43,13 @@
                     android:id="@+id/build_details_build_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="10dp" />
 
                 <LinearLayout
                     android:id="@+id/build_details_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    />
+                    android:orientation="vertical" />
 
             </LinearLayout>
 
@@ -61,15 +59,13 @@
             android:id="@+id/build_details_scroll_btn"
             style="@style/FloatingActionButton.RightBottom"
             app:srcCompat="@drawable/ic_arrow_downward_white_24dp"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/build_details_scroll_up_btn"
             style="@style/FloatingActionButton.RightBottom"
             app:srcCompat="@drawable/ic_arrow_upward_white_24dp"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
     </android.support.design.widget.CoordinatorLayout>
 

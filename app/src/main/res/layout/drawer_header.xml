@@ -44,7 +44,6 @@
             android:text="@string/navigation_drawer_email_placeholder"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-
     </LinearLayout>
 
 </RelativeLayout>
