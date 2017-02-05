@@ -61,7 +61,7 @@
     <string name="build_finished_at">Finished: %1$s</string>
     <string name="build_build_in_progress">In progress</string>
     <string name="build_duration">Duration: %1$s</string>
-    <string name="build_build_number">Build: #%1$s</string>
+    <string name="build_build_number">Build #%1$s %2$s</string>
 
     <!-- Repository details -->
     <string name="repo_details_title">Repository details</string>
