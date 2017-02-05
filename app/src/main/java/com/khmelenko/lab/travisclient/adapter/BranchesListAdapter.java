@@ -1,6 +1,5 @@
 package com.khmelenko.lab.travisclient.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +22,9 @@ import butterknife.ButterKnife;
 public final class BranchesListAdapter extends RecyclerView.Adapter<BranchesListAdapter.BranchViewHolder> {
 
     private Branches mBranches;
-    private final Context mContext;
     private final OnListItemListener mListener;
 
-    public BranchesListAdapter(Context context, Branches branches, OnListItemListener listener) {
-        mContext = context;
+    public BranchesListAdapter(Branches branches, OnListItemListener listener) {
         mBranches = branches;
         mListener = listener;
     }

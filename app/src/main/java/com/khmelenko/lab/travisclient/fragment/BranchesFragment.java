@@ -70,7 +70,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mBranchesRecyclerView.setLayoutManager(layoutManager);
 
-        mBranchesListAdapter = new BranchesListAdapter(getContext(), mBranches, this);
+        mBranchesListAdapter = new BranchesListAdapter(mBranches, this);
         mBranchesRecyclerView.setAdapter(mBranchesListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);

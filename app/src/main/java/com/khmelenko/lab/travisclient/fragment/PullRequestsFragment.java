@@ -73,7 +73,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mPullRequestsRecyclerView.setLayoutManager(layoutManager);
 
-        mPullRequestsListAdapter = new PullRequestsListAdapter(getContext(), mRequests, this);
+        mPullRequestsListAdapter = new PullRequestsListAdapter(mRequests, this);
         mPullRequestsRecyclerView.setAdapter(mPullRequestsListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);

@@ -70,7 +70,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mBuildHistoryRecyclerView.setLayoutManager(layoutManager);
 
-        mBuildListAdapter = new BuildListAdapter(getContext(), mBuildHistory, this);
+        mBuildListAdapter = new BuildListAdapter(mBuildHistory, this);
         mBuildHistoryRecyclerView.setAdapter(mBuildListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
