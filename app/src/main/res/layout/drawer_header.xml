@@ -18,7 +18,7 @@
             android:id="@+id/drawer_header_profile_image"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:src="@drawable/inset_account_circle_white_85dp" />
+            android:src="@drawable/ic_account_circle_white_85dp" />
 
     </LinearLayout>
 
@@ -43,7 +43,6 @@
             android:layout_marginTop="7dp"
             android:text="@string/navigation_drawer_email_placeholder"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
 
     </LinearLayout>
 

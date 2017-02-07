@@ -9,8 +9,7 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/CardViewContainer"
-        >
+        style="@style/CardViewContainer">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,15 +25,13 @@
                     android:id="@+id/item_job_number"
                     style="@style/ViewBuildText.TwoLines.Title.NoImage"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/item_job_state"
                     style="@style/ViewBuildText.TwoLines.Big"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -45,15 +42,13 @@
 
                 <ImageView
                     style="@style/ViewBuildImageIcon"
-                    app:srcCompat="@drawable/ic_duration_grey600_16dp"
-                    />
+                    app:srcCompat="@drawable/ic_duration_grey600_16dp" />
 
                 <TextView
                     android:id="@+id/item_job_duration"
                     style="@style/ViewBuildText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>

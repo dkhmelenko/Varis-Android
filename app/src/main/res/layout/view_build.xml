@@ -1,152 +1,77 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/build_indicator"
+            android:layout_width="16dp"
+            android:layout_height="match_parent"
+            android:background="@color/build_state_failed" />
 
         <LinearLayout
+            style="@style/CardViewChild"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/build_number"
-                style="@style/ViewBuildText.TwoLines.Title.NoImage"
+                style="@style/ViewBuildText.OneLine.Big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:id="@+id/build_state"
-                style="@style/ViewBuildText.TwoLines.Big"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                style="@style/ViewBuildImageIcon.Big"
-                app:srcCompat="@drawable/ic_person_grey600_16dp"
-                />
+                android:drawableLeft="@drawable/ic_build_state_created_16dp"
+                android:drawableStart="@drawable/ic_build_state_created_16dp" />
 
             <TextView
                 android:id="@+id/build_commit_person"
-                style="@style/ViewBuildText.OneLine.Big"
+                style="@style/ViewBuildText.OneLine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/build_pull_request_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                style="@style/ViewBuildImageIcon.TopAligned"
-                app:srcCompat="@drawable/ic_pull_request_grey600_16dp"
-                />
+                android:drawableLeft="@drawable/ic_person_grey600_16dp"
+                android:drawableStart="@drawable/ic_person_grey600_16dp" />
 
             <TextView
                 android:id="@+id/build_pull_request_title"
-                style="@style/ViewBuildText.ThreeLines.Big"
+                style="@style/ViewBuildText.ThreeLines"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/build_branch_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <ImageView
-                style="@style/ViewBuildImageIcon"
-                app:srcCompat="@drawable/ic_git_branch_grey600_16dp"
-                />
+                android:drawableLeft="@drawable/ic_pull_request_grey600_16dp"
+                android:drawableStart="@drawable/ic_pull_request_grey600_16dp" />
 
             <TextView
                 android:id="@+id/build_branch"
                 style="@style/ViewBuildText.OneLine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/build_build_commit_msg_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <ImageView
-                style="@style/ViewBuildImageIcon.TopAligned"
-                app:srcCompat="@drawable/ic_git_grey600_16dp"
-                />
+                android:drawableLeft="@drawable/ic_git_branch_grey600_16dp"
+                android:drawableStart="@drawable/ic_git_branch_grey600_16dp" />
 
             <TextView
                 android:id="@+id/build_commit_message"
                 style="@style/ViewBuildText.TwoLines"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <ImageView
-                style="@style/ViewBuildImageIcon"
-                app:srcCompat="@drawable/ic_duration_grey600_16dp"
-                />
+                android:drawableLeft="@drawable/ic_git_grey600_16dp"
+                android:drawableStart="@drawable/ic_git_grey600_16dp" />
 
             <TextView
                 android:id="@+id/build_duration"
                 style="@style/ViewBuildText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <ImageView
-                style="@style/ViewBuildImageIcon"
-                app:srcCompat="@drawable/ic_finished_at_grey600_16dp"
-                />
+                android:drawableLeft="@drawable/ic_duration_grey600_16dp"
+                android:drawableStart="@drawable/ic_duration_grey600_16dp" />
 
             <TextView
                 android:id="@+id/build_finished"
                 style="@style/ViewBuildText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:drawableLeft="@drawable/ic_finished_at_grey600_16dp"
+                android:drawableStart="@drawable/ic_finished_at_grey600_16dp" />
 
         </LinearLayout>
 

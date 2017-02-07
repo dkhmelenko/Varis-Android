@@ -1,5 +1,4 @@
-<FrameLayout
-    android:id="@+id/main_content"
+<FrameLayout android:id="@+id/main_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +6,7 @@
     android:orientation="vertical"
     tools:context="com.khmelenko.lab.travisclient.fragment.ReposFragment">
 
-    <include layout="@layout/view_empty"/>
+    <include layout="@layout/view_empty" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/main_repos_swipe_view"
@@ -18,7 +17,7 @@
             android:id="@+id/main_repos_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

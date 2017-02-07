@@ -1,31 +1,26 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.khmelenko.lab.travisclient.fragment.PullRequestsFragment">
+    android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        />
+        android:layout_gravity="center" />
 
-    <include layout="@layout/view_empty"/>
+    <include layout="@layout/view_empty" />
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/pull_requests_swipe_view"
+        android:id="@+id/list_refreshable_swipe_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/pull_requests_recycler_view"
+            android:id="@+id/list_refreshable_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            />
+            android:scrollbars="vertical" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

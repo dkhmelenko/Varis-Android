@@ -28,11 +28,11 @@ import butterknife.ButterKnife;
  */
 public class BuildView extends LinearLayout {
 
+    @Bind(R.id.build_indicator)
+    View mIndicator;
+
     @Bind(R.id.build_number)
     TextView mNumber;
-
-    @Bind(R.id.build_state)
-    TextView mState;
 
     @Bind(R.id.build_pull_request_title)
     TextView mTitle;
@@ -51,15 +51,6 @@ public class BuildView extends LinearLayout {
 
     @Bind(R.id.build_finished)
     TextView mFinished;
-
-    @Bind(R.id.build_pull_request_section)
-    View mPullRequestSection;
-
-    @Bind(R.id.build_build_commit_msg_section)
-    View mCommitMessageSection;
-
-    @Bind(R.id.build_branch_section)
-    View mBuildBranchSection;
 
     public BuildView(Context context) {
         super(context);
@@ -97,32 +88,13 @@ public class BuildView extends LinearLayout {
      */
     private void showPullRequestDetails(boolean isPullRequest) {
         if (isPullRequest) {
-            mPullRequestSection.setVisibility(VISIBLE);
-            mBuildBranchSection.setVisibility(GONE);
-            mCommitMessageSection.setVisibility(GONE);
+            mTitle.setVisibility(VISIBLE);
+            mBranch.setVisibility(GONE);
+            mCommitMessage.setVisibility(GONE);
         } else {
-            mPullRequestSection.setVisibility(GONE);
-            mBuildBranchSection.setVisibility(VISIBLE);
-            mCommitMessageSection.setVisibility(VISIBLE);
-        }
-    }
-
-    /**
-     * Sets build state
-     *
-     * @param state Build state
-     */
-    private void setBuildState(String state) {
-        if (!TextUtils.isEmpty(state)) {
-            int buildColor = BuildStateHelper.getBuildColor(state);
-            mState.setText(state);
-            mState.setTextColor(buildColor);
-            mNumber.setTextColor(buildColor);
-
-            Drawable drawable = BuildStateHelper.getBuildImage(state);
-            if (drawable != null) {
-                mNumber.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            }
+            mTitle.setVisibility(GONE);
+            mBranch.setVisibility(VISIBLE);
+            mCommitMessage.setVisibility(VISIBLE);
         }
     }
 
@@ -136,10 +108,9 @@ public class BuildView extends LinearLayout {
             String duration = TimeConverter.durationToString(durationInMillis);
             duration = getContext().getString(R.string.build_duration, duration);
             mDuration.setText(duration);
+            mDuration.setVisibility(VISIBLE);
         } else {
-            String stateInProgress = getContext().getString(R.string.build_build_in_progress);
-            String duration = getContext().getString(R.string.build_duration, stateInProgress);
-            mDuration.setText(duration);
+            mDuration.setVisibility(GONE);
         }
     }
 
@@ -153,10 +124,9 @@ public class BuildView extends LinearLayout {
             String formattedDate = DateTimeUtils.parseAndFormatDateTime(finishedAt);
             formattedDate = getContext().getString(R.string.build_finished_at, formattedDate);
             mFinished.setText(formattedDate);
+            mFinished.setVisibility(VISIBLE);
         } else {
-            String stateInProgress = getContext().getString(R.string.build_build_in_progress);
-            String finished = getContext().getString(R.string.build_finished_at, stateInProgress);
-            mFinished.setText(finished);
+            mFinished.setVisibility(GONE);
         }
     }
 
@@ -170,8 +140,7 @@ public class BuildView extends LinearLayout {
         showPullRequestDetails(false);
 
         // build data
-        mNumber.setText(getContext().getString(R.string.build_build_number, build.getNumber()));
-        setBuildState(build.getState());
+        setBuildNumberState(build.getState(), build.getNumber());
 
         // commit data
         if (commit != null) {
@@ -197,8 +166,7 @@ public class BuildView extends LinearLayout {
         showPullRequestDetails(false);
 
         // build data
-        mNumber.setText(getContext().getString(R.string.build_build_number, branch.getNumber()));
-        setBuildState(branch.getState());
+        setBuildNumberState(branch.getState(), branch.getNumber());
 
         // commit data
         if (commit != null) {
@@ -212,6 +180,21 @@ public class BuildView extends LinearLayout {
 
         // duration
         setBuildDuration(branch.getDuration());
+    }
+
+    private void setBuildNumberState(String state, String number) {
+        mNumber.setText(getContext().getString(R.string.build_build_number, number,
+                state));
+        if (!TextUtils.isEmpty(state)) {
+            int buildColor = BuildStateHelper.getBuildColor(state);
+            mIndicator.setBackgroundColor(buildColor);
+            mNumber.setTextColor(buildColor);
+
+            Drawable drawable = BuildStateHelper.getBuildImage(state);
+            if (drawable != null) {
+                mNumber.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+            }
+        }
     }
 
     /**
@@ -234,7 +217,7 @@ public class BuildView extends LinearLayout {
 
         // build data
         if (build != null) {
-            setBuildState(build.getState());
+            setBuildNumberState(build.getNumber(), build.getState());
 
             // finished at
             setBuildFinishedAt(build.getFinishedAt());

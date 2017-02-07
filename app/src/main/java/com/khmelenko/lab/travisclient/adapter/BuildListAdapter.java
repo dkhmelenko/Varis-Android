@@ -1,6 +1,5 @@
 package com.khmelenko.lab.travisclient.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +22,9 @@ import butterknife.ButterKnife;
 public final class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.BuildViewHolder> {
 
     private BuildHistory mBuildHistory;
-    private final Context mContext;
     private final OnListItemListener mListener;
 
-    public BuildListAdapter(Context context, BuildHistory buildHistory, OnListItemListener listener) {
-        mContext = context;
+    public BuildListAdapter(BuildHistory buildHistory, OnListItemListener listener) {
         mBuildHistory = buildHistory;
         mListener = listener;
     }

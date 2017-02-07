@@ -28,10 +28,10 @@ import butterknife.ButterKnife;
  */
 public class BranchesFragment extends Fragment implements OnListItemListener {
 
-    @Bind(R.id.branches_swipe_view)
+    @Bind(R.id.list_refreshable_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.branches_recycler_view)
+    @Bind(R.id.list_refreshable_recycler_view)
     RecyclerView mBranchesRecyclerView;
 
     @Bind(R.id.progressbar)
@@ -62,7 +62,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_branches, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_refreshable, container, false);
         ButterKnife.bind(this, view);
 
         mBranchesRecyclerView.setHasFixedSize(true);
@@ -70,7 +70,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mBranchesRecyclerView.setLayoutManager(layoutManager);
 
-        mBranchesListAdapter = new BranchesListAdapter(getContext(), mBranches, this);
+        mBranchesListAdapter = new BranchesListAdapter(mBranches, this);
         mBranchesRecyclerView.setAdapter(mBranchesListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);

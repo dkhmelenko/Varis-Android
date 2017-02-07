@@ -1,6 +1,6 @@
 package com.khmelenko.lab.travisclient.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -31,10 +31,10 @@ import butterknife.ButterKnife;
  */
 public class PullRequestsFragment extends Fragment implements OnListItemListener {
 
-    @Bind(R.id.pull_requests_swipe_view)
+    @Bind(R.id.list_refreshable_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.pull_requests_recycler_view)
+    @Bind(R.id.list_refreshable_recycler_view)
     RecyclerView mPullRequestsRecyclerView;
 
     @Bind(R.id.progressbar)
@@ -46,9 +46,12 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     private PullRequestsListAdapter mPullRequestsListAdapter;
     private Requests mRequests;
     private List<RequestData> mPullRequests;
-    private String mRepoSlug;
 
     private PullRequestsListener mListener;
+
+    public PullRequestsFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Creates new instance of the fragment
@@ -56,18 +59,13 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
      * @return Fragment instance
      */
     public static PullRequestsFragment newInstance() {
-        PullRequestsFragment fragment = new PullRequestsFragment();
-        return fragment;
-    }
-
-    public PullRequestsFragment() {
-        // Required empty public constructor
+        return new PullRequestsFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pull_requests, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_refreshable, container, false);
         ButterKnife.bind(this, view);
 
         mPullRequestsRecyclerView.setHasFixedSize(true);
@@ -75,7 +73,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mPullRequestsRecyclerView.setLayoutManager(layoutManager);
 
-        mPullRequestsListAdapter = new PullRequestsListAdapter(getContext(), mRequests, this);
+        mPullRequestsListAdapter = new PullRequestsListAdapter(mRequests, this);
         mPullRequestsRecyclerView.setAdapter(mPullRequestsListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
@@ -119,12 +117,12 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = (PullRequestsListener) activity;
+            mListener = (PullRequestsListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement PullRequestsListener");
         }
     }

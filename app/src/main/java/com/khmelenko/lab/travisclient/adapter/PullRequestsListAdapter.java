@@ -1,6 +1,5 @@
 package com.khmelenko.lab.travisclient.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +27,9 @@ public final class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequ
 
     private Requests mRequests;
     private List<RequestData> mPullRequests;
-    private final Context mContext;
     private final OnListItemListener mListener;
 
-    public PullRequestsListAdapter(Context context, Requests requests, OnListItemListener listener) {
-        mContext = context;
+    public PullRequestsListAdapter(Requests requests, OnListItemListener listener) {
         mRequests = requests;
         mPullRequests = new ArrayList<>();
         mListener = listener;
@@ -98,7 +95,7 @@ public final class PullRequestsListAdapter extends RecyclerView.Adapter<PullRequ
         @Bind(R.id.item_pull_request_data)
         BuildView mBuildView;
 
-        public BranchViewHolder(View itemView) {
+        BranchViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setClickable(true);
