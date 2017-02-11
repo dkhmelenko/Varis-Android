@@ -6,20 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.khmelenko.lab.travisclient.R;
+import com.khmelenko.lab.travisclient.adapter.viewholder.BuildViewHolder;
 import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.BuildHistory;
 import com.khmelenko.lab.travisclient.network.response.Commit;
-import com.khmelenko.lab.travisclient.widget.BuildView;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Adapter for the list of builds
  *
  * @author Dmytro Khmelenko
  */
-public final class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapter.BuildViewHolder> {
+public final class BuildListAdapter extends RecyclerView.Adapter<BuildViewHolder> {
 
     private BuildHistory mBuildHistory;
     private final OnListItemListener mListener;
@@ -31,8 +28,8 @@ public final class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapte
 
     @Override
     public BuildViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_build, parent, false);
-        return new BuildViewHolder(v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_build_view, parent, false);
+        return new BuildViewHolder(v, mListener);
     }
 
     @Override
@@ -58,32 +55,6 @@ public final class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapte
 
     public void setBuildHistory(BuildHistory buildHistory) {
         mBuildHistory = buildHistory;
-    }
-
-    /**
-     * Viewholder class
-     */
-    class BuildViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        @Bind(R.id.item_build_card_view)
-        View mParent;
-
-        @Bind(R.id.item_build_data)
-        BuildView mBuildView;
-
-        public BuildViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            itemView.setClickable(true);
-            mParent.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mListener != null) {
-                mListener.onItemSelected(getLayoutPosition());
-            }
-        }
     }
 
 }

@@ -85,7 +85,7 @@ public class BuildView extends LinearLayout {
      *
      * @param durationInMillis Duration
      */
-    private void setDuration(long durationInMillis) {
+    public void setDuration(long durationInMillis) {
         if (durationInMillis != 0) {
             String duration = TimeConverter.durationToString(durationInMillis);
             duration = getContext().getString(R.string.build_duration, duration);
@@ -101,7 +101,7 @@ public class BuildView extends LinearLayout {
      *
      * @param finishedAt String with the message when the build was finished
      */
-    private void setFinishedAt(String finishedAt) {
+    public void setFinishedAt(String finishedAt) {
         if (!TextUtils.isEmpty(finishedAt)) {
             String formattedDate = DateTimeUtils.parseAndFormatDateTime(finishedAt);
             formattedDate = getContext().getString(R.string.build_finished_at, formattedDate);
@@ -143,7 +143,7 @@ public class BuildView extends LinearLayout {
         }
     }
 
-    private void setTitle(String string) {
+    public void setTitle(String string) {
         mTitle.setText(string);
     }
 

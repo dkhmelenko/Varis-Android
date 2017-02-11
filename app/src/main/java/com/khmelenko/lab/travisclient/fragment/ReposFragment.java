@@ -77,7 +77,7 @@ public class ReposFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mReposRecyclerView.setLayoutManager(layoutManager);
 
-        mRepoListAdapter = new RepoListAdapter(getActivity(), mRepos, new OnListItemListener() {
+        mRepoListAdapter = new RepoListAdapter(mRepos, new OnListItemListener() {
             @Override
             public void onItemSelected(int position) {
                 if (mListener != null) {
