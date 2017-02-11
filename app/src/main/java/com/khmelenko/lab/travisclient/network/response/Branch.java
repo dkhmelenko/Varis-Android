@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Dmytro Khmelenko
  */
-public final class Branch {
+public class Branch implements IBuildState {
 
     @SerializedName("id")
     private long mId;
@@ -22,9 +22,6 @@ public final class Branch {
 
     @SerializedName("number")
     private String mNumber;
-
-//    @SerializedName("config")
-//    private Config mConfig;
 
     @SerializedName("state")
     private String mState;
@@ -44,82 +41,102 @@ public final class Branch {
     @SerializedName("pull_request")
     private boolean mPullRequest;
 
+    @Override
     public long getId() {
         return mId;
     }
 
+    @Override
     public void setId(long id) {
         mId = id;
     }
 
+    @Override
     public long getRepositoryId() {
         return mRepositoryId;
     }
 
+    @Override
     public void setRepositoryId(long repositoryId) {
         mRepositoryId = repositoryId;
     }
 
+    @Override
     public long getCommitId() {
         return mCommitId;
     }
 
+    @Override
     public void setCommitId(long commitId) {
         mCommitId = commitId;
     }
 
+    @Override
     public String getNumber() {
         return mNumber;
     }
 
+    @Override
     public void setNumber(String number) {
         mNumber = number;
     }
 
+    @Override
     public String getState() {
         return mState;
     }
 
+    @Override
     public void setState(String state) {
         mState = state;
     }
 
+    @Override
     public String getStartedAt() {
         return mStartedAt;
     }
 
+    @Override
     public void setStartedAt(String startedAt) {
         mStartedAt = startedAt;
     }
 
+    @Override
     public String getFinishedAt() {
         return mFinishedAt;
     }
 
+    @Override
     public void setFinishedAt(String finishedAt) {
         mFinishedAt = finishedAt;
     }
 
+    @Override
     public long getDuration() {
         return mDuration;
     }
 
+    @Override
     public void setDuration(long duration) {
         mDuration = duration;
     }
 
+    @Override
     public boolean isPullRequest() {
         return mPullRequest;
     }
 
+    @Override
     public void setPullRequest(boolean pullRequest) {
         mPullRequest = pullRequest;
     }
 
+    @Override
     public List<Long> getJobIds() {
         return mJobIds;
     }
 
+    @Override
     public void setJobIds(List<Long> jobIds) {
         mJobIds = jobIds;
     }

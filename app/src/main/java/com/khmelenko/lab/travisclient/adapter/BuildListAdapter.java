@@ -46,7 +46,8 @@ public final class BuildListAdapter extends RecyclerView.Adapter<BuildListAdapte
                     break;
                 }
             }
-            holder.mBuildView.setBuildData(build, relatedCommit);
+            holder.mBuildView.setBuildState(build);
+            holder.mBuildView.setCommit(relatedCommit);
         }
     }
 

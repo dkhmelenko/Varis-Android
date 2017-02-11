@@ -47,7 +47,8 @@ public final class BranchesListAdapter extends RecyclerView.Adapter<BranchesList
                 }
             }
 
-            holder.mBuildView.setBranchData(branch, relatedCommit);
+            holder.mBuildView.setBuildState(branch);
+            holder.mBuildView.setCommit(relatedCommit);
         }
     }
 
