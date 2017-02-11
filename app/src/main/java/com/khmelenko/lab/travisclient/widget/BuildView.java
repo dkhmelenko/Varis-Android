@@ -61,9 +61,7 @@ public class BuildView extends LinearLayout {
         initializeViews(context);
     }
 
-    public BuildView(Context context,
-                     AttributeSet attrs,
-                     int defStyle) {
+    public BuildView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initializeViews(context);
     }
