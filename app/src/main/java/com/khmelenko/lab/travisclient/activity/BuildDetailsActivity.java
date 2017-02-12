@@ -326,7 +326,7 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
         Commit commit = details.getCommit();
 
         BuildView buildView = (BuildView) findViewById(R.id.build_details_build_data);
-        buildView.setBuildState(build);
+        buildView.setState(build);
         buildView.setCommit(commit);
     }
 

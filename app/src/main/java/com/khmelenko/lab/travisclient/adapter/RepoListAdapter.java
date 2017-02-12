@@ -36,7 +36,7 @@ public final class RepoListAdapter extends RecyclerView.Adapter<BuildViewHolder>
     public void onBindViewHolder(BuildViewHolder repoViewHolder, int i) {
         Repo repo = mRepos.get(i);
         repoViewHolder.mBuildView.setTitle(repo.getSlug());
-        repoViewHolder.mBuildView.setState(repo.getLastBuildState());
+        repoViewHolder.mBuildView.setStateIndicator(repo.getLastBuildState());
         repoViewHolder.mBuildView.setFinishedAt(repo.getLastBuildFinishedAt());
         repoViewHolder.mBuildView.setDuration(repo.getLastBuildDuration());
     }

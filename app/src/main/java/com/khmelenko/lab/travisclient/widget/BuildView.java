@@ -115,7 +115,7 @@ public class BuildView extends LinearLayout {
      *
      * @param buildState Branch
      */
-    public void setBuildState(IBuildState buildState) {
+    public void setState(IBuildState buildState) {
         if (buildState != null) {
             setTitle(getContext()
                     .getString(R.string.build_build_number, buildState.getNumber(), buildState.getState()));

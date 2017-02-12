@@ -44,7 +44,7 @@ public final class BranchesListAdapter extends RecyclerView.Adapter<BuildViewHol
                 }
             }
 
-            holder.mBuildView.setBuildState(branch);
+            holder.mBuildView.setState(branch);
             holder.mBuildView.setCommit(relatedCommit);
         }
     }
