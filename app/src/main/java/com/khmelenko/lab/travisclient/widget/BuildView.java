@@ -12,9 +12,8 @@ import android.widget.TextView;
 import com.khmelenko.lab.travisclient.R;
 import com.khmelenko.lab.travisclient.converter.BuildStateHelper;
 import com.khmelenko.lab.travisclient.converter.TimeConverter;
-import com.khmelenko.lab.travisclient.network.response.Branch;
-import com.khmelenko.lab.travisclient.network.response.Build;
 import com.khmelenko.lab.travisclient.network.response.Commit;
+import com.khmelenko.lab.travisclient.network.response.IBuildState;
 import com.khmelenko.lab.travisclient.network.response.RequestData;
 import com.khmelenko.lab.travisclient.util.DateTimeUtils;
 
@@ -32,10 +31,10 @@ public class BuildView extends LinearLayout {
     View mIndicator;
 
     @Bind(R.id.build_number)
-    TextView mNumber;
+    TextView mTitle;
 
     @Bind(R.id.build_pull_request_title)
-    TextView mTitle;
+    TextView mPullRequest;
 
     @Bind(R.id.build_branch)
     TextView mBranch;
@@ -62,9 +61,7 @@ public class BuildView extends LinearLayout {
         initializeViews(context);
     }
 
-    public BuildView(Context context,
-                     AttributeSet attrs,
-                     int defStyle) {
+    public BuildView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initializeViews(context);
     }
@@ -82,28 +79,11 @@ public class BuildView extends LinearLayout {
     }
 
     /**
-     * Shows pull request details
-     *
-     * @param isPullRequest True, if pull request details should be shown. False otherwise
-     */
-    private void showPullRequestDetails(boolean isPullRequest) {
-        if (isPullRequest) {
-            mTitle.setVisibility(VISIBLE);
-            mBranch.setVisibility(GONE);
-            mCommitMessage.setVisibility(GONE);
-        } else {
-            mTitle.setVisibility(GONE);
-            mBranch.setVisibility(VISIBLE);
-            mCommitMessage.setVisibility(VISIBLE);
-        }
-    }
-
-    /**
      * Sets build duration
      *
      * @param durationInMillis Duration
      */
-    private void setBuildDuration(long durationInMillis) {
+    public void setDuration(long durationInMillis) {
         if (durationInMillis != 0) {
             String duration = TimeConverter.durationToString(durationInMillis);
             duration = getContext().getString(R.string.build_duration, duration);
@@ -119,7 +99,7 @@ public class BuildView extends LinearLayout {
      *
      * @param finishedAt String with the message when the build was finished
      */
-    private void setBuildFinishedAt(String finishedAt) {
+    public void setFinishedAt(String finishedAt) {
         if (!TextUtils.isEmpty(finishedAt)) {
             String formattedDate = DateTimeUtils.parseAndFormatDateTime(finishedAt);
             formattedDate = getContext().getString(R.string.build_finished_at, formattedDate);
@@ -131,99 +111,55 @@ public class BuildView extends LinearLayout {
     }
 
     /**
-     * Sets build data
+     * Sets branch data
      *
-     * @param build  Build
-     * @param commit Related commit
+     * @param buildState Branch
      */
-    public void setBuildData(Build build, Commit commit) {
-        showPullRequestDetails(false);
-
-        // build data
-        setBuildNumberState(build.getState(), build.getNumber());
-
-        // commit data
-        if (commit != null) {
-            mBranch.setText(commit.getBranch());
-            mCommitMessage.setText(commit.getMessage());
-            mCommitPerson.setText(commit.getCommitterName());
+    public void setState(IBuildState buildState) {
+        if (buildState != null) {
+            setTitle(getContext()
+                    .getString(R.string.build_build_number, buildState.getNumber(), buildState.getState()));
+            setStateIndicator(buildState.getState());
+            setFinishedAt(buildState.getFinishedAt());
+            setDuration(buildState.getDuration());
         }
-
-        // finished at
-        setBuildFinishedAt(build.getFinishedAt());
-
-        // duration
-        setBuildDuration(build.getDuration());
     }
 
     /**
-     * Sets branch data
+     * Sets commit data
      *
-     * @param branch Branch
      * @param commit Last commit
      */
-    public void setBranchData(Branch branch, Commit commit) {
-        showPullRequestDetails(false);
-
-        // build data
-        setBuildNumberState(branch.getState(), branch.getNumber());
-
-        // commit data
+    public void setCommit(Commit commit) {
         if (commit != null) {
+            mBranch.setVisibility(VISIBLE);
             mBranch.setText(commit.getBranch());
+            mCommitMessage.setVisibility(VISIBLE);
             mCommitMessage.setText(commit.getMessage());
+            mCommitPerson.setVisibility(VISIBLE);
             mCommitPerson.setText(commit.getCommitterName());
         }
-
-        // finished at
-        setBuildFinishedAt(branch.getFinishedAt());
-
-        // duration
-        setBuildDuration(branch.getDuration());
     }
 
-    private void setBuildNumberState(String state, String number) {
-        mNumber.setText(getContext().getString(R.string.build_build_number, number,
-                state));
+    public void setTitle(String string) {
+        mTitle.setText(string);
+    }
+
+    public void setStateIndicator(String state) {
         if (!TextUtils.isEmpty(state)) {
             int buildColor = BuildStateHelper.getBuildColor(state);
             mIndicator.setBackgroundColor(buildColor);
-            mNumber.setTextColor(buildColor);
+            mTitle.setTextColor(buildColor);
 
             Drawable drawable = BuildStateHelper.getBuildImage(state);
             if (drawable != null) {
-                mNumber.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+                mTitle.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
             }
         }
     }
 
-    /**
-     * Sets pull request data
-     *
-     * @param request Pull request data
-     * @param build   Build
-     * @param commit  Commit
-     */
-    public void setPullRequestData(RequestData request, Build build, Commit commit) {
-        showPullRequestDetails(true);
-
-        mNumber.setText(getContext().getString(R.string.pull_request_number, request.getPullRequestNumber()));
-        mTitle.setText(request.getPullRequestTitle());
-
-        // commit data
-        if (commit != null) {
-            mCommitPerson.setText(commit.getCommitterName());
-        }
-
-        // build data
-        if (build != null) {
-            setBuildNumberState(build.getNumber(), build.getState());
-
-            // finished at
-            setBuildFinishedAt(build.getFinishedAt());
-
-            // duration
-            setBuildDuration(build.getDuration());
-        }
+    public void setPullRequestTitle(RequestData request) {
+        mPullRequest.setVisibility(VISIBLE);
+        mPullRequest.setText(request.getPullRequestTitle());
     }
 }

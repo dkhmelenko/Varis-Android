@@ -1,4 +1,5 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,7 +32,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_person_grey600_16dp"
-                android:drawableStart="@drawable/ic_person_grey600_16dp" />
+                android:drawableStart="@drawable/ic_person_grey600_16dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/build_pull_request_title"
@@ -39,7 +42,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_pull_request_grey600_16dp"
-                android:drawableStart="@drawable/ic_pull_request_grey600_16dp" />
+                android:drawableStart="@drawable/ic_pull_request_grey600_16dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/build_branch"
@@ -47,7 +52,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_git_branch_grey600_16dp"
-                android:drawableStart="@drawable/ic_git_branch_grey600_16dp" />
+                android:drawableStart="@drawable/ic_git_branch_grey600_16dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/build_commit_message"
@@ -55,7 +62,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_git_grey600_16dp"
-                android:drawableStart="@drawable/ic_git_grey600_16dp" />
+                android:drawableStart="@drawable/ic_git_grey600_16dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/build_duration"
@@ -63,7 +72,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_duration_grey600_16dp"
-                android:drawableStart="@drawable/ic_duration_grey600_16dp" />
+                android:drawableStart="@drawable/ic_duration_grey600_16dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/build_finished"
@@ -71,7 +82,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_finished_at_grey600_16dp"
-                android:drawableStart="@drawable/ic_finished_at_grey600_16dp" />
+                android:drawableStart="@drawable/ic_finished_at_grey600_16dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
         </LinearLayout>
 
