@@ -44,7 +44,7 @@ public final class PullRequestsListAdapter extends RecyclerView.Adapter<BuildVie
 
     @Override
     public BuildViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pull_request, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_build_view, parent, false);
         return new BuildViewHolder(v, mListener);
     }
 
