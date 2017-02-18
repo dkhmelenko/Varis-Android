@@ -53,6 +53,11 @@ public final class BuildListAdapter extends RecyclerView.Adapter<BuildViewHolder
         return mBuildHistory != null ? mBuildHistory.getBuilds().size() : 0;
     }
 
+    /**
+     * Sets build history
+     *
+     * @param buildHistory Build history
+     */
     public void setBuildHistory(BuildHistory buildHistory) {
         mBuildHistory = buildHistory;
     }

@@ -2,7 +2,13 @@ package com.khmelenko.lab.travisclient.network.response;
 
 import java.util.List;
 
+/**
+ * Defines common data for the build state
+ *
+ * @author Dmytro Khmelenko
+ */
 public interface IBuildState {
+
     long getId();
 
     void setId(long id);

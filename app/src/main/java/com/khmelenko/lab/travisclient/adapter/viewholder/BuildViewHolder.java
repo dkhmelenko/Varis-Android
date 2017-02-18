@@ -11,9 +11,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Viewholder class
+ * View holder for the Build data
+ *
+ * @author Dmytro Khmelenko
  */
-public class BuildViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public final class BuildViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     @Bind(R.id.item_build_card_view)
     View mParent;

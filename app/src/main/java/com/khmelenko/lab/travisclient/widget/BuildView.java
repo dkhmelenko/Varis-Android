@@ -111,9 +111,9 @@ public class BuildView extends LinearLayout {
     }
 
     /**
-     * Sets branch data
+     * Sets build state
      *
-     * @param buildState Branch
+     * @param buildState Build state
      */
     public void setState(IBuildState buildState) {
         if (buildState != null) {
@@ -141,10 +141,20 @@ public class BuildView extends LinearLayout {
         }
     }
 
-    public void setTitle(String string) {
-        mTitle.setText(string);
+    /**
+     * Sets title
+     *
+     * @param title Title
+     */
+    public void setTitle(String title) {
+        mTitle.setText(title);
     }
 
+    /**
+     * Sets state indicator
+     *
+     * @param state Build state
+     */
     public void setStateIndicator(String state) {
         if (!TextUtils.isEmpty(state)) {
             int buildColor = BuildStateHelper.getBuildColor(state);
@@ -158,8 +168,13 @@ public class BuildView extends LinearLayout {
         }
     }
 
-    public void setPullRequestTitle(RequestData request) {
+    /**
+     * Sets the title for pull request
+     *
+     * @param title Title for Pull Request
+     */
+    public void setPullRequestTitle(RequestData title) {
         mPullRequest.setVisibility(VISIBLE);
-        mPullRequest.setText(request.getPullRequestTitle());
+        mPullRequest.setText(title.getPullRequestTitle());
     }
 }

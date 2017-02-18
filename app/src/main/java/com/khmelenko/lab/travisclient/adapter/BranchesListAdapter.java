@@ -54,8 +54,13 @@ public final class BranchesListAdapter extends RecyclerView.Adapter<BuildViewHol
         return mBranches != null ? mBranches.getBranches().size() : 0;
     }
 
-    public void setBranches(Branches repoStatus) {
-        mBranches = repoStatus;
+    /**
+     * Sets branches
+     *
+     * @param branches Branches
+     */
+    public void setBranches(Branches branches) {
+        mBranches = branches;
     }
 
 }
