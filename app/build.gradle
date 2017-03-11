@@ -9,8 +9,8 @@ android {
         applicationId "com.khmelenko.lab.travisclient"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 7
-        versionName "1.00.007"
+        versionCode 8
+        versionName "1.00.008"
         vectorDrawables.useSupportLibrary = true
     }
 
