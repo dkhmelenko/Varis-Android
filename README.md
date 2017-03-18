@@ -1,7 +1,9 @@
 # Project description
 [![Build Status on Travis:](https://travis-ci.org/dkhmelenko/TravisClient-Android.svg?branch=master)](https://travis-ci.org/dkhmelenko/TravisClient-Android)
 
-This project is Android client for Travis CI.
+This project is unofficial Android client for Travis CI. 
+
+*This app is neither offered by Travis CI GmbH nor is this app and/or the provider of this app in any way affiliated with Travis CI GmbH and/or its products.*
 
 It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
 The app has the following features:
@@ -14,7 +16,7 @@ The app has the following features:
 - search with history
 - intent filter for opening build links
 
-[![Travis Client on Google Play Store](/screenshots/google-play-badge.png)](https://play.google.com/store/apps/details?id=com.khmelenko.lab.travisclient)
+[![Varis on Google Play Store](/screenshots/google-play-badge.png)](https://play.google.com/store/apps/details?id=com.khmelenko.lab.travisclient)
 
 ![Repositories list](/screenshots/main_screen.png)   ![Build history](/screenshots/build_history.png)   ![Build Details](/screenshots/build_details.png)
 
