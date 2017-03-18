@@ -3,8 +3,6 @@
 
 This project is unofficial Android client for Travis CI. 
 
-*This app is neither offered by Travis CI GmbH nor is this app and/or the provider of this app in any way affiliated with Travis CI GmbH and/or its products.*
-
 It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
 The app has the following features:
 - user login to Travis CI and Travis CI Pro
@@ -20,6 +18,9 @@ The app has the following features:
 
 ![Repositories list](/screenshots/main_screen.png)   ![Build history](/screenshots/build_history.png)   ![Build Details](/screenshots/build_details.png)
 
+## Copyrights
+*This app is neither offered by Travis CI GmbH nor is this app and/or the provider of this app in any way affiliated with Travis CI GmbH and/or its products.*
+
 # Open source libraries
 - [Android appcompat v7](https://github.com/android/platform_frameworks_support/tree/master/v7/appcompat)
 - [Retrofit](https://github.com/square/retrofit)
@@ -33,7 +34,7 @@ The app has the following features:
 # Contribution
 In case you have ideas or found an issue, don't hesitate to create pull request or an issue.
 
-#License
+# License
 
 [Apache Licence 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
