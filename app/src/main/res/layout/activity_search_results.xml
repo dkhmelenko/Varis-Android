@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.khmelenko.lab.travisclient.activity.SearchResultsActivity">
+    tools:context="com.khmelenko.lab.varis.activity.SearchResultsActivity">
 
     <include
         android:id="@+id/toolbar"
@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/search_fragment_repos"
-        android:name="com.khmelenko.lab.travisclient.fragment.ReposFragment"
+        android:name="com.khmelenko.lab.varis.fragment.ReposFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

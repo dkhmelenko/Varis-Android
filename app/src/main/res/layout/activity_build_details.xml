@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.khmelenko.lab.travisclient.activity.BuildDetailsActivity">
+    tools:context="com.khmelenko.lab.varis.activity.BuildDetailsActivity">
 
     <include
         android:id="@+id/toolbar"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.khmelenko.lab.travisclient.widget.BuildView
+                <com.khmelenko.lab.varis.widget.BuildView
                     android:id="@+id/build_details_build_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

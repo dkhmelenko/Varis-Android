@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.khmelenko.lab.travisclient.fragment.JobsFragment">
+    tools:context="com.khmelenko.lab.varis.fragment.JobsFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/jobs_recycler_view"

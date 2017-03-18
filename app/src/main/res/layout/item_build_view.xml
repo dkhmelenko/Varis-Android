@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.khmelenko.lab.travisclient.widget.BuildView
+        <com.khmelenko.lab.varis.widget.BuildView
             android:id="@+id/item_build_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

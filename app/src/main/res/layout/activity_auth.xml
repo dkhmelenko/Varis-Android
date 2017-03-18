@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.khmelenko.lab.travisclient.activity.AuthActivity">
+    tools:context="com.khmelenko.lab.varis.activity.AuthActivity">
 
     <include
         android:id="@+id/toolbar"

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="com.khmelenko.lab.travisclient"
+    package="com.khmelenko.lab.varis"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".TravisApp"
+        android:name="com.khmelenko.lab.varis.TravisApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,7 +14,7 @@
 
         <!-- Main application activity -->
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.khmelenko.lab.varis.activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -25,22 +25,22 @@
 
         <!-- Authentication activity -->
         <activity
-            android:name=".activity.AuthActivity"
+            android:name="com.khmelenko.lab.varis.activity.AuthActivity"
             android:label="@string/auth_title"/>
 
         <!-- About -->
         <activity
-            android:name=".activity.AboutActivity"
+            android:name="com.khmelenko.lab.varis.activity.AboutActivity"
             android:label="@string/about_title"/>
 
         <!-- Repository details -->
         <activity
-            android:name=".activity.RepoDetailsActivity"
+            android:name="com.khmelenko.lab.varis.activity.RepoDetailsActivity"
             android:label="@string/repo_details_title"/>
 
         <!-- Build details -->
         <activity
-            android:name=".activity.BuildDetailsActivity"
+            android:name="com.khmelenko.lab.varis.activity.BuildDetailsActivity"
             android:label="@string/build_details_title">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -82,7 +82,7 @@
 
         <!-- Search results -->
         <activity
-            android:name=".activity.SearchResultsActivity"
+            android:name="com.khmelenko.lab.varis.activity.SearchResultsActivity"
             android:label="@string/search_results_title"
             android:launchMode="singleTop">
             <intent-filter>
@@ -97,8 +97,8 @@
                 android:resource="@xml/searchable"/>
         </activity>
 
-        <provider android:name=".storage.SearchHistoryProvider"
-                  android:authorities="com.khmelenko.lab.travisclient.storage.SearchHistoryProvider" />
+        <provider android:name="com.khmelenko.lab.varis.storage.SearchHistoryProvider"
+                  android:authorities="com.khmelenko.lab.varis.storage.SearchHistoryProvider" />
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".activity.SearchResultsActivity"/>
