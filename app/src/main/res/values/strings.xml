@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TravisClient</string>
+    <string name="app_name">Varis</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_login">Login</string>
