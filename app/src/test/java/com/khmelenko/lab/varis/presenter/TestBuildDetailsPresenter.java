@@ -192,8 +192,8 @@ public class TestBuildDetailsPresenter {
     @Test
     public void testStartLoadingDataIntentUrl() throws Exception {
         final long buildId = 188971232L;
-        final String slug = "dkhmelenko/TravisClient-Android";
-        final String intentUrl = "https://travis-ci.org/dkhmelenko/TravisClient-Android/builds/188971232";
+        final String slug = "dkhmelenko/Varis-Android";
+        final String intentUrl = "https://travis-ci.org/dkhmelenko/Varis-Android/builds/188971232";
 
         when(mRawClient.singleRequest(intentUrl)).thenReturn(intentResponse());
 
@@ -226,8 +226,8 @@ public class TestBuildDetailsPresenter {
     @Test
     public void testStartLoadingDataIntentUrlFailed() throws Exception {
         final long buildId = 0L;
-        final String slug = "dkhmelenko/TravisClient-Android";
-        final String intentUrl = "https://travis-ci.org/dkhmelenko/TravisClient-Android/builds";
+        final String slug = "dkhmelenko/Varis-Android";
+        final String intentUrl = "https://travis-ci.org/dkhmelenko/Varis-Android/builds";
 
         final String expectedUrl = "https://sample.org";
         Request request = new Request.Builder()
@@ -305,8 +305,8 @@ public class TestBuildDetailsPresenter {
     @Test
     public void testCanUserContributeToRepoTrue() throws Exception {
         final long buildId = 188971232L;
-        final String slug = "dkhmelenko/TravisClient-Android";
-        final String intentUrl = "https://travis-ci.org/dkhmelenko/TravisClient-Android/builds/188971232";
+        final String slug = "dkhmelenko/Varis-Android";
+        final String intentUrl = "https://travis-ci.org/dkhmelenko/Varis-Android/builds/188971232";
 
         when(mRawClient.singleRequest(intentUrl)).thenReturn(intentResponse());
         String[] repos = {"Repo1", "Repo2", "Repo3", slug, "Repo4"};
@@ -320,8 +320,8 @@ public class TestBuildDetailsPresenter {
     @Test
     public void testCanUserContributeToRepoFalse() throws Exception {
         final long buildId = 188971232L;
-        final String slug = "dkhmelenko/TravisClient-Android";
-        final String intentUrl = "https://travis-ci.org/dkhmelenko/TravisClient-Android/builds/188971232";
+        final String slug = "dkhmelenko/Varis-Android";
+        final String intentUrl = "https://travis-ci.org/dkhmelenko/Varis-Android/builds/188971232";
 
         when(mRawClient.singleRequest(intentUrl)).thenReturn(intentResponse());
         String[] repos = {"Repo1", "Repo2", "Repo3"};
