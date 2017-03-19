@@ -1,5 +1,5 @@
 # Project description
-[![Build Status on Travis:](https://travis-ci.org/dkhmelenko/TravisClient-Android.svg?branch=master)](https://travis-ci.org/dkhmelenko/TravisClient-Android)
+[![Build Status on Travis:](https://travis-ci.org/dkhmelenko/Varis-Android.svg?branch=master)](https://travis-ci.org/dkhmelenko/Varis-Android)
 
 This project is unofficial Android client for Travis CI. 
 
@@ -14,7 +14,7 @@ The app has the following features:
 - search with history
 - intent filter for opening build links
 
-[![Varis on Google Play Store](/screenshots/google-play-badge.png)](https://play.google.com/store/apps/details?id=com.khmelenko.lab.travisclient)
+[![Varis on Google Play Store](/screenshots/google-play-badge.png)](https://play.google.com/store/apps/details?id=com.khmelenko.lab.varis)
 
 ![Repositories list](/screenshots/main_screen.png)   ![Build history](/screenshots/build_history.png)   ![Build Details](/screenshots/build_details.png)
 
