@@ -61,7 +61,7 @@ public class TravisRestClient {
         return new RequestInterceptor() {
             @Override
             public void intercept(RequestFacade request) {
-                String userAgent = String.format("Varis/%1$s", PackageUtils.getAppVersion());
+                String userAgent = String.format("TravisClient/%1$s", PackageUtils.getAppVersion());
                 request.addHeader("User-Agent", userAgent);
                 request.addHeader("Accept", "application/vnd.travis-ci.2+json");
 
