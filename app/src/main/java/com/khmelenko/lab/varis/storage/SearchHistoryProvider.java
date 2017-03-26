@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.SearchRecentSuggestions;
 
+import com.khmelenko.lab.varis.BuildConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ import java.util.List;
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 public class SearchHistoryProvider extends SearchRecentSuggestionsProvider {
-    public static final String AUTHORITY = "com.khmelenko.lab.travisclient.storage.SearchHistoryProvider";
+    public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".storage.SearchHistoryProvider";
     public static final int MODE = DATABASE_MODE_QUERIES;
 
     // column with the search text
