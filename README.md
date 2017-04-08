@@ -7,16 +7,15 @@ It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetchi
 The app has the following features:
 - user login to Travis CI and Travis CI Pro
 - list of repositories
-- build history (commits and pull requests)
+- build history
 - build log
-- restart build
-- cancel build
+- restart/cancel build
 - search with history
 - intent filter for opening build links
 
 [![Varis on Google Play Store](/screenshots/google-play-badge.png)](https://play.google.com/store/apps/details?id=com.khmelenko.lab.varis)
 
-![Repositories list](/screenshots/main_screen.png)   ![Build history](/screenshots/build_history.png)   ![Build Details](/screenshots/build_details.png)
+![Repositories list](/screenshots/main_screen.png)    ![Build history](/screenshots/build_history.png)    ![Build Details](/screenshots/build_details.png)
 
 ## Copyrights
 *This app is neither offered by Travis CI GmbH nor is this app and/or the provider of this app in any way affiliated with Travis CI GmbH and/or its products.*
