@@ -3,7 +3,7 @@
 
 This project is unofficial Android client for Travis CI. 
 
-It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
+It uses [API v2](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
 The app has the following features:
 - user login to Travis CI and Travis CI Pro
 - list of repositories
@@ -32,6 +32,9 @@ The app has the following features:
  
 # Contribution
 In case you have ideas or found an issue, don't hesitate to create pull request or an issue.
+
+# Further steps
+1. Migration to [API v3](https://docs.travis-ci.com/user/triggering-builds)
 
 # License
 
