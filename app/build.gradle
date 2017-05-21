@@ -45,6 +45,7 @@ ext {
             support        : '25.1.1',
             gson           : '2.4',
             retrofit       : '1.9.0',
+            retrofit2      : '2.3.0',
             okhttp         : '2.7.0',
             butterknife    : '7.0.1',
             eventbus       : '2.4.0',
@@ -69,6 +70,9 @@ dependencies {
     compile "com.google.code.gson:gson:$libraryVersion.gson"
     compile "com.squareup.okhttp:okhttp:$libraryVersion.okhttp"
     compile "com.squareup.retrofit:retrofit:$libraryVersion.retrofit"
+    compile "com.squareup.retrofit2:retrofit:$libraryVersion.retrofit2"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$libraryVersion.retrofit2"
+    compile "com.squareup.retrofit2:converter-gson:$libraryVersion.retrofit2"
     compile "com.jakewharton:butterknife:$libraryVersion.butterknife"
     compile "de.greenrobot:eventbus:$libraryVersion.eventbus"
     compile "de.hdodenhof:circleimageview:$libraryVersion.circleimageview"
