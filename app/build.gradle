@@ -56,7 +56,8 @@ ext {
             junit          : '4.12',
             robolectric    : '3.0',
             rxjava         : '2.1.0',
-            rxAndroid      : '2.0.1'
+            rxAndroid      : '2.0.1',
+            okhttp3        : '3.2.0'
     ]
 }
 
@@ -73,6 +74,7 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$libraryVersion.retrofit2"
     compile "com.squareup.retrofit2:adapter-rxjava2:$libraryVersion.retrofit2"
     compile "com.squareup.retrofit2:converter-gson:$libraryVersion.retrofit2"
+    compile "com.squareup.okhttp3:logging-interceptor:$libraryVersion.okhttp3"
     compile "com.jakewharton:butterknife:$libraryVersion.butterknife"
     compile "de.greenrobot:eventbus:$libraryVersion.eventbus"
     compile "de.hdodenhof:circleimageview:$libraryVersion.circleimageview"
