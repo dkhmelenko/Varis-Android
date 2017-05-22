@@ -2,9 +2,6 @@ package com.khmelenko.lab.varis.network.retrofit.travis;
 
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.khmelenko.lab.varis.network.retrofit.ItemTypeAdapterFactory;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.util.PackageUtils;
 
@@ -15,8 +12,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * REST client for Network communication
@@ -25,20 +20,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class TravisRestClientRx {
 
+    private final Retrofit mRetrofit;
+
+    private final OkHttpClient mOkHttpClient;
+
     private TravisApiServiceRx mApiService;
 
-    private TravisRestClientRx() {
+    public TravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
+        mRetrofit = retrofit;
+        mOkHttpClient = okHttpClient;
         final String travisUrl = AppSettings.getServerUrl();
         updateTravisEndpoint(travisUrl);
-    }
-
-    /**
-     * Creates new instance of the rest client
-     *
-     * @return Instance
-     */
-    public static TravisRestClientRx newInstance() {
-        return new TravisRestClientRx();
     }
 
     /**
@@ -47,10 +39,8 @@ public class TravisRestClientRx {
      * @param newEndpoint New endpoint
      */
     public void updateTravisEndpoint(String newEndpoint) {
-        Retrofit retrofit = new Retrofit.Builder()
+        Retrofit retrofit = mRetrofit.newBuilder()
                 .baseUrl(newEndpoint)
-                .addConverterFactory(GsonConverterFactory.create(constructGsonConverter()))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(getHttpClient())
                 .build();
 
@@ -60,39 +50,26 @@ public class TravisRestClientRx {
     private OkHttpClient getHttpClient() {
         final String userAgent = String.format("TravisClient/%1$s", PackageUtils.getAppVersion());
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Interceptor.Chain chain) throws IOException {
-                Request original = chain.request();
+        return mOkHttpClient.newBuilder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request original = chain.request();
 
-                Request.Builder request = original.newBuilder()
-                        .header("User-Agent", userAgent)
-                        .header("Accept", "application/vnd.travis-ci.2+json");
+                        Request.Builder request = original.newBuilder()
+                                .header("User-Agent", userAgent)
+                                .header("Accept", "application/vnd.travis-ci.2+json");
 
-                String accessToken = AppSettings.getAccessToken();
-                if (!TextUtils.isEmpty(accessToken)) {
-                    String headerValue = String.format("token %1$s", accessToken);
-                    request.addHeader("Authorization", headerValue);
-                }
+                        String accessToken = AppSettings.getAccessToken();
+                        if (!TextUtils.isEmpty(accessToken)) {
+                            String headerValue = String.format("token %1$s", accessToken);
+                            request.addHeader("Authorization", headerValue);
+                        }
 
-                return chain.proceed(request.build());
-            }
-        });
-
-        return httpClient.build();
-    }
-
-    /**
-     * Construct Gson converter
-     *
-     * @return Gson converter
-     */
-    private Gson constructGsonConverter() {
-        return new GsonBuilder()
-                .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
-                .registerTypeAdapterFactory(new ItemTypeAdapterFactory())
-                .create();
+                        return chain.proceed(request.build());
+                    }
+                })
+                .build();
     }
 
     /**
