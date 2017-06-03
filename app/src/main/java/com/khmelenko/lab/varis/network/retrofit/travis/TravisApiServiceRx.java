@@ -15,13 +15,13 @@ import com.khmelenko.lab.varis.network.response.User;
 import java.util.List;
 
 import io.reactivex.Single;
-import retrofit.http.Body;
 import retrofit.http.EncodedPath;
-import retrofit.http.GET;
-import retrofit.http.POST;
-import retrofit.http.Path;
-import retrofit.http.Query;
 import retrofit.mime.TypedOutput;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 public interface TravisApiServiceRx {

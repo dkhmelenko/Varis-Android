@@ -7,6 +7,7 @@ import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.response.User;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
 import com.khmelenko.lab.varis.task.TaskManager;
@@ -25,6 +26,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
+import io.reactivex.Single;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -51,7 +53,7 @@ public class TestRepositoriesPresenter {
     EventBus mEventBus;
 
     @Inject
-    TravisRestClient mTravisRestClient;
+    TravisRestClientRx mTravisRestClient;
 
     @Inject
     CacheStorage mCacheStorage;
@@ -65,7 +67,7 @@ public class TestRepositoriesPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mRepositoriesPresenter = spy(new RepositoriesPresenter(mTravisRestClient, mEventBus, mTaskManager, mCacheStorage));
+        mRepositoriesPresenter = spy(new RepositoriesPresenter(mTravisRestClient, mCacheStorage));
         mRepositoriesView = mock(RepositoriesView.class);
         mRepositoriesPresenter.attach(mRepositoriesView);
     }
@@ -73,7 +75,7 @@ public class TestRepositoriesPresenter {
     @Test
     public void testReloadRepos() {
         final List<Repo> responseData = new ArrayList<>();
-        when(mTravisRestClient.getApiService().getRepos()).thenReturn(responseData);
+        when(mTravisRestClient.getApiService().getRepos()).thenReturn(Single.just(responseData));
 
         mRepositoriesPresenter.reloadRepos();
         verify(mTaskManager, times(2)).findRepos(null);
@@ -85,7 +87,7 @@ public class TestRepositoriesPresenter {
     public void testReloadReposWithToken() {
         User user = new User();
         user.setLogin("login");
-        when(mTravisRestClient.getApiService().getUser()).thenReturn(user);
+        when(mTravisRestClient.getApiService().getUser()).thenReturn(Single.just(user));
 
         // pre-setting access token
         AppSettings.putAccessToken("token");

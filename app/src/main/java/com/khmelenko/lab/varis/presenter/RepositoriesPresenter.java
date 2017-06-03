@@ -3,20 +3,27 @@ package com.khmelenko.lab.varis.presenter;
 import android.text.TextUtils;
 
 import com.khmelenko.lab.varis.common.Constants;
-import com.khmelenko.lab.varis.event.travis.FindReposEvent;
-import com.khmelenko.lab.varis.event.travis.LoadingFailedEvent;
-import com.khmelenko.lab.varis.event.travis.UserSuccessEvent;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
+import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.response.User;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
-import com.khmelenko.lab.varis.task.TaskManager;
 import com.khmelenko.lab.varis.view.RepositoriesView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
+import io.reactivex.SingleSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiConsumer;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Repositories presenter
@@ -25,26 +32,23 @@ import de.greenrobot.event.EventBus;
  */
 public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
 
-    private final TravisRestClient mTravisRestClient;
-    private final EventBus mEventBus;
-    private final TaskManager mTaskManager;
+    private final TravisRestClientRx mTravisRestClient;
     private final CacheStorage mCache;
 
     private User mUser;
 
+    private final CompositeDisposable mSubscriptions;
+
     @Inject
-    public RepositoriesPresenter(TravisRestClient restClient, EventBus eventBus,
-                                 TaskManager taskManager, CacheStorage storage) {
+    public RepositoriesPresenter(TravisRestClientRx restClient, CacheStorage storage) {
         mTravisRestClient = restClient;
-        mEventBus = eventBus;
-        mTaskManager = taskManager;
         mCache = storage;
+
+        mSubscriptions = new CompositeDisposable();
     }
 
     @Override
     public void onAttach() {
-        mEventBus.register(this);
-
         mUser = mCache.restoreUser();
         getView().updateMenuState(AppSettings.getAccessToken());
         getView().updateUserData(mUser);
@@ -55,8 +59,8 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
 
     @Override
     public void onDetach() {
-        mEventBus.unregister(this);
         getView().hideProgress();
+        mSubscriptions.clear();
     }
 
     /**
@@ -65,48 +69,34 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
     public void reloadRepos() {
         String accessToken = AppSettings.getAccessToken();
         if (TextUtils.isEmpty(accessToken)) {
-            mTaskManager.findRepos(null);
+            Disposable subscription = mTravisRestClient.getApiService()
+                    .getRepos("")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(reposHandler());
+
+            mSubscriptions.add(subscription);
         } else {
-            mTaskManager.getUser();
+            Disposable subscription = mTravisRestClient.getApiService()
+                    .getUser()
+                    .doOnSuccess(new Consumer<User>() {
+                        @Override
+                        public void accept(@NonNull User user) throws Exception {
+                            cacheUserData(user);
+                        }
+                    })
+                    .flatMap(new Function<User, SingleSource<List<Repo>>>() {
+                        @Override
+                        public SingleSource<List<Repo>> apply(@NonNull User user) throws Exception {
+                            String loginName = mUser.getLogin();
+                            return mTravisRestClient.getApiService().getUserRepos(loginName);
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(reposHandler());
+            mSubscriptions.add(subscription);
         }
-    }
-
-    /**
-     * Raised on loaded repositories
-     *
-     * @param event Event data
-     */
-    public void onEvent(FindReposEvent event) {
-        getView().hideProgress();
-        getView().setRepos(event.getRepos());
-
-        mCache.saveRepos(event.getRepos());
-    }
-
-    /**
-     * Raised on failed loading data
-     *
-     * @param event Event data
-     */
-    public void onEvent(LoadingFailedEvent event) {
-        getView().hideProgress();
-        getView().showError(event.getTaskError().getMessage());
-    }
-
-    /**
-     * Raised on loaded user information
-     *
-     * @param event Event data
-     */
-    public void onEvent(UserSuccessEvent event) {
-        mUser = event.getUser();
-
-        // cache user data
-        mCache.saveUser(mUser);
-        getView().updateUserData(mUser);
-
-        String loginName = mUser.getLogin();
-        mTaskManager.userRepos(loginName);
     }
 
     /**
@@ -120,5 +110,41 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
         // reset back to open source url
         AppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
         mTravisRestClient.updateTravisEndpoint(AppSettings.getServerUrl());
+    }
+
+    private BiConsumer<List<Repo>, Throwable> reposHandler() {
+        return new BiConsumer<List<Repo>, Throwable>() {
+            @Override
+            public void accept(List<Repo> repos, Throwable throwable) throws Exception {
+                if (mUser != null) {
+                    getView().updateUserData(mUser);
+                }
+
+                if (throwable == null) {
+                    handleReposLoaded(repos);
+                } else {
+                    handleLoadingFailed(throwable);
+                }
+            }
+        };
+    }
+
+    private void cacheUserData(User user) {
+        mUser = user;
+
+        // cache user data
+        mCache.saveUser(mUser);
+    }
+
+    private void handleReposLoaded(List<Repo> repos) {
+        getView().hideProgress();
+        getView().setRepos(repos);
+
+        mCache.saveRepos(repos);
+    }
+
+    private void handleLoadingFailed(Throwable throwable) {
+        getView().hideProgress();
+        getView().showError(throwable.getMessage());
     }
 }

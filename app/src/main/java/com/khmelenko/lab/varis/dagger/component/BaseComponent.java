@@ -7,6 +7,7 @@ import com.khmelenko.lab.varis.dagger.module.StorageModule;
 import com.khmelenko.lab.varis.dagger.module.TaskModule;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
 import com.khmelenko.lab.varis.storage.CacheStorage;
 import com.khmelenko.lab.varis.task.TaskManager;
 import com.khmelenko.lab.varis.util.PresenterKeeper;
@@ -27,6 +28,8 @@ import de.greenrobot.event.EventBus;
 public interface BaseComponent {
 
     TravisRestClient restClient();
+
+    TravisRestClientRx restClientRx();
 
     EventBus eventBus();
 
