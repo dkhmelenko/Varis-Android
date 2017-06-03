@@ -1,18 +1,16 @@
 package com.khmelenko.lab.varis.presenter;
 
-import com.khmelenko.lab.varis.event.travis.BranchesFailedEvent;
-import com.khmelenko.lab.varis.event.travis.BranchesLoadedEvent;
-import com.khmelenko.lab.varis.event.travis.BuildHistoryFailedEvent;
-import com.khmelenko.lab.varis.event.travis.BuildHistoryLoadedEvent;
-import com.khmelenko.lab.varis.event.travis.RequestsFailedEvent;
-import com.khmelenko.lab.varis.event.travis.RequestsLoadedEvent;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
-import com.khmelenko.lab.varis.task.TaskManager;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
 import com.khmelenko.lab.varis.view.RepoDetailsView;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Repository details presenter
@@ -21,100 +19,85 @@ import de.greenrobot.event.EventBus;
  */
 public class RepoDetailsPresenter extends MvpPresenter<RepoDetailsView> {
 
-    private final TaskManager mTaskManager;
-    private final EventBus mEventBus;
+    private final TravisRestClientRx mTravisRestClient;
 
     private String mRepoSlug;
 
+    private CompositeDisposable mSubscriptions;
+
     @Inject
-    public RepoDetailsPresenter(TaskManager taskManager, EventBus eventBus) {
-        mTaskManager = taskManager;
-        mEventBus = eventBus;
+    public RepoDetailsPresenter(TravisRestClientRx travisRestClient) {
+        mTravisRestClient = travisRestClient;
+
+        mSubscriptions = new CompositeDisposable();
     }
 
     @Override
     public void onAttach() {
-        mEventBus.register(this);
+        // do nothing
     }
 
     @Override
     public void onDetach() {
-        mEventBus.unregister(this);
-    }
-
-    /**
-     * Raised on loaded repositories
-     *
-     * @param event Event data
-     */
-    public void onEvent(BuildHistoryLoadedEvent event) {
-        getView().updateBuildHistory(event.getBuildHistory());
-    }
-
-    /**
-     * Raised on loaded repositories
-     *
-     * @param event Event data
-     */
-    public void onEvent(BranchesLoadedEvent event) {
-        getView().updateBranches(event.getBranches());
-    }
-
-    /**
-     * Raised on loaded requests
-     *
-     * @param event Event data
-     */
-    public void onEvent(RequestsLoadedEvent event) {
-        getView().updatePullRequests(event.getRequests());
-    }
-
-    /**
-     * Raised on failed loading build history
-     *
-     * @param event Event data
-     */
-    public void onEvent(BuildHistoryFailedEvent event) {
-        getView().showBuildHistoryLoadingError(event.getTaskError().getMessage());
-    }
-
-    /**
-     * Raised on failed loading branches
-     *
-     * @param event Event data
-     */
-    public void onEvent(BranchesFailedEvent event) {
-        getView().showBranchesLoadingError(event.getTaskError().getMessage());
-    }
-
-    /**
-     * Raised on failed loading requests
-     *
-     * @param event Event data
-     */
-    public void onEvent(RequestsFailedEvent event) {
-        getView().showPullRequestsLoadingError(event.getTaskError().getMessage());
+        mSubscriptions.clear();
     }
 
     /**
      * Starts loading build history
      */
     public void loadBuildsHistory() {
-        mTaskManager.getBuildHistory(mRepoSlug);
+        Disposable subscription = mTravisRestClient.getApiService()
+                .getBuilds(mRepoSlug)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((buildHistory, throwable) -> {
+                    if (throwable == null) {
+                        getView().updateBuildHistory(buildHistory);
+                    } else {
+                        getView().showBuildHistoryLoadingError(throwable.getMessage());
+                    }
+                });
+        mSubscriptions.add(subscription);
     }
 
     /**
      * Starts loading branches
      */
     public void loadBranches() {
-        mTaskManager.getBranches(mRepoSlug);
+        Disposable subscription = mTravisRestClient.getApiService()
+                .getBranches(mRepoSlug)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((branches, throwable) -> {
+                    if (throwable == null) {
+                        getView().updateBranches(branches);
+                    } else {
+                        getView().showBranchesLoadingError(throwable.getMessage());
+                    }
+                });
+        mSubscriptions.add(subscription);
     }
 
     /**
      * Starts loading requests
      */
     public void loadRequests() {
-        mTaskManager.getRequests(mRepoSlug);
+        Disposable subscription = Single.zip(mTravisRestClient.getApiService().getRequests(mRepoSlug),
+                mTravisRestClient.getApiService().getPullRequestBuilds(mRepoSlug),
+                (requests, buildHistory) -> {
+                    requests.setBuilds(buildHistory.getBuilds());
+                    return requests;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((requests, throwable) -> {
+                    if (throwable == null) {
+                        getView().updatePullRequests(requests);
+                    } else {
+                        getView().showPullRequestsLoadingError(throwable.getMessage());
+                    }
+                });
+        mSubscriptions.add(subscription);
     }
 
     /**
