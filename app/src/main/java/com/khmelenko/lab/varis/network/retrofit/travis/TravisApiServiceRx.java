@@ -15,7 +15,6 @@ import com.khmelenko.lab.varis.network.response.User;
 import java.util.List;
 
 import io.reactivex.Single;
-import retrofit.http.EncodedPath;
 import retrofit.mime.TypedOutput;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -40,7 +39,7 @@ public interface TravisApiServiceRx {
     Single<Repo> getRepo(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}")
-    Single<Repo> getRepo(@EncodedPath("repositorySlug") String repositorySlug);
+    Single<Repo> getRepo(@Path(value = "repositorySlug", encoded = true) String repositorySlug);
 
     @GET("/repos")
     Single<List<Repo>> getUserRepos(@Query("member") String userName);
@@ -51,13 +50,13 @@ public interface TravisApiServiceRx {
     Single<Branches> getBranches(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}/branches")
-    Single<Branches> getBranches(@EncodedPath("repositorySlug") String repositorySlug);
+    Single<Branches> getBranches(@Path(value = "repositorySlug", encoded = true) String repositorySlug);
 
     @GET("/repos/{repositoryId}/branches/{branch}")
     Single<Branch> getBranch(@Path("repositoryId") long repositoryId, @Path("branch") String branch);
 
     @GET("/repos/{repositorySlug}/branches/{branch}")
-    Single<Branch> getBranch(@EncodedPath("repositorySlug") String repositorySlug, @Path("branch") String branch);
+    Single<Branch> getBranch(@Path(value = "repositorySlug", encoded = true) String repositorySlug, @Path("branch") String branch);
 
 
     // builds
@@ -65,19 +64,19 @@ public interface TravisApiServiceRx {
     Single<BuildHistory> getBuilds(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}/builds")
-    Single<BuildHistory> getBuilds(@EncodedPath("repositorySlug") String repositorySlug);
+    Single<BuildHistory> getBuilds(@Path(value = "repositorySlug", encoded = true) String repositorySlug);
 
     @GET("/repos/{repositoryId}/builds?event_type=pull_request")
     Single<BuildHistory> getPullRequestBuilds(@Path("repositoryId") long repositoryId);
 
     @GET("/repos/{repositorySlug}/builds?event_type=pull_request")
-    Single<BuildHistory> getPullRequestBuilds(@EncodedPath("repositorySlug") String repositorySlug);
+    Single<BuildHistory> getPullRequestBuilds(@Path(value = "repositorySlug", encoded = true) String repositorySlug);
 
     @GET("/repos/{repositoryId}/builds/{buildId}")
     Single<BuildDetails> getBuild(@Path("repositoryId") long repositoryId, @Path("buildId") long buildId);
 
     @GET("/repos/{repositorySlug}/builds/{buildId}")
-    Single<BuildDetails> getBuild(@EncodedPath("repositorySlug") String repositorySlug, @Path("buildId") long buildId);
+    Single<BuildDetails> getBuild(@Path(value = "repositorySlug", encoded = true) String repositorySlug, @Path("buildId") long buildId);
 
     @POST("/builds/{buildId}/cancel")
     Single<Object> cancelBuild(@Path("buildId") long buildId, @Body TypedOutput emptyBody);
