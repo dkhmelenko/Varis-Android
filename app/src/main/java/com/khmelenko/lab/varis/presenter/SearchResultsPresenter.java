@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -57,7 +58,7 @@ public class SearchResultsPresenter extends MvpPresenter<SearchResultsView> {
         } else {
             reposSingle = mTravisRestClient.getApiService().getRepos();
         }
-        reposSingle.subscribeOn(Schedulers.io())
+        Disposable subscription = reposSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((repos, throwable) -> {
                     getView().hideProgress();
@@ -67,6 +68,7 @@ public class SearchResultsPresenter extends MvpPresenter<SearchResultsView> {
                         getView().showLoadingError(throwable.getMessage());
                     }
                 });
+        mSubscriptions.add(subscription);
     }
 
 }
