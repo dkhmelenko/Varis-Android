@@ -6,6 +6,7 @@ import com.khmelenko.lab.varis.dagger.module.NotificationModule;
 import com.khmelenko.lab.varis.dagger.module.StorageModule;
 import com.khmelenko.lab.varis.dagger.module.TaskModule;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
+import com.khmelenko.lab.varis.network.retrofit.raw.RawClientRx;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
 import com.khmelenko.lab.varis.storage.CacheStorage;
@@ -30,6 +31,8 @@ public interface BaseComponent {
     TravisRestClient restClient();
 
     TravisRestClientRx restClientRx();
+
+    RawClientRx rawClientRx();
 
     EventBus eventBus();
 

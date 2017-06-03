@@ -72,6 +72,7 @@ public class NetworkModule {
         return new okhttp3.OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .followRedirects(false)
+                .followSslRedirects(false)
                 .build();
     }
 

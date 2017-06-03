@@ -2,22 +2,14 @@ package com.khmelenko.lab.varis.presenter;
 
 import android.text.TextUtils;
 
-import com.khmelenko.lab.varis.event.travis.BuildDetailsLoadedEvent;
-import com.khmelenko.lab.varis.event.travis.CancelBuildFailedEvent;
-import com.khmelenko.lab.varis.event.travis.CancelBuildSuccessEvent;
-import com.khmelenko.lab.varis.event.travis.IntentUrlSuccessEvent;
-import com.khmelenko.lab.varis.event.travis.LoadingFailedEvent;
-import com.khmelenko.lab.varis.event.travis.LogFailEvent;
-import com.khmelenko.lab.varis.event.travis.LogLoadedEvent;
-import com.khmelenko.lab.varis.event.travis.RestartBuildFailedEvent;
-import com.khmelenko.lab.varis.event.travis.RestartBuildSuccessEvent;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Job;
+import com.khmelenko.lab.varis.network.retrofit.EmptyOutput;
+import com.khmelenko.lab.varis.network.retrofit.raw.RawClientRx;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
-import com.khmelenko.lab.varis.task.TaskError;
-import com.khmelenko.lab.varis.task.TaskManager;
 import com.khmelenko.lab.varis.view.BuildDetailsView;
 
 import java.net.MalformedURLException;
@@ -25,7 +17,16 @@ import java.net.URL;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
+import io.reactivex.Single;
+import io.reactivex.SingleSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.Headers;
+import retrofit2.HttpException;
 
 /**
  * Presenter for BuildDetails
@@ -36,9 +37,11 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
 
     public static final int LOAD_LOG_MAX_ATTEMPT = 3;
 
-    public final EventBus mEventBus;
-    public final TaskManager mTaskManager;
-    public final CacheStorage mCache;
+    private final TravisRestClientRx mTravisRestClient;
+    private final RawClientRx mRawClient;
+    private final CacheStorage mCache;
+
+    private final CompositeDisposable mSubscriptions;
 
     private String mRepoSlug;
     private long mBuildId;
@@ -47,20 +50,22 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
     private int mLoadLogAttempt = 0;
 
     @Inject
-    public BuildsDetailsPresenter(EventBus eventBus, TaskManager taskManager, CacheStorage cache) {
-        mEventBus = eventBus;
-        mTaskManager = taskManager;
+    public BuildsDetailsPresenter(TravisRestClientRx travisRestClient, RawClientRx rawClient, CacheStorage cache) {
+        mTravisRestClient = travisRestClient;
+        mRawClient = rawClient;
         mCache = cache;
+
+        mSubscriptions = new CompositeDisposable();
     }
 
     @Override
     public void onAttach() {
-        mEventBus.register(this);
+        // do nothing
     }
 
     @Override
     public void onDetach() {
-        mEventBus.unregister(this);
+        mSubscriptions.clear();
     }
 
     /**
@@ -71,12 +76,43 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
     public void startLoadingLog(long jobId) {
         mJobId = jobId;
         String accessToken = AppSettings.getAccessToken();
+        Single<String> responseSingle;
         if (TextUtils.isEmpty(accessToken)) {
-            mTaskManager.getLogUrl(jobId);
+            responseSingle = mRawClient.getApiService().getLog(String.valueOf(mJobId));
         } else {
             String auth = String.format("token %1$s", AppSettings.getAccessToken());
-            mTaskManager.getLogUrl(auth, jobId);
+            responseSingle = mRawClient.getApiService().getLog(auth, String.valueOf(mJobId));
         }
+
+        Disposable subscription = responseSingle.subscribeOn(Schedulers.io())
+                .map(s -> mRawClient.getLogUrl(mJobId))
+                .onErrorResumeNext(new Function<Throwable, SingleSource<String>>() {
+                    @Override
+                    public SingleSource<String> apply(@NonNull Throwable throwable) throws Exception {
+                        String redirectUrl = "";
+                        HttpException httpException = (HttpException) throwable;
+                        Headers headers = httpException.response().headers();
+                        for (String header : headers.names()) {
+                            if (header.equals("Location")) {
+                                redirectUrl = headers.get(header);
+                                break;
+                            }
+                        }
+                        return Single.just(redirectUrl);
+                    }
+                })
+                .retry(LOAD_LOG_MAX_ATTEMPT)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((logUrl, throwable) -> {
+                    if (throwable == null) {
+                        getView().setLogUrl(logUrl);
+                    } else {
+                        getView().showLogError();
+                        getView().showLoadingError(throwable.getMessage());
+                    }
+                });
+
+        mSubscriptions.add(subscription);
     }
 
     /**
@@ -90,140 +126,40 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
         mRepoSlug = repoSlug;
         mBuildId = buildId;
 
+        Single<BuildDetails> buildDetailsSingle;
+
         if (!TextUtils.isEmpty(intentUrl)) {
-            mTaskManager.intentUrl(intentUrl);
+            buildDetailsSingle = mRawClient.singleRequest(intentUrl)
+                    .doOnSuccess(response -> {
+                        String redirectUrl = intentUrl;
+                        if (response.isRedirect()) {
+                            redirectUrl = response.header("Location", "");
+                        }
+                        parseIntentUrl(redirectUrl);
+                    })
+                    .flatMap(new Function<okhttp3.Response, SingleSource<BuildDetails>>() {
+                        @Override
+                        public SingleSource<BuildDetails> apply(@NonNull okhttp3.Response response) throws Exception {
+                            return mTravisRestClient.getApiService().getBuild(mRepoSlug, mBuildId);
+                        }
+                    });
         } else {
-            mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
+            buildDetailsSingle = mTravisRestClient.getApiService().getBuild(mRepoSlug, mBuildId);
         }
+
+        Disposable subscription = buildDetailsSingle.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((buildDetails, throwable) -> {
+                    if (throwable == null) {
+                        handleBuildDetails(buildDetails);
+                    } else {
+                        handleLoadingFailed(throwable);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
 
         getView().showProgress();
-    }
-
-    /**
-     * Raised on failed loading data
-     *
-     * @param event Event data
-     */
-    public void onEvent(LoadingFailedEvent event) {
-        getView().hideProgress();
-        getView().updateBuildDetails(null);
-        getView().showLoadingError(event.getTaskError().getMessage());
-    }
-
-    /**
-     * Raised on failed loading log data
-     *
-     * @param event Event data
-     */
-    public void onEvent(LogFailEvent event) {
-        if(mLoadLogAttempt >= LOAD_LOG_MAX_ATTEMPT) {
-            getView().showLogError();
-            getView().showLoadingError(event.getTaskError().getMessage());
-        } else {
-            mLoadLogAttempt++;
-            startLoadingLog(mJobId);
-        }
-    }
-
-    /**
-     * Raised on success build restart
-     *
-     * @param event Event data
-     */
-    public void onEvent(RestartBuildSuccessEvent event) {
-        // reload build details
-        mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
-    }
-
-    /**
-     * Raised on failed build restart
-     *
-     * @param event Event data
-     */
-    public void onEvent(RestartBuildFailedEvent event) {
-        getView().showLoadingError(event.getTaskError().getMessage());
-
-        // reload build details
-        mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
-    }
-
-    /**
-     * Raised on success build cancel
-     *
-     * @param event Event data
-     */
-    public void onEvent(CancelBuildSuccessEvent event) {
-        // reload build details
-        mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
-    }
-
-    /**
-     * Raised on failed build cancel
-     *
-     * @param event Event data
-     */
-    public void onEvent(CancelBuildFailedEvent event) {
-        getView().showLoadingError(event.getTaskError().getMessage());
-
-        // reload build details
-        mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
-    }
-
-    /**
-     * Raised on loaded url for the log file
-     *
-     * @param event Event data
-     */
-    public void onEvent(LogLoadedEvent event) {
-        getView().setLogUrl(event.getLogUrl());
-    }
-
-    /**
-     * Raised on finished intent URL
-     *
-     * @param event Event data
-     */
-    public void onEvent(IntentUrlSuccessEvent event) {
-
-        parseIntentUrl(event.getRedirectUrl());
-        boolean isError = TextUtils.isEmpty(mRepoSlug) || mBuildId == 0;
-
-        if (isError) {
-            // handle error
-            TaskError taskError = new TaskError(TaskError.NETWORK_ERROR, "");
-            onEvent(new LoadingFailedEvent(taskError));
-        } else {
-            mTaskManager.getBuildDetails(mRepoSlug, mBuildId);
-        }
-    }
-
-    /**
-     * Raised on loaded build details
-     *
-     * @param event Event data
-     */
-    public void onEvent(BuildDetailsLoadedEvent event) {
-        getView().hideProgress();
-        getView().updateBuildDetails(event.getBuildDetails());
-
-        BuildDetails details = event.getBuildDetails();
-
-        if (details != null) {
-            if (details.getJobs().size() > 1) {
-                getView().showBuildJobs(details.getJobs());
-            } else if (details.getJobs().size() == 1) {
-                getView().showBuildLogs();
-
-                Job job = details.getJobs().get(0);
-                startLoadingLog(job.getId());
-            }
-
-            // if user logged in, show additional actions for the repo
-            String appToken = AppSettings.getAccessToken();
-            if (!TextUtils.isEmpty(appToken)) {
-                getView().showAdditionalActionsForBuild(details);
-            }
-        }
     }
 
     /**
@@ -254,14 +190,52 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
      * Restarts build process
      */
     public void restartBuild() {
-        mTaskManager.restartBuild(mBuildId);
+        Disposable subscription = mTravisRestClient.getApiService()
+                .restartBuild(mBuildId, EmptyOutput.INSTANCE)
+                .onErrorReturn(throwable -> new Object())
+                .flatMap(new Function<Object, SingleSource<BuildDetails>>() {
+                    @Override
+                    public SingleSource<BuildDetails> apply(@NonNull Object o) throws Exception {
+                        return mTravisRestClient.getApiService().getBuild(mRepoSlug, mBuildId);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((buildDetails, throwable) -> {
+                    if (throwable == null) {
+                        handleBuildDetails(buildDetails);
+                    } else {
+                        handleLoadingFailed(throwable);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
     }
 
     /**
      * Cancels build process
      */
     public void cancelBuild() {
-        mTaskManager.cancelBuild(mBuildId);
+        Disposable subscription = mTravisRestClient.getApiService()
+                .cancelBuild(mBuildId, EmptyOutput.INSTANCE)
+                .onErrorReturn(throwable -> new Object())
+                .flatMap(new Function<Object, SingleSource<BuildDetails>>() {
+                    @Override
+                    public SingleSource<BuildDetails> apply(@NonNull Object o) throws Exception {
+                        return mTravisRestClient.getApiService().getBuild(mRepoSlug, mBuildId);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((buildDetails, throwable) -> {
+                    if (throwable == null) {
+                        handleBuildDetails(buildDetails);
+                    } else {
+                        handleLoadingFailed(throwable);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
     }
 
     /**
@@ -279,5 +253,33 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
             }
         }
         return canContributeToRepo;
+    }
+
+    private void handleBuildDetails(BuildDetails buildDetails) {
+        getView().hideProgress();
+        getView().updateBuildDetails(buildDetails);
+
+        if (buildDetails != null) {
+            if (buildDetails.getJobs().size() > 1) {
+                getView().showBuildJobs(buildDetails.getJobs());
+            } else if (buildDetails.getJobs().size() == 1) {
+                getView().showBuildLogs();
+
+                Job job = buildDetails.getJobs().get(0);
+                startLoadingLog(job.getId());
+            }
+
+            // if user logged in, show additional actions for the repo
+            String appToken = AppSettings.getAccessToken();
+            if (!TextUtils.isEmpty(appToken)) {
+                getView().showAdditionalActionsForBuild(buildDetails);
+            }
+        }
+    }
+
+    private void handleLoadingFailed(Throwable throwable) {
+        getView().hideProgress();
+        getView().updateBuildDetails(null);
+        getView().showLoadingError(throwable.getMessage());
     }
 }
