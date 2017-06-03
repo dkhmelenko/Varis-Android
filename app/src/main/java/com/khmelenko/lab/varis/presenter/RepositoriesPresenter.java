@@ -21,7 +21,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiConsumer;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -79,12 +78,7 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
         } else {
             Disposable subscription = mTravisRestClient.getApiService()
                     .getUser()
-                    .doOnSuccess(new Consumer<User>() {
-                        @Override
-                        public void accept(@NonNull User user) throws Exception {
-                            cacheUserData(user);
-                        }
-                    })
+                    .doOnSuccess(this::cacheUserData)
                     .flatMap(new Function<User, SingleSource<List<Repo>>>() {
                         @Override
                         public SingleSource<List<Repo>> apply(@NonNull User user) throws Exception {
@@ -113,18 +107,15 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
     }
 
     private BiConsumer<List<Repo>, Throwable> reposHandler() {
-        return new BiConsumer<List<Repo>, Throwable>() {
-            @Override
-            public void accept(List<Repo> repos, Throwable throwable) throws Exception {
-                if (mUser != null) {
-                    getView().updateUserData(mUser);
-                }
+        return (repos, throwable) -> {
+            if (mUser != null) {
+                getView().updateUserData(mUser);
+            }
 
-                if (throwable == null) {
-                    handleReposLoaded(repos);
-                } else {
-                    handleLoadingFailed(throwable);
-                }
+            if (throwable == null) {
+                handleReposLoaded(repos);
+            } else {
+                handleLoadingFailed(throwable);
             }
         };
     }
