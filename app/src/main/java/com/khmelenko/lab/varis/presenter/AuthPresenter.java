@@ -2,28 +2,33 @@ package com.khmelenko.lab.varis.presenter;
 
 import android.text.TextUtils;
 
-import com.khmelenko.lab.varis.event.github.CreateAuthorizationSuccessEvent;
-import com.khmelenko.lab.varis.event.github.DeleteAuthorizationSuccessEvent;
-import com.khmelenko.lab.varis.event.github.GithubAuthorizationFailEvent;
-import com.khmelenko.lab.varis.event.travis.AuthFailEvent;
-import com.khmelenko.lab.varis.event.travis.AuthSuccessEvent;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
+import com.khmelenko.lab.varis.network.request.AccessTokenRequest;
 import com.khmelenko.lab.varis.network.request.AuthorizationRequest;
+import com.khmelenko.lab.varis.network.response.AccessToken;
 import com.khmelenko.lab.varis.network.response.Authorization;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClientRx;
+import com.khmelenko.lab.varis.network.retrofit.github.GithubApiServiceRx;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
 import com.khmelenko.lab.varis.storage.AppSettings;
-import com.khmelenko.lab.varis.task.TaskError;
-import com.khmelenko.lab.varis.task.TaskManager;
 import com.khmelenko.lab.varis.util.EncryptionUtils;
 import com.khmelenko.lab.varis.util.StringUtils;
 import com.khmelenko.lab.varis.view.AuthView;
 
+import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiConsumer;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
+import retrofit2.Response;
 
 /**
  * Authentication presenter
@@ -32,9 +37,10 @@ import de.greenrobot.event.EventBus;
  */
 public class AuthPresenter extends MvpPresenter<AuthView> {
 
-    private final TaskManager mTaskManager;
-    private final EventBus mEventBus;
-    private final TravisRestClient mTravisRestClient;
+    private final TravisRestClientRx mTravisRestClient;
+    private final GitHubRestClientRx mGitHubRestClient;
+
+    private final CompositeDisposable mSubscriptions;
 
     private String mBasicAuth;
     private String mSecurityCode;
@@ -43,89 +49,21 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
     private boolean mSecurityCodeInput;
 
     @Inject
-    public AuthPresenter(TaskManager taskManager, EventBus eventBus, TravisRestClient travisRestClient) {
-        mTaskManager = taskManager;
-        mEventBus = eventBus;
+    public AuthPresenter(TravisRestClientRx travisRestClient, GitHubRestClientRx gitHubRestClient) {
         mTravisRestClient = travisRestClient;
+        mGitHubRestClient = gitHubRestClient;
+
+        mSubscriptions = new CompositeDisposable();
     }
 
     @Override
     public void onAttach() {
-        mEventBus.register(this);
         getView().setInputView(mSecurityCodeInput);
     }
 
     @Override
     public void onDetach() {
-        mEventBus.unregister(this);
-    }
-
-    /**
-     * Handles success creation new authorization
-     *
-     * @param event Event data
-     */
-    public void onEvent(CreateAuthorizationSuccessEvent event) {
-        mAuthorization = event.getAuthorization();
-        mTaskManager.startAuth(mAuthorization.getToken());
-    }
-
-    /**
-     * Handles success deletion authorization
-     *
-     * @param event Event data
-     */
-    public void onEvent(DeleteAuthorizationSuccessEvent event) {
-        // ignoring the result of deletion
-    }
-
-    /**
-     * Handles event of github failed authentication
-     *
-     * @param event Event data
-     */
-    public void onEvent(GithubAuthorizationFailEvent event) {
-        getView().hideProgress();
-
-        TaskError taskError = event.getTaskError();
-        if (taskError.getCode() == TaskError.TWO_FACTOR_AUTH_REQUIRED) {
-            mSecurityCodeInput = true;
-            getView().showTwoFactorAuth();
-        } else {
-            getView().showErrorMessage(event.getTaskError().getMessage());
-        }
-    }
-
-    /**
-     * Handles event of success authentication
-     *
-     * @param event Event data
-     */
-    public void onEvent(AuthSuccessEvent event) {
-        getView().hideProgress();
-
-        // start deletion authorization on Github, because we don't need it anymore
-        if (!TextUtils.isEmpty(mSecurityCode)) {
-            mTaskManager.deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()), mSecurityCode);
-        } else {
-            mTaskManager.deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()));
-        }
-
-        // save access token to settings
-        String accessToken = event.getAccessToken();
-        AppSettings.putAccessToken(accessToken);
-
-        getView().finishView();
-    }
-
-    /**
-     * Handles event on failed authentication
-     *
-     * @param event Event data
-     */
-    public void onEvent(AuthFailEvent event) {
-        getView().hideProgress();
-        getView().showErrorMessage(event.getTaskError().getMessage());
+        mSubscriptions.clear();
     }
 
     /**
@@ -146,7 +84,8 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
      */
     public void login(String userName, String password) {
         mBasicAuth = EncryptionUtils.generateBasicAuthorization(userName, password);
-        mTaskManager.createNewAuthorization(mBasicAuth, prepareAuthorizationRequest());
+
+        doLogin(getAuthorizationJob(false));
     }
 
     /**
@@ -156,7 +95,88 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
      */
     public void twoFactorAuth(String securityCode) {
         mSecurityCode = securityCode;
-        mTaskManager.createNewAuthorization(mBasicAuth, prepareAuthorizationRequest(), securityCode);
+        doLogin(getAuthorizationJob(true));
+    }
+
+    private Single<Authorization> getAuthorizationJob(boolean twoFactorAuth) {
+        if (twoFactorAuth) {
+            return mGitHubRestClient.getApiService()
+                    .createNewAuthorization(mBasicAuth, mSecurityCode, prepareAuthorizationRequest());
+        } else {
+            return mGitHubRestClient.getApiService()
+                    .createNewAuthorization(mBasicAuth, prepareAuthorizationRequest());
+        }
+    }
+
+    private void doLogin(Single<Authorization> authorizationJob) {
+        Disposable subscription = authorizationJob
+                .flatMap(this::doAuthorization)
+                .doOnSuccess(this::saveAccessToken)
+                .doAfterSuccess(accessToken -> cleanUpAfterAuthorization())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((authorization, throwable) -> {
+                    getView().hideProgress();
+
+                    if (throwable == null) {
+                        getView().finishView();
+                    } else {
+                        HttpException httpException = (HttpException) throwable;
+                        if (isTwoFactorAuthRequired(httpException)) {
+                            mSecurityCodeInput = true;
+                            getView().showTwoFactorAuth();
+                        } else {
+                            getView().showErrorMessage(throwable.getMessage());
+                        }
+                    }
+                });
+
+        mSubscriptions.add(subscription);
+    }
+
+    private void cleanUpAfterAuthorization() {
+        // start deletion authorization on Github, because we don't need it anymore
+        Single<Object> cleanUpJob;
+        if (!TextUtils.isEmpty(mSecurityCode)) {
+            cleanUpJob = mGitHubRestClient.getApiService()
+                    .deleteAuthorization(mBasicAuth, mSecurityCode, String.valueOf(mAuthorization.getId()));
+        } else {
+            cleanUpJob = mGitHubRestClient.getApiService()
+                    .deleteAuthorization(mBasicAuth, String.valueOf(mAuthorization.getId()));
+        }
+        Disposable task = cleanUpJob
+                .onErrorReturn(throwable -> new Object())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+        mSubscriptions.add(task);
+    }
+
+    private void saveAccessToken(AccessToken accessToken) {
+        // save access token to settings
+        String token = accessToken.getAccessToken();
+        AppSettings.putAccessToken(token);
+    }
+
+    private Single<AccessToken> doAuthorization(Authorization authorization) {
+        mAuthorization = authorization;
+        AccessTokenRequest request = new AccessTokenRequest();
+        request.setGithubToken(authorization.getToken());
+        return mTravisRestClient.getApiService().auth(request);
+    }
+
+    private boolean isTwoFactorAuthRequired(HttpException exception) {
+        Response response = exception.response();
+
+        boolean twoFactorAuthRequired = false;
+        for (String header : response.headers().names()) {
+            if (GithubApiServiceRx.TWO_FACTOR_HEADER.equals(header)) {
+                twoFactorAuthRequired = true;
+                break;
+            }
+        }
+
+        return response.code() == HttpURLConnection.HTTP_UNAUTHORIZED && twoFactorAuthRequired;
     }
 
     /**

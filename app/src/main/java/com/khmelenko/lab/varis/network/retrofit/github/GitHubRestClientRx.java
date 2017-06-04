@@ -17,7 +17,7 @@ public class GitHubRestClientRx {
 
     private final Retrofit mRetrofit;
 
-    private GithubApiService mGithubApiService;
+    private GithubApiServiceRx mGithubApiService;
 
     public GitHubRestClientRx(Retrofit retrofit) {
         mRetrofit = retrofit;
@@ -26,7 +26,7 @@ public class GitHubRestClientRx {
         Retrofit newRetrofit = mRetrofit.newBuilder()
                 .baseUrl(GITHUB_URL)
                 .build();
-        mGithubApiService = newRetrofit.create(GithubApiService.class);
+        mGithubApiService = newRetrofit.create(GithubApiServiceRx.class);
     }
 
     /**
@@ -34,7 +34,7 @@ public class GitHubRestClientRx {
      *
      * @return Github API service
      */
-    public GithubApiService getApiService() {
+    public GithubApiServiceRx getApiService() {
         return mGithubApiService;
     }
 

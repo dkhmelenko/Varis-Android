@@ -6,6 +6,7 @@ import com.khmelenko.lab.varis.dagger.module.NotificationModule;
 import com.khmelenko.lab.varis.dagger.module.StorageModule;
 import com.khmelenko.lab.varis.dagger.module.TaskModule;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
+import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClientRx;
 import com.khmelenko.lab.varis.network.retrofit.raw.RawClientRx;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
@@ -33,6 +34,8 @@ public interface BaseComponent {
     TravisRestClientRx restClientRx();
 
     RawClientRx rawClientRx();
+
+    GitHubRestClientRx gitHubClientRx();
 
     EventBus eventBus();
 

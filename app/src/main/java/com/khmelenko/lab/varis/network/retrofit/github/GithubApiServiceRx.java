@@ -4,11 +4,11 @@ import com.khmelenko.lab.varis.network.request.AuthorizationRequest;
 import com.khmelenko.lab.varis.network.response.Authorization;
 
 import io.reactivex.Single;
-import retrofit.http.Body;
-import retrofit.http.DELETE;
-import retrofit.http.Header;
-import retrofit.http.POST;
-import retrofit.http.Path;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * Defines API for working with Github
