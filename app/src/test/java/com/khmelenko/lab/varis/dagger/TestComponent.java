@@ -1,6 +1,5 @@
 package com.khmelenko.lab.varis.dagger;
 
-import com.khmelenko.lab.varis.TestTaskManager;
 import com.khmelenko.lab.varis.dagger.module.ApplicationModule;
 import com.khmelenko.lab.varis.presenter.TestAuthPresenter;
 import com.khmelenko.lab.varis.presenter.TestBuildDetailsPresenter;
@@ -18,8 +17,7 @@ import dagger.Component;
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 @Singleton
-@Component(modules = {TestNetworkModule.class, TestTaskModule.class, TestNotificationModule.class,
-        TestStorageModule.class, ApplicationModule.class})
+@Component(modules = {TestNetworkModule.class, TestStorageModule.class, ApplicationModule.class})
 public interface TestComponent {
 
     void inject(TestSearchResultsPresenter test);
