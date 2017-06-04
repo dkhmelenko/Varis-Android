@@ -3,7 +3,6 @@ package com.khmelenko.lab.varis.dagger.component;
 import com.khmelenko.lab.varis.dagger.module.ApplicationModule;
 import com.khmelenko.lab.varis.dagger.module.NetworkModule;
 import com.khmelenko.lab.varis.dagger.module.StorageModule;
-import com.khmelenko.lab.varis.dagger.module.TaskModule;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClientRx;
 import com.khmelenko.lab.varis.network.retrofit.raw.RawClientRx;
@@ -21,7 +20,7 @@ import dagger.Component;
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 @Singleton
-@Component(modules = {NetworkModule.class, TaskModule.class, StorageModule.class, ApplicationModule.class})
+@Component(modules = {NetworkModule.class, StorageModule.class, ApplicationModule.class})
 public interface BaseComponent {
 
     TravisRestClientRx restClient();

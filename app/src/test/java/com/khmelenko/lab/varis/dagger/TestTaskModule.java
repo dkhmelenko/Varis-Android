@@ -1,8 +1,5 @@
 package com.khmelenko.lab.varis.dagger;
 
-import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
-import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.task.TaskHelper;
 import com.khmelenko.lab.varis.task.TaskManager;
 

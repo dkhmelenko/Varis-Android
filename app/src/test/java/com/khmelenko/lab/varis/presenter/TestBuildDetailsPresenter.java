@@ -7,8 +7,6 @@ import com.khmelenko.lab.varis.network.response.Build;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Commit;
 import com.khmelenko.lab.varis.network.response.Job;
-import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
 import com.khmelenko.lab.varis.task.TaskError;

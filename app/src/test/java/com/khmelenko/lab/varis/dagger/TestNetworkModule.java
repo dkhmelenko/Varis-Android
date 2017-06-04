@@ -1,12 +1,5 @@
 package com.khmelenko.lab.varis.dagger;
 
-import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
-import com.khmelenko.lab.varis.network.retrofit.github.GithubApiService;
-import com.khmelenko.lab.varis.network.retrofit.raw.RawApiService;
-import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisApiService;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
-
 import org.mockito.Mockito;
 
 import javax.inject.Singleton;

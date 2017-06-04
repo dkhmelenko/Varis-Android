@@ -4,7 +4,6 @@ import com.khmelenko.lab.varis.BuildConfig;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.response.Repo;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.task.TaskError;
 import com.khmelenko.lab.varis.task.TaskException;
 import com.khmelenko.lab.varis.task.TaskManager;

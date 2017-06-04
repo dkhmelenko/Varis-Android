@@ -10,7 +10,6 @@ import com.khmelenko.lab.varis.network.response.BuildHistory;
 import com.khmelenko.lab.varis.network.response.Commit;
 import com.khmelenko.lab.varis.network.response.RequestData;
 import com.khmelenko.lab.varis.network.response.Requests;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.task.TaskError;
 import com.khmelenko.lab.varis.task.TaskException;
 import com.khmelenko.lab.varis.task.TaskManager;
