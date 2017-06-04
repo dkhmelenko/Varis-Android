@@ -11,22 +11,22 @@ import retrofit2.Retrofit;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public class GitHubRestClientRx {
+public class GitHubRestClient {
 
     private static final String GITHUB_URL = Constants.GITHUB_URL;
 
     private final Retrofit mRetrofit;
 
-    private GithubApiServiceRx mGithubApiService;
+    private GithubApiService mGithubApiService;
 
-    public GitHubRestClientRx(Retrofit retrofit) {
+    public GitHubRestClient(Retrofit retrofit) {
         mRetrofit = retrofit;
 
         // rest adapter for github API service
         Retrofit newRetrofit = mRetrofit.newBuilder()
                 .baseUrl(GITHUB_URL)
                 .build();
-        mGithubApiService = newRetrofit.create(GithubApiServiceRx.class);
+        mGithubApiService = newRetrofit.create(GithubApiService.class);
     }
 
     /**
@@ -34,7 +34,7 @@ public class GitHubRestClientRx {
      *
      * @return Github API service
      */
-    public GithubApiServiceRx getApiService() {
+    public GithubApiService getApiService() {
         return mGithubApiService;
     }
 

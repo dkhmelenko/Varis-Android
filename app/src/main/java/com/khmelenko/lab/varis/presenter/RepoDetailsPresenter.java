@@ -1,7 +1,7 @@
 package com.khmelenko.lab.varis.presenter;
 
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.view.RepoDetailsView;
 
 import javax.inject.Inject;
@@ -19,14 +19,14 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class RepoDetailsPresenter extends MvpPresenter<RepoDetailsView> {
 
-    private final TravisRestClientRx mTravisRestClient;
+    private final TravisRestClient mTravisRestClient;
 
     private String mRepoSlug;
 
     private CompositeDisposable mSubscriptions;
 
     @Inject
-    public RepoDetailsPresenter(TravisRestClientRx travisRestClient) {
+    public RepoDetailsPresenter(TravisRestClient travisRestClient) {
         mTravisRestClient = travisRestClient;
 
         mSubscriptions = new CompositeDisposable();

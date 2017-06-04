@@ -23,7 +23,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 
-public interface TravisApiServiceRx {
+public interface TravisApiService {
 
     @POST("/auth/github")
     Single<AccessToken> auth(@Body AccessTokenRequest accessToken);

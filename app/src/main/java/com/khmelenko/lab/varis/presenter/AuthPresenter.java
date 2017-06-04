@@ -7,9 +7,9 @@ import com.khmelenko.lab.varis.network.request.AccessTokenRequest;
 import com.khmelenko.lab.varis.network.request.AuthorizationRequest;
 import com.khmelenko.lab.varis.network.response.AccessToken;
 import com.khmelenko.lab.varis.network.response.Authorization;
-import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClientRx;
-import com.khmelenko.lab.varis.network.retrofit.github.GithubApiServiceRx;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
+import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
+import com.khmelenko.lab.varis.network.retrofit.github.GithubApiService;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.util.EncryptionUtils;
 import com.khmelenko.lab.varis.util.StringUtils;
@@ -36,8 +36,8 @@ import retrofit2.Response;
  */
 public class AuthPresenter extends MvpPresenter<AuthView> {
 
-    private final TravisRestClientRx mTravisRestClient;
-    private final GitHubRestClientRx mGitHubRestClient;
+    private final TravisRestClient mTravisRestClient;
+    private final GitHubRestClient mGitHubRestClient;
 
     private final CompositeDisposable mSubscriptions;
 
@@ -48,7 +48,7 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
     private boolean mSecurityCodeInput;
 
     @Inject
-    public AuthPresenter(TravisRestClientRx travisRestClient, GitHubRestClientRx gitHubRestClient) {
+    public AuthPresenter(TravisRestClient travisRestClient, GitHubRestClient gitHubRestClient) {
         mTravisRestClient = travisRestClient;
         mGitHubRestClient = gitHubRestClient;
 
@@ -169,7 +169,7 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
 
         boolean twoFactorAuthRequired = false;
         for (String header : response.headers().names()) {
-            if (GithubApiServiceRx.TWO_FACTOR_HEADER.equals(header)) {
+            if (GithubApiService.TWO_FACTOR_HEADER.equals(header)) {
                 twoFactorAuthRequired = true;
                 break;
             }

@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.Repo;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.view.SearchResultsView;
 
 import java.util.List;
@@ -24,12 +24,12 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class SearchResultsPresenter extends MvpPresenter<SearchResultsView> {
 
-    private final TravisRestClientRx mTravisRestClient;
+    private final TravisRestClient mTravisRestClient;
 
     private final CompositeDisposable mSubscriptions;
 
     @Inject
-    public SearchResultsPresenter(TravisRestClientRx travisRestClient) {
+    public SearchResultsPresenter(TravisRestClient travisRestClient) {
         mTravisRestClient = travisRestClient;
 
         mSubscriptions = new CompositeDisposable();

@@ -6,7 +6,7 @@ import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.response.User;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
 import com.khmelenko.lab.varis.task.TaskManager;
@@ -52,7 +52,7 @@ public class TestRepositoriesPresenter {
     EventBus mEventBus;
 
     @Inject
-    TravisRestClientRx mTravisRestClient;
+    TravisRestClient mTravisRestClient;
 
     @Inject
     CacheStorage mCacheStorage;

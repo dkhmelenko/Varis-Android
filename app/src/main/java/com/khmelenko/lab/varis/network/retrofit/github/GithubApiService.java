@@ -15,7 +15,7 @@ import retrofit2.http.Path;
  *
  * @author Dmytro Khmelenko
  */
-public interface GithubApiServiceRx {
+public interface GithubApiService {
 
     String TWO_FACTOR_HEADER = "X-GitHub-OTP";
 

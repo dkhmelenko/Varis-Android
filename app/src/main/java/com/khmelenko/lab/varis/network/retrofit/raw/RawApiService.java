@@ -9,7 +9,7 @@ import retrofit2.http.Path;
 /**
  * @author Dmytro Khmelenko
  */
-public interface RawApiServiceRx {
+public interface RawApiService {
 
     @GET("/jobs/{jobId}/log")
     Single<String> getLog(@Header("Authorization") String basicAuth, @Path("jobId") String jobId);

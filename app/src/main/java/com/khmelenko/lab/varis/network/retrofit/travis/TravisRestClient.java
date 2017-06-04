@@ -18,15 +18,15 @@ import retrofit2.Retrofit;
  *
  * @author Dmytro Khmelenko
  */
-public class TravisRestClientRx {
+public class TravisRestClient {
 
     private final Retrofit mRetrofit;
 
     private final OkHttpClient mOkHttpClient;
 
-    private TravisApiServiceRx mApiService;
+    private TravisApiService mApiService;
 
-    public TravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
+    public TravisRestClient(Retrofit retrofit, OkHttpClient okHttpClient) {
         mRetrofit = retrofit;
         mOkHttpClient = okHttpClient;
         final String travisUrl = AppSettings.getServerUrl();
@@ -44,7 +44,7 @@ public class TravisRestClientRx {
                 .client(getHttpClient())
                 .build();
 
-        mApiService = retrofit.create(TravisApiServiceRx.class);
+        mApiService = retrofit.create(TravisApiService.class);
     }
 
     private OkHttpClient getHttpClient() {
@@ -77,7 +77,7 @@ public class TravisRestClientRx {
      *
      * @return Travis API service
      */
-    public TravisApiServiceRx getApiService() {
+    public TravisApiService getApiService() {
         return mApiService;
     }
 

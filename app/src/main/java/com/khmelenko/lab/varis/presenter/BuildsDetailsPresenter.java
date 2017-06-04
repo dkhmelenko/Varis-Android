@@ -5,8 +5,8 @@ import android.text.TextUtils;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Job;
-import com.khmelenko.lab.varis.network.retrofit.raw.RawClientRx;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
+import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
 import com.khmelenko.lab.varis.view.BuildDetailsView;
@@ -38,8 +38,8 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
 
     public static final int LOAD_LOG_MAX_ATTEMPT = 3;
 
-    private final TravisRestClientRx mTravisRestClient;
-    private final RawClientRx mRawClient;
+    private final TravisRestClient mTravisRestClient;
+    private final RawClient mRawClient;
     private final CacheStorage mCache;
 
     private final CompositeDisposable mSubscriptions;
@@ -51,7 +51,7 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
     private int mLoadLogAttempt = 0;
 
     @Inject
-    public BuildsDetailsPresenter(TravisRestClientRx travisRestClient, RawClientRx rawClient, CacheStorage cache) {
+    public BuildsDetailsPresenter(TravisRestClient travisRestClient, RawClient rawClient, CacheStorage cache) {
         mTravisRestClient = travisRestClient;
         mRawClient = rawClient;
         mCache = cache;

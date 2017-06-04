@@ -6,7 +6,7 @@ import com.khmelenko.lab.varis.common.Constants;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.response.User;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
 import com.khmelenko.lab.varis.view.RepositoriesView;
@@ -31,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
 
-    private final TravisRestClientRx mTravisRestClient;
+    private final TravisRestClient mTravisRestClient;
     private final CacheStorage mCache;
 
     private User mUser;
@@ -39,7 +39,7 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
     private final CompositeDisposable mSubscriptions;
 
     @Inject
-    public RepositoriesPresenter(TravisRestClientRx restClient, CacheStorage storage) {
+    public RepositoriesPresenter(TravisRestClient restClient, CacheStorage storage) {
         mTravisRestClient = restClient;
         mCache = storage;
 

@@ -24,14 +24,14 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public class RawClientRx {
+public class RawClient {
 
     private Retrofit mRetrofit;
     private final OkHttpClient mHttpClient;
 
-    private RawApiServiceRx mRawApiService;
+    private RawApiService mRawApiService;
 
-    public RawClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
+    public RawClient(Retrofit retrofit, OkHttpClient okHttpClient) {
         mRetrofit = retrofit;
         mHttpClient = okHttpClient;
 
@@ -64,7 +64,7 @@ public class RawClientRx {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(mHttpClient)
                 .build();
-        mRawApiService = mRetrofit.create(RawApiServiceRx.class);
+        mRawApiService = mRetrofit.create(RawApiService.class);
     }
 
     /**
@@ -72,7 +72,7 @@ public class RawClientRx {
      *
      * @return Raw API service
      */
-    public RawApiServiceRx getApiService() {
+    public RawApiService getApiService() {
         return mRawApiService;
     }
 

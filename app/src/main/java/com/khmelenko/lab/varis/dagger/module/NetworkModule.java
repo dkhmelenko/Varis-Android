@@ -3,9 +3,9 @@ package com.khmelenko.lab.varis.dagger.module;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.khmelenko.lab.varis.network.retrofit.ItemTypeAdapterFactory;
-import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClientRx;
-import com.khmelenko.lab.varis.network.retrofit.raw.RawClientRx;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
+import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
+import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 
 import javax.inject.Singleton;
@@ -28,20 +28,20 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public TravisRestClientRx provideTravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
-        return new TravisRestClientRx(retrofit, okHttpClient);
+    public TravisRestClient provideTravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
+        return new TravisRestClient(retrofit, okHttpClient);
     }
 
     @Provides
     @Singleton
-    public GitHubRestClientRx provideGitHubRestClientRx(Retrofit retrofit) {
-        return new GitHubRestClientRx(retrofit);
+    public GitHubRestClient provideGitHubRestClientRx(Retrofit retrofit) {
+        return new GitHubRestClient(retrofit);
     }
 
     @Provides
     @Singleton
-    public RawClientRx provideRawRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
-        return new RawClientRx(retrofit, okHttpClient);
+    public RawClient provideRawRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
+        return new RawClient(retrofit, okHttpClient);
     }
 
     @Provides
