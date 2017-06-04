@@ -50,11 +50,8 @@ ext {
     libraryVersion = [
             support        : '25.1.1',
             gson           : '2.4',
-            retrofit       : '1.9.0',
             retrofit2      : '2.3.0',
-            okhttp         : '2.7.0',
             butterknife    : '7.0.1',
-            eventbus       : '2.4.0',
             circleimageview: '2.0.0',
             dagger         : '2.0.2',
             glassfish      : '10.0-b28',
@@ -75,15 +72,12 @@ dependencies {
     compile "com.android.support:support-v4:$libraryVersion.support"
 
     compile "com.google.code.gson:gson:$libraryVersion.gson"
-    compile "com.squareup.okhttp:okhttp:$libraryVersion.okhttp"
-    compile "com.squareup.retrofit:retrofit:$libraryVersion.retrofit"
     compile "com.squareup.retrofit2:retrofit:$libraryVersion.retrofit2"
     compile "com.squareup.retrofit2:adapter-rxjava2:$libraryVersion.retrofit2"
     compile "com.squareup.retrofit2:converter-gson:$libraryVersion.retrofit2"
     compile "com.squareup.okhttp3:logging-interceptor:$libraryVersion.okhttp3"
     compile "com.squareup.okhttp3:okhttp:$libraryVersion.okhttp3"
     compile "com.jakewharton:butterknife:$libraryVersion.butterknife"
-    compile "de.greenrobot:eventbus:$libraryVersion.eventbus"
     compile "de.hdodenhof:circleimageview:$libraryVersion.circleimageview"
     compile "io.reactivex.rxjava2:rxjava:$libraryVersion.rxjava"
     compile "io.reactivex.rxjava2:rxandroid:$libraryVersion.rxAndroid"
