@@ -25,7 +25,6 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.BiConsumer;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.HttpException;
 import retrofit2.Response;

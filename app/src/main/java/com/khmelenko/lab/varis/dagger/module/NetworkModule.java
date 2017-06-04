@@ -3,11 +3,8 @@ package com.khmelenko.lab.varis.dagger.module;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.khmelenko.lab.varis.network.retrofit.ItemTypeAdapterFactory;
-import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClientRx;
-import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
 import com.khmelenko.lab.varis.network.retrofit.raw.RawClientRx;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
 import com.khmelenko.lab.varis.storage.AppSettings;
 
@@ -15,6 +12,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -30,25 +28,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public TravisRestClient provideTravisRestClient() {
-        return TravisRestClient.newInstance();
-    }
-
-    @Provides
-    @Singleton
-    public GitHubRestClient provideGitHubRestClient() {
-        return GitHubRestClient.newInstance();
-    }
-
-    @Provides
-    @Singleton
-    public RawClient provideRawRestClient() {
-        return RawClient.newInstance();
-    }
-
-    @Provides
-    @Singleton
-    public TravisRestClientRx provideTravisRestClientRx(Retrofit retrofit, okhttp3.OkHttpClient okHttpClient) {
+    public TravisRestClientRx provideTravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
         return new TravisRestClientRx(retrofit, okHttpClient);
     }
 
@@ -60,16 +40,16 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public RawClientRx provideRawRestClientRx(Retrofit retrofit, okhttp3.OkHttpClient okHttpClient) {
+    public RawClientRx provideRawRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
         return new RawClientRx(retrofit, okHttpClient);
     }
 
     @Provides
     @Singleton
-    public okhttp3.OkHttpClient okHttpClient() {
+    public OkHttpClient okHttpClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return new okhttp3.OkHttpClient.Builder()
+        return new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .followRedirects(false)
                 .followSslRedirects(false)
@@ -78,7 +58,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public Retrofit retrofit(okhttp3.OkHttpClient okHttpClient) {
+    public Retrofit retrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(AppSettings.getServerUrl())
                 .addConverterFactory(GsonConverterFactory.create(constructGsonConverter()))
