@@ -8,7 +8,6 @@ import com.khmelenko.lab.varis.network.response.AccessToken;
 import com.khmelenko.lab.varis.network.response.BuildHistory;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.response.Requests;
-import com.khmelenko.lab.varis.network.retrofit.EmptyOutput;
 import com.khmelenko.lab.varis.task.LoaderAsyncTask;
 import com.khmelenko.lab.varis.task.Task;
 import com.khmelenko.lab.varis.task.TaskError;

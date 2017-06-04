@@ -15,7 +15,7 @@ import com.khmelenko.lab.varis.network.response.User;
 import java.util.List;
 
 import io.reactivex.Single;
-import retrofit.mime.TypedOutput;
+import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -79,10 +79,10 @@ public interface TravisApiServiceRx {
     Single<BuildDetails> getBuild(@Path(value = "repositorySlug", encoded = true) String repositorySlug, @Path("buildId") long buildId);
 
     @POST("/builds/{buildId}/cancel")
-    Single<Object> cancelBuild(@Path("buildId") long buildId, @Body TypedOutput emptyBody);
+    Single<Object> cancelBuild(@Path("buildId") long buildId, @Body RequestBody emptyBody);
 
     @POST("/builds/{buildId}/restart")
-    Single<Object> restartBuild(@Path("buildId") long buildId, @Body TypedOutput emptyBody);
+    Single<Object> restartBuild(@Path("buildId") long buildId, @Body RequestBody emptyBody);
 
 
     // requests

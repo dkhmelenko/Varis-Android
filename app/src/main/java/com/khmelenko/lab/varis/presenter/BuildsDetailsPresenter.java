@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Job;
-import com.khmelenko.lab.varis.network.retrofit.EmptyOutput;
 import com.khmelenko.lab.varis.network.retrofit.raw.RawClientRx;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClientRx;
 import com.khmelenko.lab.varis.storage.AppSettings;
@@ -26,6 +25,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.HttpException;
 
 /**
@@ -190,8 +191,9 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
      * Restarts build process
      */
     public void restartBuild() {
+        RequestBody emptyBody = RequestBody.create(MediaType.parse("application/json"), "");
         Disposable subscription = mTravisRestClient.getApiService()
-                .restartBuild(mBuildId, EmptyOutput.INSTANCE)
+                .restartBuild(mBuildId, emptyBody)
                 .onErrorReturn(throwable -> new Object())
                 .flatMap(new Function<Object, SingleSource<BuildDetails>>() {
                     @Override
@@ -216,8 +218,9 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
      * Cancels build process
      */
     public void cancelBuild() {
+        RequestBody emptyBody = RequestBody.create(MediaType.parse("application/json"), "");
         Disposable subscription = mTravisRestClient.getApiService()
-                .cancelBuild(mBuildId, EmptyOutput.INSTANCE)
+                .cancelBuild(mBuildId, emptyBody)
                 .onErrorReturn(throwable -> new Object())
                 .flatMap(new Function<Object, SingleSource<BuildDetails>>() {
                     @Override
