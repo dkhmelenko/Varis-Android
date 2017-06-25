@@ -7,9 +7,8 @@ import com.khmelenko.lab.varis.network.request.AccessTokenRequest;
 import com.khmelenko.lab.varis.network.request.AuthorizationRequest;
 import com.khmelenko.lab.varis.network.response.AccessToken;
 import com.khmelenko.lab.varis.network.response.Authorization;
-import com.khmelenko.lab.varis.task.TaskError;
-import com.khmelenko.lab.varis.task.TaskException;
-import com.khmelenko.lab.varis.task.TaskManager;
+import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.util.EncryptionUtils;
 import com.khmelenko.lab.varis.view.AuthView;
 
@@ -19,14 +18,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-import retrofit.client.Header;
-import retrofit.client.Response;
+import io.reactivex.Single;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -46,12 +40,6 @@ import static org.mockito.Mockito.when;
 public class TestAuthPresenter {
 
     @Inject
-    TaskManager mTaskManager;
-
-    @Inject
-    EventBus mEventBus;
-
-    @Inject
     TravisRestClient mTravisRestClient;
 
     @Inject
@@ -65,7 +53,7 @@ public class TestAuthPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mAuthPresenter = spy(new AuthPresenter(mTaskManager, mEventBus, mTravisRestClient));
+        mAuthPresenter = spy(new AuthPresenter(mTravisRestClient, mGitHubRestClient));
         mAuthView = mock(AuthView.class);
         mAuthPresenter.attach(mAuthView);
     }
@@ -89,23 +77,20 @@ public class TestAuthPresenter {
         authorization.setToken(gitHubToken);
         authorization.setId(1L);
         when(mGitHubRestClient.getApiService().createNewAuthorization(eq(auth), any(AuthorizationRequest.class)))
-                .thenReturn(authorization);
+                .thenReturn(Single.just(authorization));
 
         final String accessToken = "token";
         AccessTokenRequest request = new AccessTokenRequest();
         request.setGithubToken(gitHubToken);
         AccessToken token = new AccessToken();
         token.setAccessToken(accessToken);
-        when(mTravisRestClient.getApiService().auth(request)).thenReturn(token);
+        when(mTravisRestClient.getApiService().auth(request)).thenReturn(Single.just(token));
 
         when(mGitHubRestClient.getApiService().deleteAuthorization(auth, String.valueOf(authorization.getId())))
                 .thenReturn(null);
 
         mAuthPresenter.login(login, password);
 
-        verify(mTaskManager).createNewAuthorization(eq(auth), any(AuthorizationRequest.class));
-        verify(mTaskManager).startAuth(gitHubToken);
-        verify(mTaskManager).deleteAuthorization(auth, String.valueOf(authorization.getId()));
         verify(mAuthView).hideProgress();
         verify(mAuthView).finishView();
     }
@@ -116,16 +101,15 @@ public class TestAuthPresenter {
         final String password = "password";
         String auth = EncryptionUtils.generateBasicAuthorization(login, password);
 
-        TaskError taskError = new TaskError(500, "error");
-        TaskException exception = new TaskException(taskError);
+        final String errorMsg = "error";
+        Exception exception = new Exception(errorMsg);
         when(mGitHubRestClient.getApiService().createNewAuthorization(eq(auth), any(AuthorizationRequest.class)))
-                .thenThrow(exception);
+                .thenReturn(Single.error(exception));
 
         mAuthPresenter.login(login, password);
 
-        verify(mTaskManager).createNewAuthorization(eq(auth), any(AuthorizationRequest.class));
         verify(mAuthView).hideProgress();
-        verify(mAuthView).showErrorMessage(taskError.getMessage());
+        verify(mAuthView).showErrorMessage(errorMsg);
     }
 
     @Test
@@ -139,20 +123,18 @@ public class TestAuthPresenter {
         authorization.setToken(gitHubToken);
         authorization.setId(1L);
         when(mGitHubRestClient.getApiService().createNewAuthorization(eq(auth), any(AuthorizationRequest.class)))
-                .thenReturn(authorization);
+                .thenReturn(Single.just(authorization));
 
         AccessTokenRequest request = new AccessTokenRequest();
         request.setGithubToken(gitHubToken);
-        TaskError taskError = new TaskError(500, "error");
-        TaskException exception = new TaskException(taskError);
-        when(mTravisRestClient.getApiService().auth(request)).thenThrow(exception);
+        final String errorMsg = "error";
+        Exception exception = new Exception(errorMsg);
+        when(mTravisRestClient.getApiService().auth(request)).thenReturn(Single.error(exception));
 
         mAuthPresenter.login(login, password);
 
-        verify(mTaskManager).createNewAuthorization(eq(auth), any(AuthorizationRequest.class));
-        verify(mTaskManager).startAuth(gitHubToken);
         verify(mAuthView).hideProgress();
-        verify(mAuthView).showErrorMessage(taskError.getMessage());
+        verify(mAuthView).showErrorMessage(errorMsg);
     }
 
     @Test
@@ -161,20 +143,19 @@ public class TestAuthPresenter {
         final String password = "password";
         String auth = EncryptionUtils.generateBasicAuthorization(login, password);
 
-        // rules for throwing a request for 2-factor auth
-        Header header = new Header(GithubApiService.TWO_FACTOR_HEADER, "required");
-        List<Header> headers = new ArrayList<>();
-        headers.add(header);
-        Response response = new Response("https://github.com", 401, "twoFactorAuth", headers, null);
-        TaskError taskError = new TaskError(401, "twoFactorAuth");
-        taskError.setResponse(response);
-        TaskException exception = new TaskException(taskError);
+        // TODO Throw exception for 2 factor auth
+//        // rules for throwing a request for 2-factor auth
+//        Header header = new Header(GithubApiService.TWO_FACTOR_HEADER, "required");
+//        List<Header> headers = new ArrayList<>();
+//        headers.add(header);
+
+
+        Exception exception = new Exception("error");
         when(mGitHubRestClient.getApiService().createNewAuthorization(eq(auth), any(AuthorizationRequest.class)))
-                .thenThrow(exception);
+                .thenReturn(Single.error(exception));
 
         mAuthPresenter.login(login, password);
 
-        verify(mTaskManager).createNewAuthorization(eq(auth), any(AuthorizationRequest.class));
         verify(mAuthView).showTwoFactorAuth();
 
         // rules for handling 2-factor auth continuation
@@ -184,22 +165,20 @@ public class TestAuthPresenter {
         authorization.setToken(gitHubToken);
         authorization.setId(1L);
         when(mGitHubRestClient.getApiService().createNewAuthorization(eq(auth), eq(securityCode), any(AuthorizationRequest.class)))
-                .thenReturn(authorization);
+                .thenReturn(Single.just(authorization));
 
         final String accessToken = "token";
         AccessTokenRequest request = new AccessTokenRequest();
         request.setGithubToken(gitHubToken);
         AccessToken token = new AccessToken();
         token.setAccessToken(accessToken);
-        when(mTravisRestClient.getApiService().auth(request)).thenReturn(token);
+        when(mTravisRestClient.getApiService().auth(request)).thenReturn(Single.just(token));
 
         when(mGitHubRestClient.getApiService().deleteAuthorization(auth, String.valueOf(authorization.getId())))
                 .thenReturn(null);
 
         mAuthPresenter.twoFactorAuth(securityCode);
 
-        verify(mTaskManager).startAuth(gitHubToken);
-        verify(mTaskManager).deleteAuthorization(auth, String.valueOf(authorization.getId()), securityCode);
         verify(mAuthView, times(2)).hideProgress();
         verify(mAuthView).finishView();
     }

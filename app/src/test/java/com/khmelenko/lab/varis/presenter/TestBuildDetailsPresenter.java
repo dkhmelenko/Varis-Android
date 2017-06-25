@@ -7,14 +7,11 @@ import com.khmelenko.lab.varis.network.response.Build;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Commit;
 import com.khmelenko.lab.varis.network.response.Job;
+import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
-import com.khmelenko.lab.varis.task.TaskError;
-import com.khmelenko.lab.varis.task.TaskException;
-import com.khmelenko.lab.varis.task.TaskManager;
 import com.khmelenko.lab.varis.view.BuildDetailsView;
-import com.squareup.okhttp.Protocol;
-import com.squareup.okhttp.Request;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,15 +20,15 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-import retrofit.client.Header;
-import retrofit.client.Response;
-import retrofit.mime.TypedOutput;
+import io.reactivex.Single;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -51,12 +48,6 @@ import static org.mockito.Mockito.when;
 public class TestBuildDetailsPresenter {
 
     @Inject
-    TaskManager mTaskManager;
-
-    @Inject
-    EventBus mEventBus;
-
-    @Inject
     CacheStorage mCacheStorage;
 
     @Inject
@@ -73,7 +64,7 @@ public class TestBuildDetailsPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mBuildsDetailsPresenter = spy(new BuildsDetailsPresenter(mEventBus, mTaskManager, mCacheStorage));
+        mBuildsDetailsPresenter = spy(new BuildsDetailsPresenter(mTravisRestClient, mRawClient, mCacheStorage));
         mBuildDetailsView = mock(BuildDetailsView.class);
         mBuildsDetailsPresenter.attach(mBuildDetailsView);
     }
@@ -83,11 +74,9 @@ public class TestBuildDetailsPresenter {
         final long jobId = 1L;
 
         final String expectedUrl = "https://sample.org";
-        Response response = new Response(expectedUrl, 200, "", Collections.<Header>emptyList(), null);
-        when(mRawClient.getApiService().getLog(String.valueOf(jobId))).thenReturn(response);
+        when(mRawClient.getApiService().getLog(String.valueOf(jobId))).thenReturn(Single.just(""));
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
-        verify(mTaskManager).getLogUrl(jobId);
         verify(mBuildDetailsView).setLogUrl(expectedUrl);
     }
 
@@ -96,15 +85,13 @@ public class TestBuildDetailsPresenter {
         final long jobId = 1L;
 
         final String expectedUrl = "https://sample.org";
-        Response response = new Response(expectedUrl, 200, "", Collections.<Header>emptyList(), null);
         final String accessToken = "test";
         final String authToken = "token " + accessToken;
 
-        when(mRawClient.getApiService().getLog(authToken, String.valueOf(jobId))).thenReturn(response);
+        when(mRawClient.getApiService().getLog(authToken, String.valueOf(jobId))).thenReturn(Single.just(""));
 
         AppSettings.putAccessToken(accessToken);
         mBuildsDetailsPresenter.startLoadingLog(jobId);
-        verify(mTaskManager).getLogUrl(authToken, jobId);
         verify(mBuildDetailsView).setLogUrl(expectedUrl);
     }
 
@@ -112,18 +99,12 @@ public class TestBuildDetailsPresenter {
     public void testStartLoadingLogFailed() {
         final long jobId = 1L;
 
-        final int errorCode = 401;
         final String errorMsg = "error";
-        TaskError error = spy(new TaskError(errorCode, errorMsg));
-        Response response = new Response("url", 200, "", Collections.<Header>emptyList(), null);
-        error.setResponse(response);
-        TaskException exception = spy(new TaskException(error));
-        when(mRawClient.getApiService().getLog(String.valueOf(jobId))).thenThrow(exception);
+        Exception exception = new Exception(errorMsg);
+        when(mRawClient.getApiService().getLog(String.valueOf(jobId))).thenReturn(Single.error(exception));
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
-        int loadLogInvocations = BuildsDetailsPresenter.LOAD_LOG_MAX_ATTEMPT + 1;
-        verify(mTaskManager, times(loadLogInvocations)).getLogUrl(jobId);
-        verify(mBuildDetailsView).showLoadingError(error.getMessage());
+        verify(mBuildDetailsView).showLoadingError(errorMsg);
         verify(mBuildDetailsView).showLogError();
     }
 
@@ -143,16 +124,14 @@ public class TestBuildDetailsPresenter {
         buildDetails.setJobs(jobs);
 
         final String expectedUrl = "https://sample.org";
-        Response response = new Response(expectedUrl, 200, "", Collections.<Header>emptyList(), null);
         final String accessToken = "test";
         final String authToken = "token " + accessToken;
 
         AppSettings.putAccessToken("test");
-        when(mRawClient.getApiService().getLog(authToken, String.valueOf(job.getId()))).thenReturn(response);
-        when(mTravisRestClient.getApiService().getBuild(slug, buildId)).thenReturn(buildDetails);
+        when(mRawClient.getApiService().getLog(authToken, String.valueOf(job.getId()))).thenReturn(Single.just(""));
+        when(mTravisRestClient.getApiService().getBuild(slug, buildId)).thenReturn(Single.just(buildDetails));
 
         mBuildsDetailsPresenter.startLoadingData(null, slug, buildId);
-        verify(mTaskManager).getBuildDetails(slug, buildId);
         verify(mBuildDetailsView).showProgress();
         verify(mBuildDetailsView).hideProgress();
         verify(mBuildDetailsView).updateBuildDetails(buildDetails);
@@ -177,10 +156,9 @@ public class TestBuildDetailsPresenter {
         buildDetails.setCommit(commit);
         buildDetails.setJobs(jobs);
 
-        when(mTravisRestClient.getApiService().getBuild(slug, buildId)).thenReturn(buildDetails);
+        when(mTravisRestClient.getApiService().getBuild(slug, buildId)).thenReturn(Single.just(buildDetails));
 
         mBuildsDetailsPresenter.startLoadingData(null, slug, buildId);
-        verify(mTaskManager).getBuildDetails(slug, buildId);
         verify(mBuildDetailsView).showProgress();
         verify(mBuildDetailsView).hideProgress();
         verify(mBuildDetailsView).updateBuildDetails(buildDetails);
@@ -193,11 +171,9 @@ public class TestBuildDetailsPresenter {
         final String slug = "dkhmelenko/Varis-Android";
         final String intentUrl = "https://travis-ci.org/dkhmelenko/Varis-Android/builds/188971232";
 
-        when(mRawClient.singleRequest(intentUrl)).thenReturn(intentResponse());
+        when(mRawClient.singleRequest(intentUrl)).thenReturn(Single.just(intentResponse()));
 
         mBuildsDetailsPresenter.startLoadingData(intentUrl, slug, buildId);
-        verify(mTaskManager).intentUrl(intentUrl);
-        verify(mTaskManager).getBuildDetails(slug, buildId);
     }
 
     @Test
@@ -205,20 +181,15 @@ public class TestBuildDetailsPresenter {
         final long buildId = 1L;
         final String slug = "test";
 
-        final int errorCode = 401;
         final String errorMsg = "error";
-        TaskError error = spy(new TaskError(errorCode, errorMsg));
-        Response response = new Response("url", 200, "", Collections.<Header>emptyList(), null);
-        error.setResponse(response);
-        TaskException exception = spy(new TaskException(error));
-        when(mTravisRestClient.getApiService().getBuild(slug, buildId)).thenThrow(exception);
+        Exception exception = new Exception(errorMsg);
+        when(mTravisRestClient.getApiService().getBuild(slug, buildId)).thenReturn(Single.error(exception));
 
         mBuildsDetailsPresenter.startLoadingData(null, slug, buildId);
-        verify(mTaskManager).getBuildDetails(slug, buildId);
         verify(mBuildDetailsView).showProgress();
         verify(mBuildDetailsView).hideProgress();
         verify(mBuildDetailsView).updateBuildDetails(null);
-        verify(mBuildDetailsView).showLoadingError(error.getMessage());
+        verify(mBuildDetailsView).showLoadingError(errorMsg);
     }
 
     @Test
@@ -231,73 +202,65 @@ public class TestBuildDetailsPresenter {
         Request request = new Request.Builder()
                 .url(expectedUrl)
                 .build();
-        com.squareup.okhttp.Response response = new com.squareup.okhttp.Response.Builder()
+        Response response = new Response.Builder()
                 .request(request)
                 .protocol(Protocol.HTTP_1_1)
                 .code(200)
                 .build();
 
-        final int errorCode = TaskError.NETWORK_ERROR;
-        final String errorMsg = "";
-        TaskError error = spy(new TaskError(errorCode, errorMsg));
+        final String errorMsg = "error";
 
-        when(mRawClient.singleRequest(intentUrl)).thenReturn(response);
+        when(mRawClient.singleRequest(intentUrl)).thenReturn(Single.just(response));
 
         mBuildsDetailsPresenter.startLoadingData(intentUrl, slug, buildId);
-        verify(mTaskManager).intentUrl(intentUrl);
         verify(mBuildDetailsView).hideProgress();
         verify(mBuildDetailsView).updateBuildDetails(null);
-        verify(mBuildDetailsView).showLoadingError(error.getMessage());
+        verify(mBuildDetailsView).showLoadingError(errorMsg);
     }
 
     @Test
     public void testRestartBuild() {
-        when(mTravisRestClient.getApiService().restartBuild(any(Long.class), any(TypedOutput.class)))
+        when(mTravisRestClient.getApiService().restartBuild(any(Long.class), any(RequestBody.class)))
                 .thenReturn(null);
 
         mBuildsDetailsPresenter.restartBuild();
-        verify(mTaskManager).getBuildDetails(any(String.class), any(Long.class));
+
+        // TODO Extend tests here
     }
 
     @Test
     public void testRestartBuildFailed() {
-        final int errorCode = 401;
         final String errorMsg = "error";
-        TaskError error = spy(new TaskError(errorCode, errorMsg));
-        TaskException exception = spy(new TaskException(error));
+        Exception exception = new Exception(errorMsg);
 
-        when(mTravisRestClient.getApiService().restartBuild(any(Long.class), any(TypedOutput.class)))
-                .thenThrow(exception);
+        when(mTravisRestClient.getApiService().restartBuild(any(Long.class), any(RequestBody.class)))
+                .thenReturn(Single.error(exception));
 
         mBuildsDetailsPresenter.restartBuild();
-        verify(mTaskManager).getBuildDetails(any(String.class), any(Long.class));
-        verify(mBuildDetailsView, times(2)).showLoadingError(error.getMessage());
+        verify(mBuildDetailsView, times(2)).showLoadingError(errorMsg);
 
     }
 
     @Test
     public void testCancelBuild() {
-        when(mTravisRestClient.getApiService().cancelBuild(any(Long.class), any(TypedOutput.class)))
+        when(mTravisRestClient.getApiService().cancelBuild(any(Long.class), any(RequestBody.class)))
                 .thenReturn(null);
 
         mBuildsDetailsPresenter.cancelBuild();
-        verify(mTaskManager).getBuildDetails(any(String.class), any(Long.class));
+
+        // TODO Extend tests here
     }
 
     @Test
     public void testCancelBuildFailed() {
-        final int errorCode = 401;
         final String errorMsg = "error";
-        TaskError error = spy(new TaskError(errorCode, errorMsg));
-        TaskException exception = spy(new TaskException(error));
+        Exception exception = new Exception(errorMsg);
 
-        when(mTravisRestClient.getApiService().cancelBuild(any(Long.class), any(TypedOutput.class)))
-                .thenThrow(exception);
+        when(mTravisRestClient.getApiService().cancelBuild(any(Long.class), any(RequestBody.class)))
+                .thenReturn(Single.error(exception));
 
         mBuildsDetailsPresenter.cancelBuild();
-        verify(mTaskManager).getBuildDetails(any(String.class), any(Long.class));
-        verify(mBuildDetailsView, times(2)).showLoadingError(error.getMessage());
-
+        verify(mBuildDetailsView, times(2)).showLoadingError(errorMsg);
     }
 
     @Test
@@ -306,7 +269,7 @@ public class TestBuildDetailsPresenter {
         final String slug = "dkhmelenko/Varis-Android";
         final String intentUrl = "https://travis-ci.org/dkhmelenko/Varis-Android/builds/188971232";
 
-        when(mRawClient.singleRequest(intentUrl)).thenReturn(intentResponse());
+        when(mRawClient.singleRequest(intentUrl)).thenReturn(Single.just(intentResponse()));
         String[] repos = {"Repo1", "Repo2", "Repo3", slug, "Repo4"};
         when(mCacheStorage.restoreRepos()).thenReturn(repos);
 
@@ -321,7 +284,7 @@ public class TestBuildDetailsPresenter {
         final String slug = "dkhmelenko/Varis-Android";
         final String intentUrl = "https://travis-ci.org/dkhmelenko/Varis-Android/builds/188971232";
 
-        when(mRawClient.singleRequest(intentUrl)).thenReturn(intentResponse());
+        when(mRawClient.singleRequest(intentUrl)).thenReturn(Single.just(intentResponse()));
         String[] repos = {"Repo1", "Repo2", "Repo3"};
         when(mCacheStorage.restoreRepos()).thenReturn(repos);
 
@@ -330,12 +293,12 @@ public class TestBuildDetailsPresenter {
         assertEquals(false, actual);
     }
 
-    private com.squareup.okhttp.Response intentResponse() {
+    private Response intentResponse() {
         final String expectedUrl = "https://sample.org";
         Request request = new Request.Builder()
                 .url(expectedUrl)
                 .build();
-        return new com.squareup.okhttp.Response.Builder()
+        return new Response.Builder()
                 .request(request)
                 .protocol(Protocol.HTTP_1_1)
                 .code(200)

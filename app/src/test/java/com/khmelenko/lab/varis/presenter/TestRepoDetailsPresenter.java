@@ -10,9 +10,7 @@ import com.khmelenko.lab.varis.network.response.BuildHistory;
 import com.khmelenko.lab.varis.network.response.Commit;
 import com.khmelenko.lab.varis.network.response.RequestData;
 import com.khmelenko.lab.varis.network.response.Requests;
-import com.khmelenko.lab.varis.task.TaskError;
-import com.khmelenko.lab.varis.task.TaskException;
-import com.khmelenko.lab.varis.task.TaskManager;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.view.RepoDetailsView;
 
 import org.junit.Before;
@@ -26,7 +24,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
+import io.reactivex.Single;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -44,12 +42,6 @@ import static org.mockito.Mockito.when;
 public class TestRepoDetailsPresenter {
 
     @Inject
-    TaskManager mTaskManager;
-
-    @Inject
-    EventBus mEventBus;
-
-    @Inject
     TravisRestClient mTravisRestClient;
 
     private RepoDetailsPresenter mRepoDetailsPresenter;
@@ -60,7 +52,7 @@ public class TestRepoDetailsPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mRepoDetailsPresenter = spy(new RepoDetailsPresenter(mTaskManager, mEventBus));
+        mRepoDetailsPresenter = spy(new RepoDetailsPresenter(mTravisRestClient));
         mRepoDetailsView = mock(RepoDetailsView.class);
         mRepoDetailsPresenter.attach(mRepoDetailsView);
     }
@@ -74,11 +66,10 @@ public class TestRepoDetailsPresenter {
         buildHistory.setBuilds(builds);
         buildHistory.setCommits(commits);
 
-        when(mTravisRestClient.getApiService().getBuilds(slug)).thenReturn(buildHistory);
+        when(mTravisRestClient.getApiService().getBuilds(slug)).thenReturn(Single.just(buildHistory));
 
         mRepoDetailsPresenter.setRepoSlug(slug);
         mRepoDetailsPresenter.loadBuildsHistory();
-        verify(mTaskManager).getBuildHistory(slug);
         verify(mRepoDetailsView).updateBuildHistory(buildHistory);
     }
 
@@ -86,16 +77,13 @@ public class TestRepoDetailsPresenter {
     public void testLoadBuildsHistoryFailed() {
         final String slug = "test";
 
-        final int errorCode = 401;
         final String errorMsg = "error";
-        TaskError error = spy(new TaskError(errorCode, errorMsg));
-        TaskException exception = spy(new TaskException(error));
+        Exception exception = new Exception(errorMsg);
         when(mTravisRestClient.getApiService().getBuilds(slug)).thenThrow(exception);
 
         mRepoDetailsPresenter.setRepoSlug(slug);
         mRepoDetailsPresenter.loadBuildsHistory();
-        verify(mTaskManager).getBuildHistory(slug);
-        verify(mRepoDetailsView).showBuildHistoryLoadingError(error.getMessage());
+        verify(mRepoDetailsView).showBuildHistoryLoadingError(errorMsg);
     }
 
     @Test
@@ -107,11 +95,10 @@ public class TestRepoDetailsPresenter {
         branches.setBranches(branch);
         branches.setCommits(commits);
 
-        when(mTravisRestClient.getApiService().getBranches(slug)).thenReturn(branches);
+        when(mTravisRestClient.getApiService().getBranches(slug)).thenReturn(Single.just(branches));
 
         mRepoDetailsPresenter.setRepoSlug(slug);
         mRepoDetailsPresenter.loadBranches();
-        verify(mTaskManager).getBranches(slug);
         verify(mRepoDetailsView).updateBranches(branches);
     }
 
@@ -119,16 +106,13 @@ public class TestRepoDetailsPresenter {
     public void testLoadBranchesFailed() {
         final String slug = "test";
 
-        final int errorCode = 401;
         final String errorMsg = "error";
-        TaskError error = spy(new TaskError(errorCode, errorMsg));
-        TaskException exception = spy(new TaskException(error));
-        when(mTravisRestClient.getApiService().getBranches(slug)).thenThrow(exception);
+        Exception exception = new Exception(errorMsg);
+        when(mTravisRestClient.getApiService().getBranches(slug)).thenReturn(Single.error(exception));
 
         mRepoDetailsPresenter.setRepoSlug(slug);
         mRepoDetailsPresenter.loadBranches();
-        verify(mTaskManager).getBranches(slug);
-        verify(mRepoDetailsView).showBranchesLoadingError(error.getMessage());
+        verify(mRepoDetailsView).showBranchesLoadingError(errorMsg);
     }
 
     @Test
@@ -144,12 +128,11 @@ public class TestRepoDetailsPresenter {
         buildHistory.setBuilds(builds);
         buildHistory.setCommits(commits);
 
-        when(mTravisRestClient.getApiService().getRequests(slug)).thenReturn(requests);
-        when(mTravisRestClient.getApiService().getPullRequestBuilds(slug)).thenReturn(buildHistory);
+        when(mTravisRestClient.getApiService().getRequests(slug)).thenReturn(Single.just(requests));
+        when(mTravisRestClient.getApiService().getPullRequestBuilds(slug)).thenReturn(Single.just(buildHistory));
 
         mRepoDetailsPresenter.setRepoSlug(slug);
         mRepoDetailsPresenter.loadRequests();
-        verify(mTaskManager).getRequests(slug);
         verify(mRepoDetailsView).updatePullRequests(requests);
 
     }
@@ -158,16 +141,13 @@ public class TestRepoDetailsPresenter {
     public void testLoadRequestsFailed() {
         final String slug = "test";
 
-        final int errorCode = 401;
         final String errorMsg = "error";
-        TaskError error = spy(new TaskError(errorCode, errorMsg));
-        TaskException exception = spy(new TaskException(error));
-        when(mTravisRestClient.getApiService().getRequests(slug)).thenThrow(exception);
+        Exception exception = new Exception(errorMsg);
+        when(mTravisRestClient.getApiService().getRequests(slug)).thenReturn(Single.error(exception));
 
         mRepoDetailsPresenter.setRepoSlug(slug);
         mRepoDetailsPresenter.loadRequests();
-        verify(mTaskManager).getRequests(slug);
-        verify(mRepoDetailsView).showPullRequestsLoadingError(error.getMessage());
+        verify(mRepoDetailsView).showPullRequestsLoadingError(errorMsg);
     }
 
     @Test
@@ -194,10 +174,10 @@ public class TestRepoDetailsPresenter {
         branches.setBranches(branch);
         branches.setCommits(commits);
 
-        when(mTravisRestClient.getApiService().getBuilds(slug)).thenReturn(buildHistory);
-        when(mTravisRestClient.getApiService().getBranches(slug)).thenReturn(branches);
-        when(mTravisRestClient.getApiService().getRequests(slug)).thenReturn(requests);
-        when(mTravisRestClient.getApiService().getPullRequestBuilds(slug)).thenReturn(buildHistory);
+        when(mTravisRestClient.getApiService().getBuilds(slug)).thenReturn(Single.just(buildHistory));
+        when(mTravisRestClient.getApiService().getBranches(slug)).thenReturn(Single.just(branches));
+        when(mTravisRestClient.getApiService().getRequests(slug)).thenReturn(Single.just(requests));
+        when(mTravisRestClient.getApiService().getPullRequestBuilds(slug)).thenReturn(Single.just(buildHistory));
 
         mRepoDetailsPresenter.setRepoSlug(slug);
         mRepoDetailsPresenter.loadData();

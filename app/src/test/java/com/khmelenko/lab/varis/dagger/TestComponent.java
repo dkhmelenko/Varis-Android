@@ -30,6 +30,4 @@ public interface TestComponent {
 
     void inject(TestAuthPresenter test);
 
-    void inject(TestTaskManager test);
-
 }

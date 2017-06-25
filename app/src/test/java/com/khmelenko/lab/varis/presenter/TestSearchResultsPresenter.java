@@ -4,9 +4,7 @@ import com.khmelenko.lab.varis.BuildConfig;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.response.Repo;
-import com.khmelenko.lab.varis.task.TaskError;
-import com.khmelenko.lab.varis.task.TaskException;
-import com.khmelenko.lab.varis.task.TaskManager;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.view.SearchResultsView;
 
 import org.junit.Before;
@@ -20,7 +18,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
+import io.reactivex.Single;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -38,12 +36,6 @@ import static org.mockito.Mockito.when;
 public class TestSearchResultsPresenter {
 
     @Inject
-    TaskManager mTaskManager;
-
-    @Inject
-    EventBus mEventBus;
-
-    @Inject
     TravisRestClient mTravisRestClient;
 
     private SearchResultsPresenter mSearchResultsPresenter;
@@ -55,7 +47,7 @@ public class TestSearchResultsPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mSearchResultsPresenter = spy(new SearchResultsPresenter(mTaskManager, mEventBus));
+        mSearchResultsPresenter = spy(new SearchResultsPresenter(mTravisRestClient));
         mSearchResultsView = mock(SearchResultsView.class);
         mSearchResultsPresenter.attach(mSearchResultsView);
     }
@@ -64,10 +56,9 @@ public class TestSearchResultsPresenter {
     public void testStartRepoSearch() {
         final String searchQuery = "test";
         final List<Repo> responseData = new ArrayList<>();
-        when(mTravisRestClient.getApiService().getRepos(searchQuery)).thenReturn(responseData);
+        when(mTravisRestClient.getApiService().getRepos(searchQuery)).thenReturn(Single.just(responseData));
 
         mSearchResultsPresenter.startRepoSearch(searchQuery);
-        verify(mTaskManager).findRepos(searchQuery);
         verify(mSearchResultsView).hideProgress();
         verify(mSearchResultsView).setSearchResults(eq(responseData));
     }
@@ -76,15 +67,12 @@ public class TestSearchResultsPresenter {
     public void testStartRepoSearchFailed() {
         final String searchQuery = "test";
 
-        final int errorCode = 401;
         final String errorMsg = "error";
-        TaskError error = spy(new TaskError(errorCode, errorMsg));
-        TaskException exception = spy(new TaskException(error));
-        when(mTravisRestClient.getApiService().getRepos(searchQuery)).thenThrow(exception);
+        Exception exception = new Exception(errorMsg);
+        when(mTravisRestClient.getApiService().getRepos(searchQuery)).thenReturn(Single.error(exception));
 
         mSearchResultsPresenter.startRepoSearch(searchQuery);
-        verify(mTaskManager).findRepos(searchQuery);
         verify(mSearchResultsView).hideProgress();
-        verify(mSearchResultsView).showLoadingError(eq(error.getMessage()));
+        verify(mSearchResultsView).showLoadingError(eq(exception.getMessage()));
     }
 }

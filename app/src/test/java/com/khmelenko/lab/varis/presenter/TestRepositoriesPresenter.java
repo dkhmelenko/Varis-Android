@@ -9,7 +9,6 @@ import com.khmelenko.lab.varis.network.response.User;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
-import com.khmelenko.lab.varis.task.TaskManager;
 import com.khmelenko.lab.varis.view.RepositoriesView;
 
 import org.junit.Before;
@@ -24,7 +23,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
 import io.reactivex.Single;
 
 import static org.junit.Assert.assertEquals;
@@ -44,12 +42,6 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class TestRepositoriesPresenter {
-
-    @Inject
-    TaskManager mTaskManager;
-
-    @Inject
-    EventBus mEventBus;
 
     @Inject
     TravisRestClient mTravisRestClient;
@@ -77,7 +69,6 @@ public class TestRepositoriesPresenter {
         when(mTravisRestClient.getApiService().getRepos()).thenReturn(Single.just(responseData));
 
         mRepositoriesPresenter.reloadRepos();
-        verify(mTaskManager, times(2)).findRepos(null);
         verify(mRepositoriesView, times(2)).hideProgress();
         verify(mRepositoriesView, times(2)).setRepos(eq(responseData));
     }
@@ -92,7 +83,6 @@ public class TestRepositoriesPresenter {
         AppSettings.putAccessToken("token");
 
         mRepositoriesPresenter.reloadRepos();
-        verify(mTaskManager).getUser();
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(mRepositoriesView, times(2)).updateUserData(userCaptor.capture());
@@ -100,7 +90,6 @@ public class TestRepositoriesPresenter {
         assertEquals(user.getLogin(), userCaptor.getValue().getLogin());
 
         verify(mCacheStorage).saveUser(eq(user));
-        verify(mTaskManager).userRepos(eq(user.getLogin()));
     }
 
     @Test
