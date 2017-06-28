@@ -1,10 +1,10 @@
 package com.khmelenko.lab.varis.presenter;
 
-import android.text.TextUtils;
 
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.util.StringUtils;
 import com.khmelenko.lab.varis.view.SearchResultsView;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class SearchResultsPresenter extends MvpPresenter<SearchResultsView> {
      */
     public void startRepoSearch(String query) {
         Single<List<Repo>> reposSingle;
-        if (!TextUtils.isEmpty(query)) {
+        if (!StringUtils.isEmpty(query)) {
             reposSingle = mTravisRestClient.getApiService().getRepos(query);
         } else {
             reposSingle = mTravisRestClient.getApiService().getRepos();

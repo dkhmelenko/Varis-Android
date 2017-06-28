@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.presenter;
 
-import com.khmelenko.lab.varis.BuildConfig;
+import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.response.Repo;
@@ -8,10 +8,8 @@ import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.view.SearchResultsView;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
-import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +29,10 @@ import static org.mockito.Mockito.when;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-@RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
 public class TestSearchResultsPresenter {
+
+    @Rule
+    public RxJavaRules mRxJavaRules = new RxJavaRules();
 
     @Inject
     TravisRestClient mTravisRestClient;
