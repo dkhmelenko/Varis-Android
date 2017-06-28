@@ -24,12 +24,15 @@ public class TravisRestClient {
 
     private final OkHttpClient mOkHttpClient;
 
+    private final AppSettings mAppSettings;
+
     private TravisApiService mApiService;
 
-    public TravisRestClient(Retrofit retrofit, OkHttpClient okHttpClient) {
+    public TravisRestClient(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
         mRetrofit = retrofit;
         mOkHttpClient = okHttpClient;
-        final String travisUrl = AppSettings.getServerUrl();
+        mAppSettings = appSettings;
+        final String travisUrl = appSettings.getServerUrl();
         updateTravisEndpoint(travisUrl);
     }
 
@@ -60,7 +63,7 @@ public class TravisRestClient {
                                 .header("User-Agent", userAgent)
                                 .header("Accept", "application/vnd.travis-ci.2+json");
 
-                        String accessToken = AppSettings.getAccessToken();
+                        String accessToken = mAppSettings.getAccessToken();
                         if (!TextUtils.isEmpty(accessToken)) {
                             String headerValue = String.format("token %1$s", accessToken);
                             request.addHeader("Authorization", headerValue);

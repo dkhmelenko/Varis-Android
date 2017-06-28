@@ -28,8 +28,8 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public TravisRestClient provideTravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
-        return new TravisRestClient(retrofit, okHttpClient);
+    public TravisRestClient provideTravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
+        return new TravisRestClient(retrofit, okHttpClient, appSettings);
     }
 
     @Provides
@@ -40,8 +40,8 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public RawClient provideRawRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient) {
-        return new RawClient(retrofit, okHttpClient);
+    public RawClient provideRawRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
+        return new RawClient(retrofit, okHttpClient, appSettings);
     }
 
     @Provides
@@ -58,9 +58,9 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public Retrofit retrofit(OkHttpClient okHttpClient) {
+    public Retrofit retrofit(OkHttpClient okHttpClient, AppSettings appSettings) {
         return new Retrofit.Builder()
-                .baseUrl(AppSettings.getServerUrl())
+                .baseUrl(appSettings.getServerUrl())
                 .addConverterFactory(GsonConverterFactory.create(constructGsonConverter()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)

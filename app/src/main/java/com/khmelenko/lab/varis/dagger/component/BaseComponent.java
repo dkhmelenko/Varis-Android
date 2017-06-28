@@ -7,6 +7,7 @@ import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
 import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
 import com.khmelenko.lab.varis.util.PresenterKeeper;
 
@@ -30,6 +31,8 @@ public interface BaseComponent {
     GitHubRestClient gitHubClient();
 
     CacheStorage cache();
+
+    AppSettings appSettings();
 
     PresenterKeeper<MvpPresenter> presenterKeeper();
 }

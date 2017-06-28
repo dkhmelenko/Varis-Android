@@ -38,6 +38,7 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
 
     private final TravisRestClient mTravisRestClient;
     private final GitHubRestClient mGitHubRestClient;
+    private final AppSettings mAppSettings;
 
     private final CompositeDisposable mSubscriptions;
 
@@ -48,9 +49,10 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
     private boolean mSecurityCodeInput;
 
     @Inject
-    public AuthPresenter(TravisRestClient travisRestClient, GitHubRestClient gitHubRestClient) {
+    public AuthPresenter(TravisRestClient travisRestClient, GitHubRestClient gitHubRestClient, AppSettings appSettings) {
         mTravisRestClient = travisRestClient;
         mGitHubRestClient = gitHubRestClient;
+        mAppSettings = appSettings;
 
         mSubscriptions = new CompositeDisposable();
     }
@@ -71,7 +73,7 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
      * @param newServer New server endpoint
      */
     public void updateServer(String newServer) {
-        AppSettings.putServerUrl(newServer);
+        mAppSettings.putServerUrl(newServer);
         mTravisRestClient.updateTravisEndpoint(newServer);
     }
 
@@ -95,6 +97,15 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
     public void twoFactorAuth(String securityCode) {
         mSecurityCode = securityCode;
         doLogin(getAuthorizationJob(true));
+    }
+
+    /**
+     * Returns server URL
+     *
+     * @return Server URL
+     */
+    public String getServerUrl() {
+        return mAppSettings.getServerUrl();
     }
 
     private Single<Authorization> getAuthorizationJob(boolean twoFactorAuth) {
@@ -154,7 +165,7 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
     private void saveAccessToken(AccessToken accessToken) {
         // save access token to settings
         String token = accessToken.getAccessToken();
-        AppSettings.putAccessToken(token);
+        mAppSettings.putAccessToken(token);
     }
 
     private Single<AccessToken> doAuthorization(Authorization authorization) {

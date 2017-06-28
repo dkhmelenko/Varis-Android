@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public class RxJavaRules implements TestRule {
+public final class RxJavaRules implements TestRule {
 
     @Override
     public Statement apply(final Statement base, Description description) {

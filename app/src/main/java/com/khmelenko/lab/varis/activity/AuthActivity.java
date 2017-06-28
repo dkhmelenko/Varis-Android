@@ -14,7 +14,6 @@ import com.khmelenko.lab.varis.fragment.SecurityCodeFragment;
 import com.khmelenko.lab.varis.mvp.MvpActivity;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.presenter.AuthPresenter;
-import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.util.PresenterKeeper;
 import com.khmelenko.lab.varis.view.AuthView;
 
@@ -28,9 +27,9 @@ import butterknife.ButterKnife;
  * @author Dmytro Khmelenko
  */
 public final class AuthActivity extends MvpActivity<AuthPresenter> implements
-        AuthView,
-        AuthFragment.OnLoginActionListener,
-        SecurityCodeFragment.OnSecurityCodeAction {
+                                                                   AuthView,
+                                                                   AuthFragment.OnLoginActionListener,
+                                                                   SecurityCodeFragment.OnSecurityCodeAction {
 
     private static final String SECURITY_CODE_INPUT = "securityCodeInput";
     private static final String AUTH_FRAGMENT_TAG = "AuthFragment";
@@ -60,7 +59,7 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
     private void showLoginSection() {
         AuthFragment authFragment = (AuthFragment) getSupportFragmentManager().findFragmentByTag(AUTH_FRAGMENT_TAG);
         if (authFragment == null) {
-            authFragment = AuthFragment.newInstance(AppSettings.getServerUrl());
+            authFragment = AuthFragment.newInstance(mPresenter.getServerUrl());
             addFragment(R.id.auth_container, authFragment, AUTH_FRAGMENT_TAG);
         }
     }
@@ -79,7 +78,7 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
     @Override
     protected AuthPresenter getPresenter() {
         MvpPresenter presenter = mPresenterKeeper.get(AuthPresenter.class);
-        if(presenter != null) {
+        if (presenter != null) {
             mPresenter = (AuthPresenter) presenter;
         }
         return mPresenter;

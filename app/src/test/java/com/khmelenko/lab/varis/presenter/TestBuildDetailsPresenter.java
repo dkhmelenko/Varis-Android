@@ -56,6 +56,9 @@ public class TestBuildDetailsPresenter {
     @Inject
     TravisRestClient mTravisRestClient;
 
+    @Inject
+    AppSettings mAppSettings;
+
     private BuildsDetailsPresenter mBuildsDetailsPresenter;
     private BuildDetailsView mBuildDetailsView;
 
@@ -64,7 +67,7 @@ public class TestBuildDetailsPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mBuildsDetailsPresenter = spy(new BuildsDetailsPresenter(mTravisRestClient, mRawClient, mCacheStorage));
+        mBuildsDetailsPresenter = spy(new BuildsDetailsPresenter(mTravisRestClient, mRawClient, mCacheStorage, mAppSettings));
         mBuildDetailsView = mock(BuildDetailsView.class);
         mBuildsDetailsPresenter.attach(mBuildDetailsView);
     }
@@ -89,8 +92,8 @@ public class TestBuildDetailsPresenter {
         final String authToken = "token " + accessToken;
 
         when(mRawClient.getApiService().getLog(authToken, String.valueOf(jobId))).thenReturn(Single.just(""));
+        when(mAppSettings.getAccessToken()).thenReturn(accessToken);
 
-        AppSettings.putAccessToken(accessToken);
         mBuildsDetailsPresenter.startLoadingLog(jobId);
         verify(mBuildDetailsView).setLogUrl(expectedUrl);
     }
@@ -127,9 +130,9 @@ public class TestBuildDetailsPresenter {
         final String accessToken = "test";
         final String authToken = "token " + accessToken;
 
-        AppSettings.putAccessToken("test");
         when(mRawClient.getApiService().getLog(authToken, String.valueOf(job.getId()))).thenReturn(Single.just(""));
         when(mTravisRestClient.getApiService().getBuild(slug, buildId)).thenReturn(Single.just(buildDetails));
+        when(mAppSettings.getAccessToken()).thenReturn(accessToken);
 
         mBuildsDetailsPresenter.startLoadingData(null, slug, buildId);
         verify(mBuildDetailsView).showProgress();

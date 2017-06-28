@@ -9,6 +9,7 @@ import com.khmelenko.lab.varis.network.response.AccessToken;
 import com.khmelenko.lab.varis.network.response.Authorization;
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.util.EncryptionUtils;
 import com.khmelenko.lab.varis.view.AuthView;
 
@@ -45,6 +46,9 @@ public class TestAuthPresenter {
     @Inject
     GitHubRestClient mGitHubRestClient;
 
+    @Inject
+    AppSettings mAppSettings;
+
     private AuthPresenter mAuthPresenter;
     private AuthView mAuthView;
 
@@ -53,7 +57,7 @@ public class TestAuthPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mAuthPresenter = spy(new AuthPresenter(mTravisRestClient, mGitHubRestClient));
+        mAuthPresenter = spy(new AuthPresenter(mTravisRestClient, mGitHubRestClient, mAppSettings));
         mAuthView = mock(AuthView.class);
         mAuthPresenter.attach(mAuthView);
     }

@@ -26,17 +26,18 @@ public final class TravisApp extends Application {
         super.onCreate();
         sContext = getApplicationContext();
 
-        String server = AppSettings.getServerUrl();
-        if (TextUtils.isEmpty(server)) {
-            AppSettings.putServerType(0);
-            AppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
-        }
-
         BaseComponent baseComponent = DaggerBaseComponent.create();
 
         mActivityInjection = DaggerActivityInjectionComponent.builder()
                 .baseComponent(baseComponent)
                 .build();
+
+        AppSettings appSettings = baseComponent.appSettings();
+        String server = appSettings.getServerUrl();
+        if (TextUtils.isEmpty(server)) {
+            appSettings.putServerType(0);
+            appSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
+        }
     }
 
     /**

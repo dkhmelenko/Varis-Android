@@ -31,11 +31,11 @@ public class RawClient {
 
     private RawApiService mRawApiService;
 
-    public RawClient(Retrofit retrofit, OkHttpClient okHttpClient) {
+    public RawClient(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
         mRetrofit = retrofit;
         mHttpClient = okHttpClient;
 
-        final String travisUrl = AppSettings.getServerUrl();
+        final String travisUrl = appSettings.getServerUrl();
         updateEndpoint(travisUrl);
     }
 

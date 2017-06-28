@@ -41,6 +41,7 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
     private final TravisRestClient mTravisRestClient;
     private final RawClient mRawClient;
     private final CacheStorage mCache;
+    private final AppSettings mAppSettings;
 
     private final CompositeDisposable mSubscriptions;
 
@@ -51,10 +52,12 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
     private int mLoadLogAttempt = 0;
 
     @Inject
-    public BuildsDetailsPresenter(TravisRestClient travisRestClient, RawClient rawClient, CacheStorage cache) {
+    public BuildsDetailsPresenter(TravisRestClient travisRestClient, RawClient rawClient, CacheStorage cache,
+                                  AppSettings appSettings) {
         mTravisRestClient = travisRestClient;
         mRawClient = rawClient;
         mCache = cache;
+        mAppSettings = appSettings;
 
         mSubscriptions = new CompositeDisposable();
     }
@@ -76,12 +79,12 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
      */
     public void startLoadingLog(long jobId) {
         mJobId = jobId;
-        String accessToken = AppSettings.getAccessToken();
+        String accessToken = mAppSettings.getAccessToken();
         Single<String> responseSingle;
         if (TextUtils.isEmpty(accessToken)) {
             responseSingle = mRawClient.getApiService().getLog(String.valueOf(mJobId));
         } else {
-            String auth = String.format("token %1$s", AppSettings.getAccessToken());
+            String auth = String.format("token %1$s", mAppSettings.getAccessToken());
             responseSingle = mRawClient.getApiService().getLog(auth, String.valueOf(mJobId));
         }
 
@@ -273,7 +276,7 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
             }
 
             // if user logged in, show additional actions for the repo
-            String appToken = AppSettings.getAccessToken();
+            String appToken = mAppSettings.getAccessToken();
             if (!TextUtils.isEmpty(appToken)) {
                 getView().showAdditionalActionsForBuild(buildDetails);
             }

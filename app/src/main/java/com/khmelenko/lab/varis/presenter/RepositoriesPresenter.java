@@ -1,7 +1,5 @@
 package com.khmelenko.lab.varis.presenter;
 
-import android.text.TextUtils;
-
 import com.khmelenko.lab.varis.common.Constants;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.Repo;
@@ -9,6 +7,7 @@ import com.khmelenko.lab.varis.network.response.User;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
+import com.khmelenko.lab.varis.util.StringUtils;
 import com.khmelenko.lab.varis.view.RepositoriesView;
 
 import java.util.List;
@@ -33,15 +32,17 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
 
     private final TravisRestClient mTravisRestClient;
     private final CacheStorage mCache;
+    private final AppSettings mAppSettings;
 
     private User mUser;
 
     private final CompositeDisposable mSubscriptions;
 
     @Inject
-    public RepositoriesPresenter(TravisRestClient restClient, CacheStorage storage) {
+    public RepositoriesPresenter(TravisRestClient restClient, CacheStorage storage, AppSettings appSettings) {
         mTravisRestClient = restClient;
         mCache = storage;
+        mAppSettings = appSettings;
 
         mSubscriptions = new CompositeDisposable();
     }
@@ -49,7 +50,7 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
     @Override
     public void onAttach() {
         mUser = mCache.restoreUser();
-        getView().updateMenuState(AppSettings.getAccessToken());
+        getView().updateMenuState(mAppSettings.getAccessToken());
         getView().updateUserData(mUser);
         getView().showProgress();
 
@@ -66,8 +67,8 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
      * Starts loading repositories
      */
     public void reloadRepos() {
-        String accessToken = AppSettings.getAccessToken();
-        if (TextUtils.isEmpty(accessToken)) {
+        String accessToken = mAppSettings.getAccessToken();
+        if (StringUtils.isEmpty(accessToken)) {
             Disposable subscription = mTravisRestClient.getApiService()
                     .getRepos("")
                     .subscribeOn(Schedulers.io())
@@ -99,11 +100,11 @@ public class RepositoriesPresenter extends MvpPresenter<RepositoriesView> {
     public void userLogout() {
         mCache.deleteUser();
         mCache.deleteRepos();
-        AppSettings.putAccessToken("");
+        mAppSettings.putAccessToken("");
 
         // reset back to open source url
-        AppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
-        mTravisRestClient.updateTravisEndpoint(AppSettings.getServerUrl());
+        mAppSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL);
+        mTravisRestClient.updateTravisEndpoint(mAppSettings.getServerUrl());
     }
 
     private BiConsumer<List<Repo>, Throwable> reposHandler() {
