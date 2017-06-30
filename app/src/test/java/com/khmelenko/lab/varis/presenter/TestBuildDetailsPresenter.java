@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.presenter;
 
-import com.khmelenko.lab.varis.BuildConfig;
+import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.response.Build;
@@ -14,10 +14,8 @@ import com.khmelenko.lab.varis.storage.CacheStorage;
 import com.khmelenko.lab.varis.view.BuildDetailsView;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
-import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +32,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -43,9 +40,10 @@ import static org.mockito.Mockito.when;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-@RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
 public class TestBuildDetailsPresenter {
+
+    @Rule
+    public RxJavaRules mRxJavaRules = new RxJavaRules();
 
     @Inject
     CacheStorage mCacheStorage;
@@ -77,7 +75,8 @@ public class TestBuildDetailsPresenter {
         final long jobId = 1L;
 
         final String expectedUrl = "https://sample.org";
-        when(mRawClient.getApiService().getLog(String.valueOf(jobId))).thenReturn(Single.just(""));
+        when(mRawClient.getApiService().getLog(String.valueOf(jobId))).thenReturn(Single.just(expectedUrl));
+        when(mRawClient.getLogUrl(jobId)).thenReturn(expectedUrl);
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
         verify(mBuildDetailsView).setLogUrl(expectedUrl);
@@ -92,6 +91,7 @@ public class TestBuildDetailsPresenter {
         final String authToken = "token " + accessToken;
 
         when(mRawClient.getApiService().getLog(authToken, String.valueOf(jobId))).thenReturn(Single.just(""));
+        when(mRawClient.getLogUrl(any(Long.class))).thenReturn(expectedUrl);
         when(mAppSettings.getAccessToken()).thenReturn(accessToken);
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
@@ -201,19 +201,12 @@ public class TestBuildDetailsPresenter {
         final String slug = "dkhmelenko/Varis-Android";
         final String intentUrl = "https://travis-ci.org/dkhmelenko/Varis-Android/builds";
 
-        final String expectedUrl = "https://sample.org";
-        Request request = new Request.Builder()
-                .url(expectedUrl)
-                .build();
-        Response response = new Response.Builder()
-                .request(request)
-                .protocol(Protocol.HTTP_1_1)
-                .code(200)
-                .build();
-
+        Response response = intentResponse();
         final String errorMsg = "error";
 
         when(mRawClient.singleRequest(intentUrl)).thenReturn(Single.just(response));
+        when(mTravisRestClient.getApiService().getBuild(any(String.class), any(Long.class)))
+                .thenReturn(Single.error(new Exception(errorMsg)));
 
         mBuildsDetailsPresenter.startLoadingData(intentUrl, slug, buildId);
         verify(mBuildDetailsView).hideProgress();
@@ -223,8 +216,12 @@ public class TestBuildDetailsPresenter {
 
     @Test
     public void testRestartBuild() {
+        BuildDetails buildDetails = new BuildDetails();
+
         when(mTravisRestClient.getApiService().restartBuild(any(Long.class), any(RequestBody.class)))
-                .thenReturn(null);
+                .thenReturn(Single.just(new Object()));
+        when(mTravisRestClient.getApiService().getBuild(any(String.class), any(Long.class)))
+                .thenReturn(Single.just(buildDetails));
 
         mBuildsDetailsPresenter.restartBuild();
 
@@ -238,16 +235,21 @@ public class TestBuildDetailsPresenter {
 
         when(mTravisRestClient.getApiService().restartBuild(any(Long.class), any(RequestBody.class)))
                 .thenReturn(Single.error(exception));
+        when(mTravisRestClient.getApiService().getBuild(any(String.class), any(Long.class)))
+                .thenReturn(Single.error(exception));
 
         mBuildsDetailsPresenter.restartBuild();
-        verify(mBuildDetailsView, times(2)).showLoadingError(errorMsg);
-
+        verify(mBuildDetailsView).showLoadingError(errorMsg);
     }
 
     @Test
     public void testCancelBuild() {
+        BuildDetails buildDetails = new BuildDetails();
+
         when(mTravisRestClient.getApiService().cancelBuild(any(Long.class), any(RequestBody.class)))
-                .thenReturn(null);
+                .thenReturn(Single.just(new Object()));
+        when(mTravisRestClient.getApiService().getBuild(any(String.class), any(Long.class)))
+                .thenReturn(Single.just(buildDetails));
 
         mBuildsDetailsPresenter.cancelBuild();
 
@@ -261,9 +263,11 @@ public class TestBuildDetailsPresenter {
 
         when(mTravisRestClient.getApiService().cancelBuild(any(Long.class), any(RequestBody.class)))
                 .thenReturn(Single.error(exception));
+        when(mTravisRestClient.getApiService().getBuild(any(String.class), any(Long.class)))
+                .thenReturn(Single.error(exception));
 
         mBuildsDetailsPresenter.cancelBuild();
-        verify(mBuildDetailsView, times(2)).showLoadingError(errorMsg);
+        verify(mBuildDetailsView).showLoadingError(errorMsg);
     }
 
     @Test
@@ -303,6 +307,7 @@ public class TestBuildDetailsPresenter {
                 .build();
         return new Response.Builder()
                 .request(request)
+                .message("no body")
                 .protocol(Protocol.HTTP_1_1)
                 .code(200)
                 .build();

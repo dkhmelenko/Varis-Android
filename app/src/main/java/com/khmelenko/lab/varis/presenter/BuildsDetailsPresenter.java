@@ -1,7 +1,5 @@
 package com.khmelenko.lab.varis.presenter;
 
-import android.text.TextUtils;
-
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Job;
@@ -9,6 +7,7 @@ import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
+import com.khmelenko.lab.varis.util.StringUtils;
 import com.khmelenko.lab.varis.view.BuildDetailsView;
 
 import java.net.MalformedURLException;
@@ -81,7 +80,7 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
         mJobId = jobId;
         String accessToken = mAppSettings.getAccessToken();
         Single<String> responseSingle;
-        if (TextUtils.isEmpty(accessToken)) {
+        if (StringUtils.isEmpty(accessToken)) {
             responseSingle = mRawClient.getApiService().getLog(String.valueOf(mJobId));
         } else {
             String auth = String.format("token %1$s", mAppSettings.getAccessToken());
@@ -94,15 +93,19 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
                     @Override
                     public SingleSource<String> apply(@NonNull Throwable throwable) throws Exception {
                         String redirectUrl = "";
-                        HttpException httpException = (HttpException) throwable;
-                        Headers headers = httpException.response().headers();
-                        for (String header : headers.names()) {
-                            if (header.equals("Location")) {
-                                redirectUrl = headers.get(header);
-                                break;
+                        if (throwable instanceof HttpException) {
+                            HttpException httpException = (HttpException) throwable;
+                            Headers headers = httpException.response().headers();
+                            for (String header : headers.names()) {
+                                if (header.equals("Location")) {
+                                    redirectUrl = headers.get(header);
+                                    break;
+                                }
                             }
+                            return Single.just(redirectUrl);
+                        } else {
+                            return Single.error(throwable);
                         }
-                        return Single.just(redirectUrl);
                     }
                 })
                 .retry(LOAD_LOG_MAX_ATTEMPT)
@@ -132,7 +135,7 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
 
         Single<BuildDetails> buildDetailsSingle;
 
-        if (!TextUtils.isEmpty(intentUrl)) {
+        if (!StringUtils.isEmpty(intentUrl)) {
             buildDetailsSingle = mRawClient.singleRequest(intentUrl)
                     .doOnSuccess(response -> {
                         String redirectUrl = intentUrl;
@@ -277,7 +280,7 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
 
             // if user logged in, show additional actions for the repo
             String appToken = mAppSettings.getAccessToken();
-            if (!TextUtils.isEmpty(appToken)) {
+            if (!StringUtils.isEmpty(appToken)) {
                 getView().showAdditionalActionsForBuild(buildDetails);
             }
         }
