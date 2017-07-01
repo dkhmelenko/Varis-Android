@@ -55,7 +55,7 @@ ext {
             circleimageview: '2.0.0',
             dagger         : '2.0.2',
             glassfish      : '10.0-b28',
-            mockito        : '1.10.19',
+            mockito        : '2.8.47',
             junit          : '4.12',
             robolectric    : '3.0',
             rxjava         : '2.1.0',
