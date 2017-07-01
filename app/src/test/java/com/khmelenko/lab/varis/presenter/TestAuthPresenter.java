@@ -1,6 +1,7 @@
 package com.khmelenko.lab.varis.presenter;
 
 import com.khmelenko.lab.varis.BuildConfig;
+import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.request.AccessTokenRequest;
@@ -8,20 +9,27 @@ import com.khmelenko.lab.varis.network.request.AuthorizationRequest;
 import com.khmelenko.lab.varis.network.response.AccessToken;
 import com.khmelenko.lab.varis.network.response.Authorization;
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
+import com.khmelenko.lab.varis.network.retrofit.github.GithubApiService;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.util.EncryptionUtils;
 import com.khmelenko.lab.varis.view.AuthView;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import javax.inject.Inject;
 
 import io.reactivex.Single;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
+import retrofit2.HttpException;
+import retrofit2.Response;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -36,9 +44,12 @@ import static org.mockito.Mockito.when;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class TestAuthPresenter {
+
+    @Rule
+    public RxJavaRules mRxJavaRules = new RxJavaRules();
 
     @Inject
     TravisRestClient mTravisRestClient;
@@ -147,14 +158,22 @@ public class TestAuthPresenter {
         final String password = "password";
         String auth = EncryptionUtils.generateBasicAuthorization(login, password);
 
-        // TODO Throw exception for 2 factor auth
-//        // rules for throwing a request for 2-factor auth
-//        Header header = new Header(GithubApiService.TWO_FACTOR_HEADER, "required");
-//        List<Header> headers = new ArrayList<>();
-//        headers.add(header);
+        // rules for throwing a request for 2-factor auth
+        final String expectedUrl = "https://sample.org";
+        Request rawRequest = new Request.Builder()
+                .url(expectedUrl)
+                .build();
+        okhttp3.Response rawResponse = new okhttp3.Response.Builder()
+                .request(rawRequest)
+                .message("no body")
+                .protocol(Protocol.HTTP_1_1)
+                .code(401)
+                .header(GithubApiService.TWO_FACTOR_HEADER, "required")
+                .build();
 
+        Response response = Response.error(ResponseBody.create(null, ""), rawResponse);
+        HttpException exception = new HttpException(response);
 
-        Exception exception = new Exception("error");
         when(mGitHubRestClient.getApiService().createNewAuthorization(eq(auth), any(AuthorizationRequest.class)))
                 .thenReturn(Single.error(exception));
 

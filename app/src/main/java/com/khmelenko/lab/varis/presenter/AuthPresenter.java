@@ -131,8 +131,7 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
                     if (throwable == null) {
                         getView().finishView();
                     } else {
-                        HttpException httpException = (HttpException) throwable;
-                        if (isTwoFactorAuthRequired(httpException)) {
+                        if (throwable instanceof HttpException && isTwoFactorAuthRequired((HttpException) throwable)) {
                             mSecurityCodeInput = true;
                             getView().showTwoFactorAuth();
                         } else {
