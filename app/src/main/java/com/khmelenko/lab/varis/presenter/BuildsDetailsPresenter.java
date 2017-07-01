@@ -44,7 +44,7 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
 
     private final CompositeDisposable mSubscriptions;
 
-    private String mRepoSlug;
+    private String mRepoSlug = "";
     private long mBuildId;
     private long mJobId;
 
