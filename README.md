@@ -27,7 +27,7 @@ The app has the following features:
 - [Gson](https://code.google.com/p/google-gson/)
 - [Dagger 2](https://github.com/google/dagger)
 - [Butter Knife](http://jakewharton.github.io/butterknife/)
-- [Event Bus](https://github.com/greenrobot/EventBus)
+- [RxJava](https://github.com/ReactiveX/RxJava)
 - [CircleImageView](https://github.com/hdodenhof/CircleImageView)
  
 # Contribution
