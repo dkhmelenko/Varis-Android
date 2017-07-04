@@ -32,8 +32,8 @@ android {
             proguardFile 'proguard-butterknife-7.pro'
             proguardFile 'proguard-eventbus.pro'
             proguardFile 'proguard-gson.pro'
-            proguardFile 'proguard-square-retrofit.pro'
-            proguardFile 'proguard-square-okhttp.pro'
+            proguardFile 'proguard-square-retrofit2.pro'
+            proguardFile 'proguard-square-okhttp3.pro'
             proguardFile 'proguard-support-v4.pro'
             proguardFile 'proguard-support-v7-appcompat.pro'
 
