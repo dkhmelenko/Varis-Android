@@ -7,7 +7,7 @@ import com.khmelenko.lab.varis.util.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.io.File;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class TestFileUtils {
 

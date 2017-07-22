@@ -1,9 +1,10 @@
 package com.khmelenko.lab.varis.network.retrofit.raw;
 
-import retrofit.client.Response;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Path;
+import io.reactivex.Single;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Path;
+
 
 /**
  * @author Dmytro Khmelenko
@@ -11,8 +12,8 @@ import retrofit.http.Path;
 public interface RawApiService {
 
     @GET("/jobs/{jobId}/log")
-    Response getLog(@Header("Authorization") String basicAuth, @Path("jobId") String jobId);
+    Single<String> getLog(@Header("Authorization") String basicAuth, @Path("jobId") String jobId);
 
     @GET("/jobs/{jobId}/log")
-    Response getLog(@Path("jobId") String jobId);
+    Single<String> getLog(@Path("jobId") String jobId);
 }

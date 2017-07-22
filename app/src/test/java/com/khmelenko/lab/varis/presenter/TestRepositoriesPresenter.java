@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.presenter;
 
-import com.khmelenko.lab.varis.BuildConfig;
+import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.common.Constants;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
@@ -9,22 +9,19 @@ import com.khmelenko.lab.varis.network.response.User;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
-import com.khmelenko.lab.varis.task.TaskManager;
 import com.khmelenko.lab.varis.view.RepositoriesView;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.robolectric.RobolectricGradleTestRunner;
-import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
+import io.reactivex.Single;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -40,21 +37,19 @@ import static org.mockito.Mockito.when;
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-@RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
 public class TestRepositoriesPresenter {
 
-    @Inject
-    TaskManager mTaskManager;
-
-    @Inject
-    EventBus mEventBus;
+    @Rule
+    public RxJavaRules mRxJavaRules = new RxJavaRules();
 
     @Inject
     TravisRestClient mTravisRestClient;
 
     @Inject
     CacheStorage mCacheStorage;
+
+    @Inject
+    AppSettings mAppSettings;
 
     private RepositoriesPresenter mRepositoriesPresenter;
 
@@ -65,7 +60,10 @@ public class TestRepositoriesPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mRepositoriesPresenter = spy(new RepositoriesPresenter(mTravisRestClient, mEventBus, mTaskManager, mCacheStorage));
+        final List<Repo> responseData = new ArrayList<>();
+        when(mTravisRestClient.getApiService().getRepos("")).thenReturn(Single.just(responseData));
+
+        mRepositoriesPresenter = spy(new RepositoriesPresenter(mTravisRestClient, mCacheStorage, mAppSettings));
         mRepositoriesView = mock(RepositoriesView.class);
         mRepositoriesPresenter.attach(mRepositoriesView);
     }
@@ -73,10 +71,9 @@ public class TestRepositoriesPresenter {
     @Test
     public void testReloadRepos() {
         final List<Repo> responseData = new ArrayList<>();
-        when(mTravisRestClient.getApiService().getRepos()).thenReturn(responseData);
+        when(mTravisRestClient.getApiService().getRepos()).thenReturn(Single.just(responseData));
 
         mRepositoriesPresenter.reloadRepos();
-        verify(mTaskManager, times(2)).findRepos(null);
         verify(mRepositoriesView, times(2)).hideProgress();
         verify(mRepositoriesView, times(2)).setRepos(eq(responseData));
     }
@@ -85,13 +82,10 @@ public class TestRepositoriesPresenter {
     public void testReloadReposWithToken() {
         User user = new User();
         user.setLogin("login");
-        when(mTravisRestClient.getApiService().getUser()).thenReturn(user);
-
-        // pre-setting access token
-        AppSettings.putAccessToken("token");
+        when(mTravisRestClient.getApiService().getUser()).thenReturn(Single.just(user));
+        when(mAppSettings.getAccessToken()).thenReturn("token");
 
         mRepositoriesPresenter.reloadRepos();
-        verify(mTaskManager).getUser();
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(mRepositoriesView, times(2)).updateUserData(userCaptor.capture());
@@ -99,11 +93,12 @@ public class TestRepositoriesPresenter {
         assertEquals(user.getLogin(), userCaptor.getValue().getLogin());
 
         verify(mCacheStorage).saveUser(eq(user));
-        verify(mTaskManager).userRepos(eq(user.getLogin()));
     }
 
     @Test
     public void testUserLogout() {
+        when(mAppSettings.getServerUrl()).thenReturn(Constants.OPEN_SOURCE_TRAVIS_URL);
+
         mRepositoriesPresenter.userLogout();
         verify(mCacheStorage).deleteUser();
         verify(mCacheStorage).deleteRepos();

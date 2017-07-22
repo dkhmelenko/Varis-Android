@@ -40,4 +40,14 @@ public final class StringUtils {
         }
         return builder.toString();
     }
+
+    /**
+     * Checks whether the string is null or not
+     *
+     * @param string String for checking
+     * @return True if string is empty. False otherwise
+     */
+    public static boolean isEmpty(String string) {
+        return string == null || string.isEmpty();
+    }
 }

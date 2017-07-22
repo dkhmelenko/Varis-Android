@@ -3,20 +3,19 @@
 
 This project is unofficial Android client for Travis CI. 
 
-It uses [API](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
+It uses [API v2](http://docs.travis-ci.com/api/#overview) from Travis CI for fetching all required information about repositories, build tasks and build history.
 The app has the following features:
 - user login to Travis CI and Travis CI Pro
 - list of repositories
-- build history (commits and pull requests)
+- build history
 - build log
-- restart build
-- cancel build
+- restart/cancel build
 - search with history
 - intent filter for opening build links
 
 [![Varis on Google Play Store](/screenshots/google-play-badge.png)](https://play.google.com/store/apps/details?id=com.khmelenko.lab.varis)
 
-![Repositories list](/screenshots/main_screen.png)   ![Build history](/screenshots/build_history.png)   ![Build Details](/screenshots/build_details.png)
+![Repositories list](/screenshots/main_screen.png)    ![Build history](/screenshots/build_history.png)    ![Build Details](/screenshots/build_details.png)
 
 ## Copyrights
 *This app is neither offered by Travis CI GmbH nor is this app and/or the provider of this app in any way affiliated with Travis CI GmbH and/or its products.*
@@ -28,11 +27,14 @@ The app has the following features:
 - [Gson](https://code.google.com/p/google-gson/)
 - [Dagger 2](https://github.com/google/dagger)
 - [Butter Knife](http://jakewharton.github.io/butterknife/)
-- [Event Bus](https://github.com/greenrobot/EventBus)
+- [RxJava](https://github.com/ReactiveX/RxJava)
 - [CircleImageView](https://github.com/hdodenhof/CircleImageView)
  
 # Contribution
 In case you have ideas or found an issue, don't hesitate to create pull request or an issue.
+
+# Further steps
+1. Migration to [API v3](https://docs.travis-ci.com/user/triggering-builds)
 
 # License
 

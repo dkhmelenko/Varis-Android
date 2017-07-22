@@ -1,14 +1,21 @@
 package com.khmelenko.lab.varis.presenter;
 
-import com.khmelenko.lab.varis.event.travis.FindReposEvent;
-import com.khmelenko.lab.varis.event.travis.LoadingFailedEvent;
+
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
-import com.khmelenko.lab.varis.task.TaskManager;
+import com.khmelenko.lab.varis.network.response.Repo;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.util.StringUtils;
 import com.khmelenko.lab.varis.view.SearchResultsView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Search results presenter
@@ -17,44 +24,26 @@ import de.greenrobot.event.EventBus;
  */
 public class SearchResultsPresenter extends MvpPresenter<SearchResultsView> {
 
-    private final TaskManager mTaskManager;
-    private final EventBus mEventBus;
+    private final TravisRestClient mTravisRestClient;
+
+    private final CompositeDisposable mSubscriptions;
 
     @Inject
-    public SearchResultsPresenter(TaskManager taskManager, EventBus eventBus) {
-        mTaskManager = taskManager;
-        mEventBus = eventBus;
+    public SearchResultsPresenter(TravisRestClient travisRestClient) {
+        mTravisRestClient = travisRestClient;
+
+        mSubscriptions = new CompositeDisposable();
     }
 
     @Override
     public void onAttach() {
-        mEventBus.register(this);
+        // do nothing
     }
 
     @Override
     public void onDetach() {
-        mEventBus.unregister(this);
         getView().hideProgress();
-    }
-
-    /**
-     * Raised on loaded repositories
-     *
-     * @param event Event data
-     */
-    public void onEvent(FindReposEvent event) {
-        getView().hideProgress();
-        getView().setSearchResults(event.getRepos());
-    }
-
-    /**
-     * Raised on failed loading data
-     *
-     * @param event Event data
-     */
-    public void onEvent(LoadingFailedEvent event) {
-        getView().hideProgress();
-        getView().showLoadingError(event.getTaskError().getMessage());
+        mSubscriptions.clear();
     }
 
     /**
@@ -63,7 +52,23 @@ public class SearchResultsPresenter extends MvpPresenter<SearchResultsView> {
      * @param query Query string for search
      */
     public void startRepoSearch(String query) {
-        mTaskManager.findRepos(query);
+        Single<List<Repo>> reposSingle;
+        if (!StringUtils.isEmpty(query)) {
+            reposSingle = mTravisRestClient.getApiService().getRepos(query);
+        } else {
+            reposSingle = mTravisRestClient.getApiService().getRepos();
+        }
+        Disposable subscription = reposSingle.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((repos, throwable) -> {
+                    getView().hideProgress();
+                    if (throwable == null) {
+                        getView().setSearchResults(repos);
+                    } else {
+                        getView().showLoadingError(throwable.getMessage());
+                    }
+                });
+        mSubscriptions.add(subscription);
     }
 
 }

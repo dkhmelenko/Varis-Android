@@ -4,22 +4,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.khmelenko.lab.varis.TravisApp;
-
 /**
  * Application settings
  *
  * @author Dmytro Khmelenko
  */
-public final class AppSettings {
+public class AppSettings {
 
     private static final String ACCESS_TOKEN_KEY = "TravisAccessToken";
     private static final String SERVER_TYPE_KEY = "ServerTypeKey";
     private static final String SERVER_URL_KEY = "ServerUrlKey";
 
-    // denied constructor
-    private AppSettings() {
+    private SharedPreferences mSharedPreferences;
 
+    public AppSettings(Context context) {
+        mSharedPreferences = getPreferences(context);
     }
 
     /**
@@ -27,10 +26,8 @@ public final class AppSettings {
      *
      * @return Shared preferences
      */
-    private static SharedPreferences getPreferences() {
-        Context context = TravisApp.getAppContext();
-        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return defaultSharedPreferences;
+    private SharedPreferences getPreferences(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     /**
@@ -38,9 +35,8 @@ public final class AppSettings {
      *
      * @return Access token
      */
-    public static String getAccessToken() {
-        SharedPreferences pref = getPreferences();
-        return pref.getString(ACCESS_TOKEN_KEY, "");
+    public String getAccessToken() {
+        return mSharedPreferences.getString(ACCESS_TOKEN_KEY, "");
     }
 
     /**
@@ -48,11 +44,10 @@ public final class AppSettings {
      *
      * @param accessToken Access token
      */
-    public static void putAccessToken(String accessToken) {
-        SharedPreferences pref = getPreferences();
-        SharedPreferences.Editor editor = pref.edit();
+    public void putAccessToken(String accessToken) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(ACCESS_TOKEN_KEY, accessToken);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -60,9 +55,8 @@ public final class AppSettings {
      *
      * @return Server type
      */
-    public static int getServerType() {
-        SharedPreferences pref = getPreferences();
-        return pref.getInt(SERVER_TYPE_KEY, 1);
+    public int getServerType() {
+        return mSharedPreferences.getInt(SERVER_TYPE_KEY, 1);
     }
 
     /**
@@ -70,11 +64,10 @@ public final class AppSettings {
      *
      * @param serverType Server type
      */
-    public static void putServerType(int serverType) {
-        SharedPreferences pref = getPreferences();
-        SharedPreferences.Editor editor = pref.edit();
+    public void putServerType(int serverType) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putInt(SERVER_TYPE_KEY, serverType);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -82,9 +75,8 @@ public final class AppSettings {
      *
      * @return Server type
      */
-    public static String getServerUrl() {
-        SharedPreferences pref = getPreferences();
-        return pref.getString(SERVER_URL_KEY, "");
+    public String getServerUrl() {
+        return mSharedPreferences.getString(SERVER_URL_KEY, "");
     }
 
     /**
@@ -92,11 +84,10 @@ public final class AppSettings {
      *
      * @param serverUrl Server type
      */
-    public static void putServerUrl(String serverUrl) {
-        SharedPreferences pref = getPreferences();
-        SharedPreferences.Editor editor = pref.edit();
+    public void putServerUrl(String serverUrl) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(SERVER_URL_KEY, serverUrl);
-        editor.commit();
+        editor.apply();
     }
 
 }
