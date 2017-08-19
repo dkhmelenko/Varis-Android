@@ -34,7 +34,9 @@ The app has the following features:
 In case you have ideas or found an issue, don't hesitate to create pull request or an issue.
 
 # Further steps
-1. Migration to [API v3](https://docs.travis-ci.com/user/triggering-builds)
+- Migration to [API v3](https://docs.travis-ci.com/user/triggering-builds)
+- Kotlin migration
+- Espresso tests
 
 # License
 
