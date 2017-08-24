@@ -16,4 +16,6 @@
     <color name="build_state_errored">#FF9D9D9D</color>
 
     <color name="swipe_refresh_progress">#03A9F4</color>
+
+    <color name="launcher_background">#1FAAF1</color>
 </resources>
