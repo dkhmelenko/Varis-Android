@@ -51,7 +51,7 @@ ext {
             gson           : '2.4',
             retrofit2      : '2.3.0',
             butterknife    : '7.0.1',
-            circleimageview: '2.0.0',
+            circleimageview: '2.1.0',
             dagger         : '2.0.2',
             glassfish      : '10.0-b28',
             mockito        : '2.8.47',
