@@ -69,7 +69,7 @@ public final class BuildStateHelper {
                 return ContextCompat.getDrawable(context, R.drawable.ic_build_state_created_16dp);
             case STATE_STARTED:
                 AnimatedVectorDrawableCompat drawable = AnimatedVectorDrawableCompat
-                        .create(context, R.drawable.ic_build_state_started_16dp);
+                        .create(context, R.drawable.ic_build_state_started_animated_16dp);
                 if (drawable != null) {
                     drawable.start();
                 }
