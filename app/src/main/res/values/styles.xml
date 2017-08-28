@@ -53,7 +53,8 @@
     <style name="ViewBuildText">
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">2dp</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:drawablePadding">4dp</item>
     </style>
 
     <style name="ViewBuildText.OneLine" parent="ViewBuildText">
@@ -62,7 +63,7 @@
     </style>
 
     <style name="ViewBuildText.OneLine.Big" parent="ViewBuildText.OneLine">
-        <item name="android:textSize">23sp</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
     </style>
 
     <style name="ViewBuildText.TwoLines" parent="ViewBuildText">
@@ -71,11 +72,11 @@
     </style>
 
     <style name="ViewBuildText.TwoLines.Big" parent="ViewBuildText.TwoLines">
-        <item name="android:textSize">23sp</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
     </style>
 
     <style name="ViewBuildText.TwoLines.Title.NoImage" parent="ViewBuildText.TwoLines">
-        <item name="android:textSize">23sp</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
         <item name="android:drawableLeft">@null</item>
         <item name="android:drawablePadding">2dp</item>
         <item name="android:paddingRight">10dp</item>
@@ -87,16 +88,25 @@
     </style>
 
     <style name="ViewBuildText.ThreeLines.Big" parent="ViewBuildText.ThreeLines">
-        <item name="android:textSize">23sp</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
     </style>
 
     <!-- Style of the CardView container -->
     <style name="CardViewContainer" parent="CardView">
-        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
         <item name="android:clickable">true</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
-        <item name="cardCornerRadius">1dp</item>
-        <item name="contentPadding">10dp</item>
+        <item name="cardCornerRadius">2dp</item>
+    </style>
+
+    <style name="CardViewChild">
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">4dp</item>
     </style>
 
     <!-- Style of the FloatingActionButton -->
@@ -112,6 +122,4 @@
         <item name="android:layout_gravity">bottom|right</item>
         <item name="layout_anchorGravity">bottom|right|end</item>
     </style>
-
-
 </resources>

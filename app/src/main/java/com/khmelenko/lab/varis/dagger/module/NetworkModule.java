@@ -1,0 +1,81 @@
+package com.khmelenko.lab.varis.dagger.module;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.khmelenko.lab.varis.network.retrofit.ItemTypeAdapterFactory;
+import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
+import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
+import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.storage.AppSettings;
+
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+/**
+ * Network module
+ *
+ * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
+ */
+@Module
+public class NetworkModule {
+
+    @Provides
+    @Singleton
+    public TravisRestClient provideTravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
+        return new TravisRestClient(retrofit, okHttpClient, appSettings);
+    }
+
+    @Provides
+    @Singleton
+    public GitHubRestClient provideGitHubRestClientRx(Retrofit retrofit) {
+        return new GitHubRestClient(retrofit);
+    }
+
+    @Provides
+    @Singleton
+    public RawClient provideRawRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
+        return new RawClient(retrofit, okHttpClient, appSettings);
+    }
+
+    @Provides
+    @Singleton
+    public OkHttpClient okHttpClient() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .followRedirects(false)
+                .followSslRedirects(false)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    public Retrofit retrofit(OkHttpClient okHttpClient, AppSettings appSettings) {
+        return new Retrofit.Builder()
+                .baseUrl(appSettings.getServerUrl())
+                .addConverterFactory(GsonConverterFactory.create(constructGsonConverter()))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(okHttpClient)
+                .build();
+    }
+
+    /**
+     * Construct Gson converter
+     *
+     * @return Gson converter
+     */
+    private Gson constructGsonConverter() {
+        return new GsonBuilder()
+                .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
+                .registerTypeAdapterFactory(new ItemTypeAdapterFactory())
+                .create();
+    }
+}

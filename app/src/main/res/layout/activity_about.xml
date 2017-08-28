@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.khmelenko.lab.travisclient.activity.AboutActivity">
+    tools:context="com.khmelenko.lab.varis.activity.AboutActivity">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,8 +26,7 @@
                 android:layout_gravity="center"
                 android:padding="20dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/travis_logo_200dp"
-                />
+                app:srcCompat="@drawable/travis_logo_200dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -36,7 +35,7 @@
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:text="@string/app_name"
-                android:textSize="37sp"/>
+                android:textSize="37sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -46,7 +45,7 @@
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:text="@string/about_contact_email"
-                android:textSize="22sp"/>
+                android:textSize="22sp" />
 
             <TextView
                 android:id="@+id/about_github_link"
@@ -56,8 +55,7 @@
                 android:linksClickable="true"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
-                android:textSize="22sp"
-                />
+                android:textSize="22sp" />
 
             <TextView
                 android:id="@+id/about_version"
@@ -66,7 +64,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="12dp"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
         </LinearLayout>
     </ScrollView>

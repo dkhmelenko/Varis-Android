@@ -1,22 +1,28 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'jacoco-android'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
 
     defaultConfig {
-        applicationId "com.khmelenko.lab.travisclient"
+        applicationId "com.khmelenko.lab.varis"
         minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 7
-        versionName "1.00.007"
+        targetSdkVersion 26
+        versionCode 9
+        versionName "1.00.010"
         vectorDrawables.useSupportLibrary = true
     }
 
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -26,14 +32,12 @@ android {
             proguardFile 'proguard-butterknife-7.pro'
             proguardFile 'proguard-eventbus.pro'
             proguardFile 'proguard-gson.pro'
-            proguardFile 'proguard-square-retrofit.pro'
-            proguardFile 'proguard-square-okhttp.pro'
+            proguardFile 'proguard-square-retrofit2.pro'
+            proguardFile 'proguard-square-okhttp3.pro'
             proguardFile 'proguard-support-v4.pro'
             proguardFile 'proguard-support-v7-appcompat.pro'
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            testCoverageEnabled true
         }
         debug {
             minifyEnabled false
@@ -42,29 +46,21 @@ android {
     }
 }
 
-coveralls {
-    jacocoReportPath = "${buildDir}/reports/tests/release/index.html"
-}
-
-tasks.coveralls {
-    dependsOn 'testReleaseUnitTest'
-    onlyIf { System.env.'CI' }
-}
-
 ext {
     libraryVersion = [
-            support        : '25.1.1',
+            support        : '26.0.1',
             gson           : '2.4',
-            retrofit       : '1.9.0',
-            okhttp         : '2.7.0',
+            retrofit2      : '2.3.0',
             butterknife    : '7.0.1',
-            eventbus       : '2.4.0',
-            circleimageview: '2.0.0',
+            circleimageview: '2.1.0',
             dagger         : '2.0.2',
             glassfish      : '10.0-b28',
-            mockito        : '1.10.19',
+            mockito        : '2.8.47',
             junit          : '4.12',
-            robolectric    : '3.0'
+            robolectric    : '3.0',
+            rxjava         : '2.1.0',
+            rxAndroid      : '2.0.1',
+            okhttp3        : '3.8.0'
     ]
 }
 
@@ -76,11 +72,15 @@ dependencies {
     compile "com.android.support:support-v4:$libraryVersion.support"
 
     compile "com.google.code.gson:gson:$libraryVersion.gson"
-    compile "com.squareup.okhttp:okhttp:$libraryVersion.okhttp"
-    compile "com.squareup.retrofit:retrofit:$libraryVersion.retrofit"
+    compile "com.squareup.retrofit2:retrofit:$libraryVersion.retrofit2"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$libraryVersion.retrofit2"
+    compile "com.squareup.retrofit2:converter-gson:$libraryVersion.retrofit2"
+    compile "com.squareup.okhttp3:logging-interceptor:$libraryVersion.okhttp3"
+    compile "com.squareup.okhttp3:okhttp:$libraryVersion.okhttp3"
     compile "com.jakewharton:butterknife:$libraryVersion.butterknife"
-    compile "de.greenrobot:eventbus:$libraryVersion.eventbus"
     compile "de.hdodenhof:circleimageview:$libraryVersion.circleimageview"
+    compile "io.reactivex.rxjava2:rxjava:$libraryVersion.rxjava"
+    compile "io.reactivex.rxjava2:rxandroid:$libraryVersion.rxAndroid"
 
     annotationProcessor "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
     compile "com.google.dagger:dagger:$libraryVersion.dagger"

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Wrapping the vector drawable in an inset drawable to take advantage of the "magic" way
-documented in Chris Bane's blog post:
-https://medium.com/@chrisbanes/appcompat-v23-2-age-of-the-vectors-91cbafa87c88#.w8pm9pc4w
--->
-<inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_account_circle_white_85dp" />

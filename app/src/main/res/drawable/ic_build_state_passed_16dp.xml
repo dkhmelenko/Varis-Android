@@ -1,9 +1,20 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="16dp"
-    android:height="16dp"
-    android:viewportHeight="24.0"
-    android:viewportWidth="24.0">
-    <path
-        android:fillColor="@color/build_state_passed"
-        android:pathData="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41,-1.41z" />
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<inset
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix"
+    tools:targetApi="lollipop">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="16dp"
+            android:height="16dp"
+            android:viewportHeight="24.0"
+            android:viewportWidth="24.0">
+            <path
+                android:fillColor="@color/build_state_passed"
+                android:pathData="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41,-1.41z" />
+        </vector>
+    </aapt:attr>
+</inset>

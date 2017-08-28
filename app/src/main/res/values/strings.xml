@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TravisClient</string>
+    <string name="app_name">Varis</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_login">Login</string>
@@ -52,7 +52,7 @@
 
     <!-- About screen -->
     <string name="about_title">About</string>
-    <string name="about_github_link">&lt;a href=\"https://github.com/brave-warrior/TravisClient-Android\">GitHub&lt;/a></string>
+    <string name="about_github_link">&lt;a href=\"https://github.com/dkhmelenko/Varis-Android\">GitHub&lt;/a></string>
     <string name="about_version">Version: %1$s</string>
     <string name="about_contact_email">d.khmelenko@gmail.com</string>
 
@@ -61,7 +61,7 @@
     <string name="build_finished_at">Finished: %1$s</string>
     <string name="build_build_in_progress">In progress</string>
     <string name="build_duration">Duration: %1$s</string>
-    <string name="build_build_number">Build: #%1$s</string>
+    <string name="build_build_number">Build #%1$s %2$s</string>
 
     <!-- Repository details -->
     <string name="repo_details_title">Repository details</string>
