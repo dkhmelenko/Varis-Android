@@ -82,7 +82,7 @@ public final class BuildStateHelper {
     /**
      * Checks whether the state passed or not
      *
-     * @param state State
+     * @param state TextLeaf
      * @return True, if state is passed. False otherwise
      */
     public static boolean isPassed(@NonNull String state) {
@@ -92,7 +92,7 @@ public final class BuildStateHelper {
     /**
      * Checks whether the build is in progress or not
      *
-     * @param state State
+     * @param state TextLeaf
      * @return True, if the build is in progress state. False otherwise
      */
     public static boolean isInProgress(@NonNull String state) {

@@ -7,9 +7,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
-import io.reactivex.annotations.NonNull;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -88,18 +85,32 @@ public class RawClient {
                 .url(url)
                 .build();
 
-        return Single.create(new SingleOnSubscribe<Response>() {
-            @Override
-            public void subscribe(@NonNull SingleEmitter<Response> e) throws Exception {
-                Response response = mHttpClient.newCall(request).execute();
-                e.onSuccess(response);
-            }
+        return Single.create(e -> {
+            Response response = mHttpClient.newCall(request).execute();
+            e.onSuccess(response);
+        });
+    }
+
+    /**
+     * Executes single request
+     *
+     * @param url URL for request
+     * @return String
+     */
+    public Single<String> singleStringRequest(String url) {
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        return Single.create(e -> {
+            Response response = mHttpClient.newCall(request).execute();
+            e.onSuccess(response.body().string());
         });
     }
 
     public String getLogUrl(Long jobId) {
-        String logUrl = String.format("%sjobs/%d/log", mRetrofit.baseUrl(), jobId);
-        return logUrl;
+        return String.format("%sjobs/%d/log", mRetrofit.baseUrl(), jobId);
     }
 
 }

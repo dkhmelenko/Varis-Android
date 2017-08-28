@@ -1,5 +1,6 @@
 package com.khmelenko.lab.varis.presenter;
 
+import com.khmelenko.lab.varis.log.LogEntryComposite;
 import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
@@ -71,31 +72,40 @@ public class TestBuildDetailsPresenter {
     }
 
     @Test
-    public void testStartLoadingLogNoToken() {
+    public void testStartLoadingLogNoToken() throws Exception {
         final long jobId = 1L;
 
         final String expectedUrl = "https://sample.org";
+        final String log = "log";
+        final LogEntryComposite logEntryComposite = new LogEntryComposite("");
+
         when(mRawClient.getApiService().getLog(String.valueOf(jobId))).thenReturn(Single.just(expectedUrl));
         when(mRawClient.getLogUrl(jobId)).thenReturn(expectedUrl);
+        when(mRawClient.singleStringRequest(expectedUrl)).thenReturn(Single.just(log));
+        when(mBuildsDetailsPresenter.parseLog(log)).thenReturn(logEntryComposite);
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
-        verify(mBuildDetailsView).setLogUrl(expectedUrl);
+        verify(mBuildDetailsView).setLog(logEntryComposite);
     }
 
     @Test
-    public void testStartLoadingLogWithToken() {
+    public void testStartLoadingLogWithToken() throws Exception {
         final long jobId = 1L;
 
         final String expectedUrl = "https://sample.org";
         final String accessToken = "test";
         final String authToken = "token " + accessToken;
+        final String log = "log";
+        final LogEntryComposite logEntryComposite = new LogEntryComposite("");
 
         when(mRawClient.getApiService().getLog(authToken, String.valueOf(jobId))).thenReturn(Single.just(""));
         when(mRawClient.getLogUrl(any(Long.class))).thenReturn(expectedUrl);
         when(mAppSettings.getAccessToken()).thenReturn(accessToken);
+        when(mRawClient.singleStringRequest(expectedUrl)).thenReturn(Single.just(log));
+        when(mBuildsDetailsPresenter.parseLog(log)).thenReturn(logEntryComposite);
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
-        verify(mBuildDetailsView).setLogUrl(expectedUrl);
+        verify(mBuildDetailsView).setLog(logEntryComposite);
     }
 
     @Test
@@ -126,7 +136,6 @@ public class TestBuildDetailsPresenter {
         buildDetails.setCommit(commit);
         buildDetails.setJobs(jobs);
 
-        final String expectedUrl = "https://sample.org";
         final String accessToken = "test";
         final String authToken = "token " + accessToken;
 
