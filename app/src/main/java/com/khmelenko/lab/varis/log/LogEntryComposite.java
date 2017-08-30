@@ -3,7 +3,7 @@ package com.khmelenko.lab.varis.log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogEntryComposite extends TextLeaf {
+public class LogEntryComposite extends LogEntryComponent {
 
     private String name;
     private List<LogEntryComponent> logEntryComponents = new ArrayList<>();
