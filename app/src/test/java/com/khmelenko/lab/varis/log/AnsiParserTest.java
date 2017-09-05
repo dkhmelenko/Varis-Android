@@ -26,15 +26,15 @@ public class AnsiParserTest {
     @Test
     public void parseTextHeader() throws Exception {
         TextLeaf textLeaf = new TextLeaf("Worker information");
-        textLeaf.bold = true;
-        textLeaf.textColor = 0xFFFFB6;
+        textLeaf.getOptions().setBold(true);
+        textLeaf.getOptions().setTextColor(0xFFFFB6);
         assertEquals(AnsiParser.parseText("\u001B[33;1mWorker information\u001B[0m"), textLeaf);
     }
 
     @Test
     public void parseTextComplexHeader() throws Exception {
         TextLeaf headerLeaf = new TextLeaf("Build system information");
-        headerLeaf.textColor = 0x96CBFE;
+        headerLeaf.getOptions().setTextColor(0x96CBFE);
         assertEquals(AnsiParser.parseText("\u001B[0Ktravis_fold:start:system_info\n" +
                         "\u001B[0K\u001B[34mBuild system information\u001B[0m\n" +
                         "Build language: android\n"), new TextLeaf("travis_fold:start:system_info"),

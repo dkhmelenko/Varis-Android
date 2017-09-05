@@ -33,12 +33,12 @@ public class TravisCommands {
      */
     private static List<LogEntryComponent> splitAtTravisCommands(TextLeaf textLeaf) {
         List<LogEntryComponent> result = new ArrayList<>();
-        Matcher matcher = TRAVIS_COMMAND.matcher(textLeaf.text);
+        Matcher matcher = TRAVIS_COMMAND.matcher(textLeaf.getText());
         while (matcher.find()) {
             // Create a new node for the part before the travis command (if non-empty)
             if (matcher.start() > 0) {
-                TextLeaf splitFront = new TextLeaf(textLeaf);
-                splitFront.text = textLeaf.text.substring(0, matcher.start());
+                TextLeaf splitFront = new TextLeaf(textLeaf.getOptions());
+                splitFront.setText(textLeaf.getText().substring(0, matcher.start()));
                 result.add(splitFront);
             }
 
@@ -46,8 +46,8 @@ public class TravisCommands {
             result.add(new TravisCommandLeaf(matcher.group(1), matcher.group(2), matcher.group(3)));
 
             // Set text to what remains after the command
-            textLeaf.text = textLeaf.text.substring(matcher.end());
-            matcher.reset(textLeaf.text);
+            textLeaf.setText(textLeaf.getText().substring(matcher.end()));
+            matcher.reset(textLeaf.getText());
         }
         result.add(textLeaf);
         return result;

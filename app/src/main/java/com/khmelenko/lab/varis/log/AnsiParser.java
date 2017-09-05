@@ -40,13 +40,13 @@ public class AnsiParser {
                 break;
             }
 
-            textLeaf.text = text.substring(lastControlPosition, controlStartPosition);
+            textLeaf.setText(text.substring(lastControlPosition, controlStartPosition));
 
             if (isResetLineEscape(text, controlStartPosition)) {
                 controlEndPosition = text.indexOf('K', controlStartPosition + 2);
                 int i;
                 while (true) {
-                    i = Math.max(textLeaf.text.lastIndexOf("\r"), textLeaf.text.lastIndexOf("\n"));
+                    i = Math.max(textLeaf.getText().lastIndexOf("\r"), textLeaf.getText().lastIndexOf("\n"));
                     if (i != -1) {
                         break;
                     }
@@ -55,14 +55,14 @@ public class AnsiParser {
                     }
                     textLeaf = result.pop();
                 }
-                if (textLeaf.text.length() > i && i > 0) {
-                    String end = textLeaf.text.substring(i - 1, i + 1);
-                    textLeaf.text = textLeaf.text.substring(0, i);
+                if (textLeaf.getText().length() > i && i > 0) {
+                    String end = textLeaf.getText().substring(i - 1, i + 1);
+                    textLeaf.setText(textLeaf.getText().substring(0, i));
                     if (end.equals("\r\n") || end.equals("\n\r")) {
-                        textLeaf.text = textLeaf.text.substring(0, i - 1);
+                        textLeaf.setText(textLeaf.getText().substring(0, i - 1));
                     }
                 } else {
-                    textLeaf.text = "";
+                    textLeaf.setText("");
                 }
             } else {
                 controlEndPosition = text.indexOf('m', controlStartPosition + 2);
@@ -74,17 +74,16 @@ public class AnsiParser {
             }
 
             // Emit new textLeaf
-            if (!textLeaf.text.isEmpty()) {
-                result.add(textLeaf);
-                textLeaf = new TextLeaf();
+            if (!textLeaf.getText().isEmpty()) {
+                result.push(textLeaf);
             }
-            textLeaf.addAnsiCodes(ansiStates);
+            textLeaf = new TextLeaf(FormattingOptions.fromAnsiCodes(ansiStates));
             lastControlPosition = controlEndPosition + 1;
         }
 
-        textLeaf.text = text.substring(lastControlPosition);
-        if (!textLeaf.text.isEmpty() || result.isEmpty()) {
-            result.add(textLeaf);
+        textLeaf.setText(text.substring(lastControlPosition));
+        if (!textLeaf.getText().isEmpty() || result.isEmpty()) {
+            result.push(textLeaf);
         }
         return result;
     }
