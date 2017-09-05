@@ -10,9 +10,9 @@ import java.util.Stack;
  * */
 public class AnsiParser {
 
-    private Stack<TextLeaf> result = new Stack<>();
-    private TextLeaf textLeaf = new TextLeaf();
-    private String[] ansiStates = new String[]{};
+    private Stack<TextLeaf> mResult = new Stack<>();
+    private TextLeaf mTextLeaf = new TextLeaf();
+    private String[] mAnsiStates = new String[]{};
 
     /**
      * Parses the given log for ANSI escape sequences and builds a list of text chunks, which
@@ -40,29 +40,29 @@ public class AnsiParser {
                 break;
             }
 
-            textLeaf.setText(text.substring(lastControlPosition, controlStartPosition));
+            mTextLeaf.setText(text.substring(lastControlPosition, controlStartPosition));
 
             if (isResetLineEscape(text, controlStartPosition)) {
                 controlEndPosition = text.indexOf('K', controlStartPosition + 2);
                 int i;
                 while (true) {
-                    i = Math.max(textLeaf.getText().lastIndexOf("\r"), textLeaf.getText().lastIndexOf("\n"));
+                    i = Math.max(mTextLeaf.getText().lastIndexOf("\r"), mTextLeaf.getText().lastIndexOf("\n"));
                     if (i != -1) {
                         break;
                     }
-                    if(result.isEmpty()) {
+                    if(mResult.isEmpty()) {
                         break;
                     }
-                    textLeaf = result.pop();
+                    mTextLeaf = mResult.pop();
                 }
-                if (textLeaf.getText().length() > i && i > 0) {
-                    String end = textLeaf.getText().substring(i - 1, i + 1);
-                    textLeaf.setText(textLeaf.getText().substring(0, i));
+                if (mTextLeaf.getText().length() > i && i > 0) {
+                    String end = mTextLeaf.getText().substring(i - 1, i + 1);
+                    mTextLeaf.setText(mTextLeaf.getText().substring(0, i));
                     if (end.equals("\r\n") || end.equals("\n\r")) {
-                        textLeaf.setText(textLeaf.getText().substring(0, i - 1));
+                        mTextLeaf.setText(mTextLeaf.getText().substring(0, i - 1));
                     }
                 } else {
-                    textLeaf.setText("");
+                    mTextLeaf.setText("");
                 }
             } else {
                 controlEndPosition = text.indexOf('m', controlStartPosition + 2);
@@ -70,22 +70,22 @@ public class AnsiParser {
                     break;
                 }
                 String matchingData = text.substring(controlStartPosition + 2, controlEndPosition);
-                ansiStates = matchingData.split(";");
+                mAnsiStates = matchingData.split(";");
             }
 
             // Emit new textLeaf
-            if (!textLeaf.getText().isEmpty()) {
-                result.push(textLeaf);
+            if (!mTextLeaf.getText().isEmpty()) {
+                mResult.push(mTextLeaf);
             }
-            textLeaf = new TextLeaf(FormattingOptions.fromAnsiCodes(ansiStates));
+            mTextLeaf = new TextLeaf(FormattingOptions.fromAnsiCodes(mAnsiStates));
             lastControlPosition = controlEndPosition + 1;
         }
 
-        textLeaf.setText(text.substring(lastControlPosition));
-        if (!textLeaf.getText().isEmpty() || result.isEmpty()) {
-            result.push(textLeaf);
+        mTextLeaf.setText(text.substring(lastControlPosition));
+        if (!mTextLeaf.getText().isEmpty() || mResult.isEmpty()) {
+            mResult.push(mTextLeaf);
         }
-        return result;
+        return mResult;
     }
 
     private boolean isResetLineEscape(String str, int controlStartPosition) {
