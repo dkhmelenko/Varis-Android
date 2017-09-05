@@ -1,8 +1,8 @@
 package com.khmelenko.lab.varis.log;
 
 import android.support.annotation.VisibleForTesting;
+public class TextLeaf implements LogEntryComponent {
 
-public class TextLeaf extends LogEntryComponent {
     @VisibleForTesting
     Integer textColor;
     @VisibleForTesting
