@@ -12,9 +12,9 @@ public class TravisCommands {
 
     private static final String TRAVIS_TIME = "travis_time";
     private static final String TRAVIS_FOLD = "travis_fold";
-    private static final String TRAVIS_FOLD_START = "travis_fold:start";
-    private static final String TRAVIS_FOLD_END = "travis_fold:end";
-    private static final Pattern TRAVIS_COMMAND = Pattern.compile('('+TRAVIS_FOLD + '|' + TRAVIS_TIME+"):(start|end):\\S+");
+    private static final String START = "start";
+    private static final String END = "end";
+    private static final Pattern TRAVIS_COMMAND = Pattern.compile('(' + TRAVIS_FOLD + '|' + TRAVIS_TIME + "):(" + START + '|' + END + "):(\\S+)");
 
     /**
      * Takes a list of TextLeafs and splits them when it contains a travis command into a
@@ -36,14 +36,14 @@ public class TravisCommands {
         Matcher matcher = TRAVIS_COMMAND.matcher(textLeaf.text);
         while (matcher.find()) {
             // Create a new node for the part before the travis command (if non-empty)
-            if(matcher.start() > 0) {
+            if (matcher.start() > 0) {
                 TextLeaf splitFront = new TextLeaf(textLeaf);
                 splitFront.text = textLeaf.text.substring(0, matcher.start());
                 result.add(splitFront);
             }
 
             // Create a node for the command
-            result.add(new TravisCommandLeaf(matcher.group()));
+            result.add(new TravisCommandLeaf(matcher.group(1), matcher.group(2), matcher.group(3)));
 
             // Set text to what remains after the command
             textLeaf.text = textLeaf.text.substring(matcher.end());
@@ -63,13 +63,15 @@ public class TravisCommands {
         foldStack.push(root);
         for (LogEntryComponent logEntryComponent : logEntryComponents) {
             if (logEntryComponent instanceof TravisCommandLeaf) {
-                String command = ((TravisCommandLeaf) logEntryComponent).command;
-                if (command.startsWith(TRAVIS_FOLD_START)) {
-                    LogEntryComposite logEntryComposite = new LogEntryComposite(command.substring(TRAVIS_FOLD_START.length()));
-                    foldStack.peek().append(logEntryComposite);
-                    foldStack.push(logEntryComposite);
-                } else if (command.startsWith(TRAVIS_FOLD_END)) {
-                    foldStack.pop();
+                TravisCommandLeaf command = (TravisCommandLeaf) logEntryComponent;
+                if (command.getCommand().equals(TRAVIS_FOLD)) {
+                    if (command.getType().equals(START)) {
+                        LogEntryComposite logEntryComposite = new LogEntryComposite(command.getName());
+                        foldStack.peek().append(logEntryComposite);
+                        foldStack.push(logEntryComposite);
+                    } else if (command.getType().equals(END)) {
+                        foldStack.pop();
+                    }
                 }
             } else {
                 foldStack.peek().append(logEntryComponent);
