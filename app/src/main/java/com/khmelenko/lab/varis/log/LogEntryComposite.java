@@ -20,7 +20,7 @@ public class LogEntryComposite implements LogEntryComponent {
     public String toHtml() {
         String data = "";
         if (name == null) {
-            data += "<body style=\"background-color:black;\">";
+            data += "<body style=\"background-color:#222222;\">";
         }
         for (LogEntryComponent re : logEntryComponents) {
             data += re.toHtml();
