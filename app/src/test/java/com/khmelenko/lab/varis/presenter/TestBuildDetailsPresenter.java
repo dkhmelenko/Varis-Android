@@ -1,9 +1,10 @@
 package com.khmelenko.lab.varis.presenter;
 
-import com.khmelenko.lab.varis.log.LogEntryComposite;
 import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
+import com.khmelenko.lab.varis.log.LogEntryComponent;
+import com.khmelenko.lab.varis.log.LogsParser;
 import com.khmelenko.lab.varis.network.response.Build;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Commit;
@@ -58,6 +59,9 @@ public class TestBuildDetailsPresenter {
     @Inject
     AppSettings mAppSettings;
 
+    @Inject
+    LogsParser mLogsParser;
+
     private BuildsDetailsPresenter mBuildsDetailsPresenter;
     private BuildDetailsView mBuildDetailsView;
 
@@ -66,7 +70,8 @@ public class TestBuildDetailsPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mBuildsDetailsPresenter = spy(new BuildsDetailsPresenter(mTravisRestClient, mRawClient, mCacheStorage, mAppSettings));
+        mBuildsDetailsPresenter = spy(new BuildsDetailsPresenter(mTravisRestClient, mRawClient, mCacheStorage,
+                mAppSettings, mLogsParser));
         mBuildDetailsView = mock(BuildDetailsView.class);
         mBuildsDetailsPresenter.attach(mBuildDetailsView);
     }
@@ -77,15 +82,16 @@ public class TestBuildDetailsPresenter {
 
         final String expectedUrl = "https://sample.org";
         final String log = "log";
-        final LogEntryComposite logEntryComposite = new LogEntryComposite("");
+
+        final LogEntryComponent logEntry = () -> "";
 
         when(mRawClient.getApiService().getLog(String.valueOf(jobId))).thenReturn(Single.just(expectedUrl));
         when(mRawClient.getLogUrl(jobId)).thenReturn(expectedUrl);
         when(mRawClient.singleStringRequest(expectedUrl)).thenReturn(Single.just(log));
-        when(mBuildsDetailsPresenter.parseLog(log)).thenReturn(logEntryComposite);
+        when(mLogsParser.parseLog(log)).thenReturn(logEntry);
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
-        verify(mBuildDetailsView).setLog(logEntryComposite);
+        verify(mBuildDetailsView).setLog(logEntry);
     }
 
     @Test
@@ -96,16 +102,16 @@ public class TestBuildDetailsPresenter {
         final String accessToken = "test";
         final String authToken = "token " + accessToken;
         final String log = "log";
-        final LogEntryComposite logEntryComposite = new LogEntryComposite("");
+        final LogEntryComponent logEntry = () -> "";
 
         when(mRawClient.getApiService().getLog(authToken, String.valueOf(jobId))).thenReturn(Single.just(""));
         when(mRawClient.getLogUrl(any(Long.class))).thenReturn(expectedUrl);
         when(mAppSettings.getAccessToken()).thenReturn(accessToken);
         when(mRawClient.singleStringRequest(expectedUrl)).thenReturn(Single.just(log));
-        when(mBuildsDetailsPresenter.parseLog(log)).thenReturn(logEntryComposite);
+        when(mLogsParser.parseLog(log)).thenReturn(logEntry);
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
-        verify(mBuildDetailsView).setLog(logEntryComposite);
+        verify(mBuildDetailsView).setLog(logEntry);
     }
 
     @Test

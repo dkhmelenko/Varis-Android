@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 
-public class TravisCommands {
+public class LogsParser {
 
     private static final String TRAVIS_TIME = "travis_time";
     private static final String TRAVIS_FOLD = "travis_fold";
@@ -16,11 +16,17 @@ public class TravisCommands {
     private static final String END = "end";
     private static final Pattern TRAVIS_COMMAND = Pattern.compile('(' + TRAVIS_FOLD + '|' + TRAVIS_TIME + "):(" + START + '|' + END + "):(\\S+)");
 
+    public LogEntryComponent parseLog(String logInput) {
+        Stack<TextLeaf> logEntryComponents = AnsiParser.parseText(logInput);
+        List<LogEntryComponent> res = preProcessTextLeafs(logEntryComponents);
+        return parseFoldTree(res);
+    }
+
     /**
      * Takes a list of TextLeafs and splits them when it contains a travis command into a
      * TextLeaf + TravisCommandLeaf + TextLeaf.
      */
-    public static List<LogEntryComponent> preProcessTextLeafs(List<TextLeaf> logEntryComponents) {
+    private List<LogEntryComponent> preProcessTextLeafs(List<TextLeaf> logEntryComponents) {
         return Observable.fromIterable(logEntryComponents)
                 .flatMap(logEntryComponent -> Observable.fromIterable(splitAtTravisCommands(logEntryComponent)))
                 .toList()
@@ -31,7 +37,7 @@ public class TravisCommands {
      * Turns a single TextLeaf with any number of travis_fold:... or travis_time:... commands into
      * multiple LogEntryComponents ensuring that each command has its own TravisCommandLeaf.
      */
-    private static List<LogEntryComponent> splitAtTravisCommands(TextLeaf textLeaf) {
+    private List<LogEntryComponent> splitAtTravisCommands(TextLeaf textLeaf) {
         List<LogEntryComponent> result = new ArrayList<>();
         Matcher matcher = TRAVIS_COMMAND.matcher(textLeaf.getText());
         while (matcher.find()) {
@@ -57,7 +63,7 @@ public class TravisCommands {
      * Converts a list of LogEntryComponents containing TextLeafs and TravisCommandLeafs into a
      * hierarchically structured LogEntryComposite.
      */
-    public static LogEntryComposite parseFoldTree(List<LogEntryComponent> logEntryComponents) {
+    private LogEntryComposite parseFoldTree(List<LogEntryComponent> logEntryComponents) {
         LogEntryComposite root = new LogEntryComposite(null);
         Stack<LogEntryComposite> foldStack = new Stack<>();
         foldStack.push(root);
@@ -71,7 +77,7 @@ public class TravisCommands {
         return root;
     }
 
-    private static void handleTravisCommand(Stack<LogEntryComposite> foldStack, TravisCommandLeaf command) {
+    private void handleTravisCommand(Stack<LogEntryComposite> foldStack, TravisCommandLeaf command) {
         if (command.getCommand().equals(TRAVIS_FOLD)) {
             if (command.getType().equals(START)) {
                 LogEntryComposite logEntryComposite = new LogEntryComposite(command.getName());

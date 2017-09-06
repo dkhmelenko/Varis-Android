@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.log;
 
-public class TextLeaf implements LogEntryComponent {
+final class TextLeaf implements LogEntryComponent {
 
     private FormattingOptions mOptions;
     private String mText = "";
@@ -10,7 +10,7 @@ public class TextLeaf implements LogEntryComponent {
     }
 
     TextLeaf(String text) {
-        this(text, new FormattingOptions());
+        this(text, FormattingOptions.fromAnsiCodes());
     }
 
     TextLeaf(FormattingOptions options) {

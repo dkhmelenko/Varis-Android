@@ -13,12 +13,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.khmelenko.lab.varis.log.LogEntryComposite;
 import com.khmelenko.lab.varis.R;
 import com.khmelenko.lab.varis.TravisApp;
 import com.khmelenko.lab.varis.converter.BuildStateHelper;
 import com.khmelenko.lab.varis.fragment.JobsFragment;
 import com.khmelenko.lab.varis.fragment.RawLogFragment;
+import com.khmelenko.lab.varis.log.LogEntryComponent;
 import com.khmelenko.lab.varis.mvp.MvpActivity;
 import com.khmelenko.lab.varis.network.response.Build;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
@@ -42,9 +42,9 @@ import butterknife.OnClick;
  * @author Dmytro Khmelenko
  */
 public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresenter> implements
-        BuildDetailsView,
-        JobsFragment.JobsListener,
-        RawLogFragment.OnRawLogFragmentListener {
+                                                                                    BuildDetailsView,
+                                                                                    JobsFragment.JobsListener,
+                                                                                    RawLogFragment.OnRawLogFragmentListener {
 
     public static final String EXTRA_REPO_SLUG = "RepoSlug";
     public static final String EXTRA_BUILD_ID = "BuildId";
@@ -254,7 +254,7 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
     }
 
     @Override
-    public void setLog(LogEntryComposite log) {
+    public void setLog(LogEntryComponent log) {
         mRawLogFragment.showLog(log);
     }
 

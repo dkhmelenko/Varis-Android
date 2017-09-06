@@ -3,6 +3,7 @@ package com.khmelenko.lab.varis.dagger.component;
 import com.khmelenko.lab.varis.dagger.module.ApplicationModule;
 import com.khmelenko.lab.varis.dagger.module.NetworkModule;
 import com.khmelenko.lab.varis.dagger.module.StorageModule;
+import com.khmelenko.lab.varis.log.LogsParser;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
 import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
@@ -35,4 +36,6 @@ public interface BaseComponent {
     AppSettings appSettings();
 
     PresenterKeeper<MvpPresenter> presenterKeeper();
+
+    LogsParser logsParser();
 }

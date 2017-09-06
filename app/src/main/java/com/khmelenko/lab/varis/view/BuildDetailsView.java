@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.view;
 
-import com.khmelenko.lab.varis.log.LogEntryComposite;
+import com.khmelenko.lab.varis.log.LogEntryComponent;
 import com.khmelenko.lab.varis.mvp.MvpView;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Job;
@@ -36,9 +36,9 @@ public interface BuildDetailsView extends MvpView {
     /**
      * Sets content of the log
      *
-     * @param log Parsed LogEntryComposite
+     * @param log Parsed log data
      */
-    void setLog(LogEntryComposite log);
+    void setLog(LogEntryComponent log);
 
     /**
      * Shows the list of build jobs

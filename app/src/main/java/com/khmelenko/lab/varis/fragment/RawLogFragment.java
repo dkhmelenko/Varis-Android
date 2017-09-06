@@ -11,8 +11,8 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.khmelenko.lab.varis.log.LogEntryComposite;
 import com.khmelenko.lab.varis.R;
+import com.khmelenko.lab.varis.log.LogEntryComponent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,6 +34,7 @@ public class RawLogFragment extends Fragment {
     TextView mEmptyText;
 
     private OnRawLogFragmentListener mListener;
+
     public RawLogFragment() {
 
         // Required empty public constructor
@@ -108,9 +109,9 @@ public class RawLogFragment extends Fragment {
     /**
      * Shows the log in the web view
      *
-     * @param log Parsed LogEntryComposite
+     * @param log Parsed log data
      */
-    public void showLog(LogEntryComposite log) {
+    public void showLog(LogEntryComponent log) {
         showError(false);
 
         mWebView.setWebViewClient(new WebViewClient() {

@@ -3,7 +3,7 @@ package com.khmelenko.lab.varis.log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogEntryComposite implements LogEntryComponent {
+final class LogEntryComposite implements LogEntryComponent {
 
     private String mName;
     private List<LogEntryComponent> mLogEntryComponents = new ArrayList<>();

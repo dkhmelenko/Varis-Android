@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.log;
 
-public class TravisCommandLeaf implements LogEntryComponent {
+final class TravisCommandLeaf implements LogEntryComponent {
 
     private final String mCommand;
     private final String mType;

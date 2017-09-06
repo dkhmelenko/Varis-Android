@@ -1,13 +1,22 @@
 package com.khmelenko.lab.varis.log;
 
-public class FormattingOptions {
+/**
+ * Defines possible options for formatting
+ */
+final class FormattingOptions {
+
     private Integer mTextColor;
     private Integer mBackground;
     private boolean mBold;
     private boolean mItalic;
     private boolean mUnderline;
 
-    public static FormattingOptions fromAnsiCodes(String[] ansiStates) {
+    // denied constructor
+    private FormattingOptions() {
+
+    }
+
+    public static FormattingOptions fromAnsiCodes(String... ansiStates) {
         FormattingOptions options = new FormattingOptions();
         for (String ansiCode : ansiStates) {
             AnsiCodes.applyAnsiCode(options, ansiCode);

@@ -6,12 +6,11 @@ import java.util.Stack;
  * Parser for ANSI escape sequences.
  *
  * @see <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">Wikipedia</a>
- *
- * */
-public class AnsiParser {
+ **/
+class AnsiParser {
 
     private Stack<TextLeaf> mResult = new Stack<>();
-    private FormattingOptions mOptions = new FormattingOptions();
+    private FormattingOptions mOptions = FormattingOptions.fromAnsiCodes();
 
     /**
      * Parses the given log for ANSI escape sequences and builds a list of text chunks, which
@@ -45,7 +44,7 @@ public class AnsiParser {
             if (isResetLineEscape(text, controlStartPosition)) {
                 controlEndPosition = text.indexOf('K', controlStartPosition + 2);
                 removeCurrentLine();
-                mOptions = new FormattingOptions();
+                mOptions = FormattingOptions.fromAnsiCodes();
             } else {
                 controlEndPosition = text.indexOf('m', controlStartPosition + 2);
                 if (controlEndPosition == -1) {
@@ -73,7 +72,7 @@ public class AnsiParser {
     }
 
     private void removeCurrentLine() {
-        if(mResult.isEmpty()) {
+        if (mResult.isEmpty()) {
             return;
         }
         TextLeaf textLeaf = mResult.peek();
@@ -84,7 +83,7 @@ public class AnsiParser {
                 break;
             }
             mResult.pop();
-            if(mResult.isEmpty()) {
+            if (mResult.isEmpty()) {
                 break;
             }
             textLeaf = mResult.peek();

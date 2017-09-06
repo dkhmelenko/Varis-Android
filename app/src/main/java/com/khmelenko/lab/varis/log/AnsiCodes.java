@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.log;
 
-public class AnsiCodes {
+final class AnsiCodes {
     private static int BLACK = 0x4E4E4E;
     private static int RED = 0xFF6C60;
     private static int GREEN = 0x00AA00;
@@ -19,6 +19,11 @@ public class AnsiCodes {
     private static int BG_MAGENTA = 0xFF73FD;
     private static int BG_CYAN = 0x00AAAA;
     private static int BG_WHITE = 0xEEEEEE;
+
+    // denied constructor
+    private AnsiCodes() {
+
+    }
 
     static void applyAnsiCode(FormattingOptions options, String code) {
         switch (code) {
