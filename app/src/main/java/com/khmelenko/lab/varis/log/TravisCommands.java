@@ -63,16 +63,7 @@ public class TravisCommands {
         foldStack.push(root);
         for (LogEntryComponent logEntryComponent : logEntryComponents) {
             if (logEntryComponent instanceof TravisCommandLeaf) {
-                TravisCommandLeaf command = (TravisCommandLeaf) logEntryComponent;
-                if (command.getCommand().equals(TRAVIS_FOLD)) {
-                    if (command.getType().equals(START)) {
-                        LogEntryComposite logEntryComposite = new LogEntryComposite(command.getName());
-                        foldStack.peek().append(logEntryComposite);
-                        foldStack.push(logEntryComposite);
-                    } else if (command.getType().equals(END)) {
-                        foldStack.pop();
-                    }
-                }
+                handleTravisCommand(foldStack, (TravisCommandLeaf) logEntryComponent);
             } else {
                 foldStack.peek().append(logEntryComponent);
             }
@@ -80,4 +71,15 @@ public class TravisCommands {
         return root;
     }
 
+    private static void handleTravisCommand(Stack<LogEntryComposite> foldStack, TravisCommandLeaf command) {
+        if (command.getCommand().equals(TRAVIS_FOLD)) {
+            if (command.getType().equals(START)) {
+                LogEntryComposite logEntryComposite = new LogEntryComposite(command.getName());
+                foldStack.peek().append(logEntryComposite);
+                foldStack.push(logEntryComposite);
+            } else if (command.getType().equals(END)) {
+                foldStack.pop();
+            }
+        }
+    }
 }
