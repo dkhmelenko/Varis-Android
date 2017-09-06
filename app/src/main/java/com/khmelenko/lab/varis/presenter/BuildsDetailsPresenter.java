@@ -1,5 +1,10 @@
 package com.khmelenko.lab.varis.presenter;
 
+import com.khmelenko.lab.varis.log.AnsiParser;
+import com.khmelenko.lab.varis.log.LogEntryComponent;
+import com.khmelenko.lab.varis.log.LogEntryComposite;
+import com.khmelenko.lab.varis.log.TextLeaf;
+import com.khmelenko.lab.varis.log.TravisCommands;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Job;
@@ -12,6 +17,8 @@ import com.khmelenko.lab.varis.view.BuildDetailsView;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.Stack;
 
 import javax.inject.Inject;
 
@@ -109,10 +116,12 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
                     }
                 })
                 .retry(LOAD_LOG_MAX_ATTEMPT)
+                .map(mRawClient::singleStringRequest)
+                .map(response -> parseLog(response.blockingGet()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((logUrl, throwable) -> {
+                .subscribe((log, throwable) -> {
                     if (throwable == null) {
-                        getView().setLogUrl(logUrl);
+                        getView().setLog(log);
                     } else {
                         getView().showLogError();
                         getView().showLoadingError(throwable.getMessage());
@@ -120,6 +129,12 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
                 });
 
         mSubscriptions.add(subscription);
+    }
+
+    public LogEntryComposite parseLog(String log) {
+        Stack<TextLeaf> logEntryComponents = AnsiParser.parseText(log);
+        List<LogEntryComponent> res = TravisCommands.preProcessTextLeafs(logEntryComponents);
+        return TravisCommands.parseFoldTree(res);
     }
 
     /**

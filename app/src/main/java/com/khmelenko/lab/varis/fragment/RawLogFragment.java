@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.khmelenko.lab.varis.log.LogEntryComposite;
 import com.khmelenko.lab.varis.R;
 
 import butterknife.Bind;
@@ -23,8 +24,6 @@ import butterknife.ButterKnife;
  */
 public class RawLogFragment extends Fragment {
 
-    private static final String LOG_URL = "LogUrl";
-
     @Bind(R.id.raw_log_webview)
     WebView mWebView;
 
@@ -35,6 +34,10 @@ public class RawLogFragment extends Fragment {
     TextView mEmptyText;
 
     private OnRawLogFragmentListener mListener;
+    public RawLogFragment() {
+
+        // Required empty public constructor
+    }
 
     /**
      * Creates an instance of the fragment
@@ -42,12 +45,7 @@ public class RawLogFragment extends Fragment {
      * @return Fragment instance
      */
     public static RawLogFragment newInstance() {
-        RawLogFragment fragment = new RawLogFragment();
-        return fragment;
-    }
-
-    public RawLogFragment() {
-        // Required empty public constructor
+        return new RawLogFragment();
     }
 
     @Override
@@ -62,12 +60,12 @@ public class RawLogFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = (OnRawLogFragmentListener) activity;
+            mListener = (OnRawLogFragmentListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement OnRawLogFragmentListener");
         }
     }
@@ -108,11 +106,11 @@ public class RawLogFragment extends Fragment {
     }
 
     /**
-     * Loads URL for showing in web view
+     * Shows the log in the web view
      *
-     * @param url URL
+     * @param log Parsed LogEntryComposite
      */
-    public void loadUrl(String url) {
+    public void showLog(LogEntryComposite log) {
         showError(false);
 
         mWebView.setWebViewClient(new WebViewClient() {
@@ -128,7 +126,7 @@ public class RawLogFragment extends Fragment {
             }
         });
 
-        mWebView.loadUrl(url);
+        mWebView.loadData(log.toHtml(), "text/html", "utf-8");
     }
 
     /**
