@@ -5,27 +5,27 @@ import java.util.List;
 
 public class LogEntryComposite implements LogEntryComponent {
 
-    private String name;
-    private List<LogEntryComponent> logEntryComponents = new ArrayList<>();
+    private String mName;
+    private List<LogEntryComponent> mLogEntryComponents = new ArrayList<>();
 
     public LogEntryComposite(String name) {
-        this.name = name;
+        mName = name;
     }
 
     void append(LogEntryComponent logEntryComponent) {
-        logEntryComponents.add(logEntryComponent);
+        mLogEntryComponents.add(logEntryComponent);
     }
 
     @Override
     public String toHtml() {
         String data = "";
-        if (name == null) {
+        if (mName == null) {
             data += "<body style=\"background-color:#222222;\">";
         }
-        for (LogEntryComponent re : logEntryComponents) {
+        for (LogEntryComponent re : mLogEntryComponents) {
             data += re.toHtml();
         }
-        if (name == null) {
+        if (mName == null) {
             data += "</body>";
         }
         return data;
