@@ -20,7 +20,7 @@ public class FormattingOptions {
     }
 
     public void setTextColor(Integer textColor) {
-        this.mTextColor = textColor;
+        mTextColor = textColor;
     }
 
     public Integer getBackground() {
@@ -28,7 +28,7 @@ public class FormattingOptions {
     }
 
     public void setBackground(Integer background) {
-        this.mBackground = background;
+        mBackground = background;
     }
 
     public boolean isBold() {
@@ -36,7 +36,7 @@ public class FormattingOptions {
     }
 
     public void setBold(boolean bold) {
-        this.mBold = bold;
+        mBold = bold;
     }
 
     public boolean isItalic() {
@@ -44,7 +44,7 @@ public class FormattingOptions {
     }
 
     public void setItalic(boolean italic) {
-        this.mItalic = italic;
+        mItalic = italic;
     }
 
     public boolean isUnderline() {
@@ -52,7 +52,7 @@ public class FormattingOptions {
     }
 
     public void setUnderline(boolean underline) {
-        this.mUnderline = underline;
+        mUnderline = underline;
     }
 
     @Override

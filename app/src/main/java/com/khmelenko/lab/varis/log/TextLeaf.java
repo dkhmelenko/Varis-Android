@@ -27,7 +27,7 @@ public class TextLeaf implements LogEntryComponent {
     }
 
     public void setOptions(FormattingOptions options) {
-        this.mOptions = options;
+        mOptions = options;
     }
 
     public String getText() {
@@ -35,7 +35,7 @@ public class TextLeaf implements LogEntryComponent {
     }
 
     public void setText(String text) {
-        this.mText = text;
+        mText = text;
     }
 
     @Override

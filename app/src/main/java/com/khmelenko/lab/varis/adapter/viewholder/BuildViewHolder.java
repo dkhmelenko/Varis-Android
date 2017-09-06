@@ -27,7 +27,7 @@ public final class BuildViewHolder extends RecyclerView.ViewHolder implements Vi
 
     public BuildViewHolder(View itemView, OnListItemListener mListener) {
         super(itemView);
-        this.mListener = mListener;
+        mListener = mListener;
         ButterKnife.bind(this, itemView);
         itemView.setClickable(true);
         mParent.setOnClickListener(this);
