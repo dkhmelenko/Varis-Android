@@ -42,8 +42,7 @@ final class TextLeaf implements LogEntryComponent {
     public String toHtml() {
         String result = mText.replaceAll("\\r\\n?|\\n", "<br />");
         if (mOptions.getTextColor() != null) {
-            result = "<font color='#" + Integer
-                    .toHexString(mOptions.getTextColor()) + "'>" + result + "</font>";
+            result = "<font color='" + mOptions.getTextColor() + "'>" + result + "</font>";
         } else {
             result = "<font color='#FFF'>" + result + "</font>";
         }

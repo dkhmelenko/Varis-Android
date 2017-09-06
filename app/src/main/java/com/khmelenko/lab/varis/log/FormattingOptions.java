@@ -5,8 +5,8 @@ package com.khmelenko.lab.varis.log;
  */
 final class FormattingOptions {
 
-    private Integer mTextColor;
-    private Integer mBackground;
+    private String mTextColor;
+    private String mBackground;
     private boolean mBold;
     private boolean mItalic;
     private boolean mUnderline;
@@ -24,19 +24,19 @@ final class FormattingOptions {
         return options;
     }
 
-    public Integer getTextColor() {
+    public String getTextColor() {
         return mTextColor;
     }
 
-    public void setTextColor(Integer textColor) {
+    public void setTextColor(String textColor) {
         mTextColor = textColor;
     }
 
-    public Integer getBackground() {
+    public String getBackground() {
         return mBackground;
     }
 
-    public void setBackground(Integer background) {
+    public void setBackground(String background) {
         mBackground = background;
     }
 

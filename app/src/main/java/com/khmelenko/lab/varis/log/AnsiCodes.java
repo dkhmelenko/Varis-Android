@@ -1,24 +1,24 @@
 package com.khmelenko.lab.varis.log;
 
 final class AnsiCodes {
-    private static int BLACK = 0x4E4E4E;
-    private static int RED = 0xFF6C60;
-    private static int GREEN = 0x00AA00;
-    private static int YELLOW = 0xFFFFB6;
-    private static int BLUE = 0x96CBFE;
-    private static int MAGENTA = 0xFF73FD;
-    private static int CYAN = 0x50FFFF;
-    private static int WHITE = 0xE0E0E0;
-    private static int GREY = 0x969696;
+    private static String BLACK = "#4E4E4E";
+    private static String RED = "#FF6C60";
+    private static String GREEN = "#98D86A";
+    private static String YELLOW = "#FFFFB6";
+    private static String BLUE = "#96CBFE";
+    private static String MAGENTA = "#FF73FD";
+    private static String CYAN = "#50FFFF";
+    private static String WHITE = "#E0E0E0";
+    private static String GREY = "#969696";
 
-    private static int BG_BLACK = 0x4E4E4E;
-    private static int BG_RED = 0xFF6C60;
-    private static int BG_GREEN = 0x00AA00;
-    private static int BG_YELLOW = 0xFFFFB6;
-    private static int BG_BLUE = 0x96CBFE;
-    private static int BG_MAGENTA = 0xFF73FD;
-    private static int BG_CYAN = 0x00AAAA;
-    private static int BG_WHITE = 0xEEEEEE;
+    private static String BG_BLACK = "#4E4E4E";
+    private static String BG_RED = "#FF6C60";
+    private static String BG_GREEN = "#98D86A";
+    private static String BG_YELLOW = "#FFFFB6";
+    private static String BG_BLUE = "#96CBFE";
+    private static String BG_MAGENTA = "#FF73FD";
+    private static String BG_CYAN = "#50FFFF";
+    private static String BG_WHITE = "#EEEEEE";
 
     // denied constructor
     private AnsiCodes() {
