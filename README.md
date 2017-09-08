@@ -1,5 +1,6 @@
 # Project description
 [![Build Status on Travis:](https://travis-ci.org/dkhmelenko/Varis-Android.svg?branch=master)](https://travis-ci.org/dkhmelenko/Varis-Android)
+[![codecov.io](https://codecov.io/github/dkhmelenko/Varis-Android/branch/develop/graph/badge.svg)](https://codecov.io/github/dkhmelenko/Varis-Android)
 
 This project is unofficial Android client for Travis CI. 
 
