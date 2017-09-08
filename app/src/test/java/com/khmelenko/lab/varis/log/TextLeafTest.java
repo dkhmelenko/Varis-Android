@@ -9,7 +9,7 @@ public class TextLeafTest {
     public void addAnsiCodes() throws Exception {
         TextLeaf actual = new TextLeaf("Magenta Italic", FormattingOptions.fromAnsiCodes(new String[]{"35", "3"}));
         TextLeaf expected = new TextLeaf("Magenta Italic");
-        expected.getOptions().setTextColor(0xFF73FD);
+        expected.getOptions().setTextColor("#FF73FD");
         expected.getOptions().setItalic(true);
         assertEquals(expected.toString(), actual.toString());
     }
@@ -17,7 +17,7 @@ public class TextLeafTest {
     @Test
     public void toHtml() throws Exception {
         TextLeaf text = new TextLeaf("T", FormattingOptions.fromAnsiCodes(new String[]{"34", "1"}));
-        assertEquals("<b><font color='#96cbfe'>T</font></b>", text.toHtml());
+        assertEquals("<b><font color='#96CBFE'>T</font></b>", text.toHtml());
     }
 
 }
