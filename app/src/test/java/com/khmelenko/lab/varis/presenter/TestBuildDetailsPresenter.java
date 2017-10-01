@@ -3,6 +3,8 @@ package com.khmelenko.lab.varis.presenter;
 import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
+import com.khmelenko.lab.varis.log.LogEntryComponent;
+import com.khmelenko.lab.varis.log.LogsParser;
 import com.khmelenko.lab.varis.network.response.Build;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Commit;
@@ -57,6 +59,9 @@ public class TestBuildDetailsPresenter {
     @Inject
     AppSettings mAppSettings;
 
+    @Inject
+    LogsParser mLogsParser;
+
     private BuildsDetailsPresenter mBuildsDetailsPresenter;
     private BuildDetailsView mBuildDetailsView;
 
@@ -65,37 +70,48 @@ public class TestBuildDetailsPresenter {
         TestComponent component = DaggerTestComponent.builder().build();
         component.inject(this);
 
-        mBuildsDetailsPresenter = spy(new BuildsDetailsPresenter(mTravisRestClient, mRawClient, mCacheStorage, mAppSettings));
+        mBuildsDetailsPresenter = spy(new BuildsDetailsPresenter(mTravisRestClient, mRawClient, mCacheStorage,
+                mAppSettings, mLogsParser));
         mBuildDetailsView = mock(BuildDetailsView.class);
         mBuildsDetailsPresenter.attach(mBuildDetailsView);
     }
 
     @Test
-    public void testStartLoadingLogNoToken() {
+    public void testStartLoadingLogNoToken() throws Exception {
         final long jobId = 1L;
 
         final String expectedUrl = "https://sample.org";
+        final String log = "log";
+
+        final LogEntryComponent logEntry = () -> "";
+
         when(mRawClient.getApiService().getLog(String.valueOf(jobId))).thenReturn(Single.just(expectedUrl));
         when(mRawClient.getLogUrl(jobId)).thenReturn(expectedUrl);
+        when(mRawClient.singleStringRequest(expectedUrl)).thenReturn(Single.just(log));
+        when(mLogsParser.parseLog(log)).thenReturn(logEntry);
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
-        verify(mBuildDetailsView).setLogUrl(expectedUrl);
+        verify(mBuildDetailsView).setLog(logEntry);
     }
 
     @Test
-    public void testStartLoadingLogWithToken() {
+    public void testStartLoadingLogWithToken() throws Exception {
         final long jobId = 1L;
 
         final String expectedUrl = "https://sample.org";
         final String accessToken = "test";
         final String authToken = "token " + accessToken;
+        final String log = "log";
+        final LogEntryComponent logEntry = () -> "";
 
         when(mRawClient.getApiService().getLog(authToken, String.valueOf(jobId))).thenReturn(Single.just(""));
         when(mRawClient.getLogUrl(any(Long.class))).thenReturn(expectedUrl);
         when(mAppSettings.getAccessToken()).thenReturn(accessToken);
+        when(mRawClient.singleStringRequest(expectedUrl)).thenReturn(Single.just(log));
+        when(mLogsParser.parseLog(log)).thenReturn(logEntry);
 
         mBuildsDetailsPresenter.startLoadingLog(jobId);
-        verify(mBuildDetailsView).setLogUrl(expectedUrl);
+        verify(mBuildDetailsView).setLog(logEntry);
     }
 
     @Test
@@ -126,7 +142,6 @@ public class TestBuildDetailsPresenter {
         buildDetails.setCommit(commit);
         buildDetails.setJobs(jobs);
 
-        final String expectedUrl = "https://sample.org";
         final String accessToken = "test";
         final String authToken = "token " + accessToken;
 

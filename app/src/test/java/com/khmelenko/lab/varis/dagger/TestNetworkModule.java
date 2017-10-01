@@ -1,5 +1,6 @@
 package com.khmelenko.lab.varis.dagger;
 
+import com.khmelenko.lab.varis.log.LogsParser;
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
 import com.khmelenko.lab.varis.network.retrofit.github.GithubApiService;
 import com.khmelenko.lab.varis.network.retrofit.raw.RawApiService;
@@ -14,6 +15,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
+import static org.mockito.Mockito.mock;
+
 /**
  * NetworkModule for testing
  *
@@ -25,8 +28,8 @@ public class TestNetworkModule {
     @Singleton
     @Provides
     public TravisRestClient provideTravisRestClient() {
-        TravisRestClient travisRestClient = Mockito.mock(TravisRestClient.class);
-        TravisApiService apiService = Mockito.mock(TravisApiService.class);
+        TravisRestClient travisRestClient = mock(TravisRestClient.class);
+        TravisApiService apiService = mock(TravisApiService.class);
         Mockito.when(travisRestClient.getApiService()).thenReturn(apiService);
         return travisRestClient;
     }
@@ -34,8 +37,8 @@ public class TestNetworkModule {
     @Singleton
     @Provides
     public GitHubRestClient provideGitHubRestClient() {
-        GitHubRestClient gitHubRestClient = Mockito.mock(GitHubRestClient.class);
-        GithubApiService githubApiService = Mockito.mock(GithubApiService.class);
+        GitHubRestClient gitHubRestClient = mock(GitHubRestClient.class);
+        GithubApiService githubApiService = mock(GithubApiService.class);
         Mockito.when(gitHubRestClient.getApiService()).thenReturn(githubApiService);
         return gitHubRestClient;
     }
@@ -43,9 +46,15 @@ public class TestNetworkModule {
     @Singleton
     @Provides
     public RawClient provideRawRestClient() {
-        RawClient rawClient = Mockito.mock(RawClient.class);
-        RawApiService rawApiService = Mockito.mock(RawApiService.class);
+        RawClient rawClient = mock(RawClient.class);
+        RawApiService rawApiService = mock(RawApiService.class);
         Mockito.when(rawClient.getApiService()).thenReturn(rawApiService);
         return rawClient;
+    }
+
+    @Singleton
+    @Provides
+    public LogsParser provideLogsParser() {
+        return mock(LogsParser.class);
     }
 }

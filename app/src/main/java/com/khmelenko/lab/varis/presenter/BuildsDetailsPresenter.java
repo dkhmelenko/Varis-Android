@@ -1,5 +1,6 @@
 package com.khmelenko.lab.varis.presenter;
 
+import com.khmelenko.lab.varis.log.LogsParser;
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
 import com.khmelenko.lab.varis.network.response.Job;
@@ -41,6 +42,7 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
     private final RawClient mRawClient;
     private final CacheStorage mCache;
     private final AppSettings mAppSettings;
+    private final LogsParser mLogsParser;
 
     private final CompositeDisposable mSubscriptions;
 
@@ -52,11 +54,12 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
 
     @Inject
     public BuildsDetailsPresenter(TravisRestClient travisRestClient, RawClient rawClient, CacheStorage cache,
-                                  AppSettings appSettings) {
+                                  AppSettings appSettings, LogsParser logsParser) {
         mTravisRestClient = travisRestClient;
         mRawClient = rawClient;
         mCache = cache;
         mAppSettings = appSettings;
+        mLogsParser = logsParser;
 
         mSubscriptions = new CompositeDisposable();
     }
@@ -109,10 +112,12 @@ public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
                     }
                 })
                 .retry(LOAD_LOG_MAX_ATTEMPT)
+                .map(mRawClient::singleStringRequest)
+                .map(response -> mLogsParser.parseLog(response.blockingGet()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((logUrl, throwable) -> {
+                .subscribe((log, throwable) -> {
                     if (throwable == null) {
-                        getView().setLogUrl(logUrl);
+                        getView().setLog(log);
                     } else {
                         getView().showLogError();
                         getView().showLoadingError(throwable.getMessage());
