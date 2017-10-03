@@ -27,6 +27,7 @@ import com.khmelenko.lab.varis.view.RepoDetailsView;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 
 /**
  * Repository Details Activity
@@ -101,10 +102,10 @@ public final class RepoDetailsActivity extends MvpActivity<RepoDetailsPresenter>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo_details);
         ButterKnife.bind(this);
-        TravisApp.instance().activityInjector().inject(this);
 
         initToolbar();
 

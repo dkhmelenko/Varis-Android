@@ -35,6 +35,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.android.AndroidInjection;
 
 /**
  * Build details
@@ -80,10 +81,10 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_build_details);
         ButterKnife.bind(this);
-        TravisApp.instance().activityInjector().inject(this);
         initToolbar();
     }
 

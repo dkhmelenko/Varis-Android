@@ -1,36 +1,39 @@
 package com.khmelenko.lab.varis;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.khmelenko.lab.varis.common.Constants;
-import com.khmelenko.lab.varis.dagger.component.ActivityInjectionComponent;
 import com.khmelenko.lab.varis.dagger.component.BaseComponent;
-import com.khmelenko.lab.varis.dagger.component.DaggerActivityInjectionComponent;
 import com.khmelenko.lab.varis.dagger.component.DaggerBaseComponent;
 import com.khmelenko.lab.varis.storage.AppSettings;
+
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
 
 /**
  * Application class
  *
  * @author Dmytro Khmelenko
  */
-public final class TravisApp extends Application {
+public final class TravisApp extends Application implements HasActivityInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Activity> mDispatchingActivityInjector;
 
     private static Context sContext;
-
-    private ActivityInjectionComponent mActivityInjection;
 
     public void onCreate() {
         super.onCreate();
         sContext = getApplicationContext();
 
         BaseComponent baseComponent = DaggerBaseComponent.create();
-
-        mActivityInjection = DaggerActivityInjectionComponent.builder()
-                .baseComponent(baseComponent)
-                .build();
+        baseComponent.inject(this);
 
         AppSettings appSettings = baseComponent.appSettings();
         String server = appSettings.getServerUrl();
@@ -58,12 +61,8 @@ public final class TravisApp extends Application {
         return (TravisApp) sContext;
     }
 
-    /**
-     * Gets activity injection component
-     *
-     * @return Activity injection component
-     */
-    public ActivityInjectionComponent activityInjector() {
-        return mActivityInjection;
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return mDispatchingActivityInjector;
     }
 }

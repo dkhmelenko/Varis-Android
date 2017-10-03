@@ -40,6 +40,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 
 /**
  * Main application activity
@@ -74,10 +75,10 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        TravisApp.instance().activityInjector().inject(this);
 
         mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
 

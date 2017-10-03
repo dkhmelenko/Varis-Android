@@ -54,7 +54,7 @@ ext {
             retrofit2      : '2.3.0',
             butterknife    : '7.0.1',
             circleimageview: '2.1.0',
-            dagger         : '2.0.2',
+            dagger         : '2.11',
             glassfish      : '10.0-b28',
             mockito        : '2.8.47',
             junit          : '4.12',
@@ -84,7 +84,9 @@ dependencies {
     compile "io.reactivex.rxjava2:rxandroid:$libraryVersion.rxAndroid"
 
     annotationProcessor "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$libraryVersion.dagger"
     compile "com.google.dagger:dagger:$libraryVersion.dagger"
+    compile "com.google.dagger:dagger-android-support:$libraryVersion.dagger"
     provided "org.glassfish:javax.annotation:$libraryVersion.glassfish"
 
     androidTestCompile "org.mockito:mockito-core:$libraryVersion.mockito"

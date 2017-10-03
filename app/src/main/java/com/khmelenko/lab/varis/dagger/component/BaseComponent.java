@@ -1,5 +1,6 @@
 package com.khmelenko.lab.varis.dagger.component;
 
+import com.khmelenko.lab.varis.TravisApp;
 import com.khmelenko.lab.varis.dagger.module.ApplicationModule;
 import com.khmelenko.lab.varis.dagger.module.NetworkModule;
 import com.khmelenko.lab.varis.dagger.module.StorageModule;
@@ -15,6 +16,7 @@ import com.khmelenko.lab.varis.util.PresenterKeeper;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import dagger.android.support.AndroidSupportInjectionModule;
 
 /**
  * Base component
@@ -22,8 +24,12 @@ import dagger.Component;
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 @Singleton
-@Component(modules = {NetworkModule.class, StorageModule.class, ApplicationModule.class})
+@Component(modules = {NetworkModule.class, StorageModule.class, ApplicationModule.class,
+        AuthActivityModule.class, BuildDetailsActivityModule.class, MainActivityModule.class,
+        RepoDetailsActivityModule.class, SearchResultsActivityModule.class, AndroidSupportInjectionModule.class})
 public interface BaseComponent {
+
+    void inject(TravisApp app);
 
     TravisRestClient restClient();
 
