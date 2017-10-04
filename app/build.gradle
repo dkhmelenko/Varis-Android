@@ -36,6 +36,7 @@ android {
             proguardFile 'proguard-square-okhttp3.pro'
             proguardFile 'proguard-support-v4.pro'
             proguardFile 'proguard-support-v7-appcompat.pro'
+            proguardFile 'proguard-dagger.pro'
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
