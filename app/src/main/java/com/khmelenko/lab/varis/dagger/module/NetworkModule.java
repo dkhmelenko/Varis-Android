@@ -2,6 +2,7 @@ package com.khmelenko.lab.varis.dagger.module;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.khmelenko.lab.varis.log.LogsParser;
 import com.khmelenko.lab.varis.network.retrofit.ItemTypeAdapterFactory;
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
 import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
@@ -65,6 +66,12 @@ public class NetworkModule {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    public LogsParser provideCommandsParser() {
+        return new LogsParser();
     }
 
     /**

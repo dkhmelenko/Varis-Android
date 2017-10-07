@@ -18,6 +18,7 @@ import com.khmelenko.lab.varis.TravisApp;
 import com.khmelenko.lab.varis.converter.BuildStateHelper;
 import com.khmelenko.lab.varis.fragment.JobsFragment;
 import com.khmelenko.lab.varis.fragment.RawLogFragment;
+import com.khmelenko.lab.varis.log.LogEntryComponent;
 import com.khmelenko.lab.varis.mvp.MvpActivity;
 import com.khmelenko.lab.varis.network.response.Build;
 import com.khmelenko.lab.varis.network.response.BuildDetails;
@@ -34,6 +35,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.android.AndroidInjection;
 
 /**
  * Build details
@@ -41,9 +43,9 @@ import butterknife.OnClick;
  * @author Dmytro Khmelenko
  */
 public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresenter> implements
-        BuildDetailsView,
-        JobsFragment.JobsListener,
-        RawLogFragment.OnRawLogFragmentListener {
+                                                                                    BuildDetailsView,
+                                                                                    JobsFragment.JobsListener,
+                                                                                    RawLogFragment.OnRawLogFragmentListener {
 
     public static final String EXTRA_REPO_SLUG = "RepoSlug";
     public static final String EXTRA_BUILD_ID = "BuildId";
@@ -79,10 +81,10 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_build_details);
         ButterKnife.bind(this);
-        TravisApp.instance().activityInjector().inject(this);
         initToolbar();
     }
 
@@ -156,12 +158,7 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
         mScrollBtn.hide();
         mScrollUpBtn.show();
 
-        mBuildDetailsLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mBuildDetailsLayout.fullScroll(View.FOCUS_DOWN);
-            }
-        });
+        mBuildDetailsLayout.post(() -> mBuildDetailsLayout.fullScroll(View.FOCUS_DOWN));
     }
 
     @OnClick(R.id.build_details_scroll_up_btn)
@@ -169,12 +166,7 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
         mScrollBtn.show();
         mScrollUpBtn.hide();
 
-        mBuildDetailsLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mBuildDetailsLayout.fullScroll(View.FOCUS_UP);
-            }
-        });
+        mBuildDetailsLayout.post(() -> mBuildDetailsLayout.fullScroll(View.FOCUS_UP));
     }
 
     @Override
@@ -263,8 +255,8 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
     }
 
     @Override
-    public void setLogUrl(String logUrl) {
-        mRawLogFragment.loadUrl(logUrl);
+    public void setLog(LogEntryComponent log) {
+        mRawLogFragment.showLog(log);
     }
 
     @Override
@@ -300,19 +292,14 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
      * Initializes toolbar
      */
     private void initToolbar() {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
+            toolbar.setNavigationOnClickListener(v -> onBackPressed());
         }
     }
 
@@ -325,7 +312,7 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
         Build build = details.getBuild();
         Commit commit = details.getCommit();
 
-        BuildView buildView = (BuildView) findViewById(R.id.build_details_build_data);
+        BuildView buildView = findViewById(R.id.build_details_build_data);
         buildView.setState(build);
         buildView.setCommit(commit);
     }
@@ -334,7 +321,7 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
      * Checks whether data existing or not
      */
     private void checkIfEmpty(BuildDetails details) {
-        TextView emptyText = (TextView) findViewById(R.id.empty_text);
+        TextView emptyText = findViewById(R.id.empty_text);
         emptyText.setText(R.string.build_details_empty);
         if (details == null) {
             emptyText.setVisibility(View.VISIBLE);
