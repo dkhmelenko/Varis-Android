@@ -20,6 +20,7 @@ import com.khmelenko.lab.varis.view.AuthView;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 
 /**
  * Authentication activity
@@ -45,10 +46,10 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
-        TravisApp.instance().activityInjector().inject(this);
 
         initToolbar();
     }

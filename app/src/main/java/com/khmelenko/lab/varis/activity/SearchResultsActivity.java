@@ -20,6 +20,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 
 /**
  * Provides activity with search results
@@ -39,9 +40,9 @@ public final class SearchResultsActivity extends MvpActivity<SearchResultsPresen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-        TravisApp.instance().activityInjector().inject(this);
         ButterKnife.bind(this);
 
         mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.search_fragment_repos);
