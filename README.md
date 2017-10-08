@@ -36,7 +36,7 @@ In case you have ideas or found an issue, don't hesitate to create pull request 
 
 # Further steps
 - Migration to [API v3](https://docs.travis-ci.com/user/triggering-builds)
-- Kotlin migration
+- Increase Unit tests coverage
 - Espresso tests
 
 # License
