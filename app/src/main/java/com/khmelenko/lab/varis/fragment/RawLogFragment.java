@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.khmelenko.lab.varis.R;
 import com.khmelenko.lab.varis.log.LogEntryComponent;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -24,13 +24,13 @@ import butterknife.ButterKnife;
  */
 public class RawLogFragment extends Fragment {
 
-    @Bind(R.id.raw_log_webview)
+    @BindView(R.id.raw_log_webview)
     WebView mWebView;
 
-    @Bind(R.id.progressbar)
+    @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
 
-    @Bind(R.id.empty_text)
+    @BindView(R.id.empty_text)
     TextView mEmptyText;
 
     private OnRawLogFragmentListener mListener;

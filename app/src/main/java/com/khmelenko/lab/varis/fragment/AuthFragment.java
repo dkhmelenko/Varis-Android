@@ -14,7 +14,7 @@ import android.widget.RadioGroup;
 import com.khmelenko.lab.varis.R;
 import com.khmelenko.lab.varis.common.Constants;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -27,16 +27,16 @@ public class AuthFragment extends Fragment {
 
     private static final String SERVER_URL = "ServerUrl";
 
-    @Bind(R.id.auth_server_selector)
+    @BindView(R.id.auth_server_selector)
     RadioGroup mServerSelector;
 
-    @Bind(R.id.auth_username)
+    @BindView(R.id.auth_username)
     EditText mUsername;
 
-    @Bind(R.id.auth_password)
+    @BindView(R.id.auth_password)
     EditText mPassword;
 
-    @Bind(R.id.auth_login_btn)
+    @BindView(R.id.auth_login_btn)
     Button mLoginBtn;
 
     private String mCurrentServer;

@@ -17,7 +17,7 @@ import com.khmelenko.lab.varis.network.response.IBuildState;
 import com.khmelenko.lab.varis.network.response.RequestData;
 import com.khmelenko.lab.varis.util.DateTimeUtils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -27,28 +27,28 @@ import butterknife.ButterKnife;
  */
 public class BuildView extends LinearLayout {
 
-    @Bind(R.id.build_indicator)
+    @BindView(R.id.build_indicator)
     View mIndicator;
 
-    @Bind(R.id.build_number)
+    @BindView(R.id.build_number)
     TextView mTitle;
 
-    @Bind(R.id.build_pull_request_title)
+    @BindView(R.id.build_pull_request_title)
     TextView mPullRequest;
 
-    @Bind(R.id.build_branch)
+    @BindView(R.id.build_branch)
     TextView mBranch;
 
-    @Bind(R.id.build_commit_message)
+    @BindView(R.id.build_commit_message)
     TextView mCommitMessage;
 
-    @Bind(R.id.build_commit_person)
+    @BindView(R.id.build_commit_person)
     TextView mCommitPerson;
 
-    @Bind(R.id.build_duration)
+    @BindView(R.id.build_duration)
     TextView mDuration;
 
-    @Bind(R.id.build_finished)
+    @BindView(R.id.build_finished)
     TextView mFinished;
 
     public BuildView(Context context) {

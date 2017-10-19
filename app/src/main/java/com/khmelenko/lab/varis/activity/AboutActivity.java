@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.khmelenko.lab.varis.R;
 import com.khmelenko.lab.varis.util.PackageUtils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -22,10 +22,10 @@ import butterknife.ButterKnife;
  */
 public final class AboutActivity extends BaseActivity {
 
-    @Bind(R.id.about_version)
+    @BindView(R.id.about_version)
     TextView mVersion;
 
-    @Bind(R.id.about_github_link)
+    @BindView(R.id.about_github_link)
     TextView mGithubLink;
 
     @Override

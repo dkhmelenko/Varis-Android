@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import com.khmelenko.lab.varis.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -22,7 +22,7 @@ import butterknife.OnClick;
  */
 public class SecurityCodeFragment extends Fragment {
 
-    @Bind(R.id.auth_security_code)
+    @BindView(R.id.auth_security_code)
     EditText mSecurityCode;
 
     private OnSecurityCodeAction mListener;

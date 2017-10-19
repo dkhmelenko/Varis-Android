@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.varis.R;
-import com.khmelenko.lab.varis.TravisApp;
 import com.khmelenko.lab.varis.converter.BuildStateHelper;
 import com.khmelenko.lab.varis.fragment.JobsFragment;
 import com.khmelenko.lab.varis.fragment.RawLogFragment;
@@ -32,7 +31,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.AndroidInjection;
@@ -54,19 +53,19 @@ public final class BuildDetailsActivity extends MvpActivity<BuildsDetailsPresent
     private static final String RAW_LOG_FRAGMENT_TAG = "RawLogFragment";
     private static final String JOBS_FRAGMENT_TAG = "JobsFragment";
 
-    @Bind(R.id.progressbarview)
+    @BindView(R.id.progressbarview)
     View mProgressBar;
 
-    @Bind(R.id.build_details_build_data)
+    @BindView(R.id.build_details_build_data)
     View mBuildDetailsData;
 
-    @Bind(R.id.build_details_layout)
+    @BindView(R.id.build_details_layout)
     ScrollView mBuildDetailsLayout;
 
-    @Bind(R.id.build_details_scroll_btn)
+    @BindView(R.id.build_details_scroll_btn)
     FloatingActionButton mScrollBtn;
 
-    @Bind(R.id.build_details_scroll_up_btn)
+    @BindView(R.id.build_details_scroll_up_btn)
     FloatingActionButton mScrollUpBtn;
 
     @Inject

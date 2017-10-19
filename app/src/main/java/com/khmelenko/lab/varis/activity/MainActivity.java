@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.khmelenko.lab.varis.R;
-import com.khmelenko.lab.varis.TravisApp;
 import com.khmelenko.lab.varis.adapter.SearchResultsAdapter;
 import com.khmelenko.lab.varis.fragment.LicensesDialogFragment;
 import com.khmelenko.lab.varis.fragment.ReposFragment;
@@ -38,7 +37,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 
@@ -48,7 +47,7 @@ import dagger.android.AndroidInjection;
  * @author Dmytro Khmelenko
  */
 public final class MainActivity extends MvpActivity<RepositoriesPresenter> implements RepositoriesView,
-        ReposFragment.ReposFragmentListener {
+                                                                                      ReposFragment.ReposFragmentListener {
 
     private static final int AUTH_ACTIVITY_CODE = 0;
     private static final int REPO_DETAILS_CODE = 1;
@@ -57,7 +56,7 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
 
     private static final int SEARCH_LIMIT = 3;
 
-    @Bind(R.id.drawer_layout)
+    @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
     @Inject
@@ -99,7 +98,7 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mSearchView != null) {
+        if (mSearchView != null) {
             outState.putString(SAVED_QUERY, mSearchView.getQuery().toString());
         }
     }
@@ -216,7 +215,7 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     boolean submitProhibited = true;
-                    if(query.length() > SEARCH_LIMIT) {
+                    if (query.length() > SEARCH_LIMIT) {
                         // save search query to history
                         SearchRecentSuggestions suggestionsProvider = new SearchRecentSuggestions(MainActivity.this,
                                 SearchHistoryProvider.AUTHORITY, SearchHistoryProvider.MODE);

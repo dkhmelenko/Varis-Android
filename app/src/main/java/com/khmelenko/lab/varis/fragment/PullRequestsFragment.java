@@ -21,7 +21,7 @@ import com.khmelenko.lab.varis.network.response.Requests;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -31,16 +31,16 @@ import butterknife.ButterKnife;
  */
 public class PullRequestsFragment extends Fragment implements OnListItemListener {
 
-    @Bind(R.id.list_refreshable_swipe_view)
+    @BindView(R.id.list_refreshable_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.list_refreshable_recycler_view)
+    @BindView(R.id.list_refreshable_recycler_view)
     RecyclerView mPullRequestsRecyclerView;
 
-    @Bind(R.id.progressbar)
+    @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
 
-    @Bind(R.id.empty_text)
+    @BindView(R.id.empty_text)
     TextView mEmptyText;
 
     private PullRequestsListAdapter mPullRequestsListAdapter;
