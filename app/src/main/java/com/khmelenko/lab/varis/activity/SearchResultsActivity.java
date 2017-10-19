@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.khmelenko.lab.varis.R;
-import com.khmelenko.lab.varis.TravisApp;
 import com.khmelenko.lab.varis.fragment.ReposFragment;
 import com.khmelenko.lab.varis.mvp.MvpActivity;
 import com.khmelenko.lab.varis.network.response.Repo;
@@ -28,8 +26,8 @@ import dagger.android.AndroidInjection;
  * @author Dmytro Khmelenko
  */
 public final class SearchResultsActivity extends MvpActivity<SearchResultsPresenter> implements
-        SearchResultsView,
-        ReposFragment.ReposFragmentListener {
+                                                                                     SearchResultsView,
+                                                                                     ReposFragment.ReposFragmentListener {
 
     @Inject
     SearchResultsPresenter mPresenter;
@@ -86,19 +84,14 @@ public final class SearchResultsActivity extends MvpActivity<SearchResultsPresen
      * Initializes toolbar
      */
     private void initToolbar() {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
+            toolbar.setNavigationOnClickListener(v -> onBackPressed());
         }
     }
 

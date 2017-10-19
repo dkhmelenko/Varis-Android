@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.khmelenko.lab.varis.R;
 import com.khmelenko.lab.varis.adapter.JobsListAdapter;
-import com.khmelenko.lab.varis.adapter.OnListItemListener;
 import com.khmelenko.lab.varis.network.response.Job;
 
 import java.util.ArrayList;
@@ -70,13 +69,10 @@ public class JobsFragment extends Fragment {
         mJobsRecyclerView.setLayoutManager(layoutManager);
 
         mJobsListAdapter = new JobsListAdapter(getContext(), mJobs,
-                new OnListItemListener() {
-                    @Override
-                    public void onItemSelected(int position) {
-                        if (mJobs != null && !mJobs.isEmpty()) {
-                            Job job = mJobs.get(position);
-                            mListener.onJobSelected(job);
-                        }
+                position -> {
+                    if (mJobs != null && !mJobs.isEmpty()) {
+                        Job job = mJobs.get(position);
+                        mListener.onJobSelected(job);
                     }
                 });
         mJobsRecyclerView.setAdapter(mJobsListAdapter);
@@ -90,7 +86,7 @@ public class JobsFragment extends Fragment {
 
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (JobsListener) activity;

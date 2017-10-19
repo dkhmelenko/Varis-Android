@@ -77,12 +77,7 @@ public class PullRequestsFragment extends Fragment implements OnListItemListener
         mPullRequestsRecyclerView.setAdapter(mPullRequestsListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mListener.onReloadPullRequests();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mListener.onReloadPullRequests());
 
         mProgressBar.setVisibility(View.VISIBLE);
 

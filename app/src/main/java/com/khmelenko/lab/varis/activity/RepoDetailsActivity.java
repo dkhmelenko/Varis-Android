@@ -8,11 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Toast;
 
 import com.khmelenko.lab.varis.R;
-import com.khmelenko.lab.varis.TravisApp;
 import com.khmelenko.lab.varis.adapter.SmartFragmentStatePagerAdapter;
 import com.khmelenko.lab.varis.fragment.BranchesFragment;
 import com.khmelenko.lab.varis.fragment.BuildHistoryFragment;
@@ -35,10 +33,10 @@ import dagger.android.AndroidInjection;
  * @author Dmytro Khmelenko
  */
 public final class RepoDetailsActivity extends MvpActivity<RepoDetailsPresenter> implements
-        RepoDetailsView,
-        BuildHistoryFragment.BuildHistoryListener,
-        BranchesFragment.BranchesListener,
-        PullRequestsFragment.PullRequestsListener {
+                                                                                 RepoDetailsView,
+                                                                                 BuildHistoryFragment.BuildHistoryListener,
+                                                                                 BranchesFragment.BranchesListener,
+                                                                                 PullRequestsFragment.PullRequestsListener {
 
     private static final int BUILD_DETAILS_REQUEST_CODE = 0;
 
@@ -61,7 +59,7 @@ public final class RepoDetailsActivity extends MvpActivity<RepoDetailsPresenter>
         private static final int INDEX_BRANCHES = 1;
         private static final int INDEX_PULL_REQUESTS = 2;
 
-        public PagerAdapter(FragmentManager fragmentManager) {
+        PagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
 
@@ -110,12 +108,12 @@ public final class RepoDetailsActivity extends MvpActivity<RepoDetailsPresenter>
         initToolbar();
 
         // setting view pager
-        ViewPager vpPager = (ViewPager) findViewById(R.id.repo_details_view_pager);
+        ViewPager vpPager = findViewById(R.id.repo_details_view_pager);
         mAdapterViewPager = new PagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(mAdapterViewPager);
         vpPager.setOffscreenPageLimit(PagerAdapter.ITEMS_COUNT);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.repo_details_view_tabs);
+        TabLayout tabLayout = findViewById(R.id.repo_details_view_tabs);
         tabLayout.setupWithViewPager(vpPager);
     }
 
@@ -205,19 +203,14 @@ public final class RepoDetailsActivity extends MvpActivity<RepoDetailsPresenter>
      * Initializes toolbar
      */
     private void initToolbar() {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
+            toolbar.setNavigationOnClickListener(v -> onBackPressed());
         }
     }
 

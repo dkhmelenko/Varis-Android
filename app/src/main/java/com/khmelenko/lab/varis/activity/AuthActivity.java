@@ -4,11 +4,9 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Toast;
 
 import com.khmelenko.lab.varis.R;
-import com.khmelenko.lab.varis.TravisApp;
 import com.khmelenko.lab.varis.fragment.AuthFragment;
 import com.khmelenko.lab.varis.fragment.SecurityCodeFragment;
 import com.khmelenko.lab.varis.mvp.MvpActivity;
@@ -32,7 +30,6 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
                                                                    AuthFragment.OnLoginActionListener,
                                                                    SecurityCodeFragment.OnSecurityCodeAction {
 
-    private static final String SECURITY_CODE_INPUT = "securityCodeInput";
     private static final String AUTH_FRAGMENT_TAG = "AuthFragment";
     private static final String SECURITY_CODE_FRAGMENT_TAG = "SecurityCodeFragment";
 
@@ -100,19 +97,14 @@ public final class AuthActivity extends MvpActivity<AuthPresenter> implements
      * Initializes toolbar
      */
     private void initToolbar() {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
+            toolbar.setNavigationOnClickListener(v -> onBackPressed());
         }
     }
 
