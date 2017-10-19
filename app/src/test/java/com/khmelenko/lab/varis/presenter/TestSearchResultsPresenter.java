@@ -5,7 +5,8 @@ import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
-import com.khmelenko.lab.varis.view.SearchResultsView;
+import com.khmelenko.lab.varis.repositories.search.SearchResultsPresenter;
+import com.khmelenko.lab.varis.repositories.search.SearchResultsView;
 
 import org.junit.Before;
 import org.junit.Rule;
