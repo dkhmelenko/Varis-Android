@@ -36,7 +36,7 @@ import retrofit2.HttpException;
  */
 public class BuildsDetailsPresenter extends MvpPresenter<BuildDetailsView> {
 
-    public static final int LOAD_LOG_MAX_ATTEMPT = 3;
+    private static final int LOAD_LOG_MAX_ATTEMPT = 3;
 
     private final TravisRestClient mTravisRestClient;
     private final RawClient mRawClient;

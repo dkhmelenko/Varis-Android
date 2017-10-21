@@ -108,7 +108,7 @@ public final class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.
         @BindView(R.id.item_job_duration)
         TextView mDuration;
 
-        public JobViewHolder(View itemView) {
+        JobViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setClickable(true);

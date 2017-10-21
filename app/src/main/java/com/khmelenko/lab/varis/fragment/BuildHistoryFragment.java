@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -51,8 +51,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
      * @return Fragment instance
      */
     public static BuildHistoryFragment newInstance() {
-        BuildHistoryFragment fragment = new BuildHistoryFragment();
-        return fragment;
+        return new BuildHistoryFragment();
     }
 
     public BuildHistoryFragment() {
@@ -74,12 +73,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
         mBuildHistoryRecyclerView.setAdapter(mBuildListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mListener.onReloadBuildHistory();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mListener.onReloadBuildHistory());
 
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -100,7 +94,7 @@ public class BuildHistoryFragment extends Fragment implements OnListItemListener
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (BuildHistoryListener) activity;

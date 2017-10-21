@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -130,37 +129,34 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
      * Sets up navigation drawer layout
      */
     private void setupDrawerLayout() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        final NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
-        view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        final NavigationView view = findViewById(R.id.navigation_view);
+        view.setNavigationItemSelectedListener(menuItem -> {
 
-                switch (menuItem.getItemId()) {
-                    case R.id.drawer_login:
-                        Intent loginIntent = new Intent(MainActivity.this, AuthActivity.class);
-                        startActivityForResult(loginIntent, AUTH_ACTIVITY_CODE);
-                        break;
-                    case R.id.drawer_logout:
-                        getPresenter().userLogout();
+            switch (menuItem.getItemId()) {
+                case R.id.drawer_login:
+                    Intent loginIntent = new Intent(MainActivity.this, AuthActivity.class);
+                    startActivityForResult(loginIntent, AUTH_ACTIVITY_CODE);
+                    break;
+                case R.id.drawer_logout:
+                    getPresenter().userLogout();
 
-                        finish();
-                        startActivity(getIntent());
-                        break;
-                    case R.id.drawer_licenses:
-                        LicensesDialogFragment dialog = LicensesDialogFragment.newInstance();
-                        dialog.show(getSupportFragmentManager(), "LicensesDialog");
-                        break;
-                    case R.id.drawer_about:
-                        Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
-                        startActivity(aboutIntent);
-                        break;
-                }
-                menuItem.setChecked(false);
-                mDrawerLayout.closeDrawers();
-                return true;
+                    finish();
+                    startActivity(getIntent());
+                    break;
+                case R.id.drawer_licenses:
+                    LicensesDialogFragment dialog = LicensesDialogFragment.newInstance();
+                    dialog.show(getSupportFragmentManager(), "LicensesDialog");
+                    break;
+                case R.id.drawer_about:
+                    Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
+                    startActivity(aboutIntent);
+                    break;
             }
+            menuItem.setChecked(false);
+            mDrawerLayout.closeDrawers();
+            return true;
         });
 
     }
@@ -292,10 +288,10 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
 
     @Override
     public void updateUserData(User user) {
-        final NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
+        final NavigationView view = findViewById(R.id.navigation_view);
         View header = view.getHeaderView(0);
-        TextView usernameView = (TextView) header.findViewById(R.id.drawer_header_username);
-        TextView emailView = (TextView) header.findViewById(R.id.drawer_header_email);
+        TextView usernameView = header.findViewById(R.id.drawer_header_username);
+        TextView emailView = header.findViewById(R.id.drawer_header_email);
 
         if (user != null) {
             String username = user.getLogin();
@@ -319,7 +315,7 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
 
     @Override
     public void updateMenuState(@Nullable String accessToken) {
-        NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView view = findViewById(R.id.navigation_view);
         Menu menu = view.getMenu();
         if (TextUtils.isEmpty(accessToken)) {
             menu.findItem(R.id.drawer_login).setVisible(true);

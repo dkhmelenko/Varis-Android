@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -33,8 +33,7 @@ public class SecurityCodeFragment extends Fragment {
      * @return Fragment instance
      */
     public static SecurityCodeFragment newInstance() {
-        SecurityCodeFragment fragment = new SecurityCodeFragment();
-        return fragment;
+        return new SecurityCodeFragment();
     }
 
     public SecurityCodeFragment() {
@@ -62,7 +61,7 @@ public class SecurityCodeFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (OnSecurityCodeAction) activity;

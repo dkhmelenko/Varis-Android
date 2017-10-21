@@ -1,8 +1,8 @@
 package com.khmelenko.lab.varis.fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khmelenko.lab.varis.R;
-import com.khmelenko.lab.varis.adapter.OnListItemListener;
 import com.khmelenko.lab.varis.adapter.RepoListAdapter;
 import com.khmelenko.lab.varis.network.response.Repo;
 
@@ -77,23 +76,17 @@ public class ReposFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mReposRecyclerView.setLayoutManager(layoutManager);
 
-        mRepoListAdapter = new RepoListAdapter(mRepos, new OnListItemListener() {
-            @Override
-            public void onItemSelected(int position) {
-                if (mListener != null) {
-                    mListener.onRepositorySelected(mRepos.get(position));
-                }
+        mRepoListAdapter = new RepoListAdapter(mRepos, position -> {
+            if (mListener != null) {
+                mListener.onRepositorySelected(mRepos.get(position));
             }
         });
         mReposRecyclerView.setAdapter(mRepoListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mListener != null) {
-                    mListener.onRefreshData();
-                }
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            if (mListener != null) {
+                mListener.onRefreshData();
             }
         });
 
@@ -121,7 +114,7 @@ public class ReposFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (ReposFragmentListener) activity;

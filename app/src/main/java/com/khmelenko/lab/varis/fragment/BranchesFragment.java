@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -51,8 +51,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
      * @return Fragment instance
      */
     public static BranchesFragment newInstance() {
-        BranchesFragment fragment = new BranchesFragment();
-        return fragment;
+        return new BranchesFragment();
     }
 
     public BranchesFragment() {
@@ -74,12 +73,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
         mBranchesRecyclerView.setAdapter(mBranchesListAdapter);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_progress);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mListener.onReloadBranches();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mListener.onReloadBranches());
 
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -99,7 +93,7 @@ public class BranchesFragment extends Fragment implements OnListItemListener {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (BranchesListener) activity;

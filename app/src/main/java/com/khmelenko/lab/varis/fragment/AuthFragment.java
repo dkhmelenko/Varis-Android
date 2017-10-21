@@ -1,13 +1,12 @@
 package com.khmelenko.lab.varis.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
@@ -35,9 +34,6 @@ public class AuthFragment extends Fragment {
 
     @BindView(R.id.auth_password)
     EditText mPassword;
-
-    @BindView(R.id.auth_login_btn)
-    Button mLoginBtn;
 
     private String mCurrentServer;
 
@@ -83,21 +79,18 @@ public class AuthFragment extends Fragment {
      * Prepares server selection section
      */
     private void prepareServerSelection() {
-        mServerSelector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int buttonId) {
-                String server = Constants.OPEN_SOURCE_TRAVIS_URL;
-                switch (buttonId) {
-                    case R.id.auth_server_opensource:
-                        server = Constants.OPEN_SOURCE_TRAVIS_URL;
-                        break;
-                    case R.id.auth_server_pro:
-                        server = Constants.PRIVATE_TRAVIS_URL;
-                        break;
-                }
-
-                mListener.onChangeServer(server);
+        mServerSelector.setOnCheckedChangeListener((radioGroup, buttonId) -> {
+            String server = Constants.OPEN_SOURCE_TRAVIS_URL;
+            switch (buttonId) {
+                case R.id.auth_server_opensource:
+                    server = Constants.OPEN_SOURCE_TRAVIS_URL;
+                    break;
+                case R.id.auth_server_pro:
+                    server = Constants.PRIVATE_TRAVIS_URL;
+                    break;
             }
+
+            mListener.onChangeServer(server);
         });
 
         switch (mCurrentServer) {
@@ -139,7 +132,7 @@ public class AuthFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (OnLoginActionListener) activity;

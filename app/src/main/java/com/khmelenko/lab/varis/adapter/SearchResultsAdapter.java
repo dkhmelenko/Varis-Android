@@ -24,7 +24,7 @@ public class SearchResultsAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView text = (TextView) view.findViewById(R.id.item_search_result_text);
+        TextView text = view.findViewById(R.id.item_search_result_text);
         int columnIndex = cursor.getColumnIndex(SearchHistoryProvider.HEADER_COLUMN);
         String textValue = cursor.getString(columnIndex);
         text.setText(textValue);
