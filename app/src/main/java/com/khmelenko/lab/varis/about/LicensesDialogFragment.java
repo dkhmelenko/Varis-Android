@@ -1,4 +1,4 @@
-package com.khmelenko.lab.varis.fragment;
+package com.khmelenko.lab.varis.about;
 
 import android.app.Dialog;
 import android.os.Bundle;

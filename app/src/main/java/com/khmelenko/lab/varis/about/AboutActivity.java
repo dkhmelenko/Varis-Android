@@ -1,4 +1,4 @@
-package com.khmelenko.lab.varis.activity;
+package com.khmelenko.lab.varis.about;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -9,6 +9,7 @@ import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import com.khmelenko.lab.varis.R;
+import com.khmelenko.lab.varis.activity.BaseActivity;
 import com.khmelenko.lab.varis.util.PackageUtils;
 
 import butterknife.BindView;

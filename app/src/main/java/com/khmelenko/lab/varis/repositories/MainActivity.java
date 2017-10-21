@@ -22,10 +22,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.khmelenko.lab.varis.R;
-import com.khmelenko.lab.varis.activity.AboutActivity;
+import com.khmelenko.lab.varis.about.AboutActivity;
 import com.khmelenko.lab.varis.auth.AuthActivity;
 import com.khmelenko.lab.varis.repodetails.RepoDetailsActivity;
-import com.khmelenko.lab.varis.fragment.LicensesDialogFragment;
+import com.khmelenko.lab.varis.about.LicensesDialogFragment;
 import com.khmelenko.lab.varis.mvp.MvpActivity;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.response.User;

@@ -30,7 +30,7 @@
 
         <!-- About -->
         <activity
-            android:name="com.khmelenko.lab.varis.activity.AboutActivity"
+            android:name="com.khmelenko.lab.varis.about.AboutActivity"
             android:label="@string/about_title"/>
 
         <!-- Repository details -->
