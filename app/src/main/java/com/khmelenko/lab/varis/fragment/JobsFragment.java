@@ -18,7 +18,7 @@ import com.khmelenko.lab.varis.network.response.Job;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
  */
 public class JobsFragment extends Fragment {
 
-    @Bind(R.id.jobs_recycler_view)
+    @BindView(R.id.jobs_recycler_view)
     RecyclerView mJobsRecyclerView;
 
     private JobsListAdapter mJobsListAdapter;
@@ -82,7 +82,7 @@ public class JobsFragment extends Fragment {
         mJobsRecyclerView.setAdapter(mJobsListAdapter);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int itemHeight = (int)((mJobsListAdapter.getItemHeight() * metrics.density) + 0.5);
+        int itemHeight = (int) ((mJobsListAdapter.getItemHeight() * metrics.density) + 0.5);
         mJobsRecyclerView.getLayoutParams().height = itemHeight * mJobsListAdapter.getItemCount();
 
         return view;

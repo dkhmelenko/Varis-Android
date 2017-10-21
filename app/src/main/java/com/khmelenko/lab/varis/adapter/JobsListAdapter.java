@@ -18,7 +18,7 @@ import com.khmelenko.lab.varis.util.DateTimeUtils;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -96,16 +96,16 @@ public final class JobsListAdapter extends RecyclerView.Adapter<JobsListAdapter.
 
         private static final int HEIGHT = 88; // height in DP
 
-        @Bind(R.id.card_view)
+        @BindView(R.id.card_view)
         View mParent;
 
-        @Bind(R.id.item_job_number)
+        @BindView(R.id.item_job_number)
         TextView mNumber;
 
-        @Bind(R.id.item_job_state)
+        @BindView(R.id.item_job_state)
         TextView mState;
 
-        @Bind(R.id.item_job_duration)
+        @BindView(R.id.item_job_duration)
         TextView mDuration;
 
         public JobViewHolder(View itemView) {

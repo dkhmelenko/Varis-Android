@@ -21,7 +21,7 @@ import com.khmelenko.lab.varis.network.response.Repo;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -33,13 +33,13 @@ public class ReposFragment extends Fragment {
 
     private ReposFragmentListener mListener;
 
-    @Bind(R.id.empty_text)
+    @BindView(R.id.empty_text)
     TextView mEmptyView;
 
-    @Bind(R.id.main_repos_swipe_view)
+    @BindView(R.id.main_repos_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.main_repos_recycler_view)
+    @BindView(R.id.main_repos_recycler_view)
     RecyclerView mReposRecyclerView;
 
     private RepoListAdapter mRepoListAdapter;
@@ -157,12 +157,12 @@ public class ReposFragment extends Fragment {
      */
     public void setLoadingProgress(boolean isLoading) {
         if (isLoading) {
-            if(mProgressDialog == null) {
+            if (mProgressDialog == null) {
                 mProgressDialog = ProgressDialog.show(getActivity(), "", getString(R.string.loading_msg));
             }
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
-            if(mProgressDialog != null) {
+            if (mProgressDialog != null) {
                 mProgressDialog.dismiss();
                 mProgressDialog = null;
             }

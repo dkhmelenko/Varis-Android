@@ -7,7 +7,7 @@ import com.khmelenko.lab.varis.R;
 import com.khmelenko.lab.varis.adapter.OnListItemListener;
 import com.khmelenko.lab.varis.widget.BuildView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -17,10 +17,10 @@ import butterknife.ButterKnife;
  */
 public final class BuildViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    @Bind(R.id.item_build_card_view)
+    @BindView(R.id.item_build_card_view)
     View mParent;
 
-    @Bind(R.id.item_build_data)
+    @BindView(R.id.item_build_data)
     public BuildView mBuildView;
 
     private final OnListItemListener mListener;

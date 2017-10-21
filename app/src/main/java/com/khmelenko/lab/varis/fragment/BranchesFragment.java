@@ -18,7 +18,7 @@ import com.khmelenko.lab.varis.adapter.OnListItemListener;
 import com.khmelenko.lab.varis.network.response.Branch;
 import com.khmelenko.lab.varis.network.response.Branches;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -28,16 +28,16 @@ import butterknife.ButterKnife;
  */
 public class BranchesFragment extends Fragment implements OnListItemListener {
 
-    @Bind(R.id.list_refreshable_swipe_view)
+    @BindView(R.id.list_refreshable_swipe_view)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.list_refreshable_recycler_view)
+    @BindView(R.id.list_refreshable_recycler_view)
     RecyclerView mBranchesRecyclerView;
 
-    @Bind(R.id.progressbar)
+    @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
 
-    @Bind(R.id.empty_text)
+    @BindView(R.id.empty_text)
     TextView mEmptyText;
 
     private BranchesListAdapter mBranchesListAdapter;
