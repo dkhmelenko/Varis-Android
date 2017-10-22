@@ -11,7 +11,8 @@ import com.khmelenko.lab.varis.network.response.Commit;
 import com.khmelenko.lab.varis.network.response.RequestData;
 import com.khmelenko.lab.varis.network.response.Requests;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
-import com.khmelenko.lab.varis.view.RepoDetailsView;
+import com.khmelenko.lab.varis.repodetails.RepoDetailsPresenter;
+import com.khmelenko.lab.varis.repodetails.RepoDetailsView;
 
 import org.junit.Before;
 import org.junit.Rule;

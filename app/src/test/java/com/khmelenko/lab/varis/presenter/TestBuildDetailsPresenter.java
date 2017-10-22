@@ -1,6 +1,7 @@
 package com.khmelenko.lab.varis.presenter;
 
 import com.khmelenko.lab.varis.RxJavaRules;
+import com.khmelenko.lab.varis.builddetails.BuildsDetailsPresenter;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.log.LogEntryComponent;
@@ -13,7 +14,7 @@ import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
-import com.khmelenko.lab.varis.view.BuildDetailsView;
+import com.khmelenko.lab.varis.builddetails.BuildDetailsView;
 
 import org.junit.Before;
 import org.junit.Rule;

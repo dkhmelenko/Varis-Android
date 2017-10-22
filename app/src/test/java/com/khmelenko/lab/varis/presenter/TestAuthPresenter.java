@@ -2,6 +2,7 @@ package com.khmelenko.lab.varis.presenter;
 
 import com.khmelenko.lab.varis.BuildConfig;
 import com.khmelenko.lab.varis.RxJavaRules;
+import com.khmelenko.lab.varis.auth.AuthPresenter;
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
 import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.request.AccessTokenRequest;
@@ -13,7 +14,7 @@ import com.khmelenko.lab.varis.network.retrofit.github.GithubApiService;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.util.EncryptionUtils;
-import com.khmelenko.lab.varis.view.AuthView;
+import com.khmelenko.lab.varis.auth.AuthView;
 
 import org.junit.Before;
 import org.junit.Rule;

@@ -7,9 +7,10 @@ import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.response.User;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
+import com.khmelenko.lab.varis.repositories.RepositoriesPresenter;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
-import com.khmelenko.lab.varis.view.RepositoriesView;
+import com.khmelenko.lab.varis.repositories.RepositoriesView;
 
 import org.junit.Before;
 import org.junit.Rule;

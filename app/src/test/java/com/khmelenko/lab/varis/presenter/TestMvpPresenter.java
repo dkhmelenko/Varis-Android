@@ -2,7 +2,7 @@ package com.khmelenko.lab.varis.presenter;
 
 import com.khmelenko.lab.varis.mvp.MvpPresenter;
 import com.khmelenko.lab.varis.mvp.MvpView;
-import com.khmelenko.lab.varis.view.SearchResultsView;
+import com.khmelenko.lab.varis.repositories.search.SearchResultsView;
 
 import org.junit.Before;
 import org.junit.Test;

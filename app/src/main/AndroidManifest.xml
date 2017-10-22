@@ -14,7 +14,7 @@
 
         <!-- Main application activity -->
         <activity
-            android:name="com.khmelenko.lab.varis.activity.MainActivity"
+            android:name="com.khmelenko.lab.varis.repositories.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -25,22 +25,22 @@
 
         <!-- Authentication activity -->
         <activity
-            android:name="com.khmelenko.lab.varis.activity.AuthActivity"
+            android:name="com.khmelenko.lab.varis.auth.AuthActivity"
             android:label="@string/auth_title"/>
 
         <!-- About -->
         <activity
-            android:name="com.khmelenko.lab.varis.activity.AboutActivity"
+            android:name="com.khmelenko.lab.varis.about.AboutActivity"
             android:label="@string/about_title"/>
 
         <!-- Repository details -->
         <activity
-            android:name="com.khmelenko.lab.varis.activity.RepoDetailsActivity"
+            android:name="com.khmelenko.lab.varis.repodetails.RepoDetailsActivity"
             android:label="@string/repo_details_title"/>
 
         <!-- Build details -->
         <activity
-            android:name="com.khmelenko.lab.varis.activity.BuildDetailsActivity"
+            android:name="com.khmelenko.lab.varis.builddetails.BuildDetailsActivity"
             android:label="@string/build_details_title">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -82,7 +82,7 @@
 
         <!-- Search results -->
         <activity
-            android:name="com.khmelenko.lab.varis.activity.SearchResultsActivity"
+            android:name="com.khmelenko.lab.varis.repositories.search.SearchResultsActivity"
             android:label="@string/search_results_title"
             android:launchMode="singleTop">
             <intent-filter>
