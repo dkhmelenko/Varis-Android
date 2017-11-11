@@ -80,6 +80,7 @@ dependencies {
     compile "com.squareup.okhttp3:logging-interceptor:$libraryVersion.okhttp3"
     compile "com.squareup.okhttp3:okhttp:$libraryVersion.okhttp3"
     compile "com.jakewharton:butterknife:$libraryVersion.butterknife"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$libraryVersion.butterknife"
     compile "de.hdodenhof:circleimageview:$libraryVersion.circleimageview"
     compile "io.reactivex.rxjava2:rxjava:$libraryVersion.rxjava"
     compile "io.reactivex.rxjava2:rxandroid:$libraryVersion.rxAndroid"
