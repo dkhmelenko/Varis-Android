@@ -55,7 +55,7 @@ ext {
             retrofit2      : '2.3.0',
             butterknife    : '8.8.1',
             circleimageview: '2.1.0',
-            dagger         : '2.11',
+            dagger         : '2.13',
             glassfish      : '10.0-b28',
             mockito        : '2.8.47',
             junit          : '4.12',
