@@ -50,7 +50,7 @@ android {
 
 ext {
     libraryVersion = [
-            support        : '26.0.2',
+            support        : '26.1.0',
             gson           : '2.8.2',
             retrofit2      : '2.3.0',
             butterknife    : '8.8.1',
