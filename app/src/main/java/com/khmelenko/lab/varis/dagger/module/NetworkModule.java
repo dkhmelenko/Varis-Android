@@ -25,29 +25,29 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 @Module
-public class NetworkModule {
+public abstract class NetworkModule {
 
     @Provides
     @Singleton
-    public TravisRestClient provideTravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
+    public static TravisRestClient provideTravisRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
         return new TravisRestClient(retrofit, okHttpClient, appSettings);
     }
 
     @Provides
     @Singleton
-    public GitHubRestClient provideGitHubRestClientRx(Retrofit retrofit) {
+    public static GitHubRestClient provideGitHubRestClientRx(Retrofit retrofit) {
         return new GitHubRestClient(retrofit);
     }
 
     @Provides
     @Singleton
-    public RawClient provideRawRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
+    public static RawClient provideRawRestClientRx(Retrofit retrofit, OkHttpClient okHttpClient, AppSettings appSettings) {
         return new RawClient(retrofit, okHttpClient, appSettings);
     }
 
     @Provides
     @Singleton
-    public OkHttpClient okHttpClient() {
+    public static OkHttpClient okHttpClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
@@ -59,7 +59,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public Retrofit retrofit(OkHttpClient okHttpClient, AppSettings appSettings) {
+    public static Retrofit retrofit(OkHttpClient okHttpClient, AppSettings appSettings) {
         return new Retrofit.Builder()
                 .baseUrl(appSettings.getServerUrl())
                 .addConverterFactory(GsonConverterFactory.create(constructGsonConverter()))
@@ -70,7 +70,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public LogsParser provideCommandsParser() {
+    public static LogsParser provideCommandsParser() {
         return new LogsParser();
     }
 
@@ -79,7 +79,7 @@ public class NetworkModule {
      *
      * @return Gson converter
      */
-    private Gson constructGsonConverter() {
+    private static Gson constructGsonConverter() {
         return new GsonBuilder()
                 .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
                 .registerTypeAdapterFactory(new ItemTypeAdapterFactory())

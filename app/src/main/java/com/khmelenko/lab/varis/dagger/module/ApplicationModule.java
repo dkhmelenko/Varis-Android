@@ -17,17 +17,17 @@ import dagger.Provides;
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 @Module
-public class ApplicationModule {
+public abstract class ApplicationModule {
 
     @Provides
     @Singleton
-    public PresenterKeeper<MvpPresenter> providePresenterKeeper() {
+    public static PresenterKeeper<MvpPresenter> providePresenterKeeper() {
         return new PresenterKeeper<>();
     }
 
     @Provides
     @Singleton
-    public Context provideAppContext() {
+    public static Context provideAppContext() {
         return TravisApp.getAppContext();
     }
 }

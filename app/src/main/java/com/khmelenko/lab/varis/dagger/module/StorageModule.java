@@ -17,17 +17,17 @@ import dagger.Provides;
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 @Module
-public class StorageModule {
+public abstract class StorageModule {
 
     @Provides
     @Singleton
-    public CacheStorage provideCache() {
+    public static CacheStorage provideCache() {
         return CacheStorage.newInstance();
     }
 
     @Provides
     @Singleton
-    public AppSettings provideAppSettings(Context context) {
+    public static AppSettings provideAppSettings(Context context) {
         return new AppSettings(context);
     }
 }
