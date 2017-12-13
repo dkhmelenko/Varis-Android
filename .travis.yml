@@ -17,7 +17,7 @@ android:
 before_install:
  - chmod +x gradlew
 
-script: ./gradlew testRelease jacocoTestReport assembleRelease
+script: ./gradlew testRelease jacocoTestReport connectedCheck assembleRelease
 
 after_success:
  - bash <(curl -s https://codecov.io/bash)
