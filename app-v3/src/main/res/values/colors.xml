@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <color name="primary">#03A9F4</color>
+    <color name="primary_dark">#0288D1</color>
+    <color name="primary_light">#B3E5FC</color>
+    <color name="accent">#FF5722</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#B6B6B6</color>
+
+    <color name="build_state_passed">#FF39AA56</color>
+    <color name="build_state_failed">#FFDB4545</color>
+    <color name="build_state_started">#FFD2C93B</color>
+    <color name="build_state_errored">#FF9D9D9D</color>
+
+    <color name="swipe_refresh_progress">#03A9F4</color>
+
+    <color name="launcher_background">#1FAAF1</color>
+</resources>

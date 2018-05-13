@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/drawer_login"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/navigation_drawer_login"/>
+
+        <item
+            android:id="@+id/drawer_logout"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/navigation_drawer_logout"/>
+
+        <item
+            android:id="@+id/drawer_licenses"
+            android:icon="@drawable/ic_licences_black_24dp"
+            android:title="@string/navigation_drawer_licenses"/>
+
+        <item
+            android:id="@+id/drawer_about"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="@string/navigation_drawer_about"/>
+
+    </group>
+</menu>

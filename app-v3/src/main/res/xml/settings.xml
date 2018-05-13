@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="settings_screen">
+
+    <PreferenceCategory android:title="@string/settings_category_general">
+
+        <ListPreference
+            android:entries="@array/settings_server_types"
+            android:entryValues="@array/settings_server_types_values"
+            android:key="settings_server_type"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/settings_server_type_title"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

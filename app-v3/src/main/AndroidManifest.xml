@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="com.khmelenko.lab.varis"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name="com.khmelenko.lab.varis.TravisApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+
+        <!-- Main application activity -->
+        <activity
+            android:name="com.khmelenko.lab.varis.repositories.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Authentication activity -->
+        <activity
+            android:name="com.khmelenko.lab.varis.auth.AuthActivity"
+            android:label="@string/auth_title"/>
+
+        <!-- About -->
+        <activity
+            android:name="com.khmelenko.lab.varis.about.AboutActivity"
+            android:label="@string/about_title"/>
+
+        <!-- Repository details -->
+        <activity
+            android:name="com.khmelenko.lab.varis.repodetails.RepoDetailsActivity"
+            android:label="@string/repo_details_title"/>
+
+        <!-- Build details -->
+        <activity
+            android:name="com.khmelenko.lab.varis.builddetails.BuildDetailsActivity"
+            android:label="@string/build_details_title">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <!-- Handling travis-ci.org -->
+                <data
+                    android:host="clicks.travis-ci.org"
+                    android:scheme="http"/>
+                <data
+                    android:host="clicks.travis-ci.org"
+                    android:scheme="https"/>
+
+                <data
+                    android:host="travis-ci.org"
+                    android:scheme="http"/>
+                <data
+                    android:host="travis-ci.org"
+                    android:scheme="https"/>
+
+                <!-- Handling travis-ci.com -->
+                <data
+                    android:host="clicks.travis-ci.com"
+                    android:scheme="http"/>
+                <data
+                    android:host="clicks.travis-ci.com"
+                    android:scheme="https"/>
+
+                <data
+                    android:host="travis-ci.com"
+                    android:scheme="http"/>
+                <data
+                    android:host="travis-ci.com"
+                    android:scheme="https"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Search results -->
+        <activity
+            android:name="com.khmelenko.lab.varis.repositories.search.SearchResultsActivity"
+            android:label="@string/search_results_title"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
+
+        <provider android:name="com.khmelenko.lab.varis.storage.SearchHistoryProvider"
+                  android:authorities="com.khmelenko.lab.varis.storage.SearchHistoryProvider" />
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".activity.SearchResultsActivity"/>
+
+    </application>
+
+</manifest>

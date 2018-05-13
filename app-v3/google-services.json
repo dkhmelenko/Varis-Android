@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "620229372809",
+    "firebase_url": "https://travisclient-android.firebaseio.com",
+    "project_id": "travisclient-android",
+    "storage_bucket": "travisclient-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620229372809:android:68146186f8380ae6",
+        "android_client_info": {
+          "package_name": "com.khmelenko.lab.travisclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "620229372809-tjr1knkmcbgncn1sg3fufqqj18ta2l0g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.khmelenko.lab.travisclient",
+            "certificate_hash": "AB2992FAC0F987092F4DC630FE2036E65BA01F1F"
+          }
+        },
+        {
+          "client_id": "620229372809-4vumvktjnn17fs6ddlomqhls73vqrugv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKUjvbXxq9VVQnFX8yt_MP8jaQmgT0KHk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620229372809-4vumvktjnn17fs6ddlomqhls73vqrugv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
