@@ -12,3 +12,4 @@
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
+-dontwarn sun.misc.**
