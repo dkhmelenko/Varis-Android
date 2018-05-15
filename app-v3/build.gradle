@@ -67,6 +67,8 @@ ext {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
     implementation "com.android.support:appcompat-v7:$libraryVersion.support"
     implementation "com.android.support:design:$libraryVersion.support"
     implementation "com.android.support:recyclerview-v7:$libraryVersion.support"
