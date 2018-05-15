@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco-android'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 27
