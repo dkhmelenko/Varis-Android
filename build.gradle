@@ -8,6 +8,7 @@ buildscript {
         classpath 'me.tatarka:gradle-retrolambda:3.6.1'
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.2'
         classpath 'org.codehaus.groovy:groovy-all:2.4.12'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.41'
     }
 }
 
