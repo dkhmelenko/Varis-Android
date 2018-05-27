@@ -76,6 +76,7 @@ dependencies {
     implementation "com.android.support:cardview-v7:$libraryVersion.support"
     implementation "com.android.support:support-v4:$libraryVersion.support"
     implementation "android.arch.lifecycle:extensions:$libraryVersion.architecture"
+    annotationProcessor "android.arch.lifecycle:compiler:$libraryVersion.architecture"
 
     implementation "com.google.code.gson:gson:$libraryVersion.gson"
     implementation "com.squareup.retrofit2:retrofit:$libraryVersion.retrofit2"
