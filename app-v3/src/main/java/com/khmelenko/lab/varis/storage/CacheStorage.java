@@ -6,6 +6,7 @@ import com.khmelenko.lab.varis.network.response.User;
 import com.khmelenko.lab.varis.util.FileUtils;
 
 import java.util.List;
+import javax.annotation.*;
 
 /**
  * Stores data to the cache
@@ -41,6 +42,7 @@ public class CacheStorage {
      *
      * @return User
      */
+    @Nullable
     public User restoreUser() {
         String fileData = FileUtils.readInternalFile(USER_FILE);
         Gson gson = new Gson();

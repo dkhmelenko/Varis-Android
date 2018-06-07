@@ -1,17 +1,16 @@
 package com.khmelenko.lab.varis.repositories;
 
 import android.app.SearchManager;
+import android.arch.lifecycle.*;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.*;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -26,7 +25,6 @@ import com.khmelenko.lab.varis.about.AboutActivity;
 import com.khmelenko.lab.varis.auth.AuthActivity;
 import com.khmelenko.lab.varis.repodetails.RepoDetailsActivity;
 import com.khmelenko.lab.varis.about.LicensesDialogFragment;
-import com.khmelenko.lab.varis.mvp.MvpActivity;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.response.User;
 import com.khmelenko.lab.varis.repositories.search.SearchResultsAdapter;
@@ -45,8 +43,7 @@ import dagger.android.AndroidInjection;
  *
  * @author Dmytro Khmelenko
  */
-public final class MainActivity extends MvpActivity<RepositoriesPresenter> implements RepositoriesView,
-                                                                                      ReposFragment.ReposFragmentListener {
+public final class MainActivity extends AppCompatActivity implements ReposFragment.ReposFragmentListener {
 
     private static final int AUTH_ACTIVITY_CODE = 0;
     private static final int REPO_DETAILS_CODE = 1;
@@ -59,7 +56,9 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
     DrawerLayout mDrawerLayout;
 
     @Inject
-    RepositoriesPresenter mPresenter;
+    RepositoriesViewModelFactory mViewModelFactory;
+
+    private RepositoriesViewModel mViewModel;
 
     private ReposFragment mFragment;
 
@@ -78,20 +77,33 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RepositoriesViewModel.class);
+        mViewModel.state().observe(this, repositoriesState -> {
+            hideProgress();
+            if (repositoriesState instanceof RepositoriesState.Loading) {
+                showProgress();
+            } else if (repositoriesState instanceof RepositoriesState.Error) {
+                showError(((RepositoriesState.Error)repositoriesState).getMessage());
+            } else if (repositoriesState instanceof RepositoriesState.ReposList) {
+                setRepos(((RepositoriesState.ReposList)repositoriesState).getRepos());
+            } else if (repositoriesState instanceof RepositoriesState.UserData) {
+                updateUserData(((RepositoriesState.UserData)repositoriesState).getUser());
+            }
+        });
+        mViewModel.init();
+
         mFragment = (ReposFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
 
         initToolbar();
         setupDrawerLayout();
+
+        updateMenuState(mViewModel.isUserLoggedIn());
     }
 
     @Override
-    protected RepositoriesPresenter getPresenter() {
-        return mPresenter;
-    }
-
-    @Override
-    protected void attachPresenter() {
-        getPresenter().attach(this);
+    protected void onDestroy() {
+        mViewModel.release();
+        super.onDestroy();
     }
 
     @Override
@@ -112,7 +124,7 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
      * Initializes toolbar
      */
     private void initToolbar() {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -140,7 +152,7 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
                     startActivityForResult(loginIntent, AUTH_ACTIVITY_CODE);
                     break;
                 case R.id.drawer_logout:
-                    getPresenter().userLogout();
+                    mViewModel.userLogout();
 
                     finish();
                     startActivity(getIntent());
@@ -169,13 +181,13 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
                     // clear previous data
                     mFragment.clearData();
                     showProgress();
-                    getPresenter().reloadRepos();
+                    mViewModel.reloadRepos();
                     break;
                 case REPO_DETAILS_CODE:
                     boolean reloadRequired = data.getBooleanExtra(RepoDetailsActivity.RELOAD_REQUIRED_KEY, false);
                     if (reloadRequired) {
                         showProgress();
-                        getPresenter().reloadRepos();
+                        mViewModel.reloadRepos();
                     }
                     break;
             }
@@ -283,10 +295,9 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
 
     @Override
     public void onRefreshData() {
-        getPresenter().reloadRepos();
+        mViewModel.reloadRepos();
     }
 
-    @Override
     public void updateUserData(User user) {
         final NavigationView view = findViewById(R.id.navigation_view);
         View header = view.getHeaderView(0);
@@ -308,35 +319,30 @@ public final class MainActivity extends MvpActivity<RepositoriesPresenter> imple
         }
     }
 
-    @Override
     public void setRepos(List<Repo> repos) {
         mFragment.setRepos(repos);
     }
 
-    @Override
-    public void updateMenuState(@Nullable String accessToken) {
+    public void updateMenuState(boolean userLoggedIn) {
         NavigationView view = findViewById(R.id.navigation_view);
         Menu menu = view.getMenu();
-        if (TextUtils.isEmpty(accessToken)) {
-            menu.findItem(R.id.drawer_login).setVisible(true);
-            menu.findItem(R.id.drawer_logout).setVisible(false);
-        } else {
+        if (userLoggedIn) {
             menu.findItem(R.id.drawer_login).setVisible(false);
             menu.findItem(R.id.drawer_logout).setVisible(true);
+        } else {
+            menu.findItem(R.id.drawer_login).setVisible(true);
+            menu.findItem(R.id.drawer_logout).setVisible(false);
         }
     }
 
-    @Override
     public void showError(String message) {
         mFragment.handleLoadingFailed(message);
     }
 
-    @Override
     public void showProgress() {
         mFragment.setLoadingProgress(true);
     }
 
-    @Override
     public void hideProgress() {
         mFragment.setLoadingProgress(false);
     }

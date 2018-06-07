@@ -105,4 +105,5 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$libraryVersion.robolectric"
     testImplementation "com.google.dagger:dagger:$libraryVersion.dagger"
     testAnnotationProcessor "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
+    testImplementation "android.arch.core:core-testing:$libraryVersion.architecture"
 }

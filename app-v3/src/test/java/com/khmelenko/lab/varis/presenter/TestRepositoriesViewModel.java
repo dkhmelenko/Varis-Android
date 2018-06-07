@@ -7,16 +7,18 @@ import com.khmelenko.lab.varis.dagger.TestComponent;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.network.response.User;
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
-import com.khmelenko.lab.varis.repositories.RepositoriesPresenter;
+import com.khmelenko.lab.varis.repositories.*;
 import com.khmelenko.lab.varis.storage.AppSettings;
 import com.khmelenko.lab.varis.storage.CacheStorage;
-import com.khmelenko.lab.varis.repositories.RepositoriesView;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.*;
 import org.mockito.ArgumentCaptor;
 
+import android.arch.core.executor.testing.*;
+import android.arch.lifecycle.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,21 +29,20 @@ import io.reactivex.Single;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
- * Testing {@link RepositoriesPresenter}
+ * Testing {@link com.khmelenko.lab.varis.repositories.RepositoriesViewModel}
  *
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
-public class TestRepositoriesPresenter {
+public class TestRepositoriesViewModel {
 
     @Rule
     public RxJavaRules mRxJavaRules = new RxJavaRules();
+
+    @Rule
+    public TestRule rule = new InstantTaskExecutorRule();
 
     @Inject
     TravisRestClient mTravisRestClient;
@@ -52,9 +53,9 @@ public class TestRepositoriesPresenter {
     @Inject
     AppSettings mAppSettings;
 
-    private RepositoriesPresenter mRepositoriesPresenter;
+    private RepositoriesViewModel mRepositoriesViewModel;
 
-    private RepositoriesView mRepositoriesView;
+    private Observer<RepositoriesState> stateObserver = mock(Observer.class);
 
     @Before
     public void setup() {
@@ -64,9 +65,8 @@ public class TestRepositoriesPresenter {
         final List<Repo> responseData = new ArrayList<>();
         when(mTravisRestClient.getApiService().getRepos("")).thenReturn(Single.just(responseData));
 
-        mRepositoriesPresenter = spy(new RepositoriesPresenter(mTravisRestClient, mCacheStorage, mAppSettings));
-        mRepositoriesView = mock(RepositoriesView.class);
-        mRepositoriesPresenter.attach(mRepositoriesView);
+        mRepositoriesViewModel = new RepositoriesViewModel(mTravisRestClient, mCacheStorage, mAppSettings);
+        mRepositoriesViewModel.state().observeForever(stateObserver);
     }
 
     @Test
@@ -74,9 +74,11 @@ public class TestRepositoriesPresenter {
         final List<Repo> responseData = new ArrayList<>();
         when(mTravisRestClient.getApiService().getRepos()).thenReturn(Single.just(responseData));
 
-        mRepositoriesPresenter.reloadRepos();
-        verify(mRepositoriesView, times(2)).hideProgress();
-        verify(mRepositoriesView, times(2)).setRepos(eq(responseData));
+        mRepositoriesViewModel.reloadRepos();
+
+        verify(stateObserver).onChanged(RepositoriesState.Loading.INSTANCE);
+        verify(stateObserver).onChanged(new RepositoriesState.ReposList(responseData));
+        verifyNoMoreInteractions(stateObserver);
     }
 
     @Test
@@ -86,13 +88,9 @@ public class TestRepositoriesPresenter {
         when(mTravisRestClient.getApiService().getUser()).thenReturn(Single.just(user));
         when(mAppSettings.getAccessToken()).thenReturn("token");
 
-        mRepositoriesPresenter.reloadRepos();
+        mRepositoriesViewModel.reloadRepos();
 
-        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(mRepositoriesView, times(2)).updateUserData(userCaptor.capture());
-        assertNotNull(userCaptor.getValue());
-        assertEquals(user.getLogin(), userCaptor.getValue().getLogin());
-
+        verify(stateObserver).onChanged(new RepositoriesState.UserData(user));
         verify(mCacheStorage).saveUser(eq(user));
     }
 
@@ -100,7 +98,7 @@ public class TestRepositoriesPresenter {
     public void testUserLogout() {
         when(mAppSettings.getServerUrl()).thenReturn(Constants.OPEN_SOURCE_TRAVIS_URL);
 
-        mRepositoriesPresenter.userLogout();
+        mRepositoriesViewModel.userLogout();
         verify(mCacheStorage).deleteUser();
         verify(mCacheStorage).deleteRepos();
         verify(mTravisRestClient).updateTravisEndpoint(eq(Constants.OPEN_SOURCE_TRAVIS_URL));
