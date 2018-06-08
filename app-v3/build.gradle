@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco-android'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 26
     buildToolsVersion "27.0.3"
 
     defaultConfig {
@@ -19,6 +20,12 @@ android {
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 
     compileOptions {
@@ -58,27 +65,26 @@ ext {
             circleimageview: '2.1.0',
             dagger         : '2.13',
             glassfish      : '10.0-b28',
-            mockito        : '2.8.47',
+            mockito        : '2.18.3',
             junit          : '4.12',
-            robolectric    : '3.0',
+            robolectric    : '3.8',
             rxjava         : '2.1.13',
             rxAndroid      : '2.0.2',
             okhttp3        : '3.10.0',
-            architecture   : '1.1.1'
+            architecture   : '1.1.1',
+            kotlinMockito  : '1.5.0'
     ]
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     implementation "com.android.support:appcompat-v7:$libraryVersion.support"
     implementation "com.android.support:design:$libraryVersion.support"
     implementation "com.android.support:recyclerview-v7:$libraryVersion.support"
     implementation "com.android.support:cardview-v7:$libraryVersion.support"
     implementation "com.android.support:support-v4:$libraryVersion.support"
     implementation "android.arch.lifecycle:extensions:$libraryVersion.architecture"
-    annotationProcessor "android.arch.lifecycle:compiler:$libraryVersion.architecture"
-
+    kapt "android.arch.lifecycle:compiler:$libraryVersion.architecture"
     implementation "com.google.code.gson:gson:$libraryVersion.gson"
     implementation "com.squareup.retrofit2:retrofit:$libraryVersion.retrofit2"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$libraryVersion.retrofit2"
@@ -90,20 +96,20 @@ dependencies {
     implementation "de.hdodenhof:circleimageview:$libraryVersion.circleimageview"
     implementation "io.reactivex.rxjava2:rxjava:$libraryVersion.rxjava"
     implementation "io.reactivex.rxjava2:rxandroid:$libraryVersion.rxAndroid"
-
-    annotationProcessor "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$libraryVersion.dagger"
+    kapt "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$libraryVersion.dagger"
     implementation "com.google.dagger:dagger:$libraryVersion.dagger"
     implementation "com.google.dagger:dagger-android-support:$libraryVersion.dagger"
     compileOnly "org.glassfish:javax.annotation:$libraryVersion.glassfish"
-
     androidTestImplementation "org.mockito:mockito-core:$libraryVersion.mockito"
     androidTestImplementation "junit:junit:$libraryVersion.junit"
-
     testImplementation "org.mockito:mockito-core:$libraryVersion.mockito"
     testImplementation "junit:junit:$libraryVersion.junit"
     testImplementation "org.robolectric:robolectric:$libraryVersion.robolectric"
     testImplementation "com.google.dagger:dagger:$libraryVersion.dagger"
-    testAnnotationProcessor "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
+    kaptTest "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
     testImplementation "android.arch.core:core-testing:$libraryVersion.architecture"
+    testImplementation "com.nhaarman:mockito-kotlin:$libraryVersion.kotlinMockito"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
