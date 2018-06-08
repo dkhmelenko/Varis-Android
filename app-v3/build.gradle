@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion "27.0.3"
 
     defaultConfig {
@@ -92,7 +92,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$libraryVersion.okhttp3"
     implementation "com.squareup.okhttp3:okhttp:$libraryVersion.okhttp3"
     implementation "com.jakewharton:butterknife:$libraryVersion.butterknife"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$libraryVersion.butterknife"
+    kapt "com.jakewharton:butterknife-compiler:$libraryVersion.butterknife"
     implementation "de.hdodenhof:circleimageview:$libraryVersion.circleimageview"
     implementation "io.reactivex.rxjava2:rxjava:$libraryVersion.rxjava"
     implementation "io.reactivex.rxjava2:rxandroid:$libraryVersion.rxAndroid"
