@@ -9,12 +9,12 @@
     <include layout="@layout/view_empty" />
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/main_repos_swipe_view"
+        android:id="@+id/mainReposSwipeView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/main_repos_recycler_view"
+            android:id="@+id/mainReposRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />

@@ -18,7 +18,6 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import butterknife.ButterKnife
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.about.AboutActivity
 import com.khmelenko.lab.varis.about.LicensesDialogFragment
@@ -64,7 +63,6 @@ class MainActivity : AppCompatActivity(), ReposFragment.ReposFragmentListener {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ButterKnife.bind(this)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RepositoriesViewModel::class.java)
         viewModel.state().observe(this, Observer { repositoriesState ->
