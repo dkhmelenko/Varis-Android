@@ -34,10 +34,14 @@ The app has the following features:
 # Contribution
 In case you have ideas or found an issue, don't hesitate to create pull request or an issue.
 
-# Further steps
+# Current status
+
+Currently the main app module is `app-v3`. In this module the following updates are happening:
+- migration to Kotlin
+- changing app architecture to use [Android Achitecture components](https://developer.android.com/topic/libraries/architecture/)
 - Migration to [API v3](https://docs.travis-ci.com/user/triggering-builds)
-- Increase Unit tests coverage
-- Espresso tests
+
+The module `app` is currently NOT developed anymore. However, it is working fine and is using  [API v2](http://docs.travis-ci.com/api/#overview).
 
 # License
 
