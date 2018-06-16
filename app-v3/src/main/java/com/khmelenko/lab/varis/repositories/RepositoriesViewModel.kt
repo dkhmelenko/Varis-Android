@@ -82,7 +82,7 @@ class RepositoriesViewModel(private val restClient: TravisRestClient,
 
         // reset back to open source url
         appSettings.putServerUrl(Constants.OPEN_SOURCE_TRAVIS_URL)
-        restClient.updateTravisEndpoint(appSettings.getServerUrl())
+        restClient.updateTravisEndpoint(appSettings.serverUrl)
     }
 
     private fun reposHandler(): BiConsumer<List<Repo>, Throwable> {
