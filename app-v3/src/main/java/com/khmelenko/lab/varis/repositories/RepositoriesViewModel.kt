@@ -103,7 +103,7 @@ class RepositoriesViewModel(private val restClient: TravisRestClient,
         this.user = user
 
         // cache user data
-        cacheStorage.saveUser(this.user)
+        cacheStorage.saveUser(user)
     }
 
     private fun handleReposLoaded(repos: List<Repo>) {
