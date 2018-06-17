@@ -13,6 +13,7 @@ import com.khmelenko.lab.varis.repositories.RepositoriesViewModel
 import com.khmelenko.lab.varis.storage.AppSettings
 import com.khmelenko.lab.varis.storage.CacheStorage
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import org.junit.Before
@@ -20,6 +21,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.mockito.ArgumentMatchers
+import org.mockito.Mockito.any
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import javax.inject.Inject
@@ -76,16 +78,26 @@ class TestRepositoriesViewModel {
 
     @Test
     fun testReloadReposWithToken() {
-        val user = User()
-        user.login = "login"
+        val user = spy(User().apply {
+            login = "login"
+            id = 123
+            email = "user@company.com"
+            name = "username"
+            gravatarId = ""
+            isSyncing = false
+            syncedAt = ""
+            isCorrectScopes = true
+            createdAt = ""
+        })
         whenever(travisRestClient.apiService.user).thenReturn(Single.just(user))
+        whenever(travisRestClient.apiService.getUserRepos(any())).thenReturn(Single.just(ArrayList()))
         whenever(appSettings.accessToken).thenReturn("token")
 
         repositoriesViewModel.reloadRepos()
 
         verify(stateObserver).onChanged(RepositoriesState.Loading)
         verify(stateObserver).onChanged(RepositoriesState.UserData(user))
-        verify(cacheStorage).saveUser(ArgumentMatchers.eq(user))
+        verify(cacheStorage).saveUser(user)
     }
 
     @Test
