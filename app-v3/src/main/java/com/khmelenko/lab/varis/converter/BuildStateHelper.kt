@@ -28,9 +28,9 @@ object BuildStateHelper {
      */
     @JvmStatic
     fun getBuildColor(state: String): Int {
-        val context = TravisApp.appContext
+        val context = TravisApp.appContext!!
 
-        var color = ContextCompat.getColor(context!!, R.color.secondary_text)
+        var color = ContextCompat.getColor(context, R.color.secondary_text)
         when (state) {
             STATE_CREATED, STATE_STARTED -> color = ContextCompat.getColor(context, R.color.build_state_started)
             STATE_PASSED -> color = ContextCompat.getColor(context, R.color.build_state_passed)
@@ -49,18 +49,18 @@ object BuildStateHelper {
      */
     @JvmStatic
     fun getBuildImage(state: String): Drawable? {
-        val context = TravisApp.appContext
+        val context = TravisApp.appContext!!
 
         return when (state) {
-            STATE_CREATED -> ContextCompat.getDrawable(context!!, R.drawable.ic_build_state_created_16dp)
+            STATE_CREATED -> ContextCompat.getDrawable(context, R.drawable.ic_build_state_created_16dp)
             STATE_STARTED -> {
-                val drawable = AnimatedVectorDrawableCompat.create(context!!, R.drawable.ic_build_state_started_animated_16dp)
+                val drawable = AnimatedVectorDrawableCompat.create(context, R.drawable.ic_build_state_started_animated_16dp)
                 drawable?.start()
                 drawable
             }
-            STATE_PASSED -> ContextCompat.getDrawable(context!!, R.drawable.ic_build_state_passed_16dp)
-            STATE_CANCELED, STATE_ERRORED -> ContextCompat.getDrawable(context!!, R.drawable.ic_build_state_errored_16dp)
-            STATE_FAILED -> ContextCompat.getDrawable(context!!, R.drawable.ic_build_state_failed_16dp)
+            STATE_PASSED -> ContextCompat.getDrawable(context, R.drawable.ic_build_state_passed_16dp)
+            STATE_CANCELED, STATE_ERRORED -> ContextCompat.getDrawable(context, R.drawable.ic_build_state_errored_16dp)
+            STATE_FAILED -> ContextCompat.getDrawable(context, R.drawable.ic_build_state_failed_16dp)
             else -> null
         }
     }
