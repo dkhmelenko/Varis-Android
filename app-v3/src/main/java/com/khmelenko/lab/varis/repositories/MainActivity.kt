@@ -24,6 +24,8 @@ import com.khmelenko.lab.varis.about.LicensesDialogFragment
 import com.khmelenko.lab.varis.auth.AuthActivity
 import com.khmelenko.lab.varis.network.response.Repo
 import com.khmelenko.lab.varis.network.response.User
+import com.khmelenko.lab.varis.repodetails.RELOAD_REQUIRED_KEY
+import com.khmelenko.lab.varis.repodetails.REPO_SLUG_KEY
 import com.khmelenko.lab.varis.repodetails.RepoDetailsActivity
 import com.khmelenko.lab.varis.repositories.search.SearchResultsAdapter
 import com.khmelenko.lab.varis.storage.SearchHistoryProvider
@@ -160,7 +162,7 @@ class MainActivity : AppCompatActivity(), ReposFragment.ReposFragmentListener {
                     viewModel.reloadRepos()
                 }
                 REPO_DETAILS_CODE -> {
-                    val reloadRequired = data.getBooleanExtra(RepoDetailsActivity.RELOAD_REQUIRED_KEY, false)
+                    val reloadRequired = data.getBooleanExtra(RELOAD_REQUIRED_KEY, false)
                     if (reloadRequired) {
                         showProgress()
                         viewModel.reloadRepos()
@@ -257,7 +259,7 @@ class MainActivity : AppCompatActivity(), ReposFragment.ReposFragmentListener {
 
     override fun onRepositorySelected(repo: Repo) {
         val intent = Intent(this@MainActivity, RepoDetailsActivity::class.java)
-        intent.putExtra(RepoDetailsActivity.REPO_SLUG_KEY, repo.slug)
+        intent.putExtra(REPO_SLUG_KEY, repo.slug)
         startActivityForResult(intent, REPO_DETAILS_CODE)
     }
 

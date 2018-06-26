@@ -7,7 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
 import com.khmelenko.lab.varis.R;
-import com.khmelenko.lab.varis.repodetails.RepoDetailsActivity;
+import com.khmelenko.lab.varis.repodetails.*;
 import com.khmelenko.lab.varis.mvp.MvpActivity;
 import com.khmelenko.lab.varis.network.response.Repo;
 import com.khmelenko.lab.varis.repositories.ReposFragment;
@@ -97,7 +97,7 @@ public final class SearchResultsActivity extends MvpActivity<SearchResultsPresen
     @Override
     public void onRepositorySelected(Repo repo) {
         Intent intent = new Intent(SearchResultsActivity.this, RepoDetailsActivity.class);
-        intent.putExtra(RepoDetailsActivity.REPO_SLUG_KEY, repo.getSlug());
+        intent.putExtra(RepoDetailsActivityKt.REPO_SLUG_KEY, repo.getSlug());
         startActivity(intent);
     }
 
