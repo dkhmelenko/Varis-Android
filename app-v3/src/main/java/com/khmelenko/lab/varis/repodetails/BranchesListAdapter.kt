@@ -12,19 +12,19 @@ import com.khmelenko.lab.varis.network.response.Branches
  *
  * @author Dmytro Khmelenko
  */
-class BranchesListAdapter(private var mBranches: Branches?,
-                          private val mListener: (Int) -> Unit
+class BranchesListAdapter(private var branches: Branches?,
+                          private val listener: (Int) -> Unit
 ) : RecyclerView.Adapter<BuildViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BuildViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_build_view, parent, false)
-        return BuildViewHolder(v, mListener)
+        return BuildViewHolder(v, listener)
     }
 
     override fun onBindViewHolder(holder: BuildViewHolder, position: Int) {
-        if (mBranches != null) {
-            val branch = mBranches!!.branches[position]
-            val relatedCommit = mBranches!!.commits.firstOrNull { it.id == branch.commitId }
+        if (branches != null) {
+            val branch = branches!!.branches[position]
+            val relatedCommit = branches!!.commits.firstOrNull { it.id == branch.commitId }
 
             holder.mBuildView.setState(branch)
             holder.mBuildView.setCommit(relatedCommit)
@@ -32,7 +32,7 @@ class BranchesListAdapter(private var mBranches: Branches?,
     }
 
     override fun getItemCount(): Int {
-        return if (mBranches != null) mBranches!!.branches.size else 0
+        return if (branches != null) branches!!.branches.size else 0
     }
 
     /**
@@ -41,6 +41,6 @@ class BranchesListAdapter(private var mBranches: Branches?,
      * @param branches Branches
      */
     fun setBranches(branches: Branches?) {
-        mBranches = branches
+        this.branches = branches
     }
 }
