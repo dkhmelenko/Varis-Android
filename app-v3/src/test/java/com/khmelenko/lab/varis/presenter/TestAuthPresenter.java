@@ -97,7 +97,7 @@ public class TestAuthPresenter {
 
         final String accessToken = "token";
         AccessTokenRequest request = new AccessTokenRequest();
-        request.setGithubToken(gitHubToken);
+        request.setGitHubToken(gitHubToken);
         AccessToken token = new AccessToken();
         token.setAccessToken(accessToken);
         when(mTravisRestClient.getApiService().auth(request)).thenReturn(Single.just(token));
@@ -142,7 +142,7 @@ public class TestAuthPresenter {
                 .thenReturn(Single.just(authorization));
 
         AccessTokenRequest request = new AccessTokenRequest();
-        request.setGithubToken(gitHubToken);
+        request.setGitHubToken(gitHubToken);
         final String errorMsg = "error";
         Exception exception = new Exception(errorMsg);
         when(mTravisRestClient.getApiService().auth(request)).thenReturn(Single.error(exception));
@@ -193,7 +193,7 @@ public class TestAuthPresenter {
 
         final String accessToken = "token";
         AccessTokenRequest request = new AccessTokenRequest();
-        request.setGithubToken(gitHubToken);
+        request.setGitHubToken(gitHubToken);
         AccessToken token = new AccessToken();
         token.setAccessToken(accessToken);
         when(mTravisRestClient.getApiService().auth(request)).thenReturn(Single.just(token));

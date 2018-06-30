@@ -169,7 +169,7 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
     private Single<AccessToken> doAuthorization(Authorization authorization) {
         mAuthorization = authorization;
         AccessTokenRequest request = new AccessTokenRequest();
-        request.setGithubToken(authorization.getToken());
+        request.setGitHubToken(authorization.getToken());
         return mTravisRestClient.getApiService().auth(request);
     }
 
