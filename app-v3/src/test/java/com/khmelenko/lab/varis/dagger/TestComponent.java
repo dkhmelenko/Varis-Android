@@ -1,11 +1,8 @@
 package com.khmelenko.lab.varis.dagger;
 
 import com.khmelenko.lab.varis.dagger.module.ApplicationModule;
-import com.khmelenko.lab.varis.presenter.TestAuthPresenter;
-import com.khmelenko.lab.varis.presenter.TestBuildDetailsPresenter;
-import com.khmelenko.lab.varis.presenter.TestRepoDetailsPresenter;
-import com.khmelenko.lab.varis.presenter.TestRepositoriesViewModel;
-import com.khmelenko.lab.varis.presenter.TestSearchResultsPresenter;
+import com.khmelenko.lab.varis.presenter.*;
+import com.khmelenko.lab.varis.presenter.TestSearchResultsViewModel;
 
 import javax.inject.Singleton;
 
@@ -20,7 +17,7 @@ import dagger.Component;
 @Component(modules = {TestNetworkModule.class, TestStorageModule.class, ApplicationModule.class})
 public interface TestComponent {
 
-    void inject(TestSearchResultsPresenter test);
+    void inject(TestSearchResultsViewModel test);
 
     void inject(TestRepositoriesViewModel test);
 
