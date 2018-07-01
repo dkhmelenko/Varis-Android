@@ -196,6 +196,6 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
         List<String> scopes = Arrays.asList("read:org", "user:email", "repo_deployment",
                 "repo:status", "write:repo_hook", "repo");
         String note = String.format("varis_client_%1$s", StringUtils.getRandomString());
-        return new AuthorizationRequest(scopes, note);
+        return new AuthorizationRequest(scopes, note, null, null, null, null);
     }
 }
