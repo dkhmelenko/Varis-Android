@@ -15,7 +15,10 @@ import android.widget.Toast
 import butterknife.ButterKnife
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.adapter.SmartFragmentStatePagerAdapter
+import com.khmelenko.lab.varis.builddetails.BUILD_STATE_CHANGED
 import com.khmelenko.lab.varis.builddetails.BuildDetailsActivity
+import com.khmelenko.lab.varis.builddetails.EXTRA_BUILD_ID
+import com.khmelenko.lab.varis.builddetails.EXTRA_REPO_SLUG
 import com.khmelenko.lab.varis.network.response.Branches
 import com.khmelenko.lab.varis.network.response.BuildHistory
 import com.khmelenko.lab.varis.network.response.Requests
@@ -207,8 +210,8 @@ class RepoDetailsActivity : AppCompatActivity(), BuildHistoryFragment.BuildHisto
      */
     private fun goToBuildDetails(buildId: Long) {
         val intent = Intent(this, BuildDetailsActivity::class.java)
-        intent.putExtra(BuildDetailsActivity.EXTRA_BUILD_ID, buildId)
-        intent.putExtra(BuildDetailsActivity.EXTRA_REPO_SLUG, viewModel.repoSlug)
+        intent.putExtra(EXTRA_BUILD_ID, buildId)
+        intent.putExtra(EXTRA_REPO_SLUG, viewModel.repoSlug)
         startActivityForResult(intent, BUILD_DETAILS_REQUEST_CODE)
     }
 
@@ -216,7 +219,7 @@ class RepoDetailsActivity : AppCompatActivity(), BuildHistoryFragment.BuildHisto
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == BUILD_DETAILS_REQUEST_CODE) {
-                reloadRequired = reloadRequired or data.getBooleanExtra(BuildDetailsActivity.BUILD_STATE_CHANGED, false)
+                reloadRequired = reloadRequired or data.getBooleanExtra(BUILD_STATE_CHANGED, false)
             }
         }
     }
