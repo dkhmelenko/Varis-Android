@@ -152,8 +152,8 @@ class MainActivity : AppCompatActivity(), ReposFragment.ReposFragmentListener {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        if (resultCode == Activity.RESULT_OK) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+                if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 AUTH_ACTIVITY_CODE -> {
                     // clear previous data
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity(), ReposFragment.ReposFragmentListener {
                     viewModel.reloadRepos()
                 }
                 REPO_DETAILS_CODE -> {
-                    val reloadRequired = data.getBooleanExtra(RELOAD_REQUIRED_KEY, false)
+                    val reloadRequired = data?.getBooleanExtra(RELOAD_REQUIRED_KEY, false) ?: false
                     if (reloadRequired) {
                         showProgress()
                         viewModel.reloadRepos()
