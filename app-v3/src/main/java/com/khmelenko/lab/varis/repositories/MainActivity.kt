@@ -21,6 +21,7 @@ import android.widget.TextView
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.about.AboutActivity
 import com.khmelenko.lab.varis.about.LicensesDialogFragment
+import com.khmelenko.lab.varis.activity.BaseActivity
 import com.khmelenko.lab.varis.auth.AuthActivity
 import com.khmelenko.lab.varis.network.response.Repo
 import com.khmelenko.lab.varis.network.response.User
@@ -44,7 +45,7 @@ const val SEARCH_LIMIT = 3
  *
  * @author Dmytro Khmelenko
  */
-class MainActivity : AppCompatActivity(), ReposFragment.ReposFragmentListener {
+class MainActivity : BaseActivity(), ReposFragment.ReposFragmentListener {
 
     @Inject
     lateinit var viewModelFactory: RepositoriesViewModelFactory

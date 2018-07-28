@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar
 import android.widget.Toast
 import butterknife.ButterKnife
 import com.khmelenko.lab.varis.R
+import com.khmelenko.lab.varis.activity.BaseActivity
 import com.khmelenko.lab.varis.adapter.SmartFragmentStatePagerAdapter
 import com.khmelenko.lab.varis.builddetails.BUILD_STATE_CHANGED
 import com.khmelenko.lab.varis.builddetails.BuildDetailsActivity
@@ -40,7 +41,7 @@ private const val INDEX_PULL_REQUESTS = 2
  *
  * @author Dmytro Khmelenko
  */
-class RepoDetailsActivity : AppCompatActivity(), BuildHistoryFragment.BuildHistoryListener, BranchesFragment.BranchesListener, PullRequestsFragment.PullRequestsListener {
+class RepoDetailsActivity : BaseActivity(), BuildHistoryFragment.BuildHistoryListener, BranchesFragment.BranchesListener, PullRequestsFragment.PullRequestsListener {
 
     @Inject
     lateinit var viewModelFactory: RepoDetailsViewModelFactory
