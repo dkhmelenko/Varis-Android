@@ -5,9 +5,9 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import com.khmelenko.lab.varis.R
+import com.khmelenko.lab.varis.activity.BaseActivity
 import com.khmelenko.lab.varis.network.response.Repo
 import com.khmelenko.lab.varis.repodetails.REPO_SLUG_KEY
 import com.khmelenko.lab.varis.repodetails.RepoDetailsActivity
@@ -21,7 +21,7 @@ import javax.inject.Inject
  *
  * @author Dmytro Khmelenko
  */
-class SearchResultsActivity : AppCompatActivity(), ReposFragment.ReposFragmentListener {
+class SearchResultsActivity : BaseActivity(), ReposFragment.ReposFragmentListener {
 
     @Inject
     lateinit var viewModelFactory: RepoDetailsViewModelFactory
