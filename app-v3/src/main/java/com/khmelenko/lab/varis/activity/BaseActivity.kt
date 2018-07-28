@@ -1,17 +1,15 @@
-package com.khmelenko.lab.varis.activity;
+package com.khmelenko.lab.varis.activity
 
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.IdRes
+import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 
 /**
  * Base activity
  *
  * @author Dmytro Khmelenko
  */
-public abstract class BaseActivity extends AppCompatActivity {
+abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Adds new fragment
@@ -20,15 +18,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param fragment        Fragment instance
      * @param fragmentTag     Fragment tag
      */
-    protected void addFragment(@IdRes int containerViewId,
-                               @NonNull Fragment fragment,
-                               @NonNull String fragmentTag) {
-        if (!fragment.isAdded()) {
-            getSupportFragmentManager()
+    protected fun addFragment(@IdRes containerViewId: Int,
+                              fragment: Fragment,
+                              fragmentTag: String) {
+        if (!fragment.isAdded) {
+            supportFragmentManager
                     .beginTransaction()
                     .add(containerViewId, fragment, fragmentTag)
                     .disallowAddToBackStack()
-                    .commit();
+                    .commit()
         }
     }
 
@@ -40,15 +38,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param fragmentTag        Fragment tag
      * @param backStackStateName Name in back stack
      */
-    protected void replaceFragment(@IdRes int containerViewId,
-                                   @NonNull Fragment fragment,
-                                   @NonNull String fragmentTag,
-                                   @Nullable String backStackStateName) {
-        getSupportFragmentManager()
+    protected fun replaceFragment(@IdRes containerViewId: Int,
+                                  fragment: Fragment,
+                                  fragmentTag: String,
+                                  backStackStateName: String?) {
+        supportFragmentManager
                 .beginTransaction()
                 .replace(containerViewId, fragment, fragmentTag)
                 .addToBackStack(backStackStateName)
-                .commit();
+                .commit()
     }
 
     /**
@@ -58,13 +56,13 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param fragment        Fragment instance
      * @param fragmentTag     Fragment tag
      */
-    protected void replaceFragment(@IdRes int containerViewId,
-                                   @NonNull Fragment fragment,
-                                   @NonNull String fragmentTag) {
-        getSupportFragmentManager()
+    protected fun replaceFragment(@IdRes containerViewId: Int,
+                                  fragment: Fragment,
+                                  fragmentTag: String) {
+        supportFragmentManager
                 .beginTransaction()
                 .replace(containerViewId, fragment, fragmentTag)
-                .commit();
+                .commit()
     }
 
     /**
@@ -72,12 +70,10 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param fragment Fragment
      */
-    protected void detachFragment(Fragment fragment) {
-        getSupportFragmentManager()
+    protected fun detachFragment(fragment: Fragment) {
+        supportFragmentManager
                 .beginTransaction()
                 .detach(fragment)
-                .commit();
+                .commit()
     }
-
-
 }
