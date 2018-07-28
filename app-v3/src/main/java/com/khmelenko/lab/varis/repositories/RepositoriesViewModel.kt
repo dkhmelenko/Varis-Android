@@ -33,8 +33,8 @@ class RepositoriesViewModel(private val restClient: TravisRestClient,
     private val subscriptions = CompositeDisposable()
 
     fun init(){
-        reposState.postValue(RepositoriesState.UserData(user))
-        reposState.postValue(RepositoriesState.Loading)
+        postState(RepositoriesState.UserData(user))
+        postState(RepositoriesState.Loading)
 
         reloadRepos()
     }
@@ -48,11 +48,11 @@ class RepositoriesViewModel(private val restClient: TravisRestClient,
     }
 
     fun isUserLoggedIn(): Boolean {
-        return StringUtils.isEmpty(appSettings.accessToken)
+        return !StringUtils.isEmpty(appSettings.accessToken)
     }
 
     fun reloadRepos() {
-        reposState.postValue(RepositoriesState.Loading)
+        postState(RepositoriesState.Loading)
         if (StringUtils.isEmpty(appSettings.accessToken)) {
             val subscription = restClient.apiService
                     .getRepos("")
@@ -88,7 +88,7 @@ class RepositoriesViewModel(private val restClient: TravisRestClient,
     private fun reposHandler(): BiConsumer<List<Repo>, Throwable> {
         return BiConsumer { repos, throwable ->
             if (user != null) {
-                reposState.postValue(RepositoriesState.UserData(user))
+                postState(RepositoriesState.UserData(user))
             }
 
             if (throwable == null) {
@@ -107,11 +107,15 @@ class RepositoriesViewModel(private val restClient: TravisRestClient,
     }
 
     private fun handleReposLoaded(repos: List<Repo>) {
-        reposState.postValue(RepositoriesState.ReposList(repos))
+        postState(RepositoriesState.ReposList(repos))
         cacheStorage.saveRepos(repos)
     }
 
     private fun handleLoadingFailed(throwable: Throwable?) {
-        reposState.postValue(RepositoriesState.Error(throwable?.message))
+        postState(RepositoriesState.Error(throwable?.message))
+    }
+
+    private fun postState(newState: RepositoriesState) {
+        reposState.value = newState
     }
 }

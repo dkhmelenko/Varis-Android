@@ -288,11 +288,11 @@ class MainActivity : AppCompatActivity(), ReposFragment.ReposFragmentListener {
         }
     }
 
-    fun setRepos(repos: List<Repo>) {
+    private fun setRepos(repos: List<Repo>) {
         fragment.setRepos(repos)
     }
 
-    fun updateMenuState(userLoggedIn: Boolean) {
+    private fun updateMenuState(userLoggedIn: Boolean) {
         val menu = navigationView.menu
         if (userLoggedIn) {
             menu.findItem(R.id.drawer_login).isVisible = false
