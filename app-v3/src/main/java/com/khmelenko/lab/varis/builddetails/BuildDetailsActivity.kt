@@ -44,8 +44,8 @@ class BuildDetailsActivity : BaseActivity(), JobsFragment.JobsListener, RawLogFr
     lateinit var viewModelFactory: BuildDetailsViewModelFactory
     private lateinit var viewModel: BuildsDetailsViewModel
 
-    private var jobsFragment: JobsFragment? = null
-    private var rawLogFragment: RawLogFragment? = null
+    private lateinit var jobsFragment: JobsFragment
+    private lateinit var rawLogFragment: RawLogFragment
 
     private var canContributeToRepo: Boolean = false
     private var buildInProgressState: Boolean = false
@@ -80,10 +80,10 @@ class BuildDetailsActivity : BaseActivity(), JobsFragment.JobsListener, RawLogFr
     }
 
     public override fun onSaveInstanceState(outState: Bundle) {
-        if (jobsFragment != null) {
+        if (::jobsFragment.isInitialized) {
             detachFragment(jobsFragment)
         }
-        if (rawLogFragment != null) {
+        if (::rawLogFragment.isInitialized) {
             detachFragment(rawLogFragment)
         }
         super.onSaveInstanceState(outState)
@@ -128,10 +128,10 @@ class BuildDetailsActivity : BaseActivity(), JobsFragment.JobsListener, RawLogFr
     }
 
     override fun onJobSelected(job: Job) {
-        if (rawLogFragment == null) {
+        if (!::rawLogFragment.isInitialized) {
             rawLogFragment = RawLogFragment.newInstance()
         }
-        replaceFragment(R.id.build_details_container, rawLogFragment!!, RAW_LOG_FRAGMENT_TAG, null)
+        replaceFragment(R.id.build_details_container, rawLogFragment, RAW_LOG_FRAGMENT_TAG, null)
 
         viewModel.startLoadingLog(job.id)
     }
@@ -223,27 +223,27 @@ class BuildDetailsActivity : BaseActivity(), JobsFragment.JobsListener, RawLogFr
     }
 
     private fun showLogError() {
-        rawLogFragment!!.showProgress(false)
-        rawLogFragment!!.showError(true)
+        rawLogFragment.showProgress(false)
+        rawLogFragment.showError(true)
     }
 
     private fun setLog(log: LogEntryComponent) {
-        rawLogFragment!!.showLog(log)
+        rawLogFragment.showLog(log)
     }
 
     private fun showBuildJobs(jobs: List<Job>) {
-        if (jobsFragment == null) {
+        if (!::jobsFragment.isInitialized) {
             jobsFragment = JobsFragment.newInstance()
         }
-        jobsFragment?.setJobs(jobs)
-        addFragment(R.id.build_details_container, jobsFragment!!, JOBS_FRAGMENT_TAG)
+        jobsFragment.setJobs(jobs)
+        addFragment(R.id.build_details_container, jobsFragment, JOBS_FRAGMENT_TAG)
     }
 
     private fun showBuildLogs() {
-        if (rawLogFragment == null) {
+        if (!::rawLogFragment.isInitialized) {
             rawLogFragment = RawLogFragment.newInstance()
         }
-        addFragment(R.id.build_details_container, rawLogFragment!!, RAW_LOG_FRAGMENT_TAG)
+        addFragment(R.id.build_details_container, rawLogFragment, RAW_LOG_FRAGMENT_TAG)
     }
 
     /**
