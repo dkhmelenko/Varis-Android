@@ -6,6 +6,9 @@ import android.content.Context
 import android.text.TextUtils
 import com.khmelenko.lab.varis.common.Constants
 import com.khmelenko.lab.varis.dagger.component.DaggerBaseComponent
+import com.khmelenko.lab.varis.dagger.module.ApplicationModule
+import com.khmelenko.lab.varis.dagger.module.NetworkModule
+import com.khmelenko.lab.varis.dagger.module.StorageModule
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -25,7 +28,11 @@ class TravisApp : Application(), HasActivityInjector {
         super.onCreate()
         appContext = applicationContext
 
-        val baseComponent = DaggerBaseComponent.create()
+        val baseComponent = DaggerBaseComponent.builder()
+                .applicationModule(ApplicationModule)
+                .networkModule(NetworkModule)
+                .storageModule(StorageModule)
+                .build()
         baseComponent.inject(this)
 
         val appSettings = baseComponent.appSettings()
