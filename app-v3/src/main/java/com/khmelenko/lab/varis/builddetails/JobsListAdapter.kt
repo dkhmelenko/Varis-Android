@@ -30,7 +30,7 @@ private const val ITEM_HEIGHT = 88 // height in DP
  *
  * @author Dmytro Khmelenko
  */
-class JobsListAdapter(private val context: Context, private val jobs: List<Job>?, private val listener: OnListItemListener?) : RecyclerView.Adapter<JobsListAdapter.JobViewHolder>() {
+class JobsListAdapter(private val context: Context, private val jobs: List<Job>?, private val listener: (Int) -> Unit) : RecyclerView.Adapter<JobsListAdapter.JobViewHolder>() {
 
     val itemHeight: Int
         get() = ITEM_HEIGHT
@@ -91,7 +91,7 @@ class JobsListAdapter(private val context: Context, private val jobs: List<Job>?
         }
 
         override fun onClick(view: View) {
-            listener?.onItemSelected(layoutPosition)
+            listener(layoutPosition)
         }
     }
 }

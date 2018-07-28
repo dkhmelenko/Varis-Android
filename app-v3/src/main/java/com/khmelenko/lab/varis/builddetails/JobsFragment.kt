@@ -36,7 +36,7 @@ class JobsFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         jobs_recycler_view.layoutManager = layoutManager
 
-        jobsListAdapter = JobsListAdapter(context, jobs) { position ->
+        jobsListAdapter = JobsListAdapter(context!!, jobs) { position ->
             if (!jobs.isEmpty()) {
                 val job = jobs[position]
                 listener!!.onJobSelected(job)
