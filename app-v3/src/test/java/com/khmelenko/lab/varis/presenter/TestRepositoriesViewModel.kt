@@ -13,7 +13,6 @@ import com.khmelenko.lab.varis.repositories.RepositoriesViewModel
 import com.khmelenko.lab.varis.storage.AppSettings
 import com.khmelenko.lab.varis.storage.CacheStorage
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import org.junit.Before
@@ -78,17 +77,17 @@ class TestRepositoriesViewModel {
 
     @Test
     fun testReloadReposWithToken() {
-        val user = spy(User().apply {
-            login = "login"
-            id = 123
-            email = "user@company.com"
-            name = "username"
-            gravatarId = ""
-            isSyncing = false
-            syncedAt = ""
-            isCorrectScopes = true
-            createdAt = ""
-        })
+        val user = User(
+                id = 123,
+                login = "login",
+                email = "user@company.com",
+                name = "username",
+                gravatarId = "",
+                isSyncing = false,
+                syncedAt = "",
+                isCorrectScopes = true,
+                createdAt = ""
+        )
         whenever(travisRestClient.apiService.user).thenReturn(Single.just(user))
         whenever(travisRestClient.apiService.getUserRepos(any())).thenReturn(Single.just(ArrayList()))
         whenever(appSettings.accessToken).thenReturn("token")
