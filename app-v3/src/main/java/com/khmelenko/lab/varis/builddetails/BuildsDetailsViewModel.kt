@@ -111,7 +111,7 @@ class BuildsDetailsViewModel(private val travisRestClient: TravisRestClient,
         val buildDetailsSingle: Single<BuildDetails>
 
         if (!StringUtils.isEmpty(intentUrl)) {
-            buildDetailsSingle = rawClient.singleRequest(intentUrl)
+            buildDetailsSingle = rawClient.singleRequest(intentUrl!!)
                     .doOnSuccess { response ->
                         var redirectUrl: String? = intentUrl
                         if (response.isRedirect) {
