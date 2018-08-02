@@ -10,6 +10,7 @@ import com.khmelenko.lab.varis.network.response.AccessToken
 import com.khmelenko.lab.varis.network.response.Authorization
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient
 import com.khmelenko.lab.varis.network.retrofit.github.GithubApiService
+import com.khmelenko.lab.varis.network.retrofit.github.TWO_FACTOR_HEADER
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient
 import com.khmelenko.lab.varis.storage.AppSettings
 import com.khmelenko.lab.varis.util.EncryptionUtils
@@ -89,7 +90,7 @@ class AuthViewModel(
 
     private fun getAuthorizationJob(twoFactorAuth: Boolean): Single<Authorization> {
         return if (twoFactorAuth) {
-            gitHubRestClient.apiService.createNewAuthorization(basicAuth, securityCode, prepareAuthorizationRequest())
+            gitHubRestClient.apiService.createNewAuthorization(basicAuth, securityCode!!, prepareAuthorizationRequest())
         } else {
             gitHubRestClient.apiService.createNewAuthorization(basicAuth, prepareAuthorizationRequest())
         }
@@ -123,7 +124,7 @@ class AuthViewModel(
     private fun cleanUpAfterAuthorization() {
         // start deletion authorization on Github, because we don't need it anymore
         val cleanUpJob = if (!TextUtils.isEmpty(securityCode)) {
-            gitHubRestClient.apiService.deleteAuthorization(basicAuth, securityCode, authorization.id.toString())
+            gitHubRestClient.apiService.deleteAuthorization(basicAuth, securityCode!!, authorization.id.toString())
         } else {
             gitHubRestClient.apiService.deleteAuthorization(basicAuth, authorization.id.toString())
         }
@@ -153,7 +154,7 @@ class AuthViewModel(
 
         var twoFactorAuthRequired = false
         for (header in response.headers().names()) {
-            if (GithubApiService.TWO_FACTOR_HEADER == header) {
+            if (TWO_FACTOR_HEADER == header) {
                 twoFactorAuthRequired = true
                 break
             }
