@@ -13,13 +13,13 @@ data class User(
     val id: Long,
 
     @SerializedName("name")
-    val name: String?,
+    val name: String,
 
     @SerializedName("login")
-    val login: String?,
+    val login: String,
 
     @SerializedName("email")
-    val email: String?,
+    val email: String,
 
     @SerializedName("gravatar_id")
     val gravatarId: String?,

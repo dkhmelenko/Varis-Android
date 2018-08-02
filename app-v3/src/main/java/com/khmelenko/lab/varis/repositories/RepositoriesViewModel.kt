@@ -64,7 +64,7 @@ class RepositoriesViewModel(private val restClient: TravisRestClient,
         } else {
             val subscription = restClient.apiService.user
                     .doOnSuccess { this.cacheUserData(it) }
-                    .flatMap { restClient.apiService.getUserRepos(user?.login) }
+                    .flatMap { restClient.apiService.getUserRepos(user?.login!!) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(reposHandler())

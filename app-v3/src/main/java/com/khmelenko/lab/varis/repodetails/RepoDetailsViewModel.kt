@@ -22,7 +22,7 @@ class RepoDetailsViewModel(private val travisRestClient: TravisRestClient) : Vie
 
     private val repoDetailsState = MutableLiveData<RepoDetailsState>()
 
-    var repoSlug: String? = null
+    var repoSlug: String = ""
 
     private val subscriptions = CompositeDisposable()
 
