@@ -24,10 +24,10 @@ class RepoListAdapter(
 
     override fun onBindViewHolder(repoViewHolder: BuildViewHolder, i: Int) {
         val repo = repos[i]
-        repoViewHolder.mBuildView.setTitle(repo.slug)
-        repoViewHolder.mBuildView.setStateIndicator(repo.lastBuildState)
-        repoViewHolder.mBuildView.setFinishedAt(repo.lastBuildFinishedAt)
-        repoViewHolder.mBuildView.setDuration(repo.lastBuildDuration)
+        repoViewHolder.buildView.setTitle(repo.slug)
+        repoViewHolder.buildView.setStateIndicator(repo.lastBuildState)
+        repoViewHolder.buildView.setFinishedAt(repo.lastBuildFinishedAt)
+        repoViewHolder.buildView.setDuration(repo.lastBuildDuration)
     }
 
     override fun getItemCount(): Int {

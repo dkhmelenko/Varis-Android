@@ -26,8 +26,8 @@ class BranchesListAdapter(private var branches: Branches?,
             val branch = branches!!.branches[position]
             val relatedCommit = branches!!.commits.firstOrNull { it.id == branch.commitId }
 
-            holder.mBuildView.setState(branch)
-            holder.mBuildView.setCommit(relatedCommit)
+            holder.buildView.setState(branch)
+            holder.buildView.setCommit(relatedCommit)
         }
     }
 

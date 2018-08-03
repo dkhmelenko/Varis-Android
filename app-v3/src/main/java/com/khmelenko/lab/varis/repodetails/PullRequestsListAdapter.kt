@@ -46,11 +46,11 @@ class PullRequestsListAdapter(private var requests: Requests?,
         val relatedCommit = requests!!.commits.firstOrNull { it.id == request.commitId }
         val relatedBuild = requests!!.builds.firstOrNull { it.id == request.buildId }
 
-        holder.mBuildView.setPullRequestTitle(request)
-        holder.mBuildView.setCommit(relatedCommit)
-        holder.mBuildView.setState(relatedBuild)
-        holder.mBuildView.setTitle(
-                holder.mBuildView.context.getString(R.string.pull_request_number, request.pullRequestNumber))
+        holder.buildView.setPullRequestTitle(request)
+        holder.buildView.setCommit(relatedCommit)
+        holder.buildView.setState(relatedBuild)
+        holder.buildView.setTitle(
+                holder.buildView.context.getString(R.string.pull_request_number, request.pullRequestNumber))
     }
 
     override fun getItemCount(): Int {

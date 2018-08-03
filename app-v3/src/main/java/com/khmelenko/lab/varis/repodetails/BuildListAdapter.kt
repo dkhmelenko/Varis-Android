@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 
 import com.khmelenko.lab.varis.R
-import com.khmelenko.lab.varis.adapter.OnListItemListener
 import com.khmelenko.lab.varis.adapter.viewholder.BuildViewHolder
 import com.khmelenko.lab.varis.network.response.BuildHistory
-import com.khmelenko.lab.varis.network.response.Commit
 
 /**
  * Adapter for the list of builds
@@ -27,8 +25,8 @@ class BuildListAdapter(private var buildHistory: BuildHistory?,
         if (buildHistory != null) {
             val build = buildHistory!!.builds[position]
             val relatedCommit = buildHistory!!.commits.firstOrNull { it.id == build.commitId }
-            holder.mBuildView.setState(build)
-            holder.mBuildView.setCommit(relatedCommit)
+            holder.buildView.setState(build)
+            holder.buildView.setCommit(relatedCommit)
         }
     }
 

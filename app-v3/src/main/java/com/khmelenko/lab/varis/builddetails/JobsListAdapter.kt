@@ -6,18 +6,14 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 
 import com.khmelenko.lab.varis.R
-import com.khmelenko.lab.varis.adapter.OnListItemListener
 import com.khmelenko.lab.varis.converter.BuildStateHelper
 import com.khmelenko.lab.varis.converter.TimeConverter
 import com.khmelenko.lab.varis.network.response.Job
 import com.khmelenko.lab.varis.util.DateTimeUtils
 
-import butterknife.BindView
 import butterknife.ButterKnife
-import com.khmelenko.lab.varis.R.id.card_view
 import kotlinx.android.synthetic.main.item_job.view.card_view
 import kotlinx.android.synthetic.main.item_job.view.item_job_duration
 import kotlinx.android.synthetic.main.item_job.view.item_job_number
