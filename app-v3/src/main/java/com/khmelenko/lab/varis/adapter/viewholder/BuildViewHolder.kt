@@ -2,12 +2,9 @@ package com.khmelenko.lab.varis.adapter.viewholder
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-
-import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.widget.BuildView
-
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.item_build_view.view.item_build_card_view
+import kotlinx.android.synthetic.main.item_build_view.view.item_build_data
 
 /**
  * View holder for the Build data
@@ -16,16 +13,16 @@ import butterknife.ButterKnife
  */
 class BuildViewHolder(itemView: View, private val listener: (Int) -> Unit) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-    @BindView(R.id.item_build_card_view)
-    lateinit var parent: View
+    val parent: View
 
-    @BindView(R.id.item_build_data)
-    lateinit var buildView: BuildView
+    val buildView: BuildView
 
     init {
-        ButterKnife.bind(this, itemView)
         itemView.isClickable = true
+        parent = itemView.item_build_card_view
         parent.setOnClickListener(this)
+
+        buildView = itemView.item_build_data
     }
 
     override fun onClick(view: View) {

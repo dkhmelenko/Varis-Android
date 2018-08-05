@@ -6,14 +6,11 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.converter.BuildStateHelper
 import com.khmelenko.lab.varis.converter.TimeConverter
 import com.khmelenko.lab.varis.network.response.Job
 import com.khmelenko.lab.varis.util.DateTimeUtils
-
-import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.item_job.view.card_view
 import kotlinx.android.synthetic.main.item_job.view.item_job_duration
 import kotlinx.android.synthetic.main.item_job.view.item_job_number
@@ -81,7 +78,6 @@ class JobsListAdapter(private val context: Context, private val jobs: List<Job>?
     inner class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         init {
-            ButterKnife.bind(this, itemView)
             itemView.isClickable = true
             itemView.card_view.setOnClickListener(this)
         }

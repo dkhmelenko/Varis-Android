@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import butterknife.ButterKnife
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.activity.BaseActivity
 import com.khmelenko.lab.varis.util.PackageUtils
@@ -21,7 +20,6 @@ class AboutActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
-        ButterKnife.bind(this)
 
         initToolbar()
 

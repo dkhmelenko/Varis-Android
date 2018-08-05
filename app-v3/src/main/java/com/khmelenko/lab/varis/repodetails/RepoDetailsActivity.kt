@@ -9,10 +9,8 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.Toast
-import butterknife.ButterKnife
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.activity.BaseActivity
 import com.khmelenko.lab.varis.adapter.SmartFragmentStatePagerAdapter
@@ -84,7 +82,6 @@ class RepoDetailsActivity : BaseActivity(), BuildHistoryFragment.BuildHistoryLis
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repo_details)
-        ButterKnife.bind(this)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RepoDetailsViewModel::class.java)
 
