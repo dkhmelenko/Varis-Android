@@ -12,6 +12,7 @@ import com.khmelenko.lab.varis.repositories.RepositoriesState
 import com.khmelenko.lab.varis.repositories.RepositoriesViewModel
 import com.khmelenko.lab.varis.storage.AppSettings
 import com.khmelenko.lab.varis.storage.CacheStorage
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
@@ -19,8 +20,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.any
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import javax.inject.Inject
@@ -88,8 +87,9 @@ class TestRepositoriesViewModel {
                 isCorrectScopes = true,
                 createdAt = ""
         )
-        whenever(travisRestClient.apiService.user).thenReturn(Single.just(user))
-        whenever(travisRestClient.apiService.getUserRepos(any())).thenReturn(Single.just(ArrayList()))
+        val apiService = travisRestClient.apiService
+        whenever(apiService.user).thenReturn(Single.just(user))
+        whenever(apiService.getUserRepos(any())).thenReturn(Single.just(ArrayList()))
         whenever(appSettings.accessToken).thenReturn("token")
 
         repositoriesViewModel.reloadRepos()
@@ -106,7 +106,7 @@ class TestRepositoriesViewModel {
         repositoriesViewModel.userLogout()
         verify(cacheStorage).deleteUser()
         verify(cacheStorage).deleteRepos()
-        verify(travisRestClient).updateTravisEndpoint(ArgumentMatchers.eq(Constants.OPEN_SOURCE_TRAVIS_URL))
+        verify(travisRestClient).updateTravisEndpoint(Constants.OPEN_SOURCE_TRAVIS_URL)
     }
 
 }
