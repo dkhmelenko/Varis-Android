@@ -23,7 +23,7 @@ class AboutActivity : BaseActivity() {
 
         initToolbar()
 
-        val appVersion = getString(R.string.about_version, PackageUtils.getAppVersion())
+        val appVersion = getString(R.string.about_version, PackageUtils.appVersion)
         aboutVersion.text = appVersion
 
         val link = Html.fromHtml(getString(R.string.about_github_link))

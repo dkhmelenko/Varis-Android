@@ -47,7 +47,7 @@ class TravisRestClient(
     }
 
     private fun httpClient(): OkHttpClient {
-        val userAgent = String.format("TravisClient/%1\$s", PackageUtils.getAppVersion())
+        val userAgent = String.format("TravisClient/%1\$s", PackageUtils.appVersion)
 
         return okHttpClient.newBuilder()
                 .addInterceptor { chain ->
