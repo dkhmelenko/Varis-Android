@@ -7,8 +7,8 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.OnClick
 import com.khmelenko.lab.varis.R
+import kotlinx.android.synthetic.main.fragment_security_code.auth_confirm_btn
 import kotlinx.android.synthetic.main.fragment_security_code.auth_security_code
 
 /**
@@ -25,8 +25,14 @@ class SecurityCodeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_security_code, container, false)
     }
 
-    @OnClick(R.id.auth_confirm_btn)
-    fun startConfirmation() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        auth_confirm_btn.setOnClickListener {
+            startConfirmation()
+        }
+    }
+
+    private fun startConfirmation() {
         if (TextUtils.isEmpty(auth_security_code.text)) {
             auth_security_code.error = getString(R.string.auth_invalid_security_code)
         } else {
