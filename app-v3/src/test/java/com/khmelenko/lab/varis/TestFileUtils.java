@@ -43,7 +43,7 @@ public class TestFileUtils {
         when(file.exists()).thenReturn(true);
         when(context.openFileInput(fileName)).thenReturn(stream);
 
-        FileUtils.readInternalFile(fileName, context);
+        FileUtils.INSTANCE.readInternalFile(fileName, context);
 
         verify(context).getFileStreamPath(fileName);
         verify(context).openFileInput(fileName);
@@ -59,7 +59,7 @@ public class TestFileUtils {
         FileOutputStream stream = mock(FileOutputStream.class);
         when(context.openFileOutput(fileName, mode)).thenReturn(stream);
 
-        FileUtils.writeInternalFile(fileName, body, context);
+        FileUtils.INSTANCE.writeInternalFile(fileName, body, context);
 
         verify(context).openFileOutput(fileName, mode);
     }
@@ -69,7 +69,7 @@ public class TestFileUtils {
         final String fileName = "test.txt";
         Context context = mock(Context.class);
 
-        FileUtils.deleteInternalFile(fileName, context);
+        FileUtils.INSTANCE.deleteInternalFile(fileName, context);
 
         verify(context).deleteFile(fileName);
     }
