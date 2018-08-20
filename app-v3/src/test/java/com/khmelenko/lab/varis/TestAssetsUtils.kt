@@ -20,7 +20,7 @@ import java.io.InputStream
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = intArrayOf(21))
+@Config(constants = BuildConfig::class, sdk = [21])
 class TestAssetsUtils {
 
     @Test
