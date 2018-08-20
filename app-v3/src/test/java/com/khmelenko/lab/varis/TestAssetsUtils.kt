@@ -24,7 +24,6 @@ import java.io.InputStream
 class TestAssetsUtils {
 
     @Test
-    @Throws(IOException::class)
     fun testGetProperties() {
         val property = "test"
 
