@@ -1,14 +1,14 @@
-package com.khmelenko.lab.varis.log;
+package com.khmelenko.lab.varis.log
 
 /**
  * Defines an interface for the log entry in build log
  */
-public interface LogEntryComponent {
+interface LogEntryComponent {
 
     /**
      * Transforms the entry to html format
      *
      * @return Html formatted string
      */
-    String toHtml();
+    fun toHtml(): String
 }
