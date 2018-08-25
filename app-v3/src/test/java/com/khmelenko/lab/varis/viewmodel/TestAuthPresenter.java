@@ -1,43 +1,12 @@
-package com.khmelenko.lab.varis.presenter;
+package com.khmelenko.lab.varis.viewmodel;
 
-import com.khmelenko.lab.varis.BuildConfig;
-import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.auth.AuthViewModel;
-import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
-import com.khmelenko.lab.varis.dagger.TestComponent;
-import com.khmelenko.lab.varis.network.request.AccessTokenRequest;
-import com.khmelenko.lab.varis.network.request.AuthorizationRequest;
-import com.khmelenko.lab.varis.network.response.AccessToken;
-import com.khmelenko.lab.varis.network.response.Authorization;
-import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient;
-import com.khmelenko.lab.varis.network.retrofit.github.GithubApiService;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
-import com.khmelenko.lab.varis.storage.AppSettings;
-import com.khmelenko.lab.varis.util.EncryptionUtils;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-
-import javax.inject.Inject;
-
-import io.reactivex.Single;
-import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
-import retrofit2.HttpException;
-import retrofit2.Response;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Testing {@link AuthViewModel}

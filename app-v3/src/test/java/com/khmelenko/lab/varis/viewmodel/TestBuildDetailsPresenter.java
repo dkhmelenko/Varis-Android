@@ -1,40 +1,12 @@
-package com.khmelenko.lab.varis.presenter;
+package com.khmelenko.lab.varis.viewmodel;
 
-import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.builddetails.BuildsDetailsViewModel;
-import com.khmelenko.lab.varis.dagger.TestComponent;
-import com.khmelenko.lab.varis.log.LogEntryComponent;
-import com.khmelenko.lab.varis.log.LogsParser;
-import com.khmelenko.lab.varis.network.response.Build;
-import com.khmelenko.lab.varis.network.response.BuildDetails;
-import com.khmelenko.lab.varis.network.response.Commit;
-import com.khmelenko.lab.varis.network.response.Job;
-import com.khmelenko.lab.varis.network.retrofit.raw.RawClient;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
-import com.khmelenko.lab.varis.storage.AppSettings;
-import com.khmelenko.lab.varis.storage.CacheStorage;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import io.reactivex.Single;
-import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Testing {@link BuildsDetailsViewModel}

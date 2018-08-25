@@ -1,11 +1,11 @@
 package com.khmelenko.lab.varis.dagger;
 
 import com.khmelenko.lab.varis.dagger.module.ApplicationModule;
-import com.khmelenko.lab.varis.presenter.TestAuthPresenter;
-import com.khmelenko.lab.varis.presenter.TestBuildDetailsPresenter;
-import com.khmelenko.lab.varis.presenter.TestRepoDetailsPresenter;
-import com.khmelenko.lab.varis.presenter.TestRepositoriesPresenter;
-import com.khmelenko.lab.varis.presenter.TestSearchResultsPresenter;
+import com.khmelenko.lab.varis.viewmodel.TestAuthPresenter;
+import com.khmelenko.lab.varis.viewmodel.TestBuildDetailsPresenter;
+import com.khmelenko.lab.varis.viewmodel.TestRepoDetailsPresenter;
+import com.khmelenko.lab.varis.viewmodel.TestRepositoriesPresenter;
+import com.khmelenko.lab.varis.viewmodel.TestSearchResultsPresenter;
 
 import javax.inject.Singleton;
 

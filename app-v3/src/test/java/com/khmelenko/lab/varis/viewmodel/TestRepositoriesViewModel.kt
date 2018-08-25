@@ -1,4 +1,4 @@
-package com.khmelenko.lab.varis.presenter
+package com.khmelenko.lab.varis.viewmodel
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer

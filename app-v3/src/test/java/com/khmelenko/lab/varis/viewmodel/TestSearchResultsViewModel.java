@@ -1,28 +1,14 @@
-package com.khmelenko.lab.varis.presenter;
+package com.khmelenko.lab.varis.viewmodel;
 
 import com.khmelenko.lab.varis.RxJavaRules;
-import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
-import com.khmelenko.lab.varis.dagger.TestComponent;
-import com.khmelenko.lab.varis.network.response.Repo;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.repositories.search.SearchResultsViewModel;
 
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import io.reactivex.Single;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Testing {@link SearchResultsViewModel}

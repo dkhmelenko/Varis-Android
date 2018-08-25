@@ -1,34 +1,11 @@
-package com.khmelenko.lab.varis.presenter;
+package com.khmelenko.lab.varis.viewmodel;
 
-import com.khmelenko.lab.varis.RxJavaRules;
-import com.khmelenko.lab.varis.dagger.DaggerTestComponent;
-import com.khmelenko.lab.varis.dagger.TestComponent;
-import com.khmelenko.lab.varis.network.response.Branch;
-import com.khmelenko.lab.varis.network.response.Branches;
-import com.khmelenko.lab.varis.network.response.Build;
-import com.khmelenko.lab.varis.network.response.BuildHistory;
-import com.khmelenko.lab.varis.network.response.Commit;
-import com.khmelenko.lab.varis.network.response.RequestData;
-import com.khmelenko.lab.varis.network.response.Requests;
-import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient;
 import com.khmelenko.lab.varis.repodetails.RepoDetailsViewModel;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import io.reactivex.Single;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Testing {@link RepoDetailsViewModel}

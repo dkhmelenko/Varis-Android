@@ -1,4 +1,4 @@
-package com.khmelenko.lab.varis.presenter;
+package com.khmelenko.lab.varis.viewmodel;
 
 import com.khmelenko.lab.varis.RxJavaRules;
 import com.khmelenko.lab.varis.builddetails.BuildsDetailsPresenter;

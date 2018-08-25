@@ -1,8 +1,8 @@
 package com.khmelenko.lab.varis.dagger
 
 import com.khmelenko.lab.varis.dagger.module.ApplicationModule
-import com.khmelenko.lab.varis.presenter.*
-import com.khmelenko.lab.varis.presenter.TestSearchResultsViewModel
+import com.khmelenko.lab.varis.viewmodel.*
+import com.khmelenko.lab.varis.viewmodel.TestSearchResultsViewModel
 
 import javax.inject.Singleton
 
