@@ -25,5 +25,5 @@ interface TestComponent {
 
     fun inject(test: TestBuildDetailsPresenter)
 
-    fun inject(test: TestAuthPresenter)
+    fun inject(test: TestAuthViewModel)
 }
