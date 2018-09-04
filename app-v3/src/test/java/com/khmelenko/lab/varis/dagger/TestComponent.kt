@@ -23,7 +23,7 @@ interface TestComponent {
 
     fun inject(test: TestRepoDetailsViewModel)
 
-    fun inject(test: TestBuildDetailsPresenter)
+    fun inject(test: TestBuildDetailsViewModel)
 
     fun inject(test: TestAuthViewModel)
 }
