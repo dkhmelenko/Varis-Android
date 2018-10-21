@@ -213,10 +213,10 @@ class RepoDetailsActivity : BaseActivity(), BuildHistoryFragment.BuildHistoryLis
         startActivityForResult(intent, BUILD_DETAILS_REQUEST_CODE)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == BUILD_DETAILS_REQUEST_CODE) {
+            if (requestCode == BUILD_DETAILS_REQUEST_CODE && data != null) {
                 reloadRequired = reloadRequired or data.getBooleanExtra(BUILD_STATE_CHANGED, false)
             }
         }
