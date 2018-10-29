@@ -2,6 +2,9 @@ package com.khmelenko.lab.varis.network.retrofit.github
 
 
 import com.khmelenko.lab.varis.common.Constants
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 
 import retrofit2.Retrofit
 
@@ -21,6 +24,13 @@ class GitHubRestClient(retrofit: Retrofit) {
      */
     val apiService: GithubApiService = retrofit.newBuilder()
             .baseUrl(GITHUB_URL)
+            .client(getOkHttpClient())
             .build()
             .create(GithubApiService::class.java)
+
+    private fun getOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().setLevel(BODY))
+                    .build()
+    }
 }

@@ -100,6 +100,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
+    <string name="oauth_login">OAuth Login</string>
+  <string name="personal_token">Personal Token</string>
+    <string name="auth_invalid_token_msg">Token cannot be empty.</string>
 
 
 </resources>

@@ -8,11 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khmelenko.lab.varis.R
+import com.khmelenko.lab.varis.R.string
 import com.khmelenko.lab.varis.common.Constants
-import kotlinx.android.synthetic.main.fragment_auth.auth_login_btn
-import kotlinx.android.synthetic.main.fragment_auth.auth_password
-import kotlinx.android.synthetic.main.fragment_auth.auth_server_selector
-import kotlinx.android.synthetic.main.fragment_auth.auth_username
+import kotlinx.android.synthetic.main.fragment_auth.*
 
 /**
  * Authentication fragment
@@ -44,6 +42,12 @@ class AuthFragment : Fragment() {
                 listener?.onLogin(auth_username.text.toString(), auth_password.text.toString())
             }
         }
+
+        oauth_login_button.setOnClickListener {
+            if (areOauthLoginFieldsValid()) {
+                listener?.onOauthLogin(oauth_token.text.toString())
+            }
+        }
     }
 
     /**
@@ -64,6 +68,15 @@ class AuthFragment : Fragment() {
             Constants.OPEN_SOURCE_TRAVIS_URL -> auth_server_selector.check(R.id.auth_server_opensource)
             Constants.PRIVATE_TRAVIS_URL -> auth_server_selector.check(R.id.auth_server_pro)
         }
+    }
+
+    private fun areOauthLoginFieldsValid(): Boolean {
+        var valid = true
+        if (TextUtils.isEmpty(oauth_token.text)) {
+            valid = false
+            oauth_token.error = getString(string.auth_invalid_token_msg)
+        }
+        return valid
     }
 
     /**
@@ -119,6 +132,12 @@ class AuthFragment : Fragment() {
          * @param newServer New server URL
          */
         fun onChangeServer(newServer: String)
+
+        /**
+         * Called when Logging in using API Token
+         * @param userName Username
+         */
+        fun onOauthLogin(token: String)
     }
 
     companion object {

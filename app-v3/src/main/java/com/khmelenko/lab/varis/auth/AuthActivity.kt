@@ -96,6 +96,10 @@ class AuthActivity : BaseActivity(), AuthFragment.OnLoginActionListener, Securit
         viewModel.updateServer(newServer)
     }
 
+    override fun onOauthLogin(token: String) {
+        viewModel.oauthLogin(token)
+    }
+
     override fun onSecurityCodeInput(securityCode: String) {
         viewModel.twoFactorAuth(securityCode)
     }
