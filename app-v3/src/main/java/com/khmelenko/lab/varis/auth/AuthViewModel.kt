@@ -9,7 +9,6 @@ import com.khmelenko.lab.varis.network.request.AuthorizationRequest
 import com.khmelenko.lab.varis.network.response.AccessToken
 import com.khmelenko.lab.varis.network.response.Authorization
 import com.khmelenko.lab.varis.network.retrofit.github.GitHubRestClient
-import com.khmelenko.lab.varis.network.retrofit.github.GithubApiService
 import com.khmelenko.lab.varis.network.retrofit.github.TWO_FACTOR_HEADER
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient
 import com.khmelenko.lab.varis.storage.AppSettings
@@ -21,7 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import java.net.HttpURLConnection
-import java.util.Arrays
+import java.util.*
 
 /**
  * Authentication ViewModel
@@ -121,6 +120,23 @@ class AuthViewModel(
         subscriptions.add(subscription)
     }
 
+    fun oauthLogin(token: String) {
+        postState(AuthState.Loading)
+        val subscription = gitHubRestClient.apiService.createOAuthAuthentication(token)
+                .flatMap { doAuthorization(token) }
+                .doOnSuccess { saveAccessToken(it) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { authorization, e ->
+                    if (e == null) {
+                        postState(AuthState.Success)
+                    } else {
+                        postState(AuthState.AuthError(e.message))
+                    }
+                }
+        subscriptions.add(subscription)
+    }
+
     private fun cleanUpAfterAuthorization() {
         // start deletion authorization on Github, because we don't need it anymore
         val cleanUpJob = if (!TextUtils.isEmpty(securityCode)) {
@@ -140,6 +156,12 @@ class AuthViewModel(
         // save access token to settings
         val token = accessToken.accessToken
         appSettings.putAccessToken(token)
+    }
+
+    private fun doAuthorization(token: String): Single<AccessToken>? {
+        val request = AccessTokenRequest()
+        request.gitHubToken = token
+        return travisRestClient.apiService.auth(request)
     }
 
     private fun doAuthorization(authorization: Authorization): Single<AccessToken> {
