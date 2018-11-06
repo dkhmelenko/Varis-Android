@@ -3,9 +3,14 @@ package com.khmelenko.lab.varis.network.retrofit.github
 import com.khmelenko.lab.varis.network.request.AuthorizationRequest
 import com.khmelenko.lab.varis.network.response.Authorization
 import com.khmelenko.lab.varis.network.response.OAuthUser
-
 import io.reactivex.Single
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 const val TWO_FACTOR_HEADER = "X-GitHub-OTP"
 

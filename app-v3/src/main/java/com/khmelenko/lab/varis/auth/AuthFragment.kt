@@ -8,9 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khmelenko.lab.varis.R
-import com.khmelenko.lab.varis.R.string
 import com.khmelenko.lab.varis.common.Constants
-import kotlinx.android.synthetic.main.fragment_auth.*
+import kotlinx.android.synthetic.main.fragment_auth.auth_login_btn
+import kotlinx.android.synthetic.main.fragment_auth.auth_password
+import kotlinx.android.synthetic.main.fragment_auth.auth_server_selector
+import kotlinx.android.synthetic.main.fragment_auth.auth_username
+import kotlinx.android.synthetic.main.fragment_auth.oauth_login_button
+import kotlinx.android.synthetic.main.fragment_auth.oauth_token
 
 /**
  * Authentication fragment
@@ -74,7 +78,7 @@ class AuthFragment : Fragment() {
         var valid = true
         if (TextUtils.isEmpty(oauth_token.text)) {
             valid = false
-            oauth_token.error = getString(string.auth_invalid_token_msg)
+            oauth_token.error = getString(R.string.auth_invalid_token_msg)
         }
         return valid
     }

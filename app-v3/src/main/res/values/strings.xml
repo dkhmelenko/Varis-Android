@@ -41,6 +41,9 @@
     <string name="auth_server_opensource">Travis CI (travis-ci.org)</string>
     <string name="auth_server_pro">Travis CI Pro (travis-ci.com)</string>
     <string name="auth_server_header">Server</string>
+    <string name="oauth_login">OAuth Login</string>
+    <string name="personal_token">Personal Token</string>
+    <string name="auth_invalid_token_msg">Token cannot be empty.</string>
 
     <!-- Search screen -->
     <string name="search_results_title">Search results</string>
@@ -100,9 +103,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
-    <string name="oauth_login">OAuth Login</string>
-  <string name="personal_token">Personal Token</string>
-    <string name="auth_invalid_token_msg">Token cannot be empty.</string>
 
 
 </resources>

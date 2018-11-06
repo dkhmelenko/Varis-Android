@@ -35,8 +35,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGitHubRestClientRx(retrofit: Retrofit): GitHubRestClient {
-        return GitHubRestClient(retrofit)
+    fun provideGitHubRestClientRx(retrofit: Retrofit, okHttpClient: OkHttpClient): GitHubRestClient {
+        return GitHubRestClient(retrofit, okHttpClient)
     }
 
     @Provides

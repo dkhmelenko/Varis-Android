@@ -20,7 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import java.net.HttpURLConnection
-import java.util.*
+import java.util.Arrays
 
 /**
  * Authentication ViewModel
@@ -127,11 +127,11 @@ class AuthViewModel(
                 .doOnSuccess { saveAccessToken(it) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { authorization, e ->
-                    if (e == null) {
+                .subscribe { authorization, throwable ->
+                    if (throwable == null) {
                         postState(AuthState.Success)
                     } else {
-                        postState(AuthState.AuthError(e.message))
+                        postState(AuthState.AuthError(throwable.message))
                     }
                 }
         subscriptions.add(subscription)
@@ -158,7 +158,7 @@ class AuthViewModel(
         appSettings.putAccessToken(token)
     }
 
-    private fun doAuthorization(token: String): Single<AccessToken>? {
+    private fun doAuthorization(token: String): Single<AccessToken> {
         val request = AccessTokenRequest()
         request.gitHubToken = token
         return travisRestClient.apiService.auth(request)
@@ -166,9 +166,7 @@ class AuthViewModel(
 
     private fun doAuthorization(authorization: Authorization): Single<AccessToken> {
         this.authorization = authorization
-        val request = AccessTokenRequest()
-        request.gitHubToken = authorization.token
-        return travisRestClient.apiService.auth(request)
+        return doAuthorization(authorization.token)
     }
 
     private fun isTwoFactorAuthRequired(exception: HttpException): Boolean {

@@ -1,8 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.khmelenko.lab.varis.auth.AuthFragment">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.khmelenko.lab.varis.auth.AuthFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:paddingBottom="15dp"
                 android:paddingTop="10dp"
                 android:text="@string/auth_server_header"
-                android:textSize="19sp" />
+                android:textSize="19sp"/>
 
             <RadioGroup
                 android:id="@+id/auth_server_selector"
@@ -36,13 +36,13 @@
                     android:id="@+id/auth_server_opensource"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/auth_server_opensource" />
+                    android:text="@string/auth_server_opensource"/>
 
                 <RadioButton
                     android:id="@+id/auth_server_pro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/auth_server_pro" />
+                    android:text="@string/auth_server_pro"/>
 
             </RadioGroup>
         </LinearLayout>
@@ -60,7 +60,7 @@
                 android:paddingBottom="15dp"
                 android:paddingTop="10dp"
                 android:text="@string/auth_intro_text"
-                android:textSize="19sp" />
+                android:textSize="19sp"/>
 
             <EditText
                 android:id="@+id/auth_username"
@@ -70,7 +70,7 @@
                 android:hint="@string/auth_username_hint"
                 android:imeOptions="actionNext"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"/>
 
             <EditText
                 android:id="@+id/auth_password"
@@ -80,14 +80,14 @@
                 android:hint="@string/auth_password_hint"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
-                android:maxLines="1" />
+                android:maxLines="1"/>
 
             <Button
                 android:id="@+id/auth_login_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/auth_login_btn" />
+                android:text="@string/auth_login_btn"/>
 
         </LinearLayout>
 
@@ -99,9 +99,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -115,12 +116,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:hint="@string/personal_token"/>
+                android:hint="@string/personal_token"
+                android:imeOptions="actionDone"/>
 
             <Button
                 android:id="@+id/oauth_login_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
                 android:text="@string/oauth_login"/>
 
