@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.network.response.Job
 import kotlinx.android.synthetic.main.fragment_jobs.jobs_recycler_view
@@ -19,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_jobs.jobs_recycler_view
 class JobsFragment : Fragment() {
 
     private lateinit var jobsListAdapter: JobsListAdapter
-    private val jobs = mutableListOf<Job>()
+    private val jobs = ArrayList<Job>()
 
     private var listener: JobsListener? = null
 
@@ -36,6 +38,9 @@ class JobsFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         jobs_recycler_view.layoutManager = layoutManager
 
+        jobs.clear()
+        jobs.addAll(readJobsFromArgs())
+
         jobsListAdapter = JobsListAdapter(context!!, jobs) { position ->
             if (!jobs.isEmpty()) {
                 val job = jobs[position]
@@ -48,7 +53,6 @@ class JobsFragment : Fragment() {
         val itemHeight = (jobsListAdapter.itemHeight * metrics.density + 0.5).toInt()
         jobs_recycler_view.layoutParams.height = itemHeight * jobsListAdapter.itemCount
     }
-
 
     override fun onAttach(activity: Context?) {
         super.onAttach(activity)
@@ -76,6 +80,13 @@ class JobsFragment : Fragment() {
         jobsListAdapter.notifyDataSetChanged()
     }
 
+    private fun readJobsFromArgs(): List<Job> {
+        val jobsAsString = arguments!!.getString(JOBS_KEY)
+        val gson = Gson()
+        val listType = object : TypeToken<List<Job>>() {}.type
+        return gson.fromJson<List<Job>>(jobsAsString, listType)
+    }
+
     /**
      * Interface for communication with this fragment
      */
@@ -91,16 +102,24 @@ class JobsFragment : Fragment() {
 
     companion object {
 
+        const val JOBS_KEY = "JOBS_KEY"
+
         /**
          * Creates new instance of the fragment
          *
          * @return Fragment instance
          */
-        fun newInstance(): JobsFragment {
+        fun newInstance(jobs: List<Job>): JobsFragment {
             val fragment = JobsFragment()
             val args = Bundle()
+            args.putString(JOBS_KEY, jobsToJson(jobs))
             fragment.arguments = args
             return fragment
+        }
+
+        private fun jobsToJson(jobs: List<Job>): String {
+            val gson = Gson()
+            return gson.toJson(jobs)
         }
     }
 

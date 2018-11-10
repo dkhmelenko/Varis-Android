@@ -233,9 +233,10 @@ class BuildDetailsActivity : BaseActivity(), JobsFragment.JobsListener, RawLogFr
 
     private fun showBuildJobs(jobs: List<Job>) {
         if (!::jobsFragment.isInitialized) {
-            jobsFragment = JobsFragment.newInstance()
+            jobsFragment = JobsFragment.newInstance(jobs)
+        } else {
+            jobsFragment.setJobs(jobs)
         }
-        jobsFragment.setJobs(jobs)
         addFragment(R.id.build_details_container, jobsFragment, JOBS_FRAGMENT_TAG)
     }
 
