@@ -24,7 +24,7 @@ import javax.inject.Inject
 class SearchResultsActivity : BaseActivity(), ReposFragment.ReposFragmentListener {
 
     @Inject
-    lateinit var viewModelFactory: RepoDetailsViewModelFactory
+    lateinit var viewModelFactory: SearchResultsViewModelFactory
 
     private lateinit var viewModel: SearchResultsViewModel
 

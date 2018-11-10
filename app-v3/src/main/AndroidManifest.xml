@@ -101,7 +101,7 @@
                   android:authorities="com.khmelenko.lab.varis.storage.SearchHistoryProvider" />
         <meta-data
             android:name="android.app.default_searchable"
-            android:value=".activity.SearchResultsActivity"/>
+            android:value="com.khmelenko.lab.varis.repositories.search.SearchResultsActivity"/>
 
     </application>
 

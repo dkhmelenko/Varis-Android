@@ -201,7 +201,7 @@ class MainActivity : BaseActivity(), ReposFragment.ReposFragmentListener {
                     var submitProhibited = true
                     if (query.length > SEARCH_LIMIT) {
                         // save search query to history
-                        val suggestionsProvider = SearchRecentSuggestions(this@MainActivity,
+                        val suggestionsProvider = SearchRecentSuggestions(applicationContext,
                                 SearchHistoryProvider.AUTHORITY, SearchHistoryProvider.MODE)
                         suggestionsProvider.saveRecentQuery(query, null)
                         submitProhibited = false
