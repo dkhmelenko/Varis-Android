@@ -45,7 +45,7 @@ import javax.inject.Inject
  * @author Dmytro Khmelenko (d.khmelenko@gmail.com)
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = [21])
+@Config(sdk = [21])
 class TestAuthViewModel {
 
     @get:Rule
