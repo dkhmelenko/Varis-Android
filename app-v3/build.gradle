@@ -68,7 +68,7 @@ ext {
             junit          : '4.12',
             robolectric    : '4.3.1',
             rxjava         : '2.2.2',
-            rxAndroid      : '2.1.0',
+            rxAndroid      : '2.1.1',
             okhttp3        : '3.11.0',
             architecture   : '1.1.1',
             kotlinMockito  : '1.6.0'
