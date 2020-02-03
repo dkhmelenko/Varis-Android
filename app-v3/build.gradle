@@ -59,7 +59,7 @@ android {
 ext {
     libraryVersion = [
             support        : '28.0.0',
-            gson           : '2.8.5',
+            gson           : '2.8.6',
             retrofit2      : '2.4.0',
             circleimageview: '2.1.0',
             dagger         : '2.18',
