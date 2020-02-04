@@ -1,7 +1,7 @@
 package com.khmelenko.lab.varis.repositories.search
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient
 import javax.inject.Inject
 

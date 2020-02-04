@@ -1,6 +1,6 @@
 package com.khmelenko.lab.varis.adapter.viewholder
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.khmelenko.lab.varis.widget.BuildView
 import kotlinx.android.synthetic.main.item_build_view.view.item_build_card_view

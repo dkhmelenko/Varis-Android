@@ -2,7 +2,7 @@ package com.khmelenko.lab.varis.auth
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -102,12 +102,12 @@ class AuthFragment : Fragment() {
         return valid
     }
 
-    override fun onAttach(activity: Context?) {
+    override fun onAttach(activity: Context) {
         super.onAttach(activity)
         try {
             listener = activity as? OnLoginActionListener
         } catch (e: ClassCastException) {
-            throw ClassCastException(activity!!.toString() + " must implement OnLoginActionListener")
+            throw ClassCastException(activity.toString() + " must implement OnLoginActionListener")
         }
 
     }

@@ -1,7 +1,7 @@
 package com.khmelenko.lab.varis.viewmodel
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.Observer
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
 import com.khmelenko.lab.varis.RxJavaRules
 import com.khmelenko.lab.varis.dagger.DaggerTestComponent
 import com.khmelenko.lab.varis.network.response.Branches

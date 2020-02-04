@@ -1,7 +1,7 @@
 package com.khmelenko.lab.varis.about
 
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import com.khmelenko.lab.varis.R

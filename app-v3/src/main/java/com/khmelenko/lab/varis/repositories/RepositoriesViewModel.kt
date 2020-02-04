@@ -1,8 +1,8 @@
 package com.khmelenko.lab.varis.repositories
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import android.text.TextUtils
 import com.khmelenko.lab.varis.common.Constants
 import com.khmelenko.lab.varis.network.response.Repo

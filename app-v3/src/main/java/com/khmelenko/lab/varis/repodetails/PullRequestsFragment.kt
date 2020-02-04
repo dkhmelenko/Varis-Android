@@ -2,8 +2,8 @@ package com.khmelenko.lab.varis.repodetails
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,12 +78,12 @@ class PullRequestsFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
             listener = context as PullRequestsListener?
         } catch (e: ClassCastException) {
-            throw ClassCastException(context!!.toString() + " must implement PullRequestsListener")
+            throw ClassCastException("$context must implement PullRequestsListener")
         }
 
     }

@@ -1,8 +1,8 @@
 package com.khmelenko.lab.varis.builddetails
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.khmelenko.lab.varis.log.LogsParser
 import com.khmelenko.lab.varis.network.response.BuildDetails
 import com.khmelenko.lab.varis.network.retrofit.raw.RawClient

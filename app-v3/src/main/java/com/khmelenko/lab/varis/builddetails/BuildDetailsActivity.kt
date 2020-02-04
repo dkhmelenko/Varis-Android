@@ -1,16 +1,16 @@
 package com.khmelenko.lab.varis.builddetails
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.activity.BaseActivity
 import com.khmelenko.lab.varis.converter.BuildStateHelper
@@ -56,7 +56,7 @@ class BuildDetailsActivity : BaseActivity(), JobsFragment.JobsListener, RawLogFr
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_build_details)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(BuildsDetailsViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(BuildsDetailsViewModel::class.java)
         viewModel.state().observe(this, Observer {
             handleState(it!!)
         })

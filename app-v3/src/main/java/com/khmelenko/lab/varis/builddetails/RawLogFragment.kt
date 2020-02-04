@@ -2,7 +2,7 @@ package com.khmelenko.lab.varis.builddetails
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,12 +33,12 @@ class RawLogFragment : Fragment() {
         showError(false)
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
             listener = context as OnRawLogFragmentListener?
         } catch (e: ClassCastException) {
-            throw ClassCastException(context!!.toString() + " must implement OnRawLogFragmentListener")
+            throw ClassCastException("$context must implement OnRawLogFragmentListener")
         }
 
     }
