@@ -1,8 +1,8 @@
 package com.khmelenko.lab.varis.converter
 
 import android.graphics.drawable.Drawable
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat
-import android.support.v4.content.ContextCompat
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import androidx.core.content.ContextCompat
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.TravisApp
 

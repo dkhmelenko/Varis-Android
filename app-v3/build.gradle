@@ -71,7 +71,9 @@ ext {
             rxAndroid      : '2.1.1',
             okhttp3        : '3.11.0',
             architecture   : '1.1.1',
-            kotlinMockito  : '1.6.0'
+            kotlinMockito  : '1.6.0',
+            androidX       : '1.1.0',
+            lifecycle      : '2.2.0'
     ]
 }
 
@@ -79,13 +81,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // support libraries, architecture components
-    implementation "com.android.support:appcompat-v7:$libraryVersion.support"
-    implementation "com.android.support:design:$libraryVersion.support"
-    implementation "com.android.support:recyclerview-v7:$libraryVersion.support"
-    implementation "com.android.support:cardview-v7:$libraryVersion.support"
-    implementation "com.android.support:support-v4:$libraryVersion.support"
-    implementation "android.arch.lifecycle:extensions:$libraryVersion.architecture"
-    kapt "android.arch.lifecycle:compiler:$libraryVersion.architecture"
+    implementation "androidx.appcompat:appcompat:$libraryVersion.androidX"
+    implementation "com.google.android.material:material:$libraryVersion.androidX"
+    implementation "androidx.recyclerview:recyclerview:$libraryVersion.androidX"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$libraryVersion.lifecycle"
+    kapt "androidx.lifecycle:lifecycle-compiler:$libraryVersion.lifecycle"
 
     // google
     implementation "com.google.code.gson:gson:$libraryVersion.gson"
@@ -117,7 +119,7 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$libraryVersion.robolectric"
     testImplementation "com.google.dagger:dagger:$libraryVersion.dagger"
     kaptTest "com.google.dagger:dagger-compiler:$libraryVersion.dagger"
-    testImplementation "android.arch.core:core-testing:$libraryVersion.architecture"
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation "com.nhaarman:mockito-kotlin:$libraryVersion.kotlinMockito"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

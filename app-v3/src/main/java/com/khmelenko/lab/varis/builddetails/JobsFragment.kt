@@ -2,8 +2,8 @@ package com.khmelenko.lab.varis.builddetails
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,12 +54,12 @@ class JobsFragment : Fragment() {
         jobs_recycler_view.layoutParams.height = itemHeight * jobsListAdapter.itemCount
     }
 
-    override fun onAttach(activity: Context?) {
+    override fun onAttach(activity: Context) {
         super.onAttach(activity)
         try {
             listener = activity as JobsListener?
         } catch (e: ClassCastException) {
-            throw ClassCastException(activity!!.toString() + " must implement JobsListener")
+            throw ClassCastException("$activity must implement JobsListener")
         }
     }
 

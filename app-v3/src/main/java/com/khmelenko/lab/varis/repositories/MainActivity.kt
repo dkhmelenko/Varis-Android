@@ -2,22 +2,21 @@ package com.khmelenko.lab.varis.repositories
 
 import android.app.Activity
 import android.app.SearchManager
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.SearchRecentSuggestions
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.Toolbar
+import com.google.android.material.navigation.NavigationView
+import androidx.core.view.GravityCompat
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.about.AboutActivity
 import com.khmelenko.lab.varis.about.LicensesDialogFragment
@@ -67,7 +66,7 @@ class MainActivity : BaseActivity(), ReposFragment.ReposFragmentListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(RepositoriesViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(RepositoriesViewModel::class.java)
         viewModel.state().observe(this, Observer { repositoriesState ->
             hideProgress()
             when (repositoriesState) {

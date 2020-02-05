@@ -2,11 +2,11 @@ package com.khmelenko.lab.varis.auth
 
 import android.app.Activity
 import android.app.ProgressDialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.activity.BaseActivity
 import dagger.android.AndroidInjection
@@ -36,7 +36,7 @@ class AuthActivity : BaseActivity(), AuthFragment.OnLoginActionListener, Securit
 
         initToolbar()
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AuthViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(AuthViewModel::class.java)
         viewModel.state().observe(this, Observer {
             handleState(it!!)
         })

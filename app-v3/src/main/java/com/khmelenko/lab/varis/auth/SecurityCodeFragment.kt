@@ -2,7 +2,7 @@ package com.khmelenko.lab.varis.auth
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -40,12 +40,12 @@ class SecurityCodeFragment : Fragment() {
         }
     }
 
-    override fun onAttach(activity: Context?) {
+    override fun onAttach(activity: Context) {
         super.onAttach(activity)
         try {
             listener = activity as? OnSecurityCodeAction
         } catch (e: ClassCastException) {
-            throw ClassCastException(activity?.toString() + " must implement OnFragmentInteractionListener")
+            throw ClassCastException("$activity must implement OnFragmentInteractionListener")
         }
 
     }

@@ -1,16 +1,16 @@
 package com.khmelenko.lab.varis.repodetails
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.Toolbar
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.widget.Toolbar
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.activity.BaseActivity
 import com.khmelenko.lab.varis.adapter.SmartFragmentStatePagerAdapter
@@ -59,12 +59,12 @@ class RepoDetailsActivity : BaseActivity(), BuildHistoryFragment.BuildHistoryLis
             return ITEMS_COUNT
         }
 
-        override fun getItem(position: Int): Fragment? {
+        override fun getItem(position: Int): Fragment {
             return when (position) {
                 INDEX_BUILD_HISTORY -> BuildHistoryFragment.newInstance()
                 INDEX_BRANCHES -> BranchesFragment.newInstance()
                 INDEX_PULL_REQUESTS -> PullRequestsFragment.newInstance()
-                else -> null
+                else -> Fragment()
             }
         }
 
@@ -83,7 +83,7 @@ class RepoDetailsActivity : BaseActivity(), BuildHistoryFragment.BuildHistoryLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repo_details)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(RepoDetailsViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(RepoDetailsViewModel::class.java)
 
         initToolbar()
 

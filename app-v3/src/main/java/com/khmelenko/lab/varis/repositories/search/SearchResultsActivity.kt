@@ -1,17 +1,16 @@
 package com.khmelenko.lab.varis.repositories.search
 
 import android.app.SearchManager
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import com.khmelenko.lab.varis.R
 import com.khmelenko.lab.varis.activity.BaseActivity
 import com.khmelenko.lab.varis.network.response.Repo
 import com.khmelenko.lab.varis.repodetails.REPO_SLUG_KEY
 import com.khmelenko.lab.varis.repodetails.RepoDetailsActivity
-import com.khmelenko.lab.varis.repodetails.RepoDetailsViewModelFactory
 import com.khmelenko.lab.varis.repositories.ReposFragment
 import dagger.android.AndroidInjection
 import javax.inject.Inject
@@ -37,7 +36,7 @@ class SearchResultsActivity : BaseActivity(), ReposFragment.ReposFragmentListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_results)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchResultsViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(SearchResultsViewModel::class.java)
         viewModel.state().observe(this, Observer { state ->
             hideProgress()
             when (state) {
@@ -55,6 +54,7 @@ class SearchResultsActivity : BaseActivity(), ReposFragment.ReposFragmentListene
     }
 
     override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
         setIntent(intent)
         handleIntent(intent)
     }

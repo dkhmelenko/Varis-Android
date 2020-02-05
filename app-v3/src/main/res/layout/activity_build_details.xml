@@ -21,7 +21,7 @@
             android:layout_gravity="center" />
     </LinearLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -55,18 +55,18 @@
 
         </ScrollView>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/build_details_scroll_btn"
             style="@style/FloatingActionButton.RightBottom"
             app:srcCompat="@drawable/ic_arrow_downward_white_24dp"
             android:visibility="gone" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/build_details_scroll_up_btn"
             style="@style/FloatingActionButton.RightBottom"
             app:srcCompat="@drawable/ic_arrow_upward_white_24dp"
             android:visibility="gone" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

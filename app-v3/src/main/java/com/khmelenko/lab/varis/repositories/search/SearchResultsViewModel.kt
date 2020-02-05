@@ -1,9 +1,9 @@
 package com.khmelenko.lab.varis.repositories.search
 
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.khmelenko.lab.varis.network.response.Repo
 import com.khmelenko.lab.varis.network.retrofit.travis.TravisRestClient
 import com.khmelenko.lab.varis.util.StringUtils
